@@ -2,7 +2,6 @@ package org.orcid.memberportal.service.assertion.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -10,107 +9,106 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "stored_file")
 public class StoredFile implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    
-    public static final String DEFAULT_SYSTEM_OWNER_ID = "system"; 
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    private String id;
-    
-    @Field("file_location")
-    private String fileLocation;
-    
-    @Field("file_type")
-    private String fileType;
+  public static final String DEFAULT_SYSTEM_OWNER_ID = "system";
 
-    @Field("date_stored")
-    private Instant dateWritten;
-    
-    @Field("date_processed")
-    private Instant dateProcessed;
-    
-    @Field("removal_date")
-    private Instant removalDate;
-    
-    @Field("processing_error")
-    private String error;
-    
-    @Field("original_filename")
-    private String originalFilename;
-    
-    @Field
-    private String ownerId;
+  @Id
+  private String id;
 
-    public String getId() {
-        return id;
-    }
+  @Field("file_location")
+  private String fileLocation;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  @Field("file_type")
+  private String fileType;
 
-    public String getFileLocation() {
-        return fileLocation;
-    }
+  @Field("date_stored")
+  private Instant dateWritten;
 
-    public void setFileLocation(String fileLocation) {
-        this.fileLocation = fileLocation;
-    }
+  @Field("date_processed")
+  private Instant dateProcessed;
 
-    public String getFileType() {
-        return fileType;
-    }
+  @Field("removal_date")
+  private Instant removalDate;
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
+  @Field("processing_error")
+  private String error;
 
-    public Instant getDateWritten() {
-        return dateWritten;
-    }
+  @Field("original_filename")
+  private String originalFilename;
 
-    public void setDateWritten(Instant dateWritten) {
-        this.dateWritten = dateWritten;
-    }
+  @Field
+  private String ownerId;
 
-    public Instant getRemovalDate() {
-        return removalDate;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setRemovalDate(Instant removalDate) {
-        this.removalDate = removalDate;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getOwnerId() {
-        return ownerId;
-    }
+  public String getFileLocation() {
+    return fileLocation;
+  }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
+  public void setFileLocation(String fileLocation) {
+    this.fileLocation = fileLocation;
+  }
 
-    public Instant getDateProcessed() {
-        return dateProcessed;
-    }
+  public String getFileType() {
+    return fileType;
+  }
 
-    public void setDateProcessed(Instant dateProcessed) {
-        this.dateProcessed = dateProcessed;
-    }
+  public void setFileType(String fileType) {
+    this.fileType = fileType;
+  }
 
-    public String getError() {
-        return error;
-    }
+  public Instant getDateWritten() {
+    return dateWritten;
+  }
 
-    public void setError(String error) {
-        this.error = error;
-    }
+  public void setDateWritten(Instant dateWritten) {
+    this.dateWritten = dateWritten;
+  }
 
-    public String getOriginalFilename() {
-        return originalFilename;
-    }
+  public Instant getRemovalDate() {
+    return removalDate;
+  }
 
-    public void setOriginalFilename(String originalFilename) {
-        this.originalFilename = originalFilename;
-    }
-    
+  public void setRemovalDate(Instant removalDate) {
+    this.removalDate = removalDate;
+  }
+
+  public String getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(String ownerId) {
+    this.ownerId = ownerId;
+  }
+
+  public Instant getDateProcessed() {
+    return dateProcessed;
+  }
+
+  public void setDateProcessed(Instant dateProcessed) {
+    this.dateProcessed = dateProcessed;
+  }
+
+  public String getError() {
+    return error;
+  }
+
+  public void setError(String error) {
+    this.error = error;
+  }
+
+  public String getOriginalFilename() {
+    return originalFilename;
+  }
+
+  public void setOriginalFilename(String originalFilename) {
+    this.originalFilename = originalFilename;
+  }
 }

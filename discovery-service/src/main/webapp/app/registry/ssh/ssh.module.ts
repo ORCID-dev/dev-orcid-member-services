@@ -7,6 +7,6 @@ import { SSHComponent } from './ssh.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([sshRoute])],
-  declarations: [SSHComponent]
+  declarations: [SSHComponent],
 })
 export class SSHModule {}

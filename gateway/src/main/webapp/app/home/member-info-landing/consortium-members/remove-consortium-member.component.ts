@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-remove-consortium-member',
   templateUrl: './remove-consortium-member.component.html',
-  styleUrls: ['./remove-consortium-member.scss']
+  styleUrls: ['./remove-consortium-member.scss'],
 })
 export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   COUNTRIES = COUNTRIES;
@@ -53,7 +53,7 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
     this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1);
     this.editForm = this.fb.group({
       terminationMonth: [this.monthList[0][0], [Validators.required]],
-      terminationYear: [this.yearList[0], [Validators.required]]
+      terminationYear: [this.yearList[0], [Validators.required]],
     });
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
@@ -85,7 +85,7 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
       ...new SFConsortiumMemberData(),
       terminationMonth: this.editForm.get('terminationMonth').value,
       terminationYear: this.editForm.get('terminationYear').value,
-      orgName: this.consortiumMember.orgName
+      orgName: this.consortiumMember.orgName,
     };
   }
 

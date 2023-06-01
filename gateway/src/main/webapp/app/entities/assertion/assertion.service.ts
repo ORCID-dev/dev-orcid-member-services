@@ -77,7 +77,7 @@ export class AssertionService {
       created: assertion.created != null && assertion.created.isValid() ? assertion.created.toJSON() : null,
       modified: assertion.modified != null && assertion.modified.isValid() ? assertion.modified.toJSON() : null,
       deletedFromORCID:
-        assertion.deletedFromORCID != null && assertion.deletedFromORCID.isValid() ? assertion.deletedFromORCID.toJSON() : null
+        assertion.deletedFromORCID != null && assertion.deletedFromORCID.isValid() ? assertion.deletedFromORCID.toJSON() : null,
     });
     return copy;
   }

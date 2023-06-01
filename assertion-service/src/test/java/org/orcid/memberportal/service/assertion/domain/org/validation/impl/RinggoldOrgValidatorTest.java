@@ -10,18 +10,17 @@ import org.orcid.memberportal.service.assertion.domain.validation.org.impl.Ringg
 
 public class RinggoldOrgValidatorTest {
 
-    @InjectMocks
-    private RinggoldOrgValidator validator;
+  @InjectMocks
+  private RinggoldOrgValidator validator;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+  @BeforeEach
+  public void setUp() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-    @Test
-    void testValidId() {
-        assertThat(validator.validId("12345")).isTrue();
-        assertThat(validator.validId("abcde")).isFalse();
-    }
-
+  @Test
+  void testValidId() {
+    assertThat(validator.validId("12345")).isTrue();
+    assertThat(validator.validId("abcde")).isFalse();
+  }
 }

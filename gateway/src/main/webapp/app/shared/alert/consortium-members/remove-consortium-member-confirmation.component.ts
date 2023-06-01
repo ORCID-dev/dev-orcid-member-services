@@ -3,7 +3,7 @@ import { Component, HostListener, Inject } from '@angular/core';
 @Component({
   selector: 'remove-consortium-member-confirmation',
   templateUrl: './remove-consortium-member-confirmation.component.html',
-  styleUrls: ['../lightbox-modal.scss']
+  styleUrls: ['../lightbox-modal.scss'],
 })
 export class RemoveConsortiumMemberConfirmationComponent {
   alerts: any[];

@@ -13,12 +13,8 @@
         <div *ngIf="invalidForm" class="error-message d-flex p-3 mb-3">
           <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-2" />
           <div>
-            <div class="mb-2 font-size-12 wide-text font-weight-bold">
-              Your changes cannot be saved
-            </div>
-            <div class="font-size-12 wide-text">
-              Please fix the issues with the contact form before trying to save again
-            </div>
+            <div class="mb-2 font-size-12 wide-text font-weight-bold">Your changes cannot be saved</div>
+            <div class="font-size-12 wide-text">Please fix the issues with the contact form before trying to save again</div>
           </div>
         </div>
         <div class="form">
@@ -139,8 +135,9 @@
                 *ngFor="let country of COUNTRIES | keyvalue"
                 [ngValue]="country.value"
                 jhiTranslate="{{ 'country.' + country.value + '.string' }}"
-                >{{ country.key }}</option
               >
+                {{ country.key }}
+              </option>
             </select>
           </div>
           <div class="form-group mb-4">
@@ -164,9 +161,7 @@
           <h5 class="font-weight-bold font-size-18 mb-3">
             Trademark license <span class="font-size-12 text-danger font-weight-normal">(Required)</span>
           </h5>
-          <div class="font-size-14 wide-text mb-3">
-            Can ORCID use this organization's trademarked name and logos?
-          </div>
+          <div class="font-size-14 wide-text mb-3">Can ORCID use this organization's trademarked name and logos?</div>
           <div class="mb-4">
             <div class="form-group d-flex">
               <input type="radio" class="form-control radio mr-2" name="trademarkLicense" value="Yes" formControlName="trademarkLicense" />
@@ -177,7 +172,7 @@
             <div class="form-group d-flex">
               <input type="radio" class="form-control radio mr-2" name="trademarkLicense" value="No" formControlName="trademarkLicense" />
               <label class="wide-text font-size-12 font-weight-normal"
-              ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
+                ><strong>NO</strong> - ORCID cannot use this organization's trademarked name and logos</label
               >
             </div>
             <div *ngIf="editForm.get('trademarkLicense').invalid && editForm.get('trademarkLicense').touched">
@@ -212,9 +207,7 @@
               </select>
             </div>
             <div *ngIf="editForm.hasError('invalidDate')">
-              <small class="form-text text-danger mt-3">
-                Membership start date cannot precede current date
-              </small>
+              <small class="form-text text-danger mt-3"> Membership start date cannot precede current date </small>
             </div>
           </div>
 
@@ -295,18 +288,14 @@
           <div class="warning-message d-flex p-3 mb-4">
             <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-2" />
             <div>
-              <div class="mb-2 font-size-12 wide-text font-weight-bold">
-                Please note
-              </div>
+              <div class="mb-2 font-size-12 wide-text font-weight-bold">Please note</div>
               <div class="font-size-12 wide-text">
                 It can take up to 24 hours before a new organization is available in the Member Portal. Please contact your ORCID engagement
                 lead for more information.
               </div>
             </div>
           </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-primary">
-            Submit new organization request
-          </button>
+          <button type="submit" [disabled]="isSaving" class="btn btn-primary">Submit new organization request</button>
           <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
           <button type="button" (click)="delete()" [disabled]="isSaving" class="btn btn-danger float-right" *ngIf="contactId">
             <fa-icon [icon]="'trash-alt'" class="mr-2"></fa-icon>Remove this contact

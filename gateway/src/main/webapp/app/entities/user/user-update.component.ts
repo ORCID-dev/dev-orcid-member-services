@@ -20,7 +20,7 @@ import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-ms-user-update',
-  templateUrl: './user-update.component.html'
+  templateUrl: './user-update.component.html',
 })
 export class MSUserUpdateComponent implements OnInit {
   isSaving: boolean;
@@ -44,7 +44,7 @@ export class MSUserUpdateComponent implements OnInit {
     createdBy: [],
     createdDate: [],
     lastModifiedBy: [],
-    lastModifiedDate: []
+    lastModifiedDate: [],
   });
 
   memberList = [] as IMSMember[];
@@ -113,7 +113,7 @@ export class MSUserUpdateComponent implements OnInit {
       createdBy: msUser.createdBy,
       createdDate: msUser.createdDate != null ? msUser.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: msUser.lastModifiedBy,
-      lastModifiedDate: msUser.lastModifiedDate != null ? msUser.lastModifiedDate.format(DATE_TIME_FORMAT) : null
+      lastModifiedDate: msUser.lastModifiedDate != null ? msUser.lastModifiedDate.format(DATE_TIME_FORMAT) : null,
     });
 
     if (msUser.mainContact) {
@@ -158,7 +158,7 @@ export class MSUserUpdateComponent implements OnInit {
       return false;
     } else if (this.hasRoleOrgOwner() || this.hasRoleConsortiumLead()) {
       this.editForm.patchValue({
-        salesforceId: this.getSalesForceId()
+        salesforceId: this.getSalesForceId(),
       });
       return true;
     }
@@ -271,24 +271,36 @@ export class MSUserUpdateComponent implements OnInit {
       lastModifiedDate:
         this.editForm.get(['lastModifiedDate']).value != null
           ? moment(this.editForm.get(['lastModifiedDate']).value, DATE_TIME_FORMAT)
-          : undefined
+          : undefined,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IMSUser>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected subscribeToUpdateResponse(result: Observable<HttpResponse<IMSUser>>) {
-    result.subscribe(() => this.onUpdateSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onUpdateSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected subscribeToSaveResponseWithOwnershipChange(result: Observable<HttpResponse<IMSUser>>) {
-    result.subscribe(() => this.onSaveSuccessOwnershipChange(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccessOwnershipChange(),
+      () => this.onSaveError()
+    );
   }
 
   protected subscribeToUpdateResponseWithOwnershipChange(result: Observable<HttpResponse<IMSUser>>) {
-    result.subscribe(() => this.onUpdateSuccessOwnershipChange(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onUpdateSuccessOwnershipChange(),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess() {

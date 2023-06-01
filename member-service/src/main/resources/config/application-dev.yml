@@ -114,6 +114,6 @@ oauth2:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 application:
-    orcidOrgClientId: change-me
-    orcidOrgSalesForceId: change-me
-    mailTestMode: true
+  orcidOrgClientId: change-me
+  orcidOrgSalesForceId: change-me
+  mailTestMode: true

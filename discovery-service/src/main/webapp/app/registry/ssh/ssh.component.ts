@@ -5,7 +5,7 @@ import { JhiSSHService } from './ssh.service';
 
 @Component({
   selector: 'jhi-applications',
-  templateUrl: './ssh.component.html'
+  templateUrl: './ssh.component.html',
 })
 export class SSHComponent implements OnInit, OnDestroy {
   data?: string;

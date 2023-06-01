@@ -19,7 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'jhi-assertion',
   templateUrl: './assertion.component.html',
-  styleUrls: ['assertion.scss']
+  styleUrls: ['assertion.scss'],
 })
 export class AssertionComponent implements OnInit, OnDestroy {
   errorAddingToOrcid: string = ASSERTION_STATUS.ERROR_ADDING_TO_ORCID;
@@ -96,7 +96,7 @@ export class AssertionComponent implements OnInit, OnDestroy {
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
       })
       .subscribe(
         (res: HttpResponse<IAssertion[]>) => this.paginateAssertions(res.body, res.headers),
@@ -110,8 +110,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
         page: this.page,
         size: this.itemsPerPage,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
-      }
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+      },
     });
     this.loadAll();
   }
@@ -123,8 +123,8 @@ export class AssertionComponent implements OnInit, OnDestroy {
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
-      }
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+      },
     ]);
     this.loadAll();
   }

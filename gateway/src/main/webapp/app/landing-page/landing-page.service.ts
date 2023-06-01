@@ -16,7 +16,7 @@ export class LandingPageService {
   constructor(private http: HttpClient) {
     this.headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
   }
 
@@ -37,7 +37,7 @@ export class LandingPageService {
   getUserInfo(access_token: String): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + access_token,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
     return this.http.post(this.userInfoUri, {}, { headers });
   }

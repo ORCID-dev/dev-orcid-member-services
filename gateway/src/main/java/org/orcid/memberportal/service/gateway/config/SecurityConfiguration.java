@@ -18,51 +18,70 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
-    private final OAuth2Properties oAuth2Properties;
 
-    private final CorsFilter corsFilter;
+  private final OAuth2Properties oAuth2Properties;
 
-    public SecurityConfiguration(OAuth2Properties oAuth2Properties, CorsFilter corsFilter) {
-        this.oAuth2Properties = oAuth2Properties;
-        this.corsFilter = corsFilter;
-    }
+  private final CorsFilter corsFilter;
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/h2-console/**").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
-                .addFilterBefore(corsFilter, CsrfFilter.class).headers().frameOptions().sameOrigin().and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/api/health/global").permitAll().antMatchers("/api/**")
-                .authenticated().antMatchers("/management/health").permitAll().antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
-    }
+  public SecurityConfiguration(OAuth2Properties oAuth2Properties, CorsFilter corsFilter) {
+    this.oAuth2Properties = oAuth2Properties;
+    this.corsFilter = corsFilter;
+  }
 
-    @Bean
-    public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
-        return new JwtTokenStore(jwtAccessTokenConverter);
-    }
+  @Override
+  public void configure(HttpSecurity http) throws Exception {
+    http
+      .csrf()
+      .ignoringAntMatchers("/h2-console/**")
+      .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+      .and()
+      .addFilterBefore(corsFilter, CsrfFilter.class)
+      .headers()
+      .frameOptions()
+      .sameOrigin()
+      .and()
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      .and()
+      .authorizeRequests()
+      .antMatchers("/api/health/global")
+      .permitAll()
+      .antMatchers("/api/**")
+      .authenticated()
+      .antMatchers("/management/health")
+      .permitAll()
+      .antMatchers("/management/**")
+      .hasAuthority(AuthoritiesConstants.ADMIN);
+  }
 
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
-        return new OAuth2JwtAccessTokenConverter(oAuth2Properties, signatureVerifierClient);
-    }
+  @Bean
+  public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
+    return new JwtTokenStore(jwtAccessTokenConverter);
+  }
 
-    @Bean
-    @Qualifier("loadBalancedRestTemplate")
-    public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
-        RestTemplate restTemplate = new RestTemplate();
-        customizer.customize(restTemplate);
-        return restTemplate;
-    }
+  @Bean
+  public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
+    return new OAuth2JwtAccessTokenConverter(oAuth2Properties, signatureVerifierClient);
+  }
 
-    @Bean
-    @Qualifier("vanillaRestTemplate")
-    public RestTemplate vanillaRestTemplate() {
-        return new RestTemplate();
-    }
+  @Bean
+  @Qualifier("loadBalancedRestTemplate")
+  public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
+    RestTemplate restTemplate = new RestTemplate();
+    customizer.customize(restTemplate);
+    return restTemplate;
+  }
+
+  @Bean
+  @Qualifier("vanillaRestTemplate")
+  public RestTemplate vanillaRestTemplate() {
+    return new RestTemplate();
+  }
 }

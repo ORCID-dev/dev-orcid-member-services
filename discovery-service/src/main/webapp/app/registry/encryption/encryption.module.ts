@@ -7,6 +7,6 @@ import { EncryptionComponent } from './encryption.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([encryptionRoute])],
-  declarations: [EncryptionComponent]
+  declarations: [EncryptionComponent],
 })
 export class EncryptionModule {}

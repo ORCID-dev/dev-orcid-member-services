@@ -4,7 +4,7 @@ import { AccountService } from 'app/core';
 
 @Component({
   selector: 'jhi-error',
-  templateUrl: './error.component.html'
+  templateUrl: './error.component.html',
 })
 export class ErrorComponent implements OnInit {
   errorMessage: string;

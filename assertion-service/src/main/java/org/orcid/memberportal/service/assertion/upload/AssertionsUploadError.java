@@ -4,31 +4,30 @@ import java.io.Serializable;
 
 public class AssertionsUploadError implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private long index;
+  private long index;
 
-    private String message;
+  private String message;
 
-    public AssertionsUploadError(long index, String message) {
-        this.index = index;
-        this.message = message;
-    }
+  public AssertionsUploadError(long index, String message) {
+    this.index = index;
+    this.message = message;
+  }
 
-    public long getIndex() {
-        return index;
-    }
+  public long getIndex() {
+    return index;
+  }
 
-    public void setIndex(long index) {
-        this.index = index;
-    }
+  public void setIndex(long index) {
+    this.index = index;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
+  public void setMessage(String message) {
+    this.message = message;
+  }
 }

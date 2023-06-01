@@ -91,12 +91,12 @@ jhipster:
 # ===================================================================
 
 application:
-    jwtSignatureUrl: https://sandbox.orcid.org/oauth/jwks
-    syncAffiliationsDelay: 300000
-    processAssertionUploadsDelay: 300000
-    removeStoredFilesDelay: 300000
-    processCsvReportsDelay: 300000
-    generateMemberAssertionStatsCron: 0 30 * * * ?
-    sendPermissionLinkNotificationsDelay: 120000
-    resendNotificationDays: 1,3
-    resendNotificationsCron: 0 0 0 * * ?
+  jwtSignatureUrl: https://sandbox.orcid.org/oauth/jwks
+  syncAffiliationsDelay: 300000
+  processAssertionUploadsDelay: 300000
+  removeStoredFilesDelay: 300000
+  processCsvReportsDelay: 300000
+  generateMemberAssertionStatsCron: 0 30 * * * ?
+  sendPermissionLinkNotificationsDelay: 120000
+  resendNotificationDays: 1,3
+  resendNotificationsCron: 0 0 0 * * ?

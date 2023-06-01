@@ -177,7 +177,7 @@ export class AccountService {
     return this.http.post(`${this.logoutAsResourceUrl}/logout_as`, formData, {
       headers: new HttpHeaders().set('Accept', 'text/html'),
       withCredentials: true,
-      responseType: 'text'
+      responseType: 'text',
     });
   }
 }

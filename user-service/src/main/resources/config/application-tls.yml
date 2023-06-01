@@ -9,11 +9,11 @@
 # ===================================================================
 server:
   #ssl:
-    #key-store: 
-    #key-store-password: 
-    #key-store-type: 
-    #key-alias: 
-    #ciphers:     
-    #enabled-protocols: 
+  #key-store:
+  #key-store-password:
+  #key-store-type:
+  #key-alias:
+  #ciphers:
+  #enabled-protocols:
   http2:
     enabled: true

@@ -7,7 +7,7 @@ import { RefreshService } from 'app/shared/refresh/refresh.service';
 
 @Component({
   selector: 'jhi-history',
-  templateUrl: './history.component.html'
+  templateUrl: './history.component.html',
 })
 export class HistoryComponent implements OnInit, OnDestroy {
   histories?: History;

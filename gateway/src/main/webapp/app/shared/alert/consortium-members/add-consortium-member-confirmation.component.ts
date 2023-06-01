@@ -3,7 +3,7 @@ import { Component, HostListener, Inject } from '@angular/core';
 @Component({
   selector: 'add-consortium-member-confirmation',
   templateUrl: './add-consortium-member-confirmation.component.html',
-  styleUrls: ['../lightbox-modal.scss']
+  styleUrls: ['../lightbox-modal.scss'],
 })
 export class AddConsortiumMemberConfirmationComponent {
   alerts: any[];

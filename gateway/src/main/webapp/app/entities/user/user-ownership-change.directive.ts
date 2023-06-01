@@ -2,7 +2,7 @@ import { Directive, ElementRef, EventEmitter, Inject, OnInit, Output } from '@an
 import { TranslateService } from '@ngx-translate/core';
 
 @Directive({
-  selector: '[jhi-ownershipChange]'
+  selector: '[jhi-ownershipChange]',
 })
 export class MSUserOwnershipChangeDirective implements OnInit {
   @Output() then = new EventEmitter<boolean>();
@@ -16,7 +16,7 @@ export class MSUserOwnershipChangeDirective implements OnInit {
 
   ngOnInit(): void {
     const directive = this;
-    this.element.nativeElement.onclick = function() {
+    this.element.nativeElement.onclick = function () {
       const result = confirm(directive.question.toString());
       if (result) {
         directive.then.emit(true);

@@ -2,21 +2,18 @@ package org.orcid.memberportal.service.assertion.repository;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
 import org.springframework.data.domain.Pageable;
 
 public interface AssertionRepositoryCustom {
-    
-    List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable);
+  List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable);
 
-    List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable);
+  List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable);
 
-    List<MemberAssertionStatusCount> getMemberAssertionStatusCounts();
+  List<MemberAssertionStatusCount> getMemberAssertionStatusCounts();
 
-    void updateStatusPendingToNotificationRequested(String salesforceId);
+  void updateStatusPendingToNotificationRequested(String salesforceId);
 
-    Iterator<String> findDistinctEmailsWithNotificationRequested(String salesforceId);
-
+  Iterator<String> findDistinctEmailsWithNotificationRequested(String salesforceId);
 }

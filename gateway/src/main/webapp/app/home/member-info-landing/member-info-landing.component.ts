@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-member-info-landing',
   templateUrl: './member-info-landing.component.html',
-  styleUrls: ['member-info-landing.component.scss']
+  styleUrls: ['member-info-landing.component.scss'],
 })
 export class MemberInfoLandingComponent implements OnInit, OnDestroy {
   account: IMSUser;

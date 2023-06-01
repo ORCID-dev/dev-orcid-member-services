@@ -29,13 +29,13 @@ describe('Component Tests', () => {
           FormBuilder,
           {
             provide: LoginService,
-            useClass: MockLoginService
+            useClass: MockLoginService,
           },
           {
             provide: StateStorageService,
-            useClass: MockStateStorageService
-          }
-        ]
+            useClass: MockStateStorageService,
+          },
+        ],
       })
         .overrideTemplate(JhiLoginModalComponent, '')
         .compileComponents();
@@ -58,13 +58,13 @@ describe('Component Tests', () => {
         const credentials = {
           username: 'admin',
           password: 'admin',
-          rememberMe: true
+          rememberMe: true,
         };
 
         comp.loginForm.patchValue({
           username: 'admin',
           password: 'admin',
-          rememberMe: true
+          rememberMe: true,
         });
         mockLoginService.setResponse({});
         mockStateStorageService.setResponse('admin/users?page=0');
@@ -91,12 +91,12 @@ describe('Component Tests', () => {
         const credentials = {
           username: 'admin',
           password: 'admin',
-          rememberMe: true
+          rememberMe: true,
         };
         comp.loginForm.patchValue({
           username: 'admin',
           password: 'admin',
-          rememberMe: true
+          rememberMe: true,
         });
         mockLoginService.setResponse({});
         mockStateStorageService.setResponse(null);
@@ -121,13 +121,13 @@ describe('Component Tests', () => {
 
       comp.loginForm.patchValue({
         username: 'admin',
-        password: 'admin'
+        password: 'admin',
       });
 
       const expected = {
         username: '',
         password: '',
-        rememberMe: true
+        rememberMe: true,
       };
 
       // WHEN

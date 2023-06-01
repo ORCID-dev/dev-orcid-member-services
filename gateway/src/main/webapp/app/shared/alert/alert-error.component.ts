@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
         </ngb-alert>
       </div>
     </div>
-  `
+  `,
 })
 export class JhiAlertErrorComponent implements OnDestroy {
   alerts: any[];
@@ -66,7 +66,6 @@ export class JhiAlertErrorComponent implements OnDestroy {
             }
 
             this.addParameter(httpErrorResponse);
-
           } else {
             this.addErrorAlert(httpErrorResponse.error);
           }
@@ -89,7 +88,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
   setClasses(alert) {
     return {
       'jhi-toast': alert.toast,
-      [alert.position]: true
+      [alert.position]: true,
     };
   }
 
@@ -108,7 +107,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
       msg: message,
       params: data,
       toast: this.alertService.isToast(),
-      scoped: true
+      scoped: true,
     };
 
     this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));

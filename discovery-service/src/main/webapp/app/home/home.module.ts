@@ -9,6 +9,6 @@ import { EurekaStatusService } from 'app/home/eureka.status.service';
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([HOME_ROUTE])],
   declarations: [HomeComponent],
-  providers: [EurekaStatusService]
+  providers: [EurekaStatusService],
 })
 export class JHipsterRegistryHomeModule {}

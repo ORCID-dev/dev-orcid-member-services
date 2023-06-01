@@ -65,7 +65,7 @@ function clientIdValidator(): ValidatorFn {
 
 @Component({
   selector: 'jhi-ms-member-update',
-  templateUrl: './member-update.component.html'
+  templateUrl: './member-update.component.html',
 })
 export class MSMemberUpdateComponent implements OnInit {
   orcidBaseUrl: string = ORCID_BASE_URL;
@@ -84,7 +84,7 @@ export class MSMemberUpdateComponent implements OnInit {
     createdBy: [],
     createdDate: [],
     lastModifiedBy: [],
-    lastModifiedDate: []
+    lastModifiedDate: [],
   });
 
   constructor(
@@ -142,7 +142,7 @@ export class MSMemberUpdateComponent implements OnInit {
       createdBy: msMember.createdBy,
       createdDate: msMember.createdDate != null ? msMember.createdDate.format(DATE_TIME_FORMAT) : null,
       lastModifiedBy: msMember.lastModifiedBy,
-      lastModifiedDate: msMember.lastModifiedDate != null ? msMember.lastModifiedDate.format(DATE_TIME_FORMAT) : null
+      lastModifiedDate: msMember.lastModifiedDate != null ? msMember.lastModifiedDate.format(DATE_TIME_FORMAT) : null,
     });
     const clientId = this.editForm.get('clientId').value;
     if (!clientId || (clientId && clientId === '')) {
@@ -192,12 +192,15 @@ export class MSMemberUpdateComponent implements OnInit {
       lastModifiedDate:
         this.editForm.get(['lastModifiedDate']).value != null
           ? moment(this.editForm.get(['lastModifiedDate']).value, DATE_TIME_FORMAT)
-          : undefined
+          : undefined,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IMSMember>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess() {
@@ -207,7 +210,10 @@ export class MSMemberUpdateComponent implements OnInit {
   }
 
   protected subscribeToUpdateResponse(result: Observable<HttpResponse<IMSMember>>) {
-    result.subscribe(() => this.onUpdateSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onUpdateSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected onUpdateSuccess() {

@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-ms-user',
-  templateUrl: './user.component.html'
+  templateUrl: './user.component.html',
 })
 export class MSUserComponent implements OnInit, OnDestroy {
   currentAccount: IMSUser;
@@ -83,7 +83,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
           page: this.page - 1,
           size: this.itemsPerPage,
           sort: this.sort(),
-          filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : ''
+          filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
         })
         .subscribe(
           (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
@@ -95,7 +95,7 @@ export class MSUserComponent implements OnInit, OnDestroy {
           page: this.page - 1,
           size: this.itemsPerPage,
           sort: this.sort(),
-          filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : ''
+          filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
         })
         .subscribe(
           (res: HttpResponse<IMSUser[]>) => this.paginateMSUser(res.body, res.headers),
@@ -114,8 +114,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
         page: this.page,
         size: this.itemsPerPage,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
-      }
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+      },
     });
     this.loadAll();
   }
@@ -127,8 +127,8 @@ export class MSUserComponent implements OnInit, OnDestroy {
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
-      }
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+      },
     ]);
     this.loadAll();
   }

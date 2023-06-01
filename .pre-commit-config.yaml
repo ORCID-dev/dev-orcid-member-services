@@ -22,17 +22,18 @@ repos:
         name: check yaml
         description: checks yaml files for parseable syntax.
         entry: check-yaml
-        args: ['--allow-multiple-documents']
+        args: ["--allow-multiple-documents"]
         language: python
-        exclude: '.ytt.yaml$'
+        exclude: ".ytt.yaml$"
         types: [yaml]
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: 'v2.7.1'
+    rev: "v2.7.1"
     hooks:
       - id: prettier
-        types_or: [css, javascript]
-
+        additional_dependencies:
+          - prettier
+          - prettier-plugin-java
 
   - repo: local
     hooks:
@@ -43,7 +44,7 @@ repos:
         additional_dependencies:
           [github.com/rhysd/actionlint/cmd/actionlint@v1.6.23]
         types: [yaml]
-        files: '^.github/workflows/'
+        files: "^.github/workflows/"
 
 ##########
 # pre-commit-ci config
@@ -54,8 +55,8 @@ ci:
 
     for more information, see https://pre-commit.ci
   autofix_prs: true
-  autoupdate_branch: ''
-  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: weekly
   skip: []
   submodules: false

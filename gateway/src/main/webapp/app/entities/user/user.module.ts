@@ -13,7 +13,7 @@ import {
   MSUserImportPopupComponent,
   MSUserImportDialogComponent,
   msUserRoute,
-  msUserPopupRoute
+  msUserPopupRoute,
 } from './';
 
 import { MSUserOwnershipChangeDirective } from './user-ownership-change.directive';
@@ -30,7 +30,7 @@ const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute];
     MSUserDeletePopupComponent,
     MSUserOwnershipChangeDirective,
     MSUserImportDialogComponent,
-    MSUserImportPopupComponent
+    MSUserImportPopupComponent,
   ],
   entryComponents: [
     MSUserComponent,
@@ -38,10 +38,10 @@ const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute];
     MSUserDeleteDialogComponent,
     MSUserDeletePopupComponent,
     MSUserImportDialogComponent,
-    MSUserImportPopupComponent
+    MSUserImportPopupComponent,
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MSUserServiceMSUserModule {
   constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {

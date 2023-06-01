@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'jhi-ms-user-import-dialog',
   templateUrl: './user-import-dialog.component.html',
-  providers: [FileUploadService]
+  providers: [FileUploadService],
 })
 export class MSUserImportDialogComponent {
   public resourceUrl;
@@ -56,7 +56,7 @@ export class MSUserImportDialogComponent {
           if (this.csvErrors.length === 0) {
             this.eventManager.broadcast({
               name: 'msUserListModification',
-              content: 'New user settings uploaded'
+              content: 'New user settings uploaded',
             });
             this.activeModal.dismiss(true);
           }
@@ -70,7 +70,7 @@ export class MSUserImportDialogComponent {
 
 @Component({
   selector: 'jhi-ms-user-import-popup',
-  template: ''
+  template: '',
 })
 export class MSUserImportPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;

@@ -13,7 +13,7 @@ import {
   MSMemberImportPopupComponent,
   MSMemberImportDialogComponent,
   msMemberRoute,
-  msMemberPopupRoute
+  msMemberPopupRoute,
 } from './';
 
 const ENTITY_STATES = [...msMemberRoute, ...msMemberPopupRoute];
@@ -27,7 +27,7 @@ const ENTITY_STATES = [...msMemberRoute, ...msMemberPopupRoute];
     MSMemberDeleteDialogComponent,
     MSMemberDeletePopupComponent,
     MSMemberImportDialogComponent,
-    MSMemberImportPopupComponent
+    MSMemberImportPopupComponent,
   ],
   entryComponents: [
     MSMemberComponent,
@@ -35,10 +35,10 @@ const ENTITY_STATES = [...msMemberRoute, ...msMemberPopupRoute];
     MSMemberDeleteDialogComponent,
     MSMemberDeletePopupComponent,
     MSMemberImportDialogComponent,
-    MSMemberImportPopupComponent
+    MSMemberImportPopupComponent,
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MSUserServiceMSMemberModule {
   constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {

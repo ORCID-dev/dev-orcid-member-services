@@ -14,13 +14,13 @@ import {
   SFMemberData,
   ISFRawConsortiumMemberData,
   SFConsortiumMemberData,
-  ISFConsortiumMemberData
+  ISFConsortiumMemberData,
 } from 'app/shared/model/salesforce-member-data.model';
 import {
   ISFMemberContactUpdate,
   ISFRawMemberContact,
   ISFRawMemberContacts,
-  SFMemberContact
+  SFMemberContact,
 } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from 'app/shared/model/salesforce-member-org-id.model';
 import { ISFPublicDetails } from 'app/shared/model/salesforce-public-details.model';
@@ -203,7 +203,7 @@ export class MSMemberService {
                 this.getMemberContacts(),
                 this.getMemberOrgIds(),
                 this.getConsortiaLeadName(res.consortiaLeadId),
-                this.getIsConsortiumLead(userIdentity.salesforceId)
+                this.getIsConsortiumLead(userIdentity.salesforceId),
               ]);
             }),
             tap(res => {
@@ -223,7 +223,8 @@ export class MSMemberService {
   protected convertDateFromClient(msMember: IMSMember): IMSMember {
     const copy: IMSMember = Object.assign({}, msMember, {
       createdDate: msMember.createdDate != null && msMember.createdDate.isValid() ? msMember.createdDate.toJSON() : null,
-      lastModifiedDate: msMember.lastModifiedDate != null && msMember.lastModifiedDate.isValid() ? msMember.lastModifiedDate.toJSON() : null
+      lastModifiedDate:
+        msMember.lastModifiedDate != null && msMember.lastModifiedDate.isValid() ? msMember.lastModifiedDate.toJSON() : null,
     });
     return copy;
   }
@@ -263,7 +264,7 @@ export class MSMemberService {
         publicDisplayEmail: res.body.Public_Display_Email__c,
         membershipStartDateString: res.body.Last_membership_start_date__c,
         membershipEndDateString: res.body.Last_membership_end_date__c,
-        consortiumMembers: res.body.consortiumOpportunities ? this.convertToConsortiumMembers(res.body.consortiumOpportunities) : null
+        consortiumMembers: res.body.consortiumOpportunities ? this.convertToConsortiumMembers(res.body.consortiumOpportunities) : null,
       };
     } else {
       return new SFMemberData();
@@ -297,7 +298,7 @@ export class MSMemberService {
       name: res.Name,
       contactEmail: res.Contact_Curr_Email__c,
       phone: res.Phone,
-      title: res.Title
+      title: res.Title,
     };
   }
 
@@ -327,7 +328,7 @@ export class MSMemberService {
         ROR,
         GRID,
         Ringgold,
-        Fundref
+        Fundref,
       };
     } else {
       return null;

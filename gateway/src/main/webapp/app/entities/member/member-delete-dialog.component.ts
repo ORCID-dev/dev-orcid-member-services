@@ -11,7 +11,7 @@ import { JhiAlertService } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-ms-member-delete-dialog',
-  templateUrl: './member-delete-dialog.component.html'
+  templateUrl: './member-delete-dialog.component.html',
 })
 export class MSMemberDeleteDialogComponent {
   msMember: IMSMember;
@@ -35,7 +35,7 @@ export class MSMemberDeleteDialogComponent {
         this.loading = false;
         this.eventManager.broadcast({
           name: 'msMemberListModification',
-          content: 'Deleted an msMember'
+          content: 'Deleted an msMember',
         });
         this.activeModal.dismiss(true);
         this.alertService.success('memberServiceApp.member.deleted.string');
@@ -49,7 +49,7 @@ export class MSMemberDeleteDialogComponent {
 
 @Component({
   selector: 'jhi-ms-member-delete-popup',
-  template: ''
+  template: '',
 })
 export class MSMemberDeletePopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;

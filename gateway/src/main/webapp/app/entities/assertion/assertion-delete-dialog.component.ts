@@ -12,7 +12,7 @@ import { JhiAlertService } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-assertion-delete-dialog',
-  templateUrl: './assertion-delete-dialog.component.html'
+  templateUrl: './assertion-delete-dialog.component.html',
 })
 export class AssertionDeleteDialogComponent {
   inOrcid: string = ASSERTION_STATUS.IN_ORCID;
@@ -35,13 +35,13 @@ export class AssertionDeleteDialogComponent {
       if (response.body.deleted) {
         this.eventManager.broadcast({
           name: 'assertionListModification',
-          content: 'Deleted an assertion'
+          content: 'Deleted an assertion',
         });
         this.alertService.success('assertionServiceApp.affiliation.deleted.string');
       } else {
         this.eventManager.broadcast({
           name: 'assertionListModification',
-          content: 'Failed to delete an assertion'
+          content: 'Failed to delete an assertion',
         });
         this.alertService.warning('assertionServiceApp.affiliation.problemDeleting.string');
       }
@@ -52,7 +52,7 @@ export class AssertionDeleteDialogComponent {
 
 @Component({
   selector: 'jhi-assertion-delete-popup',
-  template: ''
+  template: '',
 })
 export class AssertionDeletePopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;

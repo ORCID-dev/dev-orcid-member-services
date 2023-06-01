@@ -29,71 +29,69 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 @SpringBootTest(classes = UserServiceApp.class)
 public class MailServiceIT {
 
-    @Autowired
-    private ApplicationProperties applicationProperties;
+  @Autowired
+  private ApplicationProperties applicationProperties;
 
-    @Autowired
-    private MessageSource messageSource;
+  @Autowired
+  private MessageSource messageSource;
 
-    @Autowired
-    private SpringTemplateEngine templateEngine;
+  @Autowired
+  private SpringTemplateEngine templateEngine;
 
-    @Spy
-    private MailgunClient mailgunClient;
+  @Spy
+  private MailgunClient mailgunClient;
 
-    @Captor
-    private ArgumentCaptor<String> subjectCaptor;
+  @Captor
+  private ArgumentCaptor<String> subjectCaptor;
 
-    @Captor
-    private ArgumentCaptor<String> recipientCaptor;
+  @Captor
+  private ArgumentCaptor<String> recipientCaptor;
 
-    @Captor
-    private ArgumentCaptor<String> contentCaptor;
+  @Captor
+  private ArgumentCaptor<String> contentCaptor;
 
-    private MailService mailService;
+  private MailService mailService;
 
-    @BeforeEach
-    public void setup() throws MailException {
-        MockitoAnnotations.initMocks(this);
-        doNothing().when(mailgunClient).sendMail(anyString(), anyString(), anyString());
-        mailService = new MailService(applicationProperties, messageSource, templateEngine, mailgunClient);
-    }
+  @BeforeEach
+  public void setup() throws MailException {
+    MockitoAnnotations.initMocks(this);
+    doNothing().when(mailgunClient).sendMail(anyString(), anyString(), anyString());
+    mailService = new MailService(applicationProperties, messageSource, templateEngine, mailgunClient);
+  }
 
-    @Test
-    public void testSendActivationEmail() throws Exception {
-        User user = new User();
-        user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setEmail("john.doe@example.com");
-        mailService.sendActivationEmail(user);
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getValue()).isEqualTo("userservice account activation");
-        assertThat(contentCaptor.getValue()).isNotNull();
-    }
+  @Test
+  public void testSendActivationEmail() throws Exception {
+    User user = new User();
+    user.setLangKey(Constants.DEFAULT_LANGUAGE);
+    user.setEmail("john.doe@example.com");
+    mailService.sendActivationEmail(user);
+    verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+    assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
+    assertThat(subjectCaptor.getValue()).isEqualTo("userservice account activation");
+    assertThat(contentCaptor.getValue()).isNotNull();
+  }
 
-    @Test
-    public void testSendPasswordResetMail() throws Exception {
-        User user = new User();
-        user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setEmail("john.doe@example.com");
-        mailService.sendPasswordResetMail(user);
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal password reset");
-        assertThat(contentCaptor.getValue()).isNotNull();
-    }
+  @Test
+  public void testSendPasswordResetMail() throws Exception {
+    User user = new User();
+    user.setLangKey(Constants.DEFAULT_LANGUAGE);
+    user.setEmail("john.doe@example.com");
+    mailService.sendPasswordResetMail(user);
+    verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+    assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
+    assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal password reset");
+    assertThat(contentCaptor.getValue()).isNotNull();
+  }
 
-    @Test
-    public void testOrganizationOwnerChangedMail() throws Exception {
-        User user = new User();
-        user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        user.setEmail("john.doe@example.com");
-        mailService.sendOrganizationOwnerChangedMail(user, "Member 1");
-        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
-        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
-        assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal organization owner updated");
-        assertThat(contentCaptor.getValue()).isNotNull();
-
-    }
-
+  @Test
+  public void testOrganizationOwnerChangedMail() throws Exception {
+    User user = new User();
+    user.setLangKey(Constants.DEFAULT_LANGUAGE);
+    user.setEmail("john.doe@example.com");
+    mailService.sendOrganizationOwnerChangedMail(user, "Member 1");
+    verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+    assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
+    assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal organization owner updated");
+    assertThat(contentCaptor.getValue()).isNotNull();
+  }
 }

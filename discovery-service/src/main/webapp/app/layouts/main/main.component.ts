@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-main',
-  templateUrl: './main.component.html'
+  templateUrl: './main.component.html',
 })
 export class MainComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();

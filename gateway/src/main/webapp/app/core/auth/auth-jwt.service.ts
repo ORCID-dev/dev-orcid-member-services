@@ -18,7 +18,7 @@ export class AuthServerProvider {
       username: credentials.username,
       password: credentials.password,
       rememberMe: credentials.crememberMe,
-      mfaCode: credentials.mfaCode
+      mfaCode: credentials.mfaCode,
     };
     return this.http.post(SERVER_API_URL + 'auth/login', data, {});
   }

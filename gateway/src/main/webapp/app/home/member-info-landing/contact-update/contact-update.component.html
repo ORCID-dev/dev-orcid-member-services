@@ -15,12 +15,8 @@
         <div *ngIf="invalidForm" class="error-message d-flex p-3 mb-3">
           <img src="./../../../../content/images/error-sign.svg" alt="Warning sign" class="p-2" />
           <div>
-            <div class="mb-2 font-size-12 wide-text font-weight-bold">
-              Your changes cannot be saved
-            </div>
-            <div class="font-size-12 wide-text">
-              Please fix the issues with the contact form before trying to save again
-            </div>
+            <div class="mb-2 font-size-12 wide-text font-weight-bold">Your changes cannot be saved</div>
+            <div class="font-size-12 wide-text">Please fix the issues with the contact form before trying to save again</div>
           </div>
         </div>
         <h3 class="mb-3 wide-text">Contact details</h3>
@@ -142,15 +138,15 @@
           <div class="warning-message d-flex p-3 mb-4">
             <img src="./../../../../content/images/warning-sign.svg" alt="Warning sign" class="p-2" />
             <div>
-              <div class="mb-2 font-size-12 wide-text font-weight-bold">
-                Please note
-              </div>
+              <div class="mb-2 font-size-12 wide-text font-weight-bold">Please note</div>
               <div class="font-size-12 wide-text">
                 Changes made to organization contacts can take up to 48 hours to be reflected in the organization contact list.
               </div>
             </div>
           </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-primary">{{contactId ? 'Submit contact change request' : 'Submit new contact'}}</button>
+          <button type="submit" [disabled]="isSaving" class="btn btn-primary">
+            {{ contactId ? 'Submit contact change request' : 'Submit new contact' }}
+          </button>
           <button type="button" class="btn btn-outline-primary" routerLink="/">Cancel</button>
           <button type="button" (click)="delete()" [disabled]="isSaving" class="btn btn-danger float-right" *ngIf="contactId">
             <fa-icon [icon]="'trash-alt'" class="mr-2"></fa-icon>Remove this contact

@@ -1,10 +1,8 @@
 package org.orcid.memberportal.service.gateway.web.rest;
 
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.orcid.memberportal.service.gateway.security.oauth2.LoginResult;
 import org.orcid.memberportal.service.gateway.security.oauth2.OAuth2AuthenticationService;
 import org.slf4j.Logger;
@@ -27,48 +25,57 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthResource {
 
-    private final Logger log = LoggerFactory.getLogger(AuthResource.class);
+  private final Logger log = LoggerFactory.getLogger(AuthResource.class);
 
-    private OAuth2AuthenticationService authenticationService;
+  private OAuth2AuthenticationService authenticationService;
 
-    public AuthResource(OAuth2AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
+  public AuthResource(OAuth2AuthenticationService authenticationService) {
+    this.authenticationService = authenticationService;
+  }
 
-    /**
-     * Authenticates a user setting the access and refresh token cookies.
-     *
-     * @param request
-     *            the {@link HttpServletRequest} holding - among others - the
-     *            headers passed from the client.
-     * @param response
-     *            the {@link HttpServletResponse} getting the cookies set upon
-     *            successful authentication.
-     * @param params
-     *            the login params (username, password, rememberMe).
-     * @return the access token of the authenticated user. Will return an error
-     *         code if it fails to authenticate the user.
-     */
-    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResult> authenticate(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, String> params) {
-        return authenticationService.authenticate(request, response, params);
-    }
-    
-    /**
-     * Logout current user deleting his cookies.
-     *
-     * @param request
-     *            the {@link HttpServletRequest} holding - among others - the
-     *            headers passed from the client.
-     * @param response
-     *            the {@link HttpServletResponse} getting the cookies set upon
-     *            successful authentication.
-     * @return an empty response entity.
-     */
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        log.info("logging out user {}", SecurityContextHolder.getContext().getAuthentication().getName());
-        authenticationService.logout(request, response);
-        return ResponseEntity.noContent().build();
-    }
+  /**
+   * Authenticates a user setting the access and refresh token cookies.
+   *
+   * @param request
+   *            the {@link HttpServletRequest} holding - among others - the
+   *            headers passed from the client.
+   * @param response
+   *            the {@link HttpServletResponse} getting the cookies set upon
+   *            successful authentication.
+   * @param params
+   *            the login params (username, password, rememberMe).
+   * @return the access token of the authenticated user. Will return an error
+   *         code if it fails to authenticate the user.
+   */
+  @RequestMapping(
+    value = "/login",
+    method = RequestMethod.POST,
+    consumes = MediaType.APPLICATION_JSON_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  public ResponseEntity<LoginResult> authenticate(
+    HttpServletRequest request,
+    HttpServletResponse response,
+    @RequestBody Map<String, String> params
+  ) {
+    return authenticationService.authenticate(request, response, params);
+  }
+
+  /**
+   * Logout current user deleting his cookies.
+   *
+   * @param request
+   *            the {@link HttpServletRequest} holding - among others - the
+   *            headers passed from the client.
+   * @param response
+   *            the {@link HttpServletResponse} getting the cookies set upon
+   *            successful authentication.
+   * @return an empty response entity.
+   */
+  @RequestMapping(value = "/logout", method = RequestMethod.POST)
+  public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+    log.info("logging out user {}", SecurityContextHolder.getContext().getAuthentication().getName());
+    authenticationService.logout(request, response);
+    return ResponseEntity.noContent().build();
+  }
 }

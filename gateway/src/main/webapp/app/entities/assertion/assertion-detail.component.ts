@@ -8,7 +8,7 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
 @Component({
   selector: 'jhi-assertion-detail',
-  templateUrl: './assertion-detail.component.html'
+  templateUrl: './assertion-detail.component.html',
 })
 export class AssertionDetailComponent implements OnInit {
   assertion: IAssertion;

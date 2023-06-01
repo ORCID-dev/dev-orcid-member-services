@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-ms-member',
-  templateUrl: './member.component.html'
+  templateUrl: './member.component.html',
 })
 export class MSMemberComponent implements OnInit, OnDestroy {
   currentAccount: any;
@@ -81,7 +81,7 @@ export class MSMemberComponent implements OnInit, OnDestroy {
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
-        filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : ''
+        filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
       })
       .subscribe(
         (res: HttpResponse<IMSMember[]>) => this.paginateMSMember(res.body, res.headers),
@@ -99,8 +99,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
         page: this.page,
         size: this.itemsPerPage,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
-      }
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+      },
     });
     this.loadAll();
   }
@@ -112,8 +112,8 @@ export class MSMemberComponent implements OnInit, OnDestroy {
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : ''
-      }
+        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+      },
     ]);
     this.loadAll();
   }

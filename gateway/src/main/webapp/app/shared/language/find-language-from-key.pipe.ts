@@ -14,7 +14,7 @@ export class FindLanguageFromKeyPipe implements PipeTransform {
     ko: { name: '한국어' },
     pt: { name: 'Português' },
     ru: { name: 'Pусский' },
-    xx: { name: 'Test' }
+    xx: { name: 'Test' },
     // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
   };
   transform(lang: string): string {

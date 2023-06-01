@@ -14,7 +14,7 @@ import {
   COUNTRIES,
   ORG_ID_TYPES,
   DEFAULT_EARLIEST_YEAR,
-  DEFAULT_LATEST_YEAR_INCREMENT
+  DEFAULT_LATEST_YEAR_INCREMENT,
 } from 'app/shared/constants/orcid-api.constants';
 import { EMAIL_REGEXP } from 'app/app.constants';
 
@@ -111,7 +111,7 @@ function isValidDate(year, month, day) {
 
 @Component({
   selector: 'jhi-assertion-update',
-  templateUrl: './assertion-update.component.html'
+  templateUrl: './assertion-update.component.html',
 })
 export class AssertionUpdateComponent implements OnInit {
   AFFILIATION_TYPES = AFFILIATION_TYPES;
@@ -152,7 +152,7 @@ export class AssertionUpdateComponent implements OnInit {
       created: [],
       modified: [],
       deletedFromORCID: [],
-      sent: []
+      sent: [],
     },
     { validator: dateValidator() }
   );
@@ -222,7 +222,7 @@ export class AssertionUpdateComponent implements OnInit {
         modified: assertion.modified != null ? assertion.modified.format(DATE_TIME_FORMAT) : null,
         deletedFromORCID: assertion.deletedFromORCID != null ? assertion.deletedFromORCID.format(DATE_TIME_FORMAT) : null,
         status: assertion.status,
-        ownerId: assertion.ownerId
+        ownerId: assertion.ownerId,
       });
 
       this.onStartDateSelected(false);
@@ -288,7 +288,7 @@ export class AssertionUpdateComponent implements OnInit {
           ? moment(this.editForm.get(['deletedFromORCID']).value, DATE_TIME_FORMAT)
           : undefined,
       status: this.editForm.get(['status']) ? this.editForm.get(['status']).value : '',
-      ownerId: this.editForm.get(['ownerId']) ? this.editForm.get(['ownerId']).value : ''
+      ownerId: this.editForm.get(['ownerId']) ? this.editForm.get(['ownerId']).value : '',
     };
   }
 
@@ -312,7 +312,7 @@ export class AssertionUpdateComponent implements OnInit {
           !isValidDate(this.editForm.get('startYear').value, this.editForm.get('startMonth').value, this.editForm.get('startDay').value)
         ) {
           this.editForm.patchValue({
-            startDay: null
+            startDay: null,
           });
         }
       }
@@ -325,7 +325,7 @@ export class AssertionUpdateComponent implements OnInit {
       if (this.editForm.get('endYear').value && this.editForm.get('endMonth').value) {
         if (!isValidDate(this.editForm.get('endYear').value, this.editForm.get('endMonth').value, this.editForm.get('endDay').value)) {
           this.editForm.patchValue({
-            endDay: null
+            endDay: null,
           });
         }
       }

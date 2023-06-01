@@ -1,5 +1,5 @@
-## This file is a backup copy of the configuration file of transifex. 
-## it does not affect the functionality of the integration here in any way. 
+## This file is a backup copy of the configuration file of transifex.
+## it does not affect the functionality of the integration here in any way.
 
 filters:
   - filter_type: file
@@ -114,7 +114,7 @@ filters:
     file_format: UNICODEPROPERTIES
     source_language: en
     translation_files_expression: gateway/src/test/resources/i18n/messages_<lang>.properties
-    source_file: gateway/src/test/resources/i18n/messages_en.properties 
+    source_file: gateway/src/test/resources/i18n/messages_en.properties
 
   - filter_type: file
     file_format: UNICODEPROPERTIES
@@ -151,4 +151,3 @@ filters:
     source_language: en
     translation_files_expression: user-service/src/test/resources/i18n/messages_<lang>.properties
     source_file: user-service/src/test/resources/i18n/messages_en.properties
-

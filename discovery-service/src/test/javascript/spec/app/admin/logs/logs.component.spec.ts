@@ -20,7 +20,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
         declarations: [LogsComponent],
-        providers: [LogsService, RoutesService]
+        providers: [LogsService, RoutesService],
       })
         .overrideTemplate(LogsComponent, '')
         .compileComponents();
@@ -49,7 +49,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         comp.activeRoute = activeRoute;
         comp.routes = [activeRoute];
@@ -58,9 +58,9 @@ describe('Component Tests', () => {
           of({
             loggers: {
               main: {
-                effectiveLevel: 'WARN'
-              }
-            }
+                effectiveLevel: 'WARN',
+              },
+            },
           })
         );
 
@@ -79,7 +79,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         comp.activeRoute = activeRoute;
         comp.routes = [activeRoute];
@@ -103,7 +103,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         comp.activeRoute = activeRoute;
         comp.routes = [activeRoute];
@@ -113,9 +113,9 @@ describe('Component Tests', () => {
           of({
             loggers: {
               main: {
-                effectiveLevel: 'WARN'
-              }
-            }
+                effectiveLevel: 'WARN',
+              },
+            },
           })
         );
 

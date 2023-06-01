@@ -15,7 +15,7 @@ import {
   SendNotificationsPopupComponent,
   SendNotificationsDialogComponent,
   assertionRoute,
-  assertionPopupRoute
+  assertionPopupRoute,
 } from './';
 
 const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
@@ -31,7 +31,7 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
     AssertionImportPopupComponent,
     AssertionImportDialogComponent,
     SendNotificationsPopupComponent,
-    SendNotificationsDialogComponent
+    SendNotificationsDialogComponent,
   ],
   entryComponents: [
     AssertionComponent,
@@ -41,10 +41,10 @@ const ENTITY_STATES = [...assertionRoute, ...assertionPopupRoute];
     AssertionImportPopupComponent,
     AssertionImportDialogComponent,
     SendNotificationsPopupComponent,
-    SendNotificationsDialogComponent
+    SendNotificationsDialogComponent,
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AssertionServiceAssertionModule {
   constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {

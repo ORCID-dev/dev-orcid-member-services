@@ -11,13 +11,13 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
       [
         {
           path: 'admin',
-          loadChildren: './admin/admin.module#GatewayAdminModule'
+          loadChildren: './admin/admin.module#GatewayAdminModule',
         },
-        ...LAYOUT_ROUTES
+        ...LAYOUT_ROUTES,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }
-    )
+    ),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class GatewayAppRoutingModule {}

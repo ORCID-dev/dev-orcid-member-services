@@ -15,7 +15,7 @@ import { IMSUser } from 'app/shared/model/user.model';
 @Component({
   selector: 'send-notifications-import-dialog',
   templateUrl: './send-notifications-dialog.component.html',
-  providers: [NotificationService]
+  providers: [NotificationService],
 })
 export class SendNotificationsDialogComponent implements OnInit {
   faPaperPlane = faPaperPlane;
@@ -70,7 +70,7 @@ export class SendNotificationsDialogComponent implements OnInit {
   close() {
     this.eventManager.broadcast({
       name: 'sendNotifications',
-      content: ''
+      content: '',
     });
     this.activeModal.dismiss(true);
   }
@@ -78,7 +78,7 @@ export class SendNotificationsDialogComponent implements OnInit {
 
 @Component({
   selector: 'send-notifications-popup',
-  template: ''
+  template: '',
 })
 export class SendNotificationsPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;

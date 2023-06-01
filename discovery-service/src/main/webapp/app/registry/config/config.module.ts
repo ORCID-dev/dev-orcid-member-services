@@ -7,6 +7,6 @@ import { ConfigComponent } from './config.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([configRoute])],
-  declarations: [ConfigComponent]
+  declarations: [ConfigComponent],
 })
 export class ConfigModule {}

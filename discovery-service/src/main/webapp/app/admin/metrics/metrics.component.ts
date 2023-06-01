@@ -8,7 +8,7 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-metrics',
-  templateUrl: './metrics.component.html'
+  templateUrl: './metrics.component.html',
 })
 export class MetricsMonitoringComponent implements OnInit, OnDestroy {
   metrics?: Metrics;
@@ -55,7 +55,7 @@ export class MetricsMonitoringComponent implements OnInit, OnDestroy {
             if (error.status === 500 || error.status === 404) {
               this.routesService.routeDown(this.activeRoute);
             }
-          }
+          },
         });
     } else {
       this.routesService.routeDown(this.activeRoute);

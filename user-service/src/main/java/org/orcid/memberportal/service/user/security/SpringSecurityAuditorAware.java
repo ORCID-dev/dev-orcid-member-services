@@ -1,7 +1,6 @@
 package org.orcid.memberportal.service.user.security;
 
 import java.util.Optional;
-
 import org.orcid.memberportal.service.user.config.Constants;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringSecurityAuditorAware implements AuditorAware<String> {
 
-    @Override
-    public Optional<String> getCurrentAuditor() {
-        return Optional.of(SecurityUtils.getCurrentUserLogin().orElse(Constants.SYSTEM_ACCOUNT));
-    }
+  @Override
+  public Optional<String> getCurrentAuditor() {
+    return Optional.of(SecurityUtils.getCurrentUserLogin().orElse(Constants.SYSTEM_ACCOUNT));
+  }
 }

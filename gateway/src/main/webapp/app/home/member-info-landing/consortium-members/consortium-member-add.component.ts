@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-consortium-member-add',
   templateUrl: './consortium-member-add.component.html',
-  styleUrls: ['./consortium-member-add.scss']
+  styleUrls: ['./consortium-member-add.scss'],
 })
 export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
   COUNTRIES = COUNTRIES;
@@ -38,7 +38,7 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     { id: 3, selected: false, name: 'Technical contact' },
     { id: 4, selected: false, name: 'Invoice contact' },
     { id: 5, selected: false, name: 'Comms contact' },
-    { id: 6, selected: false, name: 'Product contact' }
+    { id: 6, selected: false, name: 'Product contact' },
   ];
 
   constructor(
@@ -75,7 +75,7 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
         contactName: [null, [Validators.maxLength(40)]],
         contactJobTitle: [null, [Validators.maxLength(128)]],
         contactEmail: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(40)]],
-        contactPhone: [null, [Validators.maxLength(40)]]
+        contactPhone: [null, [Validators.maxLength(40)]],
       },
       { validator: this.dateValidator.bind(this) }
     );
@@ -115,7 +115,7 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
       contactName: consortiumMember.contactName,
       contactJobTitle: consortiumMember.contactJobTitle,
       contactEmail: consortiumMember.contactEmail,
-      contactPhone: consortiumMember.contactPhone
+      contactPhone: consortiumMember.contactPhone,
     });
   }
 

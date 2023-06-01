@@ -35,51 +35,51 @@ export const msUserRoute: Routes = [
     path: '',
     component: MSUserComponent,
     resolve: {
-      pagingParams: JhiResolvePagingParams
+      pagingParams: JhiResolvePagingParams,
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
       defaultSort: 'id,asc',
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/view',
     component: MSUserDetailComponent,
     resolve: {
-      msUser: MSUserResolve
+      msUser: MSUserResolve,
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: 'new',
     component: MSUserUpdateComponent,
     resolve: {
-      msUser: MSUserResolve
+      msUser: MSUserResolve,
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/edit',
     component: MSUserUpdateComponent,
     resolve: {
-      msUser: MSUserResolve
+      msUser: MSUserResolve,
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string',
     },
-    canActivate: [UserRouteAccessService]
-  }
+    canActivate: [UserRouteAccessService],
+  },
 ];
 
 export const msUserPopupRoute: Routes = [
@@ -87,26 +87,26 @@ export const msUserPopupRoute: Routes = [
     path: ':id/delete',
     component: MSUserDeletePopupComponent,
     resolve: {
-      msUser: MSUserResolve
+      msUser: MSUserResolve,
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER', 'ROLE_CONSORTIUM_LEAD'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string',
     },
     canActivate: [UserRouteAccessService],
-    outlet: 'popup'
+    outlet: 'popup',
   },
   {
     path: 'import',
     component: MSUserImportPopupComponent,
     resolve: {
-      msUser: MSUserResolve
+      msUser: MSUserResolve,
     },
     data: {
       authorities: ['ROLE_ADMIN'],
-      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string'
+      pageTitle: 'gatewayApp.msUserServiceMSUser.home.title.string',
     },
     canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  }
+    outlet: 'popup',
+  },
 ];

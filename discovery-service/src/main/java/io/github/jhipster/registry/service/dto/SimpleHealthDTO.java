@@ -8,21 +8,19 @@ import org.springframework.boot.actuate.health.Status;
  */
 public final class SimpleHealthDTO {
 
-    private Status status;
+  private Status status;
 
-    public SimpleHealthDTO() {
-    }
+  public SimpleHealthDTO() {}
 
-    public SimpleHealthDTO(Status status) {
-        this.status = status;
-    }
+  public SimpleHealthDTO(Status status) {
+    this.status = status;
+  }
 
-    public Status getStatus() {
-        return status;
-    }
+  public Status getStatus() {
+    return status;
+  }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
+  public void setStatus(Status status) {
+    this.status = status;
+  }
 }

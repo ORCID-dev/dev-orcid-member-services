@@ -15,7 +15,7 @@ describe('Component Tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
-        declarations: [HealthCheckComponent]
+        declarations: [HealthCheckComponent],
       })
         .overrideTemplate(HealthCheckComponent, '')
         .compileComponents();
@@ -44,7 +44,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         const health: Health = { status: 'UP', components: { mail: { status: 'UP', details: 'mailDetails' } } };
         spyOn(service, 'checkInstanceHealth').and.returnValue(of(health));
@@ -64,7 +64,7 @@ describe('Component Tests', () => {
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         const health: Health = { status: 'DOWN', components: { mail: { status: 'DOWN', details: 'mailDetails' } } };
         spyOn(service, 'checkInstanceHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: health })));

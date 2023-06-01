@@ -18,7 +18,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
         declarations: [LogsComponent],
-        providers: [LogsService]
+        providers: [LogsService],
       })
         .overrideTemplate(LogsComponent, '')
         .compileComponents();
@@ -46,11 +46,11 @@ describe('Component Tests', () => {
               body: {
                 loggers: {
                   main: {
-                    effectiveLevel: 'WARN'
-                  }
-                }
+                    effectiveLevel: 'WARN',
+                  },
+                },
               },
-              headers
+              headers,
             })
           )
         );
@@ -74,10 +74,10 @@ describe('Component Tests', () => {
               body: {
                 loggers: {
                   main: {
-                    effectiveLevel: 'ERROR'
-                  }
-                }
-              }
+                    effectiveLevel: 'ERROR',
+                  },
+                },
+              },
             })
           )
         );

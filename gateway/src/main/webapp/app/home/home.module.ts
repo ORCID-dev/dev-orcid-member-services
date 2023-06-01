@@ -10,7 +10,7 @@ import {
   GenericLandingComponent,
   MemberInfoLandingComponent,
   MemberInfoEditComponent,
-  ContactUpdateComponent
+  ContactUpdateComponent,
 } from './';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { QuillModule } from 'ngx-quill';
@@ -24,9 +24,9 @@ import { QuillModule } from 'ngx-quill';
     MemberInfoEditComponent,
     ContactUpdateComponent,
     AddConsortiumMemberComponent,
-    RemoveConsortiumMemberComponent
+    RemoveConsortiumMemberComponent,
   ],
 
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GatewayHomeModule {}

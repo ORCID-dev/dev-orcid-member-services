@@ -6,86 +6,85 @@ import java.util.List;
 
 public class AssertionsUploadSummary implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private int numAdded;
+  private int numAdded;
 
-    private int numUpdated;
+  private int numUpdated;
 
-    private int numDeleted;
+  private int numDeleted;
 
-    private int numDuplicates;
-    
-    private String filename;
-    
-    private String date;
+  private int numDuplicates;
 
-    List<AssertionsUploadError> errors = new ArrayList<>();
-    
-    List<String> registryDeleteFailures = new ArrayList<>();
+  private String filename;
 
-    public int getNumAdded() {
-        return numAdded;
-    }
+  private String date;
 
-    public void setNumAdded(int numAdded) {
-        this.numAdded = numAdded;
-    }
+  List<AssertionsUploadError> errors = new ArrayList<>();
 
-    public int getNumUpdated() {
-        return numUpdated;
-    }
+  List<String> registryDeleteFailures = new ArrayList<>();
 
-    public void setNumUpdated(int numUpdated) {
-        this.numUpdated = numUpdated;
-    }
+  public int getNumAdded() {
+    return numAdded;
+  }
 
-    public int getNumDeleted() {
-        return numDeleted;
-    }
+  public void setNumAdded(int numAdded) {
+    this.numAdded = numAdded;
+  }
 
-    public void setNumDeleted(int numDeleted) {
-        this.numDeleted = numDeleted;
-    }
+  public int getNumUpdated() {
+    return numUpdated;
+  }
 
-    public int getNumDuplicates() {
-        return numDuplicates;
-    }
+  public void setNumUpdated(int numUpdated) {
+    this.numUpdated = numUpdated;
+  }
 
-    public void setNumDuplicates(int numDuplicates) {
-        this.numDuplicates = numDuplicates;
-    }
+  public int getNumDeleted() {
+    return numDeleted;
+  }
 
-    public List<AssertionsUploadError> getErrors() {
-        return errors;
-    }
+  public void setNumDeleted(int numDeleted) {
+    this.numDeleted = numDeleted;
+  }
 
-    public void setErrors(List<AssertionsUploadError> errors) {
-        this.errors = errors;
-    }
+  public int getNumDuplicates() {
+    return numDuplicates;
+  }
 
-    public String getFilename() {
-        return filename;
-    }
+  public void setNumDuplicates(int numDuplicates) {
+    this.numDuplicates = numDuplicates;
+  }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
+  public List<AssertionsUploadError> getErrors() {
+    return errors;
+  }
 
-    public String getDate() {
-        return date;
-    }
+  public void setErrors(List<AssertionsUploadError> errors) {
+    this.errors = errors;
+  }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+  public String getFilename() {
+    return filename;
+  }
 
-    public List<String> getRegistryDeleteFailures() {
-        return registryDeleteFailures;
-    }
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
 
-    public void setRegistryDeleteFailures(List<String> registryDeleteFailures) {
-        this.registryDeleteFailures = registryDeleteFailures;
-    }
-    
+  public String getDate() {
+    return date;
+  }
+
+  public void setDate(String date) {
+    this.date = date;
+  }
+
+  public List<String> getRegistryDeleteFailures() {
+    return registryDeleteFailures;
+  }
+
+  public void setRegistryDeleteFailures(List<String> registryDeleteFailures) {
+    this.registryDeleteFailures = registryDeleteFailures;
+  }
 }

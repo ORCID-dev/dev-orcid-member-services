@@ -9,12 +9,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [NgbModule, InfiniteScrollModule, CookieModule.forRoot(), FontAwesomeModule, ReactiveFormsModule],
-  exports: [FormsModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule, FontAwesomeModule, ReactiveFormsModule]
+  exports: [FormsModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule, FontAwesomeModule, ReactiveFormsModule],
 })
 export class GatewaySharedLibsModule {
   static forRoot() {
     return {
-      ngModule: GatewaySharedLibsModule
+      ngModule: GatewaySharedLibsModule,
     };
   }
 }

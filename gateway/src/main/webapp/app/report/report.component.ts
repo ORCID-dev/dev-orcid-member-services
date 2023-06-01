@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'jhi-report',
   templateUrl: './report.component.html',
-  styleUrls: ['report.scss']
+  styleUrls: ['report.scss'],
 })
 export class ReportComponent implements OnInit {
   reportSrc: any;

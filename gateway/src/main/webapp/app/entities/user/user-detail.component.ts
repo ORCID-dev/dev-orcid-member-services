@@ -9,7 +9,7 @@ import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-ms-user-detail',
-  templateUrl: './user-detail.component.html'
+  templateUrl: './user-detail.component.html',
 })
 export class MSUserDetailComponent implements OnInit {
   msUser: IMSUser;

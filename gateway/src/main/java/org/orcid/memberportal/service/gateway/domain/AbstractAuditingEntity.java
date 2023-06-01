@@ -1,14 +1,13 @@
 package org.orcid.memberportal.service.gateway.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.time.Instant;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import java.io.Serializable;
-import java.time.Instant;
 
 /**
  * Base abstract class for entities which will hold definitions for created,
@@ -16,57 +15,57 @@ import java.time.Instant;
  */
 public abstract class AbstractAuditingEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @CreatedBy
-    @Field("created_by")
-    @JsonIgnore
-    private String createdBy;
+  @CreatedBy
+  @Field("created_by")
+  @JsonIgnore
+  private String createdBy;
 
-    @CreatedDate
-    @Field("created_date")
-    @JsonIgnore
-    private Instant createdDate = Instant.now();
+  @CreatedDate
+  @Field("created_date")
+  @JsonIgnore
+  private Instant createdDate = Instant.now();
 
-    @LastModifiedBy
-    @Field("last_modified_by")
-    @JsonIgnore
-    private String lastModifiedBy;
+  @LastModifiedBy
+  @Field("last_modified_by")
+  @JsonIgnore
+  private String lastModifiedBy;
 
-    @LastModifiedDate
-    @Field("last_modified_date")
-    @JsonIgnore
-    private Instant lastModifiedDate = Instant.now();
+  @LastModifiedDate
+  @Field("last_modified_date")
+  @JsonIgnore
+  private Instant lastModifiedDate = Instant.now();
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
+  public Instant getCreatedDate() {
+    return createdDate;
+  }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
+  public void setCreatedDate(Instant createdDate) {
+    this.createdDate = createdDate;
+  }
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+  public String getLastModifiedBy() {
+    return lastModifiedBy;
+  }
 
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+  public void setLastModifiedBy(String lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+  public Instant getLastModifiedDate() {
+    return lastModifiedDate;
+  }
 
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+  public void setLastModifiedDate(Instant lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
 }

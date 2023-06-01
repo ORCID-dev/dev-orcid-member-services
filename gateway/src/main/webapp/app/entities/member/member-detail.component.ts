@@ -6,7 +6,7 @@ import { IMSMember } from 'app/shared/model/member.model';
 
 @Component({
   selector: 'jhi-ms-member-detail',
-  templateUrl: './member-detail.component.html'
+  templateUrl: './member-detail.component.html',
 })
 export class MSMemberDetailComponent implements OnInit {
   msMember: IMSMember;

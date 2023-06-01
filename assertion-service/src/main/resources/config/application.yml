@@ -1,4 +1,3 @@
-
 # ===================================================================
 # Spring Boot configuration.
 #
@@ -177,33 +176,33 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:  
-    orcidAPIEndpoint: ${APPLICATION_ORCIDAPIENDPOINT}
-    jwtSignatureUrl: ${APPLICATION_JWT_SIGNATURE_URL}
-    landingPageUrl: ${APPLICATION_LANDING_PAGE_URL}
-    mailDomain: ${APPLICATION_MAIL_DOMAIN}
-    mailApiKey: ${APPLICATION_MAIL_API_KEY}
-    mailApiUrl: ${APPLICATION_MAIL_API_URL}
-    mailFromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}  
-    mailFromName: ${APPLICATION_MAIL_FROM_NAME}
-    memberAssertionStatsDirectory: files/stats
-    assertionsCsvUploadDirectory: files/uploads
-    csvReportsDirectory: files/reports
-    storedFileLifespan: ${STORED_FILE_LIFESPAN}
-    memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
-    syncAffiliationsDelay: 60000
-    generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
-    processAssertionUploadsDelay: 120000
-    processCsvReportsDelay: 120000
-    removeStoredFilesDelay: 300000
-    sendPermissionLinkNotificationsDelay: 120000
-    internalRegistryApiEndpoint: ${APPLICATION_INTERNAL_API_ENDPOINT}
-    resendNotificationDays: ${APPLICATION_RESEND_NOTIFICATION_DAYS}
-    resendNotificationsCron: ${APPLICATION_RESEND_NOTIFICATION_CRON}
-    tokenExchange:
-        endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
-        grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}
-        subjectTokenType: ${APPLICATION_TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE}
-        requestedTokenType: ${APPLICATION_TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE}
-        clientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID} 
-        clientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}
+application:
+  orcidAPIEndpoint: ${APPLICATION_ORCIDAPIENDPOINT}
+  jwtSignatureUrl: ${APPLICATION_JWT_SIGNATURE_URL}
+  landingPageUrl: ${APPLICATION_LANDING_PAGE_URL}
+  mailDomain: ${APPLICATION_MAIL_DOMAIN}
+  mailApiKey: ${APPLICATION_MAIL_API_KEY}
+  mailApiUrl: ${APPLICATION_MAIL_API_URL}
+  mailFromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}
+  mailFromName: ${APPLICATION_MAIL_FROM_NAME}
+  memberAssertionStatsDirectory: files/stats
+  assertionsCsvUploadDirectory: files/uploads
+  csvReportsDirectory: files/reports
+  storedFileLifespan: ${STORED_FILE_LIFESPAN}
+  memberAssertionStatsRecipient: ${MEMBER_ASSERTION_STATS_RECIPIENT}
+  syncAffiliationsDelay: 60000
+  generateMemberAssertionStatsCron: ${MEMBER_ASSERTION_STATS_CRON}
+  processAssertionUploadsDelay: 120000
+  processCsvReportsDelay: 120000
+  removeStoredFilesDelay: 300000
+  sendPermissionLinkNotificationsDelay: 120000
+  internalRegistryApiEndpoint: ${APPLICATION_INTERNAL_API_ENDPOINT}
+  resendNotificationDays: ${APPLICATION_RESEND_NOTIFICATION_DAYS}
+  resendNotificationsCron: ${APPLICATION_RESEND_NOTIFICATION_CRON}
+  tokenExchange:
+    endpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
+    grantType: ${APPLICATION_TOKEN_EXCHANGE_GRANT_TYPE}
+    subjectTokenType: ${APPLICATION_TOKEN_EXCHANGE_SUBJECT_TOKEN_TYPE}
+    requestedTokenType: ${APPLICATION_TOKEN_EXCHANGE_REQUESTED_TOKEN_TYPE}
+    clientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID}
+    clientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}

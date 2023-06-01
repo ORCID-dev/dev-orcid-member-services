@@ -6,7 +6,7 @@ import {
   JhiAlertComponent,
   JhiAlertErrorComponent,
   ConvertToCamelCasePipe,
-  ContactUpdateConfirmationAlert
+  ContactUpdateConfirmationAlert,
 } from './';
 import { RemoveConsortiumMemberConfirmationComponent } from './alert/consortium-members/remove-consortium-member-confirmation.component';
 import { AddConsortiumMemberConfirmationComponent } from './alert/consortium-members/add-consortium-member-confirmation.component';
@@ -20,7 +20,7 @@ import { AddConsortiumMemberConfirmationComponent } from './alert/consortium-mem
     JhiAlertErrorComponent,
     ContactUpdateConfirmationAlert,
     AddConsortiumMemberConfirmationComponent,
-    RemoveConsortiumMemberConfirmationComponent
+    RemoveConsortiumMemberConfirmationComponent,
   ],
   exports: [
     GatewaySharedLibsModule,
@@ -30,8 +30,8 @@ import { AddConsortiumMemberConfirmationComponent } from './alert/consortium-mem
     JhiAlertErrorComponent,
     ContactUpdateConfirmationAlert,
     AddConsortiumMemberConfirmationComponent,
-    RemoveConsortiumMemberConfirmationComponent
+    RemoveConsortiumMemberConfirmationComponent,
   ],
-  entryComponents: [ContactUpdateConfirmationAlert, AddConsortiumMemberConfirmationComponent, RemoveConsortiumMemberConfirmationComponent]
+  entryComponents: [ContactUpdateConfirmationAlert, AddConsortiumMemberConfirmationComponent, RemoveConsortiumMemberConfirmationComponent],
 })
 export class GatewaySharedCommonModule {}

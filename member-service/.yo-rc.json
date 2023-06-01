@@ -32,10 +32,7 @@
     "enableTranslation": true,
     "clientPackageManager": "npm",
     "nativeLanguage": "en",
-    "languages": [
-      "en",
-      "es"
-    ],
+    "languages": ["en", "es"],
     "skipClient": true,
     "skipUserManagement": true
   }

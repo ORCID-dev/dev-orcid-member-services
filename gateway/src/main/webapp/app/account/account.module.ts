@@ -10,7 +10,7 @@ import {
   PasswordResetInitComponent,
   PasswordResetFinishComponent,
   SettingsComponent,
-  accountState
+  accountState,
 } from './';
 
 @NgModule({
@@ -21,8 +21,8 @@ import {
     PasswordStrengthBarComponent,
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
-    SettingsComponent
+    SettingsComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GatewayAccountModule {}

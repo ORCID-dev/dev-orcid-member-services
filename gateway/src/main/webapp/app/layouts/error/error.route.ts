@@ -8,8 +8,8 @@ export const errorRoute: Routes = [
     component: ErrorComponent,
     data: {
       authorities: [],
-      pageTitle: 'error.title.string'
-    }
+      pageTitle: 'error.title.string',
+    },
   },
   {
     path: 'accessdenied',
@@ -17,8 +17,8 @@ export const errorRoute: Routes = [
     data: {
       authorities: [],
       pageTitle: 'error.title.string',
-      error403: true
-    }
+      error403: true,
+    },
   },
   {
     path: '404',
@@ -26,11 +26,11 @@ export const errorRoute: Routes = [
     data: {
       authorities: [],
       pageTitle: 'error.title.string',
-      error404: true
-    }
+      error404: true,
+    },
   },
   {
     path: '**',
-    redirectTo: '/404'
-  }
+    redirectTo: '/404',
+  },
 ];

@@ -11,13 +11,13 @@ describe('Component Tests', () => {
   describe('MSUser Management Detail Component', () => {
     let comp: MSUserDetailComponent;
     let fixture: ComponentFixture<MSUserDetailComponent>;
-    const route = ({ data: of({ msUser: new MSUser('123') }) } as any) as ActivatedRoute;
+    const route = { data: of({ msUser: new MSUser('123') }) } as any as ActivatedRoute;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
         declarations: [MSUserDetailComponent],
-        providers: [{ provide: ActivatedRoute, useValue: route }]
+        providers: [{ provide: ActivatedRoute, useValue: route }],
       })
         .overrideTemplate(MSUserDetailComponent, '')
         .compileComponents();

@@ -6,6 +6,6 @@ import { REPORT_ROUTE, ReportComponent } from './';
 @NgModule({
   imports: [GatewaySharedModule, RouterModule.forChild([REPORT_ROUTE])],
   declarations: [ReportComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GatewayReportModule {}

@@ -1,34 +1,34 @@
 package org.orcid.memberportal.service.user.security;
 
 public class MfaSetup {
-    
-    private String secret;
-    
-    private String otp;
-    
-    private byte[] qrCode;
 
-    public String getSecret() {
-        return secret;
-    }
+  private String secret;
 
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
+  private String otp;
 
-    public String getOtp() {
-        return otp;
-    }
+  private byte[] qrCode;
 
-    public void setOtp(String otp) {
-        this.otp = otp;
-    }
+  public String getSecret() {
+    return secret;
+  }
 
-    public byte[] getQrCode() {
-        return qrCode;
-    }
+  public void setSecret(String secret) {
+    this.secret = secret;
+  }
 
-    public void setQrCode(byte[] qrCode) {
-        this.qrCode = qrCode;
-    }
+  public String getOtp() {
+    return otp;
+  }
+
+  public void setOtp(String otp) {
+    this.otp = otp;
+  }
+
+  public byte[] getQrCode() {
+    return qrCode;
+  }
+
+  public void setQrCode(byte[] qrCode) {
+    this.qrCode = qrCode;
+  }
 }

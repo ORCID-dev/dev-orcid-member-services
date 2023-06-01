@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-member-info-edit',
   templateUrl: './member-info-edit.component.html',
-  styleUrls: ['./member-info-edit.component.scss']
+  styleUrls: ['./member-info-edit.component.scss'],
 })
 export class MemberInfoEditComponent implements OnInit, OnDestroy {
   memberDataSubscription: Subscription;
@@ -24,20 +24,20 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
   isSaving: boolean;
   invalidForm: boolean;
   quillConfig = {
-    toolbar: [['bold', 'italic'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']]
+    toolbar: [['bold', 'italic'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']],
   };
   quillStyles = {
     fontFamily: 'inherit',
     fontSize: '14px',
     letterSpacing: '0.25px',
-    marginRight: '0'
+    marginRight: '0',
   };
 
   editForm = this.fb.group({
     name: [null, [Validators.required, Validators.maxLength(255)]],
     description: [null, [Validators.maxLength(5000)]],
     website: [null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]],
-    email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
+    email: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
   });
 
   constructor(
@@ -77,7 +77,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
         name: data.publicDisplayName,
         description: data.publicDisplayDescriptionHtml,
         website: data.website,
-        email: data.publicDisplayEmail
+        email: data.publicDisplayEmail,
       });
     }
   }
@@ -92,7 +92,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       name: this.editForm.get(['name']).value,
       description: this.editForm.get(['description']).value,
       website: this.editForm.get(['website']).value,
-      email: this.editForm.get(['email']).value
+      email: this.editForm.get(['email']).value,
     };
   }
 
@@ -110,7 +110,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
             publicDisplayDescriptionHtml: details.description,
             publicDisplayName: details.name,
             publicDisplayEmail: details.email,
-            website: details.website
+            website: details.website,
           });
           this.onSaveSuccess();
         },

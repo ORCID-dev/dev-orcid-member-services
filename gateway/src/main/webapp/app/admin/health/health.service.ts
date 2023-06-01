@@ -41,7 +41,7 @@ export class JhiHealthService {
   /* private methods */
   private addHealthObject(result, isLeaf, healthObject, name): any {
     const healthData: any = {
-      name
+      name,
     };
 
     const details = {};

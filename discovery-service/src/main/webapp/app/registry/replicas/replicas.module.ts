@@ -7,6 +7,6 @@ import { ReplicasComponent } from './replicas.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([replicasRoute])],
-  declarations: [ReplicasComponent]
+  declarations: [ReplicasComponent],
 })
 export class ReplicasModule {}

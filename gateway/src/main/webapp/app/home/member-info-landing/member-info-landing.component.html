@@ -64,12 +64,8 @@
       </div>
       <div class="row d-flex ml-0">
         <div class="font-weight-bold mr-1">Membership:</div>
-        <div *ngIf="isActive()" style="color:#7FAA26;">
-          Active
-        </div>
-        <div *ngIf="!isActive()" style="color:#D32F2F;">
-          Inactive
-        </div>
+        <div *ngIf="isActive()" style="color: #7faa26">Active</div>
+        <div *ngIf="!isActive()" style="color: #d32f2f">Inactive</div>
       </div>
     </div>
     <div *ngIf="memberData.isConsortiumLead">
@@ -121,9 +117,7 @@
             <div *ngIf="contact.phone">
               {{ contact.phone }}
             </div>
-            <div *ngIf="!contact.phone">
-              -
-            </div>
+            <div *ngIf="!contact.phone">-</div>
             <div class="contacts-edit-column">
               <a routerLink="/contact/{{ contact.contactEmail }}/edit" class="font-weight-normal">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>
@@ -146,7 +140,12 @@
         <h6>Member name</h6>
         <hr class="green-hr" />
         <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
-          <div>{{ consortiumMember.orgName }} <a routerLink="consortium-member/{{ consortiumMember.salesforceId }}/remove"><fa-icon [icon]="'trash-alt'" class="float-right"></fa-icon></a></div>
+          <div>
+            {{ consortiumMember.orgName }}
+            <a routerLink="consortium-member/{{ consortiumMember.salesforceId }}/remove"
+              ><fa-icon [icon]="'trash-alt'" class="float-right"></fa-icon
+            ></a>
+          </div>
           <hr *ngIf="i + 1 < memberData.consortiumMembers.length" />
         </div>
       </div>

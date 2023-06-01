@@ -17,10 +17,10 @@ export const REPORT_ROUTE: Route = {
   path: 'report/:reportType',
   component: ReportComponent,
   resolve: {
-    reportType: ReportResolve
+    reportType: ReportResolve,
   },
   data: {
     authorities: [],
-    pageTitle: 'gatewayApp.report.member.title.string'
-  }
+    pageTitle: 'gatewayApp.report.member.title.string',
+  },
 };

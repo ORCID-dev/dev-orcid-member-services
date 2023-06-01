@@ -29,13 +29,13 @@ describe('Component Tests', () => {
                     pagingParams: {
                       predicate: 'id',
                       reverse: false,
-                      page: 0
-                    }
-                  })
-              }
-            }
-          }
-        ]
+                      page: 0,
+                    },
+                  }),
+              },
+            },
+          },
+        ],
       })
         .overrideTemplate(AssertionComponent, '')
         .compileComponents();
@@ -52,7 +52,7 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Assertion('123')],
-            headers
+            headers,
           })
         )
       );
@@ -72,7 +72,7 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Assertion('123')],
-            headers
+            headers,
           })
         )
       );
@@ -85,7 +85,7 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Assertion('123')],
-            headers
+            headers,
           })
         )
       );

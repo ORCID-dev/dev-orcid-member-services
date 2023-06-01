@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'jhi-route-selector',
   templateUrl: './route-selector.component.html',
-  styleUrls: ['route-selector.component.scss']
+  styleUrls: ['route-selector.component.scss'],
 })
 export class RouteSelectorComponent implements OnInit, OnDestroy {
   activeRoute?: Route;

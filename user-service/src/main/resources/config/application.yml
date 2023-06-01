@@ -178,7 +178,7 @@ application:
   mailDomain: ${application.mail.domain}
   mailApiKey: ${application.mail.apiKey}
   mailApiUrl: ${application.mail.apiUrl}
-  mailFromAddress: ${application.mail.fromAddress}  
+  mailFromAddress: ${application.mail.fromAddress}
   mailFromName: ${application.mail.fromName}
   baseUrl: ${application.baseUrl}
   encryptKey: ${application.encrypt.key}

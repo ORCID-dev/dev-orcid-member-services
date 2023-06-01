@@ -25,7 +25,7 @@ export class ProfileService {
           inProduction: response.activeProfiles && response.activeProfiles.includes('prod'),
           swaggerEnabled: response.activeProfiles && response.activeProfiles.includes('swagger'),
           cloudConfigServerConfigurationSources: response['cloud-config-server-configuration-sources'],
-          cloudConfigLabel: response['cloud-config-label']
+          cloudConfigLabel: response['cloud-config-label'],
         };
         if (response.activeProfiles && response['display-ribbon-on-profiles']) {
           const displayRibbonOnProfiles = response['display-ribbon-on-profiles'].split(',');

@@ -18,9 +18,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     BrowserAnimationsModule,
 
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   declarations: [LandingPageComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GatewayLandingPageModule {}

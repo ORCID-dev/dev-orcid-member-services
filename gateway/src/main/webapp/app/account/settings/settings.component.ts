@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'jhi-settings',
-  templateUrl: './settings.component.html'
+  templateUrl: './settings.component.html',
 })
 export class SettingsComponent implements OnInit {
   error: string;
@@ -27,12 +27,12 @@ export class SettingsComponent implements OnInit {
     activated: [false],
     authorities: [[]],
     langKey: ['en'],
-    imageUrl: []
+    imageUrl: [],
   });
   mfaForm = this.fb.group({
     mfaEnabled: [[]],
     verificationCode: [],
-    securitySave: []
+    securitySave: [],
   });
 
   constructor(
@@ -144,7 +144,7 @@ export class SettingsComponent implements OnInit {
       activated: this.settingsForm.get('activated').value,
       authorities: this.settingsForm.get('authorities').value,
       langKey: this.settingsForm.get('langKey').value,
-      imageUrl: this.settingsForm.get('imageUrl').value
+      imageUrl: this.settingsForm.get('imageUrl').value,
     };
   }
 
@@ -156,13 +156,13 @@ export class SettingsComponent implements OnInit {
       activated: account.activated,
       authorities: account.authorities,
       langKey: account.langKey,
-      imageUrl: account.imageUrl
+      imageUrl: account.imageUrl,
     });
   }
 
   updateMfaForm(account: any): void {
     this.mfaForm.patchValue({
-      mfaEnabled: account.mfaEnabled
+      mfaEnabled: account.mfaEnabled,
     });
   }
 }

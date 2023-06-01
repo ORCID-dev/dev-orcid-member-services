@@ -9,7 +9,7 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Component({
   selector: 'jhi-login-modal',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class JhiLoginModalComponent implements AfterViewInit, OnInit {
   authenticationError: boolean;
@@ -22,7 +22,7 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
     username: [''],
     password: [''],
     rememberMe: [true],
-    mfaCode: ['']
+    mfaCode: [''],
   });
 
   constructor(
@@ -46,7 +46,7 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
     this.loginForm.patchValue({
       username: '',
       password: '',
-      mfaCode: ''
+      mfaCode: '',
     });
     if (!this.isModal) {
       this.activeModal.dismiss('cancel');
@@ -69,7 +69,7 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
           username: this.loginForm.get('username').value,
           password: this.loginForm.get('password').value,
           rememberMe: this.loginForm.get('rememberMe').value,
-          mfaCode: this.loginForm.get('mfaCode').value
+          mfaCode: this.loginForm.get('mfaCode').value,
         })
         .subscribe(
           data => {
@@ -102,7 +102,7 @@ export class JhiLoginModalComponent implements AfterViewInit, OnInit {
 
     this.eventManager.broadcast({
       name: 'authenticationSuccess',
-      content: 'Sending Authentication Success'
+      content: 'Sending Authentication Success',
     });
 
     // previousState was set in the authExpiredInterceptor before being redirected to login modal.

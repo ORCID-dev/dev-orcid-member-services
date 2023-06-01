@@ -20,53 +20,53 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
     JhiParseLinks,
     {
       provide: JhiLanguageService,
-      useClass: MockLanguageService
+      useClass: MockLanguageService,
     },
     {
       provide: JhiLanguageHelper,
-      useClass: MockLanguageHelper
+      useClass: MockLanguageHelper,
     },
     {
       provide: JhiEventManager,
-      useClass: MockEventManager
+      useClass: MockEventManager,
     },
     {
       provide: NgbActiveModal,
-      useClass: MockActiveModal
+      useClass: MockActiveModal,
     },
     {
       provide: ActivatedRoute,
-      useValue: new MockActivatedRoute({ id: '123' })
+      useValue: new MockActivatedRoute({ id: '123' }),
     },
     {
       provide: Router,
-      useClass: MockRouter
+      useClass: MockRouter,
     },
     {
       provide: AccountService,
-      useClass: MockAccountService
+      useClass: MockAccountService,
     },
     {
       provide: LoginModalService,
-      useValue: null
+      useValue: null,
     },
     {
       provide: ElementRef,
-      useValue: null
+      useValue: null,
     },
     {
       provide: Renderer,
-      useValue: null
+      useValue: null,
     },
     {
       provide: JhiAlertService,
-      useValue: null
+      useValue: null,
     },
     {
       provide: NgbModal,
-      useValue: null
-    }
+      useValue: null,
+    },
   ],
-  imports: [HttpClientTestingModule]
+  imports: [HttpClientTestingModule],
 })
 export class GatewayTestModule {}

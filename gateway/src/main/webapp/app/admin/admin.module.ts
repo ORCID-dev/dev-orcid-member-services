@@ -14,14 +14,14 @@ import {
   JhiHealthCheckComponent,
   JhiConfigurationComponent,
   JhiDocsComponent,
-  JhiGatewayComponent
+  JhiGatewayComponent,
 } from './';
 
 @NgModule({
   imports: [
     GatewaySharedModule,
     /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
-    RouterModule.forChild(adminState)
+    RouterModule.forChild(adminState),
   ],
   declarations: [
     AuditsComponent,
@@ -31,11 +31,11 @@ import {
     JhiHealthModalComponent,
     JhiDocsComponent,
     JhiGatewayComponent,
-    JhiMetricsMonitoringComponent
+    JhiMetricsMonitoringComponent,
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
   entryComponents: [JhiHealthModalComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GatewayAdminModule {
   constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {

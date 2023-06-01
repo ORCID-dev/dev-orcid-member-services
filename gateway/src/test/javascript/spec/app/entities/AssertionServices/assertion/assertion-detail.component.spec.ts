@@ -11,13 +11,13 @@ describe('Component Tests', () => {
   describe('Assertion Management Detail Component', () => {
     let comp: AssertionDetailComponent;
     let fixture: ComponentFixture<AssertionDetailComponent>;
-    const route = ({ data: of({ assertion: new Assertion('123') }) } as any) as ActivatedRoute;
+    const route = { data: of({ assertion: new Assertion('123') }) } as any as ActivatedRoute;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
         declarations: [AssertionDetailComponent],
-        providers: [{ provide: ActivatedRoute, useValue: route }]
+        providers: [{ provide: ActivatedRoute, useValue: route }],
       })
         .overrideTemplate(AssertionDetailComponent, '')
         .compileComponents();

@@ -7,7 +7,7 @@ export const enum AffiliationSection {
   INVITED_POSITION = 'INVITED_POSITION',
   DISTINCTION = 'DISTINCTION',
   MEMBERSHIP = 'MEMBERSHIP',
-  SERVICE = 'SERVICE'
+  SERVICE = 'SERVICE',
 }
 
 export interface IAssertion {

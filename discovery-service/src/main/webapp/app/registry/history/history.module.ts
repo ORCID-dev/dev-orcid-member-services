@@ -7,6 +7,6 @@ import { HistoryComponent } from './history.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([historyRoute])],
-  declarations: [HistoryComponent]
+  declarations: [HistoryComponent],
 })
 export class HistoryModule {}

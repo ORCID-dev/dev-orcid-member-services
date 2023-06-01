@@ -6,7 +6,7 @@ import { RefreshService } from './refresh.service';
 @Component({
   selector: 'jhi-refresh-selector',
   templateUrl: './refresh-selector.component.html',
-  styleUrls: ['refresh-selector.component.scss']
+  styleUrls: ['refresh-selector.component.scss'],
 })
 export class RefreshSelectorComponent implements OnInit, OnDestroy {
   activeRefreshTime: number;

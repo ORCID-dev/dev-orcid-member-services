@@ -10,19 +10,18 @@ import org.orcid.memberportal.service.assertion.domain.validation.org.impl.GridO
 
 public class GridOrgValidatorTest {
 
-    @InjectMocks
-    private GridOrgValidator validator;
+  @InjectMocks
+  private GridOrgValidator validator;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+  @BeforeEach
+  public void setUp() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-    @Test
-    void testValidId() {
-        assertThat(validator.validId("grid.238252.c")).isTrue();
-        assertThat(validator.validId(".238252.c")).isFalse();
-        assertThat(validator.validId("grid")).isFalse();
-    }
-
+  @Test
+  void testValidId() {
+    assertThat(validator.validId("grid.238252.c")).isTrue();
+    assertThat(validator.validId(".238252.c")).isFalse();
+    assertThat(validator.validId("grid")).isFalse();
+  }
 }

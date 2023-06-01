@@ -14,24 +14,25 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
  * @see RefreshTokenFilter
  */
 public class RefreshTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
-    /**
-     * {@link RefreshTokenFilter} needs the {@link OAuth2AuthenticationService}
-     * to refresh cookies using the refresh token.
-     */
-    private OAuth2AuthenticationService authenticationService;
-    private final TokenStore tokenStore;
 
-    public RefreshTokenFilterConfigurer(OAuth2AuthenticationService authenticationService, TokenStore tokenStore) {
-        this.authenticationService = authenticationService;
-        this.tokenStore = tokenStore;
-    }
+  /**
+   * {@link RefreshTokenFilter} needs the {@link OAuth2AuthenticationService}
+   * to refresh cookies using the refresh token.
+   */
+  private OAuth2AuthenticationService authenticationService;
+  private final TokenStore tokenStore;
 
-    /**
-     * Install {@link RefreshTokenFilter} as a servlet Filter.
-     */
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        RefreshTokenFilter customFilter = new RefreshTokenFilter(authenticationService, tokenStore);
-        http.addFilterBefore(customFilter, OAuth2AuthenticationProcessingFilter.class);
-    }
+  public RefreshTokenFilterConfigurer(OAuth2AuthenticationService authenticationService, TokenStore tokenStore) {
+    this.authenticationService = authenticationService;
+    this.tokenStore = tokenStore;
+  }
+
+  /**
+   * Install {@link RefreshTokenFilter} as a servlet Filter.
+   */
+  @Override
+  public void configure(HttpSecurity http) throws Exception {
+    RefreshTokenFilter customFilter = new RefreshTokenFilter(authenticationService, tokenStore);
+    http.addFilterBefore(customFilter, OAuth2AuthenticationProcessingFilter.class);
+  }
 }

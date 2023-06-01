@@ -15,11 +15,11 @@ import { NgbDateMomentAdapter } from 'app/shared/util/datepicker-adapter';
     Title,
     {
       provide: LOCALE_ID,
-      useValue: 'en'
+      useValue: 'en',
     },
     { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter },
-    DatePipe
-  ]
+    DatePipe,
+  ],
 })
 export class GatewayCoreModule {
   constructor() {

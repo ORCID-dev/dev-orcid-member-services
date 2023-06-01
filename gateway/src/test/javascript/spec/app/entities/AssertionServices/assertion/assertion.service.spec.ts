@@ -19,7 +19,7 @@ describe('Service Tests', () => {
     let currentDate: moment.Moment;
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
       expectedResult = {};
       injector = getTestBed();
@@ -70,7 +70,7 @@ describe('Service Tests', () => {
           {
             created: currentDate.format(DATE_TIME_FORMAT),
             modified: currentDate.format(DATE_TIME_FORMAT),
-            deletedFromORCID: currentDate.format(DATE_TIME_FORMAT)
+            deletedFromORCID: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
         );
@@ -90,7 +90,7 @@ describe('Service Tests', () => {
             id: 'ID',
             created: currentDate.format(DATE_TIME_FORMAT),
             modified: currentDate.format(DATE_TIME_FORMAT),
-            deletedFromORCID: currentDate.format(DATE_TIME_FORMAT)
+            deletedFromORCID: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
         );
@@ -98,7 +98,7 @@ describe('Service Tests', () => {
           {
             created: currentDate,
             modified: currentDate,
-            deletedFromORCID: currentDate
+            deletedFromORCID: currentDate,
           },
           returnedFromService
         );
@@ -139,7 +139,7 @@ describe('Service Tests', () => {
             modified: currentDate.format(DATE_TIME_FORMAT),
             deletedFromORCID: currentDate.format(DATE_TIME_FORMAT),
             sent: true,
-            adminId: 'BBBBBB'
+            adminId: 'BBBBBB',
           },
           elemDefault
         );
@@ -148,7 +148,7 @@ describe('Service Tests', () => {
           {
             created: currentDate,
             modified: currentDate,
-            deletedFromORCID: currentDate
+            deletedFromORCID: currentDate,
           },
           returnedFromService
         );
@@ -189,7 +189,7 @@ describe('Service Tests', () => {
             modified: currentDate.format(DATE_TIME_FORMAT),
             deletedFromORCID: currentDate.format(DATE_TIME_FORMAT),
             sent: true,
-            adminId: 'BBBBBB'
+            adminId: 'BBBBBB',
           },
           elemDefault
         );
@@ -197,7 +197,7 @@ describe('Service Tests', () => {
           {
             created: currentDate,
             modified: currentDate,
-            deletedFromORCID: currentDate
+            deletedFromORCID: currentDate,
           },
           returnedFromService
         );

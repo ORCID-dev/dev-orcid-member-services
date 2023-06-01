@@ -2,54 +2,53 @@ package org.orcid.memberportal.service.member.client.model;
 
 public class PublicMemberDetails {
 
-    private String name;
+  private String name;
 
-    private String description;
-    
-    private String website;
-    
-    private String email;
-    
-    private String salesforceId;
+  private String description;
 
-    public String getName() {
-        return name;
-    }
+  private String website;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  private String email;
 
-    public String getDescription() {
-        return description;
-    }
+  private String salesforceId;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getWebsite() {
-        return website;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setWebsite(String website) {
-        this.website = website;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getWebsite() {
+    return website;
+  }
 
-    public String getSalesforceId() {
-        return salesforceId;
-    }
+  public void setWebsite(String website) {
+    this.website = website;
+  }
 
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
-    }
-    
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getSalesforceId() {
+    return salesforceId;
+  }
+
+  public void setSalesforceId(String salesforceId) {
+    this.salesforceId = salesforceId;
+  }
 }

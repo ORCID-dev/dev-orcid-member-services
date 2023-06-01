@@ -11,7 +11,7 @@ import { JhiAlertService } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-ms-user-delete-dialog',
-  templateUrl: './user-delete-dialog.component.html'
+  templateUrl: './user-delete-dialog.component.html',
 })
 export class MSUserDeleteDialogComponent {
   msUser: IMSUser;
@@ -31,7 +31,7 @@ export class MSUserDeleteDialogComponent {
     this.msUserService.delete(id).subscribe(response => {
       this.eventManager.broadcast({
         name: 'msUserListModification',
-        content: 'Deleted an msUser'
+        content: 'Deleted an msUser',
       });
       this.activeModal.dismiss(true);
       this.alertService.success('userServiceApp.user.deleted.string');
@@ -41,7 +41,7 @@ export class MSUserDeleteDialogComponent {
 
 @Component({
   selector: 'jhi-ms-user-delete-popup',
-  template: ''
+  template: '',
 })
 export class MSUserDeletePopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;

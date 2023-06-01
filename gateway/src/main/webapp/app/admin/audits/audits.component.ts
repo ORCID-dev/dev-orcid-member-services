@@ -10,7 +10,7 @@ import { AuditsService } from './audits.service';
 
 @Component({
   selector: 'jhi-audit',
-  templateUrl: './audits.component.html'
+  templateUrl: './audits.component.html',
 })
 export class AuditsComponent implements OnInit, OnDestroy {
   audits: Audit[];
@@ -81,9 +81,12 @@ export class AuditsComponent implements OnInit, OnDestroy {
         size: this.itemsPerPage,
         sort: this.sort(),
         fromDate: this.fromDate,
-        toDate: this.toDate
+        toDate: this.toDate,
       })
-      .subscribe((res: HttpResponse<Audit[]>) => this.onSuccess(res.body, res.headers), (res: HttpResponse<any>) => this.onError(res.body));
+      .subscribe(
+        (res: HttpResponse<Audit[]>) => this.onSuccess(res.body, res.headers),
+        (res: HttpResponse<any>) => this.onError(res.body)
+      );
   }
 
   sort() {
@@ -105,8 +108,8 @@ export class AuditsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/audits'], {
       queryParams: {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-      }
+        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+      },
     });
     this.loadAll();
   }

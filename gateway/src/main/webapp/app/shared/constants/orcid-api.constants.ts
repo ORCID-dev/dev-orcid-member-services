@@ -10,7 +10,7 @@ export const ASSERTION_STATUS = {
   USER_REVOKED_ACCESS: 'User revoked access',
   ERROR_ADDING_TO_ORCID: 'Error adding to ORCID',
   ERROR_UPDATING_TO_ORCID: 'Error updating in ORCID',
-  ERROR_DELETING_IN_ORCID: 'Error deleting in ORCID'
+  ERROR_DELETING_IN_ORCID: 'Error deleting in ORCID',
 };
 
 export const COUNTRIES = {
@@ -262,7 +262,7 @@ export const COUNTRIES = {
   'Western Sahara': 'EH',
   Yemen: 'YE',
   Zambia: 'ZM',
-  Zimbabwe: 'ZW'
+  Zimbabwe: 'ZW',
 };
 
 export const ORG_ID_TYPES = ['RINGGOLD', 'GRID', 'ROR'];

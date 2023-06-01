@@ -86,14 +86,14 @@ export class MSUserService {
     return this.http.post(`${this.switchResourceUrl}/switch_user`, formData, {
       headers: new HttpHeaders().set('Accept', 'text/html'),
       withCredentials: true,
-      responseType: 'text'
+      responseType: 'text',
     });
   }
 
   protected convertDateFromClient(msUser: IMSUser): IMSUser {
     const copy: IMSUser = Object.assign({}, msUser, {
       createdDate: msUser.createdDate != null && msUser.createdDate.isValid() ? msUser.createdDate.toJSON() : null,
-      lastModifiedDate: msUser.lastModifiedDate != null && msUser.lastModifiedDate.isValid() ? msUser.lastModifiedDate.toJSON() : null
+      lastModifiedDate: msUser.lastModifiedDate != null && msUser.lastModifiedDate.isValid() ? msUser.lastModifiedDate.toJSON() : null,
     });
     return copy;
   }
@@ -104,7 +104,7 @@ export class MSUserService {
       res.body.lastModifiedDate = res.body.lastModifiedDate != null ? moment(res.body.lastModifiedDate) : null;
       res.body.isAdmin = false;
       if (res.body.authorities != null) {
-        res.body.authorities.forEach(function(userRole) {
+        res.body.authorities.forEach(function (userRole) {
           if (userRole === UserAuthorities.ROLE_ADMIN) {
             res.body.isAdmin = true;
           }
@@ -121,7 +121,7 @@ export class MSUserService {
         msUser.lastModifiedDate = msUser.lastModifiedDate != null ? moment(msUser.lastModifiedDate) : null;
         msUser.isAdmin = false;
         if (msUser.authorities != null) {
-          msUser.authorities.forEach(function(userRole) {
+          msUser.authorities.forEach(function (userRole) {
             if (userRole === UserAuthorities.ROLE_ADMIN) {
               msUser.isAdmin = true;
             }

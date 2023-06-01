@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-health',
-  templateUrl: './health.component.html'
+  templateUrl: './health.component.html',
 })
 export class HealthCheckComponent implements OnInit, OnDestroy {
   health?: Health;

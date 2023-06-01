@@ -35,7 +35,7 @@ import { QuillModule } from 'ngx-quill';
       alertAsToast: false,
       alertTimeout: 5000,
       i18nEnabled: true,
-      defaultI18nLang: 'en'
+      defaultI18nLang: 'en',
     }),
     GatewaySharedModule.forRoot(),
     GatewayCoreModule,
@@ -46,28 +46,28 @@ import { QuillModule } from 'ngx-quill';
     GatewayEntityModule,
     GatewayReportModule,
     GatewayAppRoutingModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthExpiredInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorHandlerInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NotificationInterceptor,
-      multi: true
+      multi: true,
     },
-    NgbActiveModal
+    NgbActiveModal,
   ],
-  bootstrap: [JhiMainComponent]
+  bootstrap: [JhiMainComponent],
 })
 export class GatewayAppModule {
   constructor(private dpConfig: NgbDatepickerConfig) {

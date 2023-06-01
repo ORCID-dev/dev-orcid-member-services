@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'jhi-assertions-import-dialog',
   templateUrl: './assertion-import-dialog.component.html',
-  providers: [FileUploadService]
+  providers: [FileUploadService],
 })
 export class AssertionImportDialogComponent {
   public resourceUrl;
@@ -67,7 +67,7 @@ export class AssertionImportDialogComponent {
   close() {
     this.eventManager.broadcast({
       name: 'importAssertions',
-      content: ''
+      content: '',
     });
     this.activeModal.dismiss(true);
   }
@@ -75,7 +75,7 @@ export class AssertionImportDialogComponent {
 
 @Component({
   selector: 'jhi-assertions-import-popup',
-  template: ''
+  template: '',
 })
 export class AssertionImportPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;

@@ -8,10 +8,10 @@ export const auditsRoute: Route = {
   path: 'audits',
   component: AuditsComponent,
   resolve: {
-    pagingParams: JhiResolvePagingParams
+    pagingParams: JhiResolvePagingParams,
   },
   data: {
     pageTitle: 'audits.title.string',
-    defaultSort: 'auditEventDate,desc'
-  }
+    defaultSort: 'auditEventDate,desc',
+  },
 };

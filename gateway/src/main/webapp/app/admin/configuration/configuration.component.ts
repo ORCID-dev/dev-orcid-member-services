@@ -4,7 +4,7 @@ import { JhiConfigurationService } from './configuration.service';
 
 @Component({
   selector: 'jhi-configuration',
-  templateUrl: './configuration.component.html'
+  templateUrl: './configuration.component.html',
 })
 export class JhiConfigurationComponent implements OnInit {
   allConfiguration: any = null;

@@ -8,7 +8,7 @@ import {
   ISFMemberContact,
   ISFMemberContactUpdate,
   SFMemberContact,
-  SFMemberContactUpdate
+  SFMemberContactUpdate,
 } from 'app/shared/model/salesforce-member-contact.model';
 import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
 import { IMSUser } from 'app/shared/model/user.model';
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-contact-update',
   templateUrl: './contact-update.component.html',
-  styleUrls: ['./contact-update.component.scss']
+  styleUrls: ['./contact-update.component.scss'],
 })
 export class ContactUpdateComponent implements OnInit, OnDestroy {
   memberDataSubscription: Subscription;
@@ -36,7 +36,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
     { id: 3, selected: false, name: 'Technical contact' },
     { id: 4, selected: false, name: 'Invoice contact' },
     { id: 5, selected: false, name: 'Comms contact' },
-    { id: 6, selected: false, name: 'Product contact' }
+    { id: 6, selected: false, name: 'Product contact' },
   ];
 
   constructor(
@@ -62,7 +62,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         // add interface
         this.rolesData.map(val => this.fb.group({ id: val.id, selected: val.selected, name: val.name })),
         [this.validateContactRoles]
-      )
+      ),
     });
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
@@ -95,7 +95,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       email: contact.contactEmail,
       roles: contact.memberOrgRole.map(role => {
         return { selected: true, name: role };
-      })
+      }),
     });
   }
 
@@ -118,7 +118,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         .get('roles')
         // add interface
         .value.filter(role => role.selected)
-        .map(role => role.name)
+        .map(role => role.name),
     };
   }
 

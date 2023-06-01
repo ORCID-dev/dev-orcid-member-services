@@ -17,7 +17,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [GatewayTestModule],
         declarations: [PasswordComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(PasswordComponent, '')
         .compileComponents();
@@ -33,7 +33,7 @@ describe('Component Tests', () => {
       // GIVEN
       comp.passwordForm.patchValue({
         newPassword: 'password1',
-        confirmPassword: 'password2'
+        confirmPassword: 'password2',
       });
       // WHEN
       comp.changePassword();
@@ -47,7 +47,7 @@ describe('Component Tests', () => {
       // GIVEN
       const passwordValues = {
         currentPassword: 'oldPassword',
-        newPassword: 'myPassword'
+        newPassword: 'myPassword',
       };
 
       spyOn(service, 'save').and.returnValue(of(new HttpResponse({ body: true })));
@@ -55,7 +55,7 @@ describe('Component Tests', () => {
       comp.passwordForm.patchValue({
         currentPassword: passwordValues.currentPassword,
         newPassword: passwordValues.newPassword,
-        confirmPassword: passwordValues.newPassword
+        confirmPassword: passwordValues.newPassword,
       });
 
       // WHEN
@@ -65,12 +65,12 @@ describe('Component Tests', () => {
       expect(service.save).toHaveBeenCalledWith(passwordValues.newPassword, passwordValues.currentPassword);
     });
 
-    it('should set success to OK upon success', function() {
+    it('should set success to OK upon success', function () {
       // GIVEN
       spyOn(service, 'save').and.returnValue(of(new HttpResponse({ body: true })));
       comp.passwordForm.patchValue({
         newPassword: 'myPassword',
-        confirmPassword: 'myPassword'
+        confirmPassword: 'myPassword',
       });
 
       // WHEN
@@ -82,12 +82,12 @@ describe('Component Tests', () => {
       expect(comp.success).toBe('OK');
     });
 
-    it('should notify of error if change password fails', function() {
+    it('should notify of error if change password fails', function () {
       // GIVEN
       spyOn(service, 'save').and.returnValue(throwError('ERROR'));
       comp.passwordForm.patchValue({
         newPassword: 'myPassword',
-        confirmPassword: 'myPassword'
+        confirmPassword: 'myPassword',
       });
 
       // WHEN

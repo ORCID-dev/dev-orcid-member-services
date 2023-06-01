@@ -8,7 +8,7 @@ import { ApplicationsService } from 'app/registry/applications/applications.serv
 
 @Component({
   selector: 'jhi-config',
-  templateUrl: './config.component.html'
+  templateUrl: './config.component.html',
 })
 export class ConfigComponent implements OnInit, OnDestroy {
   application = 'application';

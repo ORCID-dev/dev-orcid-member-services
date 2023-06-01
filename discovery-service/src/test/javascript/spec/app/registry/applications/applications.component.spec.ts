@@ -15,7 +15,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
         declarations: [ApplicationsComponent],
-        providers: [ApplicationsService, RefreshService]
+        providers: [ApplicationsService, RefreshService],
       })
         .overrideTemplate(ApplicationsComponent, '')
         .compileComponents();
@@ -35,9 +35,9 @@ describe('Component Tests', () => {
               {
                 instanceId: 1,
                 status: 'UP',
-                homePageUrl: 'home'
-              }
-            ]
+                homePageUrl: 'home',
+              },
+            ],
           },
           {
             name: 'app2',
@@ -45,15 +45,15 @@ describe('Component Tests', () => {
               {
                 instanceId: 2,
                 status: 'UP',
-                homePageUrl: 'home'
+                homePageUrl: 'home',
               },
               {
                 instanceId: 3,
                 status: 'UP',
-                homePageUrl: 'home'
-              }
-            ]
-          }
+                homePageUrl: 'home',
+              },
+            ],
+          },
         ];
         spyOn(service, 'findAll').and.returnValue(of(applications));
 

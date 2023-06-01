@@ -3,150 +3,149 @@ package org.orcid.memberportal.service.member.client.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JsonRootName(value="member")
+@JsonRootName(value = "member")
 public class MemberDetails {
-    
-    @JsonProperty("Id")
-    private String id;
-    
-    @JsonProperty("Consortia_Member__c")
-    private boolean consortiaMember;
-    
-    @JsonProperty("Consortium_Lead__c")
-    private String consortiaLeadId;
-    
-    @JsonProperty("Name")
-    private String name;
-    
-    @JsonProperty("Public_Display_Name__c")
-    private String publicDisplayName;
-    
-    @JsonProperty("Website")
-    private String website;
-    
-    @JsonProperty("BillingCountry")
-    private String billingCountry;
-    
-    @JsonProperty("Research_Community__c")
-    private String memberType;
-    
-    @JsonProperty("Public_Display_Description__c")
-    private String publicDisplayDescriptionHtml;
-    
-    @JsonProperty("Logo_Description__c")
-    private String logoUrl;
-    
-    @JsonProperty("Public_Display_Email__c")
-    private String publicDisplayEmail;
-    
-    @JsonProperty("Last_membership_start_date__c")
-    private String membershipStartDateString;
-    
-    @JsonProperty("Last_membership_end_date__c")
-    private String membershipEndDateString;
 
-    public String getId() {
-        return id;
-    }
+  @JsonProperty("Id")
+  private String id;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  @JsonProperty("Consortia_Member__c")
+  private boolean consortiaMember;
 
-    public boolean isConsortiaMember() {
-        return consortiaMember;
-    }
+  @JsonProperty("Consortium_Lead__c")
+  private String consortiaLeadId;
 
-    public void setConsortiaMember(boolean consortiaMember) {
-        this.consortiaMember = consortiaMember;
-    }
+  @JsonProperty("Name")
+  private String name;
 
-    public String getConsortiaLeadId() {
-        return consortiaLeadId;
-    }
+  @JsonProperty("Public_Display_Name__c")
+  private String publicDisplayName;
 
-    public void setConsortiaLeadId(String consortiaLeadId) {
-        this.consortiaLeadId = consortiaLeadId;
-    }
+  @JsonProperty("Website")
+  private String website;
 
-    public String getName() {
-        return name;
-    }
+  @JsonProperty("BillingCountry")
+  private String billingCountry;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  @JsonProperty("Research_Community__c")
+  private String memberType;
 
-    public String getPublicDisplayName() {
-        return publicDisplayName;
-    }
+  @JsonProperty("Public_Display_Description__c")
+  private String publicDisplayDescriptionHtml;
 
-    public void setPublicDisplayName(String publicDisplayName) {
-        this.publicDisplayName = publicDisplayName;
-    }
+  @JsonProperty("Logo_Description__c")
+  private String logoUrl;
 
-    public String getWebsite() {
-        return website;
-    }
+  @JsonProperty("Public_Display_Email__c")
+  private String publicDisplayEmail;
 
-    public void setWebsite(String website) {
-        this.website = website;
-    }
+  @JsonProperty("Last_membership_start_date__c")
+  private String membershipStartDateString;
 
-    public String getBillingCountry() {
-        return billingCountry;
-    }
+  @JsonProperty("Last_membership_end_date__c")
+  private String membershipEndDateString;
 
-    public void setBillingCountry(String billingCountry) {
-        this.billingCountry = billingCountry;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public String getMemberType() {
-        return memberType;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public void setMemberType(String memberType) {
-        this.memberType = memberType;
-    }
+  public boolean isConsortiaMember() {
+    return consortiaMember;
+  }
 
-    public String getPublicDisplayDescriptionHtml() {
-        return publicDisplayDescriptionHtml;
-    }
+  public void setConsortiaMember(boolean consortiaMember) {
+    this.consortiaMember = consortiaMember;
+  }
 
-    public void setPublicDisplayDescriptionHtml(String publicDisplayDescriptionHtml) {
-        this.publicDisplayDescriptionHtml = publicDisplayDescriptionHtml;
-    }
+  public String getConsortiaLeadId() {
+    return consortiaLeadId;
+  }
 
-    public String getLogoUrl() {
-        return logoUrl;
-    }
+  public void setConsortiaLeadId(String consortiaLeadId) {
+    this.consortiaLeadId = consortiaLeadId;
+  }
 
-    public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getPublicDisplayEmail() {
-        return publicDisplayEmail;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setPublicDisplayEmail(String publicDisplayEmail) {
-        this.publicDisplayEmail = publicDisplayEmail;
-    }
+  public String getPublicDisplayName() {
+    return publicDisplayName;
+  }
 
-    public String getMembershipStartDateString() {
-        return membershipStartDateString;
-    }
+  public void setPublicDisplayName(String publicDisplayName) {
+    this.publicDisplayName = publicDisplayName;
+  }
 
-    public void setMembershipStartDateString(String membershipStartDateString) {
-        this.membershipStartDateString = membershipStartDateString;
-    }
+  public String getWebsite() {
+    return website;
+  }
 
-    public String getMembershipEndDateString() {
-        return membershipEndDateString;
-    }
+  public void setWebsite(String website) {
+    this.website = website;
+  }
 
-    public void setMembershipEndDateString(String membershipEndDateString) {
-        this.membershipEndDateString = membershipEndDateString;
-    }
-    
+  public String getBillingCountry() {
+    return billingCountry;
+  }
+
+  public void setBillingCountry(String billingCountry) {
+    this.billingCountry = billingCountry;
+  }
+
+  public String getMemberType() {
+    return memberType;
+  }
+
+  public void setMemberType(String memberType) {
+    this.memberType = memberType;
+  }
+
+  public String getPublicDisplayDescriptionHtml() {
+    return publicDisplayDescriptionHtml;
+  }
+
+  public void setPublicDisplayDescriptionHtml(String publicDisplayDescriptionHtml) {
+    this.publicDisplayDescriptionHtml = publicDisplayDescriptionHtml;
+  }
+
+  public String getLogoUrl() {
+    return logoUrl;
+  }
+
+  public void setLogoUrl(String logoUrl) {
+    this.logoUrl = logoUrl;
+  }
+
+  public String getPublicDisplayEmail() {
+    return publicDisplayEmail;
+  }
+
+  public void setPublicDisplayEmail(String publicDisplayEmail) {
+    this.publicDisplayEmail = publicDisplayEmail;
+  }
+
+  public String getMembershipStartDateString() {
+    return membershipStartDateString;
+  }
+
+  public void setMembershipStartDateString(String membershipStartDateString) {
+    this.membershipStartDateString = membershipStartDateString;
+  }
+
+  public String getMembershipEndDateString() {
+    return membershipEndDateString;
+  }
+
+  public void setMembershipEndDateString(String membershipEndDateString) {
+    this.membershipEndDateString = membershipEndDateString;
+  }
 }

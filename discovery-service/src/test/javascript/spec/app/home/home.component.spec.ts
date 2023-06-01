@@ -30,16 +30,16 @@ describe('Component Tests', () => {
           {
             provide: LoginModalService,
             useValue: {
-              open(): void {}
-            }
+              open(): void {},
+            },
           },
           EurekaStatusService,
           ApplicationsService,
           HealthService,
           LoginOAuth2Service,
           ProfileService,
-          RefreshService
-        ]
+          RefreshService,
+        ],
       })
         .overrideTemplate(HomeComponent, '')
         .compileComponents();
@@ -60,8 +60,8 @@ describe('Component Tests', () => {
         spyOn(service, 'findAll').and.returnValue(
           of({
             status: {
-              environment: 'test'
-            }
+              environment: 'test',
+            },
           })
         );
 
@@ -82,23 +82,23 @@ describe('Component Tests', () => {
               instances: [
                 {
                   instanceId: 1,
-                  status: 'UP'
+                  status: 'UP',
                 },
                 {
                   instanceId: 2,
-                  status: 'DOWN'
-                }
-              ]
+                  status: 'DOWN',
+                },
+              ],
             },
             {
               name: 'app2',
               instances: [
                 {
                   instanceId: 3,
-                  status: 'UP'
-                }
-              ]
-            }
+                  status: 'UP',
+                },
+              ],
+            },
           ])
         );
 

@@ -6,22 +6,22 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'user',
-        loadChildren: './user/user.module#MSUserServiceMSUserModule'
+        loadChildren: './user/user.module#MSUserServiceMSUserModule',
       },
       {
         path: 'member',
-        loadChildren: './member/member.module#MSUserServiceMSMemberModule'
+        loadChildren: './member/member.module#MSUserServiceMSMemberModule',
       },
       {
         path: 'assertion',
-        loadChildren: './assertion/assertion.module#AssertionServiceAssertionModule'
-      }
+        loadChildren: './assertion/assertion.module#AssertionServiceAssertionModule',
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ])
+    ]),
   ],
   declarations: [],
   entryComponents: [],
   providers: [],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GatewayEntityModule {}

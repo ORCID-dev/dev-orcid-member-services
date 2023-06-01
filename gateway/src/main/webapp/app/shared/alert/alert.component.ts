@@ -11,7 +11,7 @@ import { JhiAlertService } from 'ng-jhipster';
         </ngb-alert>
       </div>
     </div>
-  `
+  `,
 })
 export class JhiAlertComponent implements OnInit, OnDestroy {
   alerts: any[];
@@ -25,7 +25,7 @@ export class JhiAlertComponent implements OnInit, OnDestroy {
   setClasses(alert) {
     return {
       'jhi-toast': alert.toast,
-      [alert.position]: true
+      [alert.position]: true,
     };
   }
 

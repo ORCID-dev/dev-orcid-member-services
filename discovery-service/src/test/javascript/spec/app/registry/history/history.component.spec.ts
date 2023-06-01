@@ -14,7 +14,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
         declarations: [HistoryComponent],
-        providers: [HistoryService, RefreshService]
+        providers: [HistoryService, RefreshService],
       })
         .overrideTemplate(HistoryComponent, '')
         .compileComponents();
@@ -30,11 +30,11 @@ describe('Component Tests', () => {
       inject([HistoryService], (service: HistoryService) => {
         const response = {
           canceled: {
-            '11052017': 'instance1'
+            '11052017': 'instance1',
           },
           registered: {
-            '11022017': 'instance2'
-          }
+            '11022017': 'instance2',
+          },
         };
         spyOn(service, 'findAll').and.returnValue(of(response));
 
@@ -50,11 +50,11 @@ describe('Component Tests', () => {
       inject([HistoryService], (service: HistoryService) => {
         const response = {
           canceled: {
-            '11052017': 'instance1'
+            '11052017': 'instance1',
           },
           registered: {
-            '11022017': 'instance2'
-          }
+            '11022017': 'instance2',
+          },
         };
         spyOn(service, 'findAll').and.returnValue(of(response));
 

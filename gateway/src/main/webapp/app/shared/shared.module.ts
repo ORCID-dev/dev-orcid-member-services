@@ -6,12 +6,12 @@ import { GatewaySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirec
   declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
   entryComponents: [JhiLoginModalComponent],
   exports: [GatewaySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GatewaySharedModule {
   static forRoot() {
     return {
-      ngModule: GatewaySharedModule
+      ngModule: GatewaySharedModule,
     };
   }
 }

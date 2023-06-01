@@ -15,7 +15,7 @@ import { AlertError } from './alert-error.model';
         </ngb-alert>
       </div>
     </div>
-  `
+  `,
 })
 export class AlertErrorComponent implements OnDestroy {
   alerts: JhiAlert[] = [];
@@ -102,7 +102,7 @@ export class AlertErrorComponent implements OnDestroy {
       msg: message,
       timeout: 5000,
       toast: this.alertService.isToast(),
-      scoped: true
+      scoped: true,
     };
 
     this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));

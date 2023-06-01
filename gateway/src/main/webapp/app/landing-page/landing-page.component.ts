@@ -13,7 +13,7 @@ import { BASE_URL, ORCID_BASE_URL } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-landing-page',
-  templateUrl: './landing-page.component.html'
+  templateUrl: './landing-page.component.html',
 })
 export class LandingPageComponent implements OnInit {
   issuer: string = ORCID_BASE_URL;
@@ -125,7 +125,7 @@ export class LandingPageComponent implements OnInit {
           alg: ['RS256'],
           iss: [this.issuer],
           aud: this.clientId,
-          gracePeriod: 15 * 60 // 15 mins skew allowed
+          gracePeriod: 15 * 60, // 15 mins skew allowed
         });
         if (response === true) {
           // check if existing token belongs to a different user

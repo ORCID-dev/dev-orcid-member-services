@@ -1,10 +1,8 @@
 package org.orcid.memberportal.service.assertion.config;
 
 import io.github.jhipster.config.JHipsterConstants;
-
-import org.springframework.boot.SpringApplication;
-
 import java.util.*;
+import org.springframework.boot.SpringApplication;
 
 /**
  * Utility class to load a Spring profile to be used as default when there is no
@@ -14,25 +12,24 @@ import java.util.*;
  */
 public final class DefaultProfileUtil {
 
-    private static final String SPRING_PROFILE_DEFAULT = "spring.profiles.default";
+  private static final String SPRING_PROFILE_DEFAULT = "spring.profiles.default";
 
-    private DefaultProfileUtil() {
-    }
+  private DefaultProfileUtil() {}
 
-    /**
-     * Set a default to use when no profile is configured.
-     *
-     * @param app
-     *            the Spring application.
+  /**
+   * Set a default to use when no profile is configured.
+   *
+   * @param app
+   *            the Spring application.
+   */
+  public static void addDefaultProfile(SpringApplication app) {
+    Map<String, Object> defProperties = new HashMap<>();
+    /*
+     * The default profile to use when no other profiles are defined This
+     * cannot be set in the application.yml file. See
+     * https://github.com/spring-projects/spring-boot/issues/1219
      */
-    public static void addDefaultProfile(SpringApplication app) {
-        Map<String, Object> defProperties = new HashMap<>();
-        /*
-         * The default profile to use when no other profiles are defined This
-         * cannot be set in the application.yml file. See
-         * https://github.com/spring-projects/spring-boot/issues/1219
-         */
-        defProperties.put(SPRING_PROFILE_DEFAULT, JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
-        app.setDefaultProperties(defProperties);
-    }
+    defProperties.put(SPRING_PROFILE_DEFAULT, JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
+    app.setDefaultProperties(defProperties);
+  }
 }

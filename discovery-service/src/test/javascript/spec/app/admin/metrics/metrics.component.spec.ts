@@ -14,7 +14,7 @@ describe('Component Tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JHipsterRegistryTestModule],
-        declarations: [MetricsMonitoringComponent]
+        declarations: [MetricsMonitoringComponent],
       })
         .overrideTemplate(MetricsMonitoringComponent, '')
         .compileComponents();
@@ -32,21 +32,21 @@ describe('Component Tests', () => {
         const response = {
           timers: {
             service: 'test',
-            unrelatedKey: 'test'
+            unrelatedKey: 'test',
           },
           gauges: {
             'jcache.statistics': {
-              value: 2
+              value: 2,
             },
-            unrelatedKey: 'test'
-          }
+            unrelatedKey: 'test',
+          },
         };
         comp.activeRoute = {
           path: 'pathApp1',
           prefix: 'prefixApp1',
           appName: 'appName1',
           status: 'UP',
-          serviceId: '1'
+          serviceId: '1',
         };
         spyOn(service, 'getInstanceMetrics').and.returnValue(of(response));
 

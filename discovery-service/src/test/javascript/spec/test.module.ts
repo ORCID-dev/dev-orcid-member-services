@@ -24,45 +24,45 @@ import { MockSessionStorageService } from './helpers/mock-session-storage.servic
     JhiParseLinks,
     {
       provide: JhiEventManager,
-      useClass: MockEventManager
+      useClass: MockEventManager,
     },
     {
       provide: NgbActiveModal,
-      useClass: MockActiveModal
+      useClass: MockActiveModal,
     },
     {
       provide: ActivatedRoute,
-      useValue: new MockActivatedRoute({ id: 123 })
+      useValue: new MockActivatedRoute({ id: 123 }),
     },
     {
       provide: Router,
-      useClass: MockRouter
+      useClass: MockRouter,
     },
     {
       provide: AccountService,
-      useClass: MockAccountService
+      useClass: MockAccountService,
     },
     {
       provide: LoginModalService,
-      useValue: null
+      useValue: null,
     },
     {
       provide: JhiAlertService,
-      useValue: null
+      useValue: null,
     },
     {
       provide: NgbModal,
-      useValue: null
+      useValue: null,
     },
     {
       provide: SessionStorageService,
-      useClass: MockSessionStorageService
+      useClass: MockSessionStorageService,
     },
     {
       provide: StateStorageService,
-      useClass: MockStateStorageService
-    }
+      useClass: MockStateStorageService,
+    },
   ],
-  imports: [HttpClientTestingModule]
+  imports: [HttpClientTestingModule],
 })
 export class JHipsterRegistryTestModule {}

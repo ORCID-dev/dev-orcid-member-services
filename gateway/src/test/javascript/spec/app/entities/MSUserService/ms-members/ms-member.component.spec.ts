@@ -29,13 +29,13 @@ describe('Component Tests', () => {
                     pagingParams: {
                       predicate: 'id',
                       reverse: false,
-                      page: 0
-                    }
-                  })
-              }
-            }
-          }
-        ]
+                      page: 0,
+                    },
+                  }),
+              },
+            },
+          },
+        ],
       })
         .overrideTemplate(MSMemberComponent, '')
         .compileComponents();
@@ -52,7 +52,7 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new MSMember('123')],
-            headers
+            headers,
           })
         )
       );
@@ -72,7 +72,7 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new MSMember('123')],
-            headers
+            headers,
           })
         )
       );
@@ -102,7 +102,7 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new MSMember('123')],
-            headers
+            headers,
           })
         )
       );

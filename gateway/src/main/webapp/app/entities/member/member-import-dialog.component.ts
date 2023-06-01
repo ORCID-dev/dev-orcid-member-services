@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'jhi-ms-member-import-dialog',
   templateUrl: './member-import-dialog.component.html',
-  providers: [FileUploadService]
+  providers: [FileUploadService],
 })
 export class MSMemberImportDialogComponent {
   public resourceUrl;
@@ -56,7 +56,7 @@ export class MSMemberImportDialogComponent {
           if (this.csvErrors.length === 0) {
             this.eventManager.broadcast({
               name: 'msMemberListModification',
-              content: 'New member uploaded'
+              content: 'New member uploaded',
             });
             this.activeModal.dismiss(true);
           }
@@ -70,7 +70,7 @@ export class MSMemberImportDialogComponent {
 
 @Component({
   selector: 'jhi-ms-member-import-popup',
-  template: ''
+  template: '',
 })
 export class MSMemberImportPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef;

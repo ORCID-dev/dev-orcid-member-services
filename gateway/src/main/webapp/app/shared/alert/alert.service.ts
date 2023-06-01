@@ -9,7 +9,7 @@ interface AlertInterface {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AlertService {
   alertRef: ComponentRef<any>;
@@ -29,9 +29,9 @@ export class AlertService {
           {
             provide: 'config',
             useValue: {
-              data: alert.data
-            }
-          }
+              data: alert.data,
+            },
+          },
         ]);
         this.alertRef = containerRef.createComponent(popupFactory, 0, injector);
         this.alertRef.instance.hide = () => {

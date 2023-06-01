@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorHandlerService {
   constructor() {}
@@ -21,7 +21,7 @@ export class ErrorHandlerService {
     console.error(error);
     return throwError({
       error,
-      message: 'Something bad happened; please try again later.'
+      message: 'Something bad happened; please try again later.',
     });
   }
 

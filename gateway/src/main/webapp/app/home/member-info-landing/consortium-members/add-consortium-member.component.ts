@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-add-consortium-member',
   templateUrl: './add-consortium-member.component.html',
-  styleUrls: ['./add-consortium-member.scss']
+  styleUrls: ['./add-consortium-member.scss'],
 })
 export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
   COUNTRIES = COUNTRIES;
@@ -38,7 +38,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
     { id: 3, selected: false, name: 'Technical contact' },
     { id: 4, selected: false, name: 'Invoice contact' },
     { id: 5, selected: false, name: 'Comms contact' },
-    { id: 6, selected: false, name: 'Product contact' }
+    { id: 6, selected: false, name: 'Product contact' },
   ];
 
   constructor(
@@ -74,7 +74,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       contactGivenName: [null, [Validators.required, Validators.maxLength(40)]],
       contactFamilyName: [null, [Validators.required, Validators.maxLength(80)]],
       contactJobTitle: [null, [Validators.maxLength(128)]],
-      contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]]
+      contactEmail: [null, [Validators.required, Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]],
     });
 
     this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
@@ -111,7 +111,7 @@ export class AddConsortiumMemberComponent implements OnInit, OnDestroy {
       contactGivenName: this.editForm.get('contactGivenName').value,
       contactFamilyName: this.editForm.get('contactFamilyName').value,
       contactJobTitle: this.editForm.get('contactJobTitle').value,
-      contactEmail: this.editForm.get('contactEmail').value
+      contactEmail: this.editForm.get('contactEmail').value,
     };
     return consortiumMember;
   }
