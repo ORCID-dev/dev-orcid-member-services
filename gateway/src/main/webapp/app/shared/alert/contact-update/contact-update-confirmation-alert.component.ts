@@ -3,7 +3,7 @@ import { Component, HostListener } from '@angular/core';
 @Component({
   selector: 'app-contact-update-confirmation-alert',
   templateUrl: './contact-update-confirmation-alert.component.html',
-  styleUrls: ['contact-update-confirmation-alert.scss']
+  styleUrls: ['../lightbox-modal.scss']
 })
 export class ContactUpdateConfirmationAlert {
   alerts: any[];
