@@ -34,7 +34,7 @@ repos:
         additional_dependencies:
           - prettier
           - prettier-plugin-java
-        types: [java]
+          - '@prettier/plugin-xml@v2.2.0'
 
   - repo: local
     hooks:
@@ -42,8 +42,7 @@ repos:
         name: actionlint
         entry: actionlint
         language: golang
-        additional_dependencies:
-          [github.com/rhysd/actionlint/cmd/actionlint@v1.6.23]
+        additional_dependencies: [github.com/rhysd/actionlint/cmd/actionlint@v1.6.23]
         types: [yaml]
         files: '^.github/workflows/'
 

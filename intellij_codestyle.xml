@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <code_scheme name="ORCID Codestyle">
   <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="25" />
   <option name="RIGHT_MARGIN" value="170" />
@@ -13,4 +13,3 @@
     <option name="WRAP_LONG_LINES" value="true" />
   </codeStyleSettings>
 </code_scheme>
-
