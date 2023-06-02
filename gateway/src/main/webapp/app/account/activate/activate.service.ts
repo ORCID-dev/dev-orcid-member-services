@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Observable } from 'rxjs'
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { SERVER_API_URL } from 'app/app.constants'
 
 @Injectable({ providedIn: 'root' })
 export class ActivateService {
@@ -11,6 +11,6 @@ export class ActivateService {
   get(key: string): Observable<any> {
     return this.http.get(SERVER_API_URL + 'services/userservice/api/activate', {
       params: new HttpParams().set('key', key),
-    });
+    })
   }
 }

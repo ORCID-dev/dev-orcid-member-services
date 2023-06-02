@@ -2,7 +2,9 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": { "string": "Повторяющаяся аффилиация. Эта аффилиация уже создана." }
+        "duplicate": {
+          "string": "Повторяющаяся аффилиация. Эта аффилиация уже создана."
+        }
       }
     }
   },
@@ -11,10 +13,14 @@
       "home": {
         "title": { "string": "Принадлежность" },
         "createLabel": { "string": "Добавить принадлежность" },
-        "createOrEditLabel": { "string": "Добавить или редактировать принадлежность" },
+        "createOrEditLabel": {
+          "string": "Добавить или редактировать принадлежность"
+        },
         "notFound": { "string": "Аффилиаций не найдено" },
         "uploadLabel": { "string": "Импортировать принадлежности из CSV" },
-        "permissionNotificationsLabel": { "string": "Отправить уведомления о разрешении" },
+        "permissionNotificationsLabel": {
+          "string": "Отправить уведомления о разрешении"
+        },
         "forHelpTroubleshooting": {
           "string": "Если вам требуется помощь в устранении этой ошибки, обратитесь к руководителю вашего консорциума либо напишите по адресу membership@orcid.org. Приложите снимок экрана с сообщением об ошибке ниже."
         }
@@ -58,7 +64,9 @@
         "successMessage": {
           "string": "Ваш файл CSV загружен для обработки. Мы сообщим по электронной почте, как только файл будет обработан."
         },
-        "failure": { "string": "При загрузке вашего CSV-файла для обработки возникла проблема." }
+        "failure": {
+          "string": "При загрузке вашего CSV-файла для обработки возникла проблема."
+        }
       },
       "notifications": {
         "title": { "string": "Отправить уведомления о разрешении" },
@@ -71,7 +79,9 @@
         "languageDescription": {
           "string": "На каком языке отправлять уведомления?"
         },
-        "alreadyInProgress": { "string": "Запрос об отправке уведомлений пользователям уже обрабатывается. Повторите попытку позже." },
+        "alreadyInProgress": {
+          "string": "Запрос об отправке уведомлений пользователям уже обрабатывается. Повторите попытку позже."
+        },
         "notificationInProgress": {
           "string": "Отправка уведомлений началась. Мы сообщим вам об окончании этого процесса по электронной почте."
         },
@@ -101,7 +111,9 @@
       "orgCity": { "string": "Город" },
       "orgRegion": { "string": "Штат/регион" },
       "disambiguatedOrgId": { "string": "ID организации" },
-      "disambiguationSource": { "string": "Источник идентификатора организации" },
+      "disambiguationSource": {
+        "string": "Источник идентификатора организации"
+      },
       "externalId": { "string": "Внешний идентификатор" },
       "externalIdType": { "string": "Тип внешнего ID" },
       "externalIdUrl": { "string": "URL внешнего идентификатора" },
@@ -114,7 +126,9 @@
       "sent": { "string": "Отправлено" },
       "adminId": { "string": "Идентификатор администратора" },
       "notificationFirstSent": { "string": "Первое отправленное уведомление" },
-      "notificationLastSent": { "string": "Последнее отправленное уведомление" },
+      "notificationLastSent": {
+        "string": "Последнее отправленное уведомление"
+      },
       "email": { "string": "Эл. адрес пользователя" },
       "orcidId": { "string": "Идентификатор ORCID" },
       "year": { "string": "Год" },
@@ -149,7 +163,9 @@
       "pending": { "string": "Ожидает" },
       "inOrcid": { "string": "В ORCID" },
       "userGrantedAccess": { "string": "Пользователь предоставил доступ" },
-      "UserDeletedFromOrcid": { "string": "Пользователь удалил аффилиацию из ORCID" },
+      "UserDeletedFromOrcid": {
+        "string": "Пользователь удалил аффилиацию из ORCID"
+      },
       "userRevokedAccess": { "string": "Пользователь отменил доступ" },
       "errorAddingToOrcid": { "string": "Ошибка при добавлении в ORCID" },
       "errorUpdatingInOrcid": { "string": "Ошибка при обновлении в ORCID" },
@@ -180,7 +196,9 @@
       "created": { "string": "Аффилиация создана" },
       "updated": { "string": "Аффилиация обновлена" },
       "deleted": { "string": "Аффилиация удалена" },
-      "problemDeleting": { "string": "Возникла проблема при удалении присоединения" }
+      "problemDeleting": {
+        "string": "Возникла проблема при удалении присоединения"
+      }
     }
   }
 }

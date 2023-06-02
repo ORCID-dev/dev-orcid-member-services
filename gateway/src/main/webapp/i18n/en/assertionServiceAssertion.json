@@ -2,7 +2,9 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": { "string": "Duplicate affiliation. This affiliation has already been created." }
+        "duplicate": {
+          "string": "Duplicate affiliation. This affiliation has already been created."
+        }
       }
     }
   },
@@ -14,7 +16,9 @@
         "createOrEditLabel": { "string": "Add or edit affiliation" },
         "notFound": { "string": "No affiliations found" },
         "uploadLabel": { "string": "Import affiliations from CSV" },
-        "permissionNotificationsLabel": { "string": "Send permission notifications" },
+        "permissionNotificationsLabel": {
+          "string": "Send permission notifications"
+        },
         "forHelpTroubleshooting": {
           "string": "If you require help troubleshooting this error, please contact your consortium lead or membership@orcid.org. Please include a screenshot of the error message below."
         }
@@ -58,7 +62,9 @@
         "successMessage": {
           "string": "Your CSV has been uploaded for processing. We will let you know via email once the file has been processed."
         },
-        "failure": { "string": "There was a problem uploading your CSV for processing." }
+        "failure": {
+          "string": "There was a problem uploading your CSV for processing."
+        }
       },
       "notifications": {
         "title": { "string": "Send permission notifications" },
@@ -71,7 +77,9 @@
         "languageDescription": {
           "string": "What language should the notifications be sent in?"
         },
-        "alreadyInProgress": { "string": "A request to send notifications to your users is already in progress. Please try again later." },
+        "alreadyInProgress": {
+          "string": "A request to send notifications to your users is already in progress. Please try again later."
+        },
         "notificationInProgress": {
           "string": "Notification process has now started. We will email you as soon as the process has completed."
         },
@@ -180,7 +188,9 @@
       "created": { "string": "Affiliation created" },
       "updated": { "string": "Affiliation updated" },
       "deleted": { "string": "Affiliation deleted" },
-      "problemDeleting": { "string": "There was a problem deleting the affiliation" }
+      "problemDeleting": {
+        "string": "There was a problem deleting the affiliation"
+      }
     }
   }
 }

@@ -17,21 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class AppResource {
 
-  private final Logger log = LoggerFactory.getLogger(AppResource.class);
+      private final Logger log = LoggerFactory.getLogger(AppResource.class);
 
-  @Autowired
-  private ApplicationProperties applicationProperties;
+      @Autowired
+      private ApplicationProperties applicationProperties;
 
-  /**
-   * GET  /authenticate : check if the user is authenticated, and return its login.
-   *
-   * @param request the HTTP request
-   * @return the login if the user is authenticated
-   */
-  @GetMapping("/version")
-  public ResponseEntity<VersionDTO> getAppVersion() {
-    log.debug("REST request to get application version");
-    String version = applicationProperties.getAppVersion();
-    return ResponseEntity.ok(new VersionDTO(version));
-  }
+      /**
+       * GET  /authenticate : check if the user is authenticated, and return its login.
+       *
+       * @param request the HTTP request
+       * @return the login if the user is authenticated
+       */
+      @GetMapping("/version")
+      public ResponseEntity<VersionDTO> getAppVersion() {
+            log.debug("REST request to get application version");
+            String version = applicationProperties.getAppVersion();
+            return ResponseEntity.ok(new VersionDTO(version));
+      }
 }

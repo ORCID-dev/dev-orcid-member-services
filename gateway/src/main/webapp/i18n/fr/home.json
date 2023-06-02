@@ -7,10 +7,16 @@
         "text": {
           "string": "Le portail des membres d'ORCID est un ensemble d'outils qui permet aux institutions de tirer le meilleur profit de leur adhésion à ORCID. Certains de nos outils sont déjà disponibles, et nous en développons activement d'autres qui permettent à nos membres de :"
         },
-        "bullet1": { "string": "Ajouter/mettre à jour les données sur les dossiers ORCID des chercheurs" },
+        "bullet1": {
+          "string": "Ajouter/mettre à jour les données sur les dossiers ORCID des chercheurs"
+        },
         "bullet2": { "string": "Accès aux données et aux rapports" },
-        "bullet3": { "string": "Gérez les informations d'affiliation ORCID de votre organisation" },
-        "bullet4": { "string": "Gérer les informations d'authentification à l'API ORCID de votre organisation" }
+        "bullet3": {
+          "string": "Gérez les informations d'affiliation ORCID de votre organisation"
+        },
+        "bullet4": {
+          "string": "Gérer les informations d'authentification à l'API ORCID de votre organisation"
+        }
       },
       "section2": {
         "text": { "string": "Outils actuellement disponibles :" },
@@ -33,21 +39,29 @@
         "table": {
           "line1": {
             "heading": { "string": "Guide de gestion du compte" },
-            "description": { "string": "Guide pour gérer l'accès de vos utilisateurs au Portail des membres" }
+            "description": {
+              "string": "Guide pour gérer l'accès de vos utilisateurs au Portail des membres"
+            }
           },
           "line2": {
             "heading": { "string": "Guide du gestionnaire d'affiliation" },
-            "description": { "string": "Guide pour le personnel de votre institution qui utilisera le gestionnaire d'affiliation" }
+            "description": {
+              "string": "Guide pour le personnel de votre institution qui utilisera le gestionnaire d'affiliation"
+            }
           },
           "line3": {
             "heading": { "string": "Guide de signalement de membres" },
-            "description": { "string": "Guide pour apprendre à lire vos rapports de membres" }
+            "description": {
+              "string": "Guide pour apprendre à lire vos rapports de membres"
+            }
           }
         }
       },
       "section4": {
         "heading": { "string": "Contacts de l'assistance" },
-        "text": { "string": "Pour obtenir de l'aide ou poser vos questions au sujet du portail des membres, veuillez contacter :" },
+        "text": {
+          "string": "Pour obtenir de l'aide ou poser vos questions au sujet du portail des membres, veuillez contacter :"
+        },
         "bullet1": {
           "text": { "string": "Votre " },
           "linkText": { "string": "organisation chef de file du consortium" }
@@ -65,7 +79,9 @@
       "signIntoOrcid": { "string": "Connectez-vous à votre dossier ORCID" }
     },
     "loggedIn": {
-      "message": { "string": "Vous êtes connecté en tant que <strong>{{username}}</strong>" }
+      "message": {
+        "string": "Vous êtes connecté en tant que <strong>{{username}}</strong>"
+      }
     }
   }
 }

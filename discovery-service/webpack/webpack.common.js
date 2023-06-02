@@ -1,9 +1,9 @@
-const webpack = require('webpack');
-const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack')
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const utils = require('./utils.js');
+const utils = require('./utils.js')
 
 module.exports = options => ({
   resolve: {
@@ -55,7 +55,11 @@ module.exports = options => ({
         NODE_ENV: `'${options.env}'`,
         BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
         // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
-        VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV'}'`,
+        VERSION: `'${
+          process.env.hasOwnProperty('APP_VERSION')
+            ? process.env.APP_VERSION
+            : 'DEV'
+        }'`,
         DEBUG_INFO_ENABLED: options.env === 'development',
         // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
         // If this URL is left empty (""), then it will be relative to the current context.
@@ -65,7 +69,12 @@ module.exports = options => ({
       },
     }),
     new CopyWebpackPlugin([
-      { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, ignore: ['index.html'] },
+      {
+        from: './node_modules/swagger-ui-dist/*.{js,css,html,png}',
+        to: 'swagger-ui',
+        flatten: true,
+        ignore: ['index.html'],
+      },
       { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
       { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
       { from: './src/main/webapp/content/', to: 'content' },
@@ -82,4 +91,4 @@ module.exports = options => ({
     }),
     new BaseHrefWebpackPlugin({ baseHref: '/' }),
   ],
-});
+})

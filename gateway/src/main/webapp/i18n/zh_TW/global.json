@@ -14,11 +14,17 @@
     "menu": {
       "memberPortal": { "string": "會員入口網站" },
       "beta": { "string": "測試版" },
-      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "jhipster-needle-menu-add-element": {
+        "string": "JHipster will add additional menu entries here (do not translate!)"
+      },
       "tools": {
         "main": { "string": "工具" },
-        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "assertionServiceAffiliationManager": {
+          "string": "Affiliation Manager"
+        },
+        "jhipster-needle-menu-add-entry": {
+          "string": "JHipster will add additional entities here (do not translate!)"
+        },
         "member": { "string": "會員" }
       },
       "report": {
@@ -42,14 +48,18 @@
         "main": { "string": "管理員" },
         "manageUsers": { "string": "管理使用者" },
         "manageMembers": { "string": "管理會員" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+        "jhipster-needle-menu-add-admin-element": {
+          "string": "JHipster will add additional menu entries here (do not translate!)"
+        }
       },
       "resources": {
         "main": { "string": "資源" },
         "accountManagementGuide": { "string": "帳號管理指南" },
         "affiliationManagerGuide": { "string": "Affiliation Manager 指南" },
         "memberReportingGuide": { "string": "會員通報指南" },
-        "applyForAffiliationManagerCreds": { "string": "申請 Affiliation Manager 憑證" }
+        "applyForAffiliationManagerCreds": {
+          "string": "申請 Affiliation Manager 憑證"
+        }
       },
       "language": { "string": "語言" }
     },
@@ -109,7 +119,9 @@
     "ribbon": {
       "dev": { "string": "開發" }
     },
-    "item-count": { "string": "顯示 {{total}} 項物件中的 {{first}} - {{second}} 項。" }
+    "item-count": {
+      "string": "顯示 {{total}} 項物件中的 {{first}} - {{second}} 項。"
+    }
   },
   "entity": {
     "action": {

@@ -1,12 +1,12 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
 
 /* ==========================================================================
 Footer
 ========================================================================== */
 a {
   color: rgba(0, 0, 0, 0.87);
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 1.3px !important;
@@ -16,7 +16,7 @@ a {
 p {
   margin: 0 0 6px;
   text-align: center;
-  font: 400 14px/16px 'Noto Sans', sans-serif;
+  font: 400 14px/16px "Noto Sans", sans-serif;
 }
 
 .copyright,

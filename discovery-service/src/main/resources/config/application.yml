@@ -70,11 +70,21 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'threaddump']
+        include:
+          [
+            "configprops",
+            "env",
+            "health",
+            "info",
+            "jhimetrics",
+            "logfile",
+            "loggers",
+            "threaddump",
+          ]
   endpoint:
     health:
       show-details: when-authorized
-      roles: 'ROLE_ADMIN'
+      roles: "ROLE_ADMIN"
     jhimetrics:
       enabled: true
   info:
@@ -113,7 +123,7 @@ server:
 # Properties to be exposed on the /info management endpoint
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
-  display-ribbon-on-profiles: 'dev'
+  display-ribbon-on-profiles: "dev"
 
 # ===================================================================
 # Eureka server configuration (eureka.server.*)
@@ -166,7 +176,7 @@ eureka:
 # ===================================================================
 jhipster:
   clientApp:
-    name: 'JHipsterRegistry'
+    name: "JHipsterRegistry"
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"

@@ -29,7 +29,9 @@
         "filePath": { "string": "檔案路經" },
         "emptyFile": { "string": "沒有可以上傳的檔案。請選擇一個檔案。" },
         "errors": {
-          "label": { "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次" }
+          "label": {
+            "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次"
+          }
         }
       },
       "assertionService": {

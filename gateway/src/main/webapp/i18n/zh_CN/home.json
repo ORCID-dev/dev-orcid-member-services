@@ -33,11 +33,15 @@
         "table": {
           "line1": {
             "heading": { "string": "账户管理指南" },
-            "description": { "string": "有关如何管理用户对会员门户的访问权限的指南" }
+            "description": {
+              "string": "有关如何管理用户对会员门户的访问权限的指南"
+            }
           },
           "line2": {
             "heading": { "string": "机构管理器指南" },
-            "description": { "string": "该指南供贵机构将使用机构管理器的员工参考" }
+            "description": {
+              "string": "该指南供贵机构将使用机构管理器的员工参考"
+            }
           },
           "line3": {
             "heading": { "string": "会员报告指南" },
@@ -65,7 +69,9 @@
       "signIntoOrcid": { "string": "登录您的 ORCID 记录" }
     },
     "loggedIn": {
-      "message": { "string": "您是以用户 <strong>{{username}}</strong> 的身份登录的" }
+      "message": {
+        "string": "您是以用户 <strong>{{username}}</strong> 的身份登录的"
+      }
     }
   }
 }

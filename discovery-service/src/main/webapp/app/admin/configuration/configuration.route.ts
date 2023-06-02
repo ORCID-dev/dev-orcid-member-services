@@ -1,6 +1,6 @@
-import { Route } from '@angular/router';
+import { Route } from '@angular/router'
 
-import { ConfigurationComponent } from './configuration.component';
+import { ConfigurationComponent } from './configuration.component'
 
 export const configurationRoute: Route = {
   path: '',
@@ -8,4 +8,4 @@ export const configurationRoute: Route = {
   data: {
     pageTitle: 'Cloud configuration',
   },
-};
+}

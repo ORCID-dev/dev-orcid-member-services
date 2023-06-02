@@ -6,9 +6,15 @@
         "button": { "string": "Redefinir palavra-passe" }
       },
       "messages": {
-        "info": { "string": "Insira o endereço de e-mail que usou para se registar" },
-        "success": { "string": "Verifique os seus emails para mais detalhes sobre como redefinir a sua palavra-passe." },
-        "notfound": { "string": "<strong>O endereço de e-mail não está registado!</strong> Verifique e tente novamente" }
+        "info": {
+          "string": "Insira o endereço de e-mail que usou para se registar"
+        },
+        "success": {
+          "string": "Verifique os seus emails para mais detalhes sobre como redefinir a sua palavra-passe."
+        },
+        "notfound": {
+          "string": "<strong>O endereço de e-mail não está registado!</strong> Verifique e tente novamente"
+        }
       }
     },
     "finish": {
@@ -18,7 +24,9 @@
       },
       "messages": {
         "info": { "string": "Escolha uma nova palavra-passe" },
-        "success": { "string": "<strong>A sua palavra-passe foi redefinida.</strong> Por favor" },
+        "success": {
+          "string": "<strong>A sua palavra-passe foi redefinida.</strong> Por favor"
+        },
         "keymissing": { "string": "Falta o código de ativação." },
         "keyinvalid": { "string": "A chave de ativação é inválida." },
         "keyexpired": {

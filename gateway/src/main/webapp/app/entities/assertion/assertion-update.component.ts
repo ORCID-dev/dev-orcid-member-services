@@ -1,31 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { IAssertion, Assertion } from 'app/shared/model/assertion.model';
-import { AssertionService } from './assertion.service';
-import { DateUtilService } from 'app/shared/util/date-util.service';
-import { JhiAlertService } from 'ng-jhipster';
+import { Component, OnInit } from '@angular/core'
+import { HttpResponse } from '@angular/common/http'
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
+import { Observable } from 'rxjs'
+import * as moment from 'moment'
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants'
+import { IAssertion, Assertion } from 'app/shared/model/assertion.model'
+import { AssertionService } from './assertion.service'
+import { DateUtilService } from 'app/shared/util/date-util.service'
+import { JhiAlertService } from 'ng-jhipster'
 import {
   AFFILIATION_TYPES,
   COUNTRIES,
   ORG_ID_TYPES,
   DEFAULT_EARLIEST_YEAR,
   DEFAULT_LATEST_YEAR_INCREMENT,
-} from 'app/shared/constants/orcid-api.constants';
-import { EMAIL_REGEXP } from 'app/app.constants';
+} from 'app/shared/constants/orcid-api.constants'
+import { EMAIL_REGEXP } from 'app/app.constants'
 
 function dateValidator() {
   return (formGroup: FormGroup) => {
-    const startYearControl = formGroup.controls['startYear'];
-    const endYearControl = formGroup.controls['endYear'];
-    const startMonthControl = formGroup.controls['startMonth'];
-    const endMonthControl = formGroup.controls['endMonth'];
-    const startDayControl = formGroup.controls['startDay'];
-    const endDayControl = formGroup.controls['endDay'];
+    const startYearControl = formGroup.controls['startYear']
+    const endYearControl = formGroup.controls['endYear']
+    const startMonthControl = formGroup.controls['startMonth']
+    const endMonthControl = formGroup.controls['endMonth']
+    const startDayControl = formGroup.controls['startDay']
+    const endDayControl = formGroup.controls['endDay']
 
     if (
       (hasValue(startDayControl) && hasValue(endDayControl)) ||
@@ -36,77 +42,105 @@ function dateValidator() {
         (hasValue(startYearControl) ? startYearControl.value + '-' : '') +
           (hasValue(startMonthControl) ? startMonthControl.value + '-' : '') +
           (hasValue(startDayControl) ? startDayControl.value : '')
-      );
+      )
       const endDate = new Date(
         (hasValue(endYearControl) ? endYearControl.value + '-' : '') +
           (hasValue(endMonthControl) ? endMonthControl.value + '-' : '') +
           (hasValue(endDayControl) ? endDayControl.value : '')
-      );
+      )
 
       if (startDate > endDate) {
-        endYearControl.setErrors({ dateValidator: true });
+        endYearControl.setErrors({ dateValidator: true })
       } else {
-        endYearControl.setErrors(null);
+        endYearControl.setErrors(null)
       }
     }
-  };
+  }
 }
 
 function disambiguatedOrgIdValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     if (control.parent !== undefined) {
-      const disambiguationSourceValue = control.parent.get('disambiguationSource').value;
+      const disambiguationSourceValue = control.parent.get(
+        'disambiguationSource'
+      ).value
       if (disambiguationSourceValue === 'RINGGOLD') {
-        const reg = new RegExp('^\\d+$');
+        const reg = new RegExp('^\\d+$')
         if (control.value && !reg.test(control.value)) {
-          return { validDisambiguatedOrgId: false };
+          return { validDisambiguatedOrgId: false }
         }
       } else if (disambiguationSourceValue === 'GRID') {
-        const gridStartsWith = 'grid.';
-        const gridBaseUrl = 'https://www.grid.ac/';
-        const gridBaseUrlInstitutes = 'https://www.grid.ac/institutes/';
-        const gridBaseUrlAlt = 'https://grid.ac/';
-        const gridBaseUrlInstitutesAlt = 'https://grid.ac/institutes/';
-        let gridId = control.value;
+        const gridStartsWith = 'grid.'
+        const gridBaseUrl = 'https://www.grid.ac/'
+        const gridBaseUrlInstitutes = 'https://www.grid.ac/institutes/'
+        const gridBaseUrlAlt = 'https://grid.ac/'
+        const gridBaseUrlInstitutesAlt = 'https://grid.ac/institutes/'
+        let gridId = control.value
         // strip the url and see if is a valid grid id
-        if (gridId && gridId.substr(0, gridBaseUrlInstitutes.length) === gridBaseUrlInstitutes) {
-          gridId = gridId.substr(gridBaseUrlInstitutes.length, gridId.length);
-          console.log('!!!!' + gridId);
-        } else if (gridId && gridId.substr(0, gridBaseUrl.length) === gridBaseUrl) {
-          gridId = gridId.substr(gridBaseUrl.length);
-        } else if (gridId && gridId.substr(0, gridBaseUrlInstitutesAlt.length) === gridBaseUrlInstitutesAlt) {
-          gridId = gridId.substr(gridBaseUrlInstitutesAlt.length);
-        } else if (gridId && gridId.substr(0, gridBaseUrlAlt.length) === gridBaseUrlAlt) {
-          gridId = gridId.substr(gridBaseUrlAlt.length);
+        if (
+          gridId &&
+          gridId.substr(0, gridBaseUrlInstitutes.length) ===
+            gridBaseUrlInstitutes
+        ) {
+          gridId = gridId.substr(gridBaseUrlInstitutes.length, gridId.length)
+          console.log('!!!!' + gridId)
+        } else if (
+          gridId &&
+          gridId.substr(0, gridBaseUrl.length) === gridBaseUrl
+        ) {
+          gridId = gridId.substr(gridBaseUrl.length)
+        } else if (
+          gridId &&
+          gridId.substr(0, gridBaseUrlInstitutesAlt.length) ===
+            gridBaseUrlInstitutesAlt
+        ) {
+          gridId = gridId.substr(gridBaseUrlInstitutesAlt.length)
+        } else if (
+          gridId &&
+          gridId.substr(0, gridBaseUrlAlt.length) === gridBaseUrlAlt
+        ) {
+          gridId = gridId.substr(gridBaseUrlAlt.length)
         }
 
-        console.log('gridID: ' + gridId);
-        if (gridId && !(gridId.substr(0, gridStartsWith.length) === gridStartsWith)) {
-          return { validDisambiguatedOrgId: false };
+        console.log('gridID: ' + gridId)
+        if (
+          gridId &&
+          !(gridId.substr(0, gridStartsWith.length) === gridStartsWith)
+        ) {
+          return { validDisambiguatedOrgId: false }
         }
       } else if (disambiguationSourceValue === 'ROR') {
-        const reg = new RegExp('^(https://ror.org/)?0[^ILO]{6}\\d{2}$');
+        const reg = new RegExp('^(https://ror.org/)?0[^ILO]{6}\\d{2}$')
         if (control.value && !reg.test(control.value)) {
-          return { validDisambiguatedOrgId: false };
+          return { validDisambiguatedOrgId: false }
         }
       }
     }
-    return null;
-  };
+    return null
+  }
 }
 
 function hasValue(controls): boolean {
-  return controls && controls.value !== undefined && controls.value !== '' && controls.value !== null;
+  return (
+    controls &&
+    controls.value !== undefined &&
+    controls.value !== '' &&
+    controls.value !== null
+  )
 }
 
 function isValidDate(year, month, day) {
-  day = Number(day);
-  month = Number(month) - 1;
-  year = Number(year);
+  day = Number(day)
+  month = Number(month) - 1
+  year = Number(year)
 
-  const d = new Date(year, month, day);
+  const d = new Date(year, month, day)
 
-  return d.getUTCFullYear() === year && d.getUTCMonth() === month && d.getUTCDate() === day;
+  return (
+    d.getUTCFullYear() === year &&
+    d.getUTCMonth() === month &&
+    d.getUTCDate() === day
+  )
 }
 
 @Component({
@@ -114,16 +148,16 @@ function isValidDate(year, month, day) {
   templateUrl: './assertion-update.component.html',
 })
 export class AssertionUpdateComponent implements OnInit {
-  AFFILIATION_TYPES = AFFILIATION_TYPES;
-  COUNTRIES = COUNTRIES;
-  ORG_ID_TYPES = ORG_ID_TYPES;
-  startYearsList: any;
-  endYearsList: any;
-  monthsList: any;
-  startDaysList: any;
-  endDaysList: any;
-  isSaving: boolean;
-  ngbDate: any;
+  AFFILIATION_TYPES = AFFILIATION_TYPES
+  COUNTRIES = COUNTRIES
+  ORG_ID_TYPES = ORG_ID_TYPES
+  startYearsList: any
+  endYearsList: any
+  monthsList: any
+  startDaysList: any
+  endDaysList: any
+  isSaving: boolean
+  ngbDate: any
 
   editForm = this.fb.group(
     {
@@ -143,7 +177,10 @@ export class AssertionUpdateComponent implements OnInit {
       orgCountry: [null, [Validators.required]],
       orgCity: [null, [Validators.required]],
       orgRegion: [],
-      disambiguatedOrgId: [null, [Validators.required, disambiguatedOrgIdValidator()]],
+      disambiguatedOrgId: [
+        null,
+        [Validators.required, disambiguatedOrgIdValidator()],
+      ],
       disambiguationSource: [null, [Validators.required]],
       externalId: [],
       externalIdType: [],
@@ -155,7 +192,7 @@ export class AssertionUpdateComponent implements OnInit {
       sent: [],
     },
     { validator: dateValidator() }
-  );
+  )
 
   constructor(
     protected assertionService: AssertionService,
@@ -166,31 +203,39 @@ export class AssertionUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.startYearsList = this.dateUtilService.getYearsList(0);
-    this.endYearsList = this.dateUtilService.getYearsList(DEFAULT_LATEST_YEAR_INCREMENT);
-    this.monthsList = this.dateUtilService.getMonthsList();
-    this.startDaysList = this.dateUtilService.getDaysList();
-    this.endDaysList = this.dateUtilService.getDaysList();
-    this.isSaving = false;
+    this.startYearsList = this.dateUtilService.getYearsList(0)
+    this.endYearsList = this.dateUtilService.getYearsList(
+      DEFAULT_LATEST_YEAR_INCREMENT
+    )
+    this.monthsList = this.dateUtilService.getMonthsList()
+    this.startDaysList = this.dateUtilService.getDaysList()
+    this.endDaysList = this.dateUtilService.getDaysList()
+    this.isSaving = false
 
     this.activatedRoute.data.subscribe(({ assertion }) => {
-      this.updateForm(assertion);
-    });
+      this.updateForm(assertion)
+    })
 
-    this.onChanges();
+    this.onChanges()
   }
 
   onChanges(): void {
     this.editForm.get('startMonth').valueChanges.subscribe(val => {
-      this.startDaysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
-    });
+      this.startDaysList = this.dateUtilService.getDaysList(
+        this.editForm.get('startYear').value,
+        this.editForm.get('startMonth').value
+      )
+    })
     this.editForm.get('endMonth').valueChanges.subscribe(val => {
-      this.endDaysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
-    });
+      this.endDaysList = this.dateUtilService.getDaysList(
+        this.editForm.get('endYear').value,
+        this.editForm.get('endMonth').value
+      )
+    })
     this.editForm.get('disambiguationSource').valueChanges.subscribe(value => {
-      this.editForm.get('disambiguatedOrgId').markAsTouched();
-      this.editForm.get('disambiguatedOrgId').updateValueAndValidity();
-    });
+      this.editForm.get('disambiguatedOrgId').markAsTouched()
+      this.editForm.get('disambiguatedOrgId').updateValueAndValidity()
+    })
   }
 
   updateForm(assertion: IAssertion) {
@@ -218,41 +263,54 @@ export class AssertionUpdateComponent implements OnInit {
         externalIdType: assertion.externalIdType,
         externalIdUrl: assertion.externalIdUrl,
         putCode: assertion.putCode,
-        created: assertion.created != null ? assertion.created.format(DATE_TIME_FORMAT) : null,
-        modified: assertion.modified != null ? assertion.modified.format(DATE_TIME_FORMAT) : null,
-        deletedFromORCID: assertion.deletedFromORCID != null ? assertion.deletedFromORCID.format(DATE_TIME_FORMAT) : null,
+        created:
+          assertion.created != null
+            ? assertion.created.format(DATE_TIME_FORMAT)
+            : null,
+        modified:
+          assertion.modified != null
+            ? assertion.modified.format(DATE_TIME_FORMAT)
+            : null,
+        deletedFromORCID:
+          assertion.deletedFromORCID != null
+            ? assertion.deletedFromORCID.format(DATE_TIME_FORMAT)
+            : null,
         status: assertion.status,
         ownerId: assertion.ownerId,
-      });
+      })
 
-      this.onStartDateSelected(false);
-      this.onEndDateSelected(false);
+      this.onStartDateSelected(false)
+      this.onEndDateSelected(false)
     }
   }
 
   previousState() {
-    window.history.back();
+    window.history.back()
   }
 
   save() {
-    this.isSaving = true;
-    const assertion = this.createFromForm();
+    this.isSaving = true
+    const assertion = this.createFromForm()
     if (assertion.id !== undefined && assertion.id != null) {
       this.assertionService.update(assertion).subscribe(
         () => {
-          this.onSaveSuccess();
-          this.alertService.success('assertionServiceApp.affiliation.updated.string');
+          this.onSaveSuccess()
+          this.alertService.success(
+            'assertionServiceApp.affiliation.updated.string'
+          )
         },
         () => this.onSaveError()
-      );
+      )
     } else {
       this.assertionService.create(assertion).subscribe(
         () => {
-          this.onSaveSuccess();
-          this.alertService.success('assertionServiceApp.affiliation.created.string');
+          this.onSaveSuccess()
+          this.alertService.success(
+            'assertionServiceApp.affiliation.created.string'
+          )
         },
         () => this.onSaveError()
-      );
+      )
     }
   }
 
@@ -281,52 +339,91 @@ export class AssertionUpdateComponent implements OnInit {
       externalIdType: this.editForm.get(['externalIdType']).value,
       externalIdUrl: this.editForm.get(['externalIdUrl']).value,
       putCode: this.editForm.get(['putCode']).value,
-      created: this.editForm.get(['created']).value != null ? moment(this.editForm.get(['created']).value, DATE_TIME_FORMAT) : undefined,
-      modified: this.editForm.get(['modified']).value != null ? moment(this.editForm.get(['modified']).value, DATE_TIME_FORMAT) : undefined,
+      created:
+        this.editForm.get(['created']).value != null
+          ? moment(this.editForm.get(['created']).value, DATE_TIME_FORMAT)
+          : undefined,
+      modified:
+        this.editForm.get(['modified']).value != null
+          ? moment(this.editForm.get(['modified']).value, DATE_TIME_FORMAT)
+          : undefined,
       deletedFromORCID:
         this.editForm.get(['deletedFromORCID']).value != null
-          ? moment(this.editForm.get(['deletedFromORCID']).value, DATE_TIME_FORMAT)
+          ? moment(
+              this.editForm.get(['deletedFromORCID']).value,
+              DATE_TIME_FORMAT
+            )
           : undefined,
-      status: this.editForm.get(['status']) ? this.editForm.get(['status']).value : '',
-      ownerId: this.editForm.get(['ownerId']) ? this.editForm.get(['ownerId']).value : '',
-    };
+      status: this.editForm.get(['status'])
+        ? this.editForm.get(['status']).value
+        : '',
+      ownerId: this.editForm.get(['ownerId'])
+        ? this.editForm.get(['ownerId']).value
+        : '',
+    }
   }
 
   protected onSaveSuccess() {
-    this.isSaving = false;
-    this.previousState();
+    this.isSaving = false
+    this.previousState()
   }
 
   protected onSaveError() {
-    this.isSaving = false;
+    this.isSaving = false
   }
 
   public onStartDateSelected(resetValue) {
-    this.startDaysList = this.dateUtilService.getDaysList(this.editForm.get('startYear').value, this.editForm.get('startMonth').value);
+    this.startDaysList = this.dateUtilService.getDaysList(
+      this.editForm.get('startYear').value,
+      this.editForm.get('startMonth').value
+    )
     console.log(
-      this.editForm.get('startYear').value + ' ' + this.editForm.get('startMonth').value + ' ' + this.editForm.get('startDay').value
-    );
+      this.editForm.get('startYear').value +
+        ' ' +
+        this.editForm.get('startMonth').value +
+        ' ' +
+        this.editForm.get('startDay').value
+    )
     if (resetValue && this.editForm.get('startDay').value) {
-      if (this.editForm.get('startYear').value && this.editForm.get('startMonth').value) {
+      if (
+        this.editForm.get('startYear').value &&
+        this.editForm.get('startMonth').value
+      ) {
         if (
-          !isValidDate(this.editForm.get('startYear').value, this.editForm.get('startMonth').value, this.editForm.get('startDay').value)
+          !isValidDate(
+            this.editForm.get('startYear').value,
+            this.editForm.get('startMonth').value,
+            this.editForm.get('startDay').value
+          )
         ) {
           this.editForm.patchValue({
             startDay: null,
-          });
+          })
         }
       }
     }
   }
 
   public onEndDateSelected(resetValue) {
-    this.endDaysList = this.dateUtilService.getDaysList(this.editForm.get('endYear').value, this.editForm.get('endMonth').value);
+    this.endDaysList = this.dateUtilService.getDaysList(
+      this.editForm.get('endYear').value,
+      this.editForm.get('endMonth').value
+    )
     if (resetValue && this.editForm.get('endDay').value) {
-      if (this.editForm.get('endYear').value && this.editForm.get('endMonth').value) {
-        if (!isValidDate(this.editForm.get('endYear').value, this.editForm.get('endMonth').value, this.editForm.get('endDay').value)) {
+      if (
+        this.editForm.get('endYear').value &&
+        this.editForm.get('endMonth').value
+      ) {
+        if (
+          !isValidDate(
+            this.editForm.get('endYear').value,
+            this.editForm.get('endMonth').value,
+            this.editForm.get('endDay').value
+          )
+        ) {
           this.editForm.patchValue({
             endDay: null,
-          });
+          })
         }
       }
     }

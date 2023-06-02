@@ -14,11 +14,17 @@
     "menu": {
       "memberPortal": { "string": "Členský portál" },
       "beta": { "string": "Beta" },
-      "jhipster-needle-menu-add-element": { "string": "Sem přidá JHipster další položky menu (nepřekládat!)" },
+      "jhipster-needle-menu-add-element": {
+        "string": "Sem přidá JHipster další položky menu (nepřekládat!)"
+      },
       "tools": {
         "main": { "string": "Nástroje" },
-        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "assertionServiceAffiliationManager": {
+          "string": "Affiliation Manager"
+        },
+        "jhipster-needle-menu-add-entry": {
+          "string": "JHipster will add additional entities here (do not translate!)"
+        },
         "member": { "string": "Člen" }
       },
       "report": {
@@ -42,14 +48,20 @@
         "main": { "string": "Správce" },
         "manageUsers": { "string": "Správa uživatelských účtů" },
         "manageMembers": { "string": "Správa členů" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+        "jhipster-needle-menu-add-admin-element": {
+          "string": "JHipster will add additional menu entries here (do not translate!)"
+        }
       },
       "resources": {
         "main": { "string": "Zdroje" },
         "accountManagementGuide": { "string": "Průvodce pro správu účtu" },
-        "affiliationManagerGuide": { "string": "Průvodce pro aplikaci Affiliation Manager" },
+        "affiliationManagerGuide": {
+          "string": "Průvodce pro aplikaci Affiliation Manager"
+        },
         "memberReportingGuide": { "string": "Průvodce pro nahlašování členů" },
-        "applyForAffiliationManagerCreds": { "string": "Požádat o přihlašovací údaje k aplikaci Affiliation Manager" }
+        "applyForAffiliationManagerCreds": {
+          "string": "Požádat o přihlašovací údaje k aplikaci Affiliation Manager"
+        }
       },
       "language": { "string": "Jazyk" }
     },
@@ -92,8 +104,12 @@
         },
         "confirmpassword": {
           "required": { "string": "Musíte uvést potvrzovací heslo." },
-          "minlength": { "string": "Vaše potvrzovací heslo musí mít alespoň 4 znaky." },
-          "maxlength": { "string": "Vaše potvrzovací heslo nesmí být delší než 50 znaků." }
+          "minlength": {
+            "string": "Vaše potvrzovací heslo musí mít alespoň 4 znaky."
+          },
+          "maxlength": {
+            "string": "Vaše potvrzovací heslo nesmí být delší než 50 znaků."
+          }
         },
         "email": {
           "required": { "string": "Váš e-mail je povinný." },
@@ -109,7 +125,9 @@
     "ribbon": {
       "dev": { "string": "Vývoj" }
     },
-    "item-count": { "string": "Zobrazují se položky {{first}} – {{second}} z {{total}}" }
+    "item-count": {
+      "string": "Zobrazují se položky {{first}} – {{second}} z {{total}}"
+    }
   },
   "entity": {
     "action": {
@@ -144,17 +162,27 @@
     "validation": {
       "required": { "string": "Toto pole je vyžadováno." },
       "minlength": { "string": "Toto pole musí mít alespoň {{ min }} znaků." },
-      "maxlength": { "string": "Toto pole nemůže být delší než {{ max }} znaků." },
+      "maxlength": {
+        "string": "Toto pole nemůže být delší než {{ max }} znaků."
+      },
       "min": { "string": "Toto pole by mělo mít alespoň {{ min }} znaků." },
       "max": { "string": "Toto pole nemůže být vyšší než {{ max }}." },
-      "minbytes": { "string": "Toto pole by mělo mít alespoň {{ min }} bajtů." },
-      "maxbytes": { "string": "Toto pole nemůže mít více než {{ max }} bajtů." },
+      "minbytes": {
+        "string": "Toto pole by mělo mít alespoň {{ min }} bajtů."
+      },
+      "maxbytes": {
+        "string": "Toto pole nemůže mít více než {{ max }} bajtů."
+      },
       "pattern": { "string": "Toto pole musí být ve tvaru pro {{ pattern }}." },
       "number": { "string": "V tomto poli by mělo být číslo." },
       "datetimelocal": { "string": "Toto pole by mělo obsahovat datum a čas." },
-      "patternLogin": { "string": "Toto pole může obsahovat pouze písmena, číslice a e-mailové adresy." },
+      "patternLogin": {
+        "string": "Toto pole může obsahovat pouze písmena, číslice a e-mailové adresy."
+      },
       "email": { "string": "Uveďte prosím platnou e-mailovou adresu." },
-      "endDate": { "string": "Datum zahájení nemůže být pozdější než datum ukončení." },
+      "endDate": {
+        "string": "Datum zahájení nemůže být pozdější než datum ukončení."
+      },
       "disambiguatedOrgId": {
         "string": "Toto pole je povinné. Identifikace organizace GRID musí začínat frází grid, například grid.12344 nebo to musí být platná URL, identifikace organizace RINGGOLD musí být číslo. Identifkace ROR musejí mít 9 znaků a začínat 0."
       }
@@ -165,14 +193,18 @@
     "server.not.reachable": { "string": "Server je nedostupný" },
     "url.not.found": { "string": "Nenalezeno" },
     "notnull": { "string": "Pole {{ fieldName }} nesmí být prázdné!" },
-    "size": { "string": "Pole {{ fieldName }} nesplňuje minimální/maximální požadavky na velikost!" },
+    "size": {
+      "string": "Pole {{ fieldName }} nesplňuje minimální/maximální požadavky na velikost!"
+    },
     "userexists": { "string": "Přihlašovací jméno již bylo použito!" },
     "emailexists": { "string": "E-mail se již používá!" },
     "idexists": { "string": "Nový {{entityName}} již nemůže mít ID" },
     "delete.auth.user": { "string": "Aktuálního uživatele nelze smazat." },
     "delete.main.contact": { "string": "Nelze vymazat vlastníka organizace." },
     "delete.last.admin": { "string": "Nelze vymazat posledního správce." },
-    "member.no.admin.allowed": { "string": "S tímto číslem nelze spojit uživatele s právy správce" },
+    "member.no.admin.allowed": {
+      "string": "S tímto číslem nelze spojit uživatele s právy správce"
+    },
     "clientidinvalid": {
       "string": "Neplatné ID klienta. ID klienta by mělo být ve formátu XXXX-XXXX-XXXX-XXXX nebo APP-XXXXXXXXXXXXXXXX. X může být číslice nebo velké písmeno"
     },

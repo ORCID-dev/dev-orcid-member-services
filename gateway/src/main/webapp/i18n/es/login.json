@@ -9,7 +9,9 @@
       "rememberme": { "string": "Recuérdame" },
       "button": { "string": "Registrarse" },
       "mfaCode": {
-        "prompt": { "string": "Introduzca el código MFA de su aplicación de autenticación" },
+        "prompt": {
+          "string": "Introduzca el código MFA de su aplicación de autenticación"
+        },
         "error": { "string": "Código MFA no válido" },
         "label": { "string": "Código MFA" }
       }

@@ -17,38 +17,42 @@ import org.springframework.boot.actuate.health.Status;
 
 public class HealthServiceTest {
 
-  @Mock
-  private HealthClient healthClient;
+      @Mock
+      private HealthClient healthClient;
 
-  @InjectMocks
-  private HealthService healthService;
+      @InjectMocks
+      private HealthService healthService;
 
-  @BeforeEach
-  public void setUp() throws JAXBException {
-    MockitoAnnotations.initMocks(this);
-  }
-
-  @Test
-  void testCheckHealth() throws IOException {
-    SimpleHealthDTO health = new SimpleHealthDTO(Status.UP);
-    Mockito.when(healthClient.getHealth(Mockito.eq("url"))).thenReturn(health);
-
-    SimpleHealthDTO checkedHealth = healthService.checkHealth("url");
-    assertThat(checkedHealth).isNotNull();
-    assertThat(checkedHealth.getStatus()).isEqualTo(Status.UP);
-
-    Mockito.verify(healthClient).getHealth(Mockito.eq("url"));
-  }
-
-  @Test
-  void testCheckHealthWithError() throws IOException {
-    Mockito.when(healthClient.getHealth(Mockito.eq("url"))).thenThrow(new IOException());
-
-    Assertions.assertThrows(
-      IOException.class,
-      () -> {
-        healthService.checkHealth("url");
+      @BeforeEach
+      public void setUp() throws JAXBException {
+            MockitoAnnotations.initMocks(this);
       }
-    );
-  }
+
+      @Test
+      void testCheckHealth() throws IOException {
+            SimpleHealthDTO health = new SimpleHealthDTO(Status.UP);
+            Mockito
+                  .when(healthClient.getHealth(Mockito.eq("url")))
+                  .thenReturn(health);
+
+            SimpleHealthDTO checkedHealth = healthService.checkHealth("url");
+            assertThat(checkedHealth).isNotNull();
+            assertThat(checkedHealth.getStatus()).isEqualTo(Status.UP);
+
+            Mockito.verify(healthClient).getHealth(Mockito.eq("url"));
+      }
+
+      @Test
+      void testCheckHealthWithError() throws IOException {
+            Mockito
+                  .when(healthClient.getHealth(Mockito.eq("url")))
+                  .thenThrow(new IOException());
+
+            Assertions.assertThrows(
+                  IOException.class,
+                  () -> {
+                        healthService.checkHealth("url");
+                  }
+            );
+      }
 }

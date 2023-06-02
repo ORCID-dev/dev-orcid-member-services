@@ -9,7 +9,9 @@
       "rememberme": { "string": "Lembrar-me" },
       "button": { "string": "Iniciar sessão" },
       "mfaCode": {
-        "prompt": { "string": "Introduza o código MFA da sua aplicação autenticadora" },
+        "prompt": {
+          "string": "Introduza o código MFA da sua aplicação autenticadora"
+        },
         "error": { "string": "Código MFA inválido" },
         "label": { "string": "Código MFA" }
       }

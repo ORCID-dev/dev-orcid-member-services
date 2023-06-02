@@ -10,14 +10,26 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * Spring Data MongoDB repository for the {@link PersistentAuditEvent} entity.
  */
-public interface PersistenceAuditEventRepository extends MongoRepository<PersistentAuditEvent, String> {
-  List<PersistentAuditEvent> findByPrincipal(String principal);
+public interface PersistenceAuditEventRepository
+      extends MongoRepository<PersistentAuditEvent, String> {
+      List<PersistentAuditEvent> findByPrincipal(String principal);
 
-  List<PersistentAuditEvent> findByAuditEventDateAfter(Instant after);
+      List<PersistentAuditEvent> findByAuditEventDateAfter(Instant after);
 
-  List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfter(String principal, Instant after);
+      List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfter(
+            String principal,
+            Instant after
+      );
 
-  List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(String principal, Instant after, String type);
+      List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(
+            String principal,
+            Instant after,
+            String type
+      );
 
-  Page<PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable);
+      Page<PersistentAuditEvent> findAllByAuditEventDateBetween(
+            Instant fromDate,
+            Instant toDate,
+            Pageable pageable
+      );
 }

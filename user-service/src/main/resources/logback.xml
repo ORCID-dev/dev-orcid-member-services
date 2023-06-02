@@ -2,7 +2,7 @@
 <!DOCTYPE configuration>
 <configuration scan="true">
     <property name="LOG_PATH" value="logs" />
-    
+
     <logger name="javax.activation" level="WARN" />
     <logger name="javax.mail" level="WARN" />
     <logger name="javax.management.remote" level="WARN" />
@@ -34,7 +34,10 @@
     <logger name="sun.rmi.transport" level="WARN" />
 	<logger name="net.sf.ehcache" level="WARN" />
 	<logger name="org.orcid" level="INFO" />
-	<logger name="org.orcid.memberportal.service.user.services.MailService" level="DEBUG" />
+	<logger
+        name="org.orcid.memberportal.service.user.services.MailService"
+        level="DEBUG"
+    />
 	<logger name="org.thymeleaf" level="DEBUG" />
 	<logger name="jdk.event.security" level="WARN" />
 	<logger name="feign.template.Template" level="WARN" />
@@ -46,14 +49,22 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/user_service.%d{yyyy-MM-dd}.log</fileNamePattern>
+    <appender
+        name="FILE"
+        class="ch.qos.logback.core.rolling.RollingFileAppender"
+    >
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"
+        >
+            <fileNamePattern
+            >${LOG_PATH}/user_service.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
-                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter" />
+                <jsonFormatter
+                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"
+                />
                 <appendLineSeparator>true</appendLineSeparator>
             </layout>
         </encoder>
@@ -65,7 +76,8 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-          <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+          <pattern
+            >%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 

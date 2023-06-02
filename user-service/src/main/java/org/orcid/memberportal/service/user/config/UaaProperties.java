@@ -10,96 +10,104 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "uaa", ignoreUnknownFields = false)
 public class UaaProperties {
 
-  private KeyStore keyStore = new KeyStore();
+      private KeyStore keyStore = new KeyStore();
 
-  public KeyStore getKeyStore() {
-    return keyStore;
-  }
+      public KeyStore getKeyStore() {
+            return keyStore;
+      }
 
-  private WebClientConfiguration webClientConfiguration = new WebClientConfiguration();
+      private WebClientConfiguration webClientConfiguration =
+            new WebClientConfiguration();
 
-  public WebClientConfiguration getWebClientConfiguration() {
-    return webClientConfiguration;
-  }
+      public WebClientConfiguration getWebClientConfiguration() {
+            return webClientConfiguration;
+      }
 
-  /**
-   * Keystore configuration for signing and verifying JWT tokens.
-   */
-  public static class KeyStore {
+      /**
+       * Keystore configuration for signing and verifying JWT tokens.
+       */
+      public static class KeyStore {
 
-    // name of the keystore in the classpath
-    private String name;
-    // password used to access the key
-    private String password;
-    // name of the alias to fetch
-    private String alias;
+            // name of the keystore in the classpath
+            private String name;
+            // password used to access the key
+            private String password;
+            // name of the alias to fetch
+            private String alias;
 
-    public String getName() {
-      return name;
-    }
+            public String getName() {
+                  return name;
+            }
 
-    public void setName(String name) {
-      this.name = name;
-    }
+            public void setName(String name) {
+                  this.name = name;
+            }
 
-    public String getPassword() {
-      return password;
-    }
+            public String getPassword() {
+                  return password;
+            }
 
-    public void setPassword(String password) {
-      this.password = password;
-    }
+            public void setPassword(String password) {
+                  this.password = password;
+            }
 
-    public String getAlias() {
-      return alias;
-    }
+            public String getAlias() {
+                  return alias;
+            }
 
-    public void setAlias(String alias) {
-      this.alias = alias;
-    }
-  }
+            public void setAlias(String alias) {
+                  this.alias = alias;
+            }
+      }
 
-  public static class WebClientConfiguration {
+      public static class WebClientConfiguration {
 
-    // validity of the short-lived access token in secs (min: 60), don't
-    // make it too long
-    private int accessTokenValidityInSeconds = 5 * 60;
-    // validity of the refresh token in secs (defines the duration of
-    // "remember me")
-    private int refreshTokenValidityInSecondsForRememberMe = 7 * 24 * 60 * 60;
-    private String clientId = "web_app";
-    private String secret = "changeit";
+            // validity of the short-lived access token in secs (min: 60), don't
+            // make it too long
+            private int accessTokenValidityInSeconds = 5 * 60;
+            // validity of the refresh token in secs (defines the duration of
+            // "remember me")
+            private int refreshTokenValidityInSecondsForRememberMe =
+                  7 * 24 * 60 * 60;
+            private String clientId = "web_app";
+            private String secret = "changeit";
 
-    public int getAccessTokenValidityInSeconds() {
-      return accessTokenValidityInSeconds;
-    }
+            public int getAccessTokenValidityInSeconds() {
+                  return accessTokenValidityInSeconds;
+            }
 
-    public void setAccessTokenValidityInSeconds(int accessTokenValidityInSeconds) {
-      this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
-    }
+            public void setAccessTokenValidityInSeconds(
+                  int accessTokenValidityInSeconds
+            ) {
+                  this.accessTokenValidityInSeconds =
+                        accessTokenValidityInSeconds;
+            }
 
-    public int getRefreshTokenValidityInSecondsForRememberMe() {
-      return refreshTokenValidityInSecondsForRememberMe;
-    }
+            public int getRefreshTokenValidityInSecondsForRememberMe() {
+                  return refreshTokenValidityInSecondsForRememberMe;
+            }
 
-    public void setRefreshTokenValidityInSecondsForRememberMe(int refreshTokenValidityInSecondsForRememberMe) {
-      this.refreshTokenValidityInSecondsForRememberMe = refreshTokenValidityInSecondsForRememberMe;
-    }
+            public void setRefreshTokenValidityInSecondsForRememberMe(
+                  int refreshTokenValidityInSecondsForRememberMe
+            ) {
+                  this.refreshTokenValidityInSecondsForRememberMe =
+                        refreshTokenValidityInSecondsForRememberMe;
+            }
 
-    public String getClientId() {
-      return clientId;
-    }
+            public String getClientId() {
+                  return clientId;
+            }
 
-    public void setClientId(String clientId) {
-      this.clientId = clientId;
-    }
+            public void setClientId(String clientId) {
+                  this.clientId = clientId;
+            }
 
-    public String getSecret() {
-      return secret;
-    }
+            public String getSecret() {
+                  return secret;
+            }
 
-    public void setSecret(String secret) {
-      this.secret = secret;
-    }
-  }
+            public void setSecret(String secret) {
+                  this.secret = secret;
+            }
+      }
 }

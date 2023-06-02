@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing'
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
+import { of, throwError } from 'rxjs'
 
-import { GatewayTestModule } from '../../../test.module';
-import { JhiHealthCheckComponent } from 'app/admin/health/health.component';
-import { JhiHealthService } from 'app/admin/health/health.service';
+import { GatewayTestModule } from '../../../test.module'
+import { JhiHealthCheckComponent } from 'app/admin/health/health.component'
+import { JhiHealthService } from 'app/admin/health/health.service'
 
 describe('Component Tests', () => {
   describe('JhiHealthCheckComponent', () => {
-    let comp: JhiHealthCheckComponent;
-    let fixture: ComponentFixture<JhiHealthCheckComponent>;
-    let service: JhiHealthService;
+    let comp: JhiHealthCheckComponent
+    let fixture: ComponentFixture<JhiHealthCheckComponent>
+    let service: JhiHealthService
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -18,39 +18,41 @@ describe('Component Tests', () => {
         declarations: [JhiHealthCheckComponent],
       })
         .overrideTemplate(JhiHealthCheckComponent, '')
-        .compileComponents();
-    }));
+        .compileComponents()
+    }))
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(JhiHealthCheckComponent);
-      comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(JhiHealthService);
-    });
+      fixture = TestBed.createComponent(JhiHealthCheckComponent)
+      comp = fixture.componentInstance
+      service = fixture.debugElement.injector.get(JhiHealthService)
+    })
 
     describe('baseName and subSystemName', () => {
       it('should return the basename when it has no sub system', () => {
-        expect(comp.baseName('base')).toBe('base');
-      });
+        expect(comp.baseName('base')).toBe('base')
+      })
 
       it('should return the basename when it has sub systems', () => {
-        expect(comp.baseName('base.subsystem.system')).toBe('base');
-      });
+        expect(comp.baseName('base.subsystem.system')).toBe('base')
+      })
 
       it('should return the sub system name', () => {
-        expect(comp.subSystemName('subsystem')).toBe('');
-      });
+        expect(comp.subSystemName('subsystem')).toBe('')
+      })
 
       it('should return the subsystem when it has multiple keys', () => {
-        expect(comp.subSystemName('subsystem.subsystem.system')).toBe(' - subsystem.system');
-      });
-    });
+        expect(comp.subSystemName('subsystem.subsystem.system')).toBe(
+          ' - subsystem.system'
+        )
+      })
+    })
 
     describe('transformHealthData', () => {
       it('should flatten empty health data', () => {
-        const data = {};
-        const expected = [];
-        expect(service.transformHealthData(data)).toEqual(expected);
-      });
+        const data = {}
+        const expected = []
+        expect(service.transformHealthData(data)).toEqual(expected)
+      })
 
       it('should flatten health data with no subsystems', () => {
         const data = {
@@ -66,7 +68,7 @@ describe('Component Tests', () => {
               error: 'mail.a.b.c',
             },
           },
-        };
+        }
         const expected = [
           {
             name: 'db',
@@ -81,9 +83,9 @@ describe('Component Tests', () => {
             error: 'mail.a.b.c',
             status: 'UP',
           },
-        ];
-        expect(service.transformHealthData(data)).toEqual(expected);
-      });
+        ]
+        expect(service.transformHealthData(data)).toEqual(expected)
+      })
 
       it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
         const data = {
@@ -111,7 +113,7 @@ describe('Component Tests', () => {
               },
             },
           },
-        };
+        }
         const expected = [
           {
             name: 'db',
@@ -141,9 +143,9 @@ describe('Component Tests', () => {
               property2: 'system.subsystem2.property2',
             },
           },
-        ];
-        expect(service.transformHealthData(data)).toEqual(expected);
-      });
+        ]
+        expect(service.transformHealthData(data)).toEqual(expected)
+      })
 
       it('should flatten health data with subsystems at level 1, main system has additional information', () => {
         const data = {
@@ -172,7 +174,7 @@ describe('Component Tests', () => {
               },
             },
           },
-        };
+        }
         const expected = [
           {
             name: 'db',
@@ -209,9 +211,9 @@ describe('Component Tests', () => {
               property2: 'system.subsystem2.property2',
             },
           },
-        ];
-        expect(service.transformHealthData(data)).toEqual(expected);
-      });
+        ]
+        expect(service.transformHealthData(data)).toEqual(expected)
+      })
 
       it('should flatten health data with subsystems at level 1, main system has additional error', () => {
         const data = {
@@ -240,7 +242,7 @@ describe('Component Tests', () => {
               },
             },
           },
-        };
+        }
         const expected = [
           {
             name: 'db',
@@ -275,47 +277,51 @@ describe('Component Tests', () => {
               property2: 'system.subsystem2.property2',
             },
           },
-        ];
-        expect(service.transformHealthData(data)).toEqual(expected);
-      });
-    });
+        ]
+        expect(service.transformHealthData(data)).toEqual(expected)
+      })
+    })
 
     describe('getBadgeClass', () => {
       it('should get badge class', () => {
-        const upBadgeClass = comp.getBadgeClass('UP');
-        const downBadgeClass = comp.getBadgeClass('DOWN');
-        expect(upBadgeClass).toEqual('badge-success');
-        expect(downBadgeClass).toEqual('badge-danger');
-      });
-    });
+        const upBadgeClass = comp.getBadgeClass('UP')
+        const downBadgeClass = comp.getBadgeClass('DOWN')
+        expect(upBadgeClass).toEqual('badge-success')
+        expect(downBadgeClass).toEqual('badge-danger')
+      })
+    })
 
     describe('refresh', () => {
       it('should call refresh on init', () => {
         // GIVEN
-        spyOn(service, 'checkHealth').and.returnValue(of(new HttpResponse()));
-        spyOn(service, 'transformHealthData').and.returnValue({ data: 'test' });
+        spyOn(service, 'checkHealth').and.returnValue(of(new HttpResponse()))
+        spyOn(service, 'transformHealthData').and.returnValue({ data: 'test' })
 
         // WHEN
-        comp.ngOnInit();
+        comp.ngOnInit()
 
         // THEN
-        expect(service.checkHealth).toHaveBeenCalled();
-        expect(service.transformHealthData).toHaveBeenCalled();
-        expect(comp.healthData).toEqual({ data: 'test' });
-      });
+        expect(service.checkHealth).toHaveBeenCalled()
+        expect(service.transformHealthData).toHaveBeenCalled()
+        expect(comp.healthData).toEqual({ data: 'test' })
+      })
       it('should handle a 503 on refreshing health data', () => {
         // GIVEN
-        spyOn(service, 'checkHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: 'Mail down' })));
-        spyOn(service, 'transformHealthData').and.returnValue({ health: 'down' });
+        spyOn(service, 'checkHealth').and.returnValue(
+          throwError(new HttpErrorResponse({ status: 503, error: 'Mail down' }))
+        )
+        spyOn(service, 'transformHealthData').and.returnValue({
+          health: 'down',
+        })
 
         // WHEN
-        comp.refresh();
+        comp.refresh()
 
         // THEN
-        expect(service.checkHealth).toHaveBeenCalled();
-        expect(service.transformHealthData).toHaveBeenCalled();
-        expect(comp.healthData).toEqual({ health: 'down' });
-      });
-    });
-  });
-});
+        expect(service.checkHealth).toHaveBeenCalled()
+        expect(service.transformHealthData).toHaveBeenCalled()
+        expect(comp.healthData).toEqual({ health: 'down' })
+      })
+    })
+  })
+})

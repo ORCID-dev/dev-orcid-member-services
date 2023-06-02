@@ -12,14 +12,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MailConfiguration {
 
-  @Bean
-  public HttpClient mailgunHttpClient(ApplicationProperties applicationProperties) {
-    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("api", applicationProperties.getMailApiKey());
+      @Bean
+      public HttpClient mailgunHttpClient(
+            ApplicationProperties applicationProperties
+      ) {
+            UsernamePasswordCredentials credentials =
+                  new UsernamePasswordCredentials(
+                        "api",
+                        applicationProperties.getMailApiKey()
+                  );
 
-    CredentialsProvider provider = new BasicCredentialsProvider();
-    provider.setCredentials(AuthScope.ANY, credentials);
+            CredentialsProvider provider = new BasicCredentialsProvider();
+            provider.setCredentials(AuthScope.ANY, credentials);
 
-    HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-    return client;
-  }
+            HttpClient client = HttpClientBuilder
+                  .create()
+                  .setDefaultCredentialsProvider(provider)
+                  .build();
+            return client;
+      }
 }

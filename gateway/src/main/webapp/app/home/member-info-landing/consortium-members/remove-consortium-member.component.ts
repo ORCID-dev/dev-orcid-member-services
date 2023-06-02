@@ -1,14 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MSMemberService } from 'app/entities/member';
-import { AlertService, RemoveConsortiumMemberConfirmationComponent } from 'app/shared';
-import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
+import { MSMemberService } from 'app/entities/member'
+import {
+  AlertService,
+  RemoveConsortiumMemberConfirmationComponent,
+} from 'app/shared'
+import { COUNTRIES } from 'app/shared/constants/orcid-api.constants'
 
-import { ISFConsortiumMemberData, ISFMemberData, SFConsortiumMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { IMSUser } from 'app/shared/model/user.model';
-import { DateUtilService } from 'app/shared/util/date-util.service';
-import { Subscription } from 'rxjs';
+import {
+  ISFConsortiumMemberData,
+  ISFMemberData,
+  SFConsortiumMemberData,
+} from 'app/shared/model/salesforce-member-data.model'
+import { IMSUser } from 'app/shared/model/user.model'
+import { DateUtilService } from 'app/shared/util/date-util.service'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-remove-consortium-member',
@@ -16,20 +23,20 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./remove-consortium-member.scss'],
 })
 export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
-  COUNTRIES = COUNTRIES;
-  memberDataSubscription: Subscription;
-  account: IMSUser;
-  memberData: ISFMemberData;
-  consortiumMember: SFConsortiumMemberData;
-  isSaving: boolean;
-  invalidForm: boolean;
-  routeData: any;
-  editForm: FormGroup;
-  consortiumMemberId: string;
-  currentMonth: number;
-  currentYear: number;
-  monthList: [number, string][];
-  yearList: string[];
+  COUNTRIES = COUNTRIES
+  memberDataSubscription: Subscription
+  account: IMSUser
+  memberData: ISFMemberData
+  consortiumMember: SFConsortiumMemberData
+  isSaving: boolean
+  invalidForm: boolean
+  routeData: any
+  editForm: FormGroup
+  consortiumMemberId: string
+  currentMonth: number
+  currentYear: number
+  monthList: [number, string][]
+  yearList: string[]
 
   constructor(
     private memberService: MSMemberService,
@@ -43,40 +50,43 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       if (params['id']) {
-        this.consortiumMemberId = params['id'];
+        this.consortiumMemberId = params['id']
       }
-    });
+    })
 
-    this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
-    this.currentYear = this.dateUtilService.getCurrentYear();
-    this.monthList = this.dateUtilService.getFutureMonthsList();
-    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1);
+    this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
+    this.currentYear = this.dateUtilService.getCurrentYear()
+    this.monthList = this.dateUtilService.getFutureMonthsList()
+    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1)
     this.editForm = this.fb.group({
       terminationMonth: [this.monthList[0][0], [Validators.required]],
       terminationYear: [this.yearList[0], [Validators.required]],
-    });
+    })
 
-    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
-      this.memberData = data;
-      this.consortiumMember = Object.values(data.consortiumMembers).find(
-        (member: ISFConsortiumMemberData) => member.salesforceId === this.consortiumMemberId
-      );
-    });
+    this.memberDataSubscription = this.memberService.memberData.subscribe(
+      data => {
+        this.memberData = data
+        this.consortiumMember = Object.values(data.consortiumMembers).find(
+          (member: ISFConsortiumMemberData) =>
+            member.salesforceId === this.consortiumMemberId
+        )
+      }
+    )
     this.editForm.valueChanges.subscribe(form => {
       if (form['terminationYear'] === this.currentYear) {
-        this.monthList = this.dateUtilService.getFutureMonthsList();
+        this.monthList = this.dateUtilService.getFutureMonthsList()
       } else {
-        this.monthList = this.dateUtilService.getMonthsList();
+        this.monthList = this.dateUtilService.getMonthsList()
       }
       if (this.editForm.status === 'VALID') {
-        this.invalidForm = false;
+        this.invalidForm = false
       }
-    });
+    })
   }
 
   ngOnDestroy(): void {
     if (this.memberDataSubscription) {
-      this.memberDataSubscription.unsubscribe();
+      this.memberDataSubscription.unsubscribe()
     }
   }
 
@@ -86,42 +96,45 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
       terminationMonth: this.editForm.get('terminationMonth').value,
       terminationYear: this.editForm.get('terminationYear').value,
       orgName: this.consortiumMember.orgName,
-    };
+    }
   }
 
   save() {
     if (this.editForm.status === 'INVALID') {
-      this.editForm.markAllAsTouched();
-      this.invalidForm = true;
+      this.editForm.markAllAsTouched()
+      this.invalidForm = true
     } else {
-      this.invalidForm = false;
-      this.isSaving = true;
-      const consortiumMember = this.createConsortiumMemberFromForm();
+      this.invalidForm = false
+      this.isSaving = true
+      const consortiumMember = this.createConsortiumMemberFromForm()
 
       this.memberService.removeConsortiumMember(consortiumMember).subscribe(
         res => {
           if (res) {
-            this.onSaveSuccess(consortiumMember.orgName);
+            this.onSaveSuccess(consortiumMember.orgName)
           } else {
-            console.error(res);
-            this.onSaveError();
+            console.error(res)
+            this.onSaveError()
           }
         },
         err => {
-          console.error(err);
-          this.onSaveError();
+          console.error(err)
+          this.onSaveError()
         }
-      );
+      )
     }
   }
 
   onSaveSuccess(orgName: string) {
-    this.isSaving = false;
-    this.alertService.showHomepageLightboxModal({ alertComponent: RemoveConsortiumMemberConfirmationComponent, data: orgName });
-    this.router.navigate(['']);
+    this.isSaving = false
+    this.alertService.showHomepageLightboxModal({
+      alertComponent: RemoveConsortiumMemberConfirmationComponent,
+      data: orgName,
+    })
+    this.router.navigate([''])
   }
 
   onSaveError() {
-    this.isSaving = false;
+    this.isSaving = false
   }
 }

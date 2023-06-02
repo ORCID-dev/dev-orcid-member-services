@@ -2,7 +2,9 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": { "string": "Afiliação duplicada. Esta afiliação já foi criada." }
+        "duplicate": {
+          "string": "Afiliação duplicada. Esta afiliação já foi criada."
+        }
       }
     }
   },
@@ -14,7 +16,9 @@
         "createOrEditLabel": { "string": "Adicionar ou editar afiliação" },
         "notFound": { "string": "Não foram encontradas afiliações" },
         "uploadLabel": { "string": "Importar afiliações de CSV" },
-        "permissionNotificationsLabel": { "string": "Enviar notificações de permissão" },
+        "permissionNotificationsLabel": {
+          "string": "Enviar notificações de permissão"
+        },
         "forHelpTroubleshooting": {
           "string": "Se precisar de ajuda a resolver este erro, por favor contacte o seu líder de consórcio ou membership@orcid.org. Por favor inclua uma captura de ecrã da mensagem de erro em baixo."
         }
@@ -58,7 +62,9 @@
         "successMessage": {
           "string": "O seu CSV foi carregado para processamento. Avisá-lo-emos por e-mail assim que o ficheiro tiver sido processado."
         },
-        "failure": { "string": "Ocorreu um problema ao carregar o seu CSV para processamento." }
+        "failure": {
+          "string": "Ocorreu um problema ao carregar o seu CSV para processamento."
+        }
       },
       "notifications": {
         "title": { "string": "Enviar notificações de permissão" },
@@ -182,7 +188,9 @@
       "created": { "string": "Afiliação criada" },
       "updated": { "string": "Afiliação atualizada" },
       "deleted": { "string": "Afiliação excluída" },
-      "problemDeleting": { "string": "Ocorreu um problema ao eliminar a afiliação" }
+      "problemDeleting": {
+        "string": "Ocorreu um problema ao eliminar a afiliação"
+      }
     }
   }
 }

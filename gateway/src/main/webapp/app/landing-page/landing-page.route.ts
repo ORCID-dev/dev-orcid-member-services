@@ -1,6 +1,6 @@
-import { Route } from '@angular/router';
+import { Route } from '@angular/router'
 
-import { LandingPageComponent } from './';
+import { LandingPageComponent } from './'
 
 export const LANDING_PAGE_ROUTE: Route = {
   path: 'landing-page',
@@ -9,4 +9,4 @@ export const LANDING_PAGE_ROUTE: Route = {
     authorities: [],
     pageTitle: 'landingPage.title.string',
   },
-};
+}

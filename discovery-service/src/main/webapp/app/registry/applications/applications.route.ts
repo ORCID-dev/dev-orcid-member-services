@@ -1,6 +1,6 @@
-import { Route } from '@angular/router';
+import { Route } from '@angular/router'
 
-import { ApplicationsComponent } from './applications.component';
+import { ApplicationsComponent } from './applications.component'
 
 export const applicationsRoute: Route = {
   path: '',
@@ -8,4 +8,4 @@ export const applicationsRoute: Route = {
   data: {
     pageTitle: 'Applications',
   },
-};
+}

@@ -1,21 +1,29 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AssertionService } from '../../entities/assertion/assertion.service';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpResponse } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { AssertionService } from '../../entities/assertion/assertion.service'
 
 @Injectable()
 export class NotificationService {
-  resourceUrl: string;
+  resourceUrl: string
 
-  constructor(private http: HttpClient, private assertionService: AssertionService) {
-    this.resourceUrl = this.assertionService.resourceUrl + '/notification-request';
+  constructor(
+    private http: HttpClient,
+    private assertionService: AssertionService
+  ) {
+    this.resourceUrl =
+      this.assertionService.resourceUrl + '/notification-request'
   }
 
   updateStatuses(language: string): Observable<HttpResponse<any>> {
-    return this.http.post<any>(this.resourceUrl, { language }, { observe: 'response' });
+    return this.http.post<any>(
+      this.resourceUrl,
+      { language },
+      { observe: 'response' }
+    )
   }
 
   requestInProgress(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(this.resourceUrl, { observe: 'response' });
+    return this.http.get<any>(this.resourceUrl, { observe: 'response' })
   }
 }

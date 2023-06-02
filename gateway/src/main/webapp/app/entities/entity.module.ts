@@ -1,5 +1,5 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { RouterModule } from '@angular/router'
 
 @NgModule({
   imports: [
@@ -14,7 +14,8 @@ import { RouterModule } from '@angular/router';
       },
       {
         path: 'assertion',
-        loadChildren: './assertion/assertion.module#AssertionServiceAssertionModule',
+        loadChildren:
+          './assertion/assertion.module#AssertionServiceAssertionModule',
       },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),

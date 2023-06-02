@@ -7,10 +7,16 @@
         "text": {
           "string": "Il Portale Membri ORCID è una suite di strumenti che aiutano le istituzioni ad ottenere il massimo dal proprio abbonamento ORCID. Abbiamo già alcuni strumenti disponibili, ed altri sono già in fase di sviluppo, per permettere ai nostri membri di:"
         },
-        "bullet1": { "string": "Aggiungi/aggiorna i dati sui record ORCID dei ricercatori" },
+        "bullet1": {
+          "string": "Aggiungi/aggiorna i dati sui record ORCID dei ricercatori"
+        },
         "bullet2": { "string": "Accedi a dati e report" },
-        "bullet3": { "string": "Gestisci le informazioni sull'iscrizione a ORCID della tua organizzazione\n" },
-        "bullet4": { "string": "Gestisci le credenziali API di ORCID della tua organizzazione\n" }
+        "bullet3": {
+          "string": "Gestisci le informazioni sull'iscrizione a ORCID della tua organizzazione\n"
+        },
+        "bullet4": {
+          "string": "Gestisci le credenziali API di ORCID della tua organizzazione\n"
+        }
       },
       "section2": {
         "text": { "string": "Strumenti attualmente disponibili:" },
@@ -33,21 +39,29 @@
         "table": {
           "line1": {
             "heading": { "string": "Guida alla gestione dell'account" },
-            "description": { "string": "Guida alla gestione dell'accesso dei tuoi utenti al portale membri" }
+            "description": {
+              "string": "Guida alla gestione dell'accesso dei tuoi utenti al portale membri"
+            }
           },
           "line2": {
             "heading": { "string": "Guida ad Affiliation Manager" },
-            "description": { "string": "Guida per lo staff della tua istituzione che userà l'Affiliation Manager" }
+            "description": {
+              "string": "Guida per lo staff della tua istituzione che userà l'Affiliation Manager"
+            }
           },
           "line3": {
             "heading": { "string": "Guida alla segnalazione dei membri" },
-            "description": { "string": "Guida alla lettura dei report per i membri" }
+            "description": {
+              "string": "Guida alla lettura dei report per i membri"
+            }
           }
         }
       },
       "section4": {
         "heading": { "string": "Contatti per il supporto" },
-        "text": { "string": "Per domande o assistenza con il Portale Membri, contatta:" },
+        "text": {
+          "string": "Per domande o assistenza con il Portale Membri, contatta:"
+        },
         "bullet1": {
           "text": { "string": "Il tuo" },
           "linkText": { "string": "organizzazione capo del consorzio" }
@@ -65,7 +79,9 @@
       "signIntoOrcid": { "string": "accedi al tuo archivio ORCID" }
     },
     "loggedIn": {
-      "message": { "string": "Hai effettuato l’accesso come <strong>{{username}}</strong>" }
+      "message": {
+        "string": "Hai effettuato l’accesso come <strong>{{username}}</strong>"
+      }
     }
   }
 }

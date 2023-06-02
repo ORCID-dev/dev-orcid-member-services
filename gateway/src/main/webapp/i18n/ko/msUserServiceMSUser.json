@@ -27,9 +27,13 @@
         "title": { "string": "사용자 가져오기" },
         "label": { "string": "업로드할 CSV 파일을 선택해 주세요" },
         "filePath": { "string": "파일 경로" },
-        "emptyFile": { "string": "업로드할 파일이 없습니다. 하나를 선택해 주세요." },
+        "emptyFile": {
+          "string": "업로드할 파일이 없습니다. 하나를 선택해 주세요."
+        },
         "errors": {
-          "label": { "string": "이런! 데이터 처리 중에 문제가 발생했습니다. 아래 오류를 수정한 후 다시 시도해 주세요" }
+          "label": {
+            "string": "이런! 데이터 처리 중에 문제가 발생했습니다. 아래 오류를 수정한 후 다시 시도해 주세요"
+          }
         }
       },
       "assertionService": {

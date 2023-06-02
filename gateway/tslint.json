@@ -10,7 +10,11 @@
     "indent": [true, "spaces"],
     "label-position": true,
     "member-access": false,
-    "member-ordering": [true, "static-before-instance", "variables-before-functions"],
+    "member-ordering": [
+      true,
+      "static-before-instance",
+      "variables-before-functions"
+    ],
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
@@ -27,7 +31,13 @@
     "no-unused-expression": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
-    "one-line": [true, "check-open-brace", "check-catch", "check-else", "check-whitespace"],
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-else",
+      "check-whitespace"
+    ],
     "quotemark": [true, "single", "avoid-escape"],
     "radix": true,
     "semicolon": [true, "always", "ignore-bound-class-methods"],
@@ -43,7 +53,14 @@
       }
     ],
     "variable-name": false,
-    "whitespace": [true, "check-branch", "check-decl", "check-operator", "check-separator", "check-type"],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-type"
+    ],
     "prefer-const": true,
     "arrow-parens": [true, "ban-single-arg-parens"],
     "arrow-return-shorthand": [true],

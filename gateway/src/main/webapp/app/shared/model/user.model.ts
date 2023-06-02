@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import { Moment } from 'moment'
 
 export const enum UserAuthorities {
   ROLE_USER = 'ROLE_USER',
@@ -8,22 +8,22 @@ export const enum UserAuthorities {
 }
 
 export interface IMSUser {
-  id?: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  mainContact?: boolean;
-  salesforceId?: string;
-  memberName?: string;
-  parentSalesforceId?: string;
-  activated?: boolean;
-  isAdmin?: boolean;
-  authorities?: [string];
-  createdBy?: string;
-  createdDate?: Moment;
-  lastModifiedBy?: string;
-  lastModifiedDate?: Moment;
-  mfaEnabled?: boolean;
+  id?: string
+  email?: string
+  firstName?: string
+  lastName?: string
+  mainContact?: boolean
+  salesforceId?: string
+  memberName?: string
+  parentSalesforceId?: string
+  activated?: boolean
+  isAdmin?: boolean
+  authorities?: [string]
+  createdBy?: string
+  createdDate?: Moment
+  lastModifiedBy?: string
+  lastModifiedDate?: Moment
+  mfaEnabled?: boolean
 }
 
 export class MSUser implements IMSUser {
@@ -44,9 +44,9 @@ export class MSUser implements IMSUser {
     public lastModifiedDate?: Moment,
     public mfaEnabled?: boolean
   ) {
-    this.isAdmin = this.isAdmin || false;
-    this.mainContact = this.mainContact || false;
-    this.activated = this.activated || false;
-    this.mfaEnabled = this.mfaEnabled || false;
+    this.isAdmin = this.isAdmin || false
+    this.mainContact = this.mainContact || false
+    this.activated = this.activated || false
+    this.mfaEnabled = this.mfaEnabled || false
   }
 }

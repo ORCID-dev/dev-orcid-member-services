@@ -20,5 +20,8 @@
       "value": "5.0.2"
     }
   },
-  "buildpacks": [{ "url": "heroku/jvm" }, { "url": "https://github.com/jhipster/jhipster-registry-buildpack" }]
+  "buildpacks": [
+    { "url": "heroku/jvm" },
+    { "url": "https://github.com/jhipster/jhipster-registry-buildpack" }
+  ]
 }

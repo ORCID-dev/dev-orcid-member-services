@@ -6,9 +6,15 @@
         "button": { "string": "Obnovit heslo" }
       },
       "messages": {
-        "info": { "string": "Vložte e-mailovou adresu, kterou jste použili při registraci" },
-        "success": { "string": "Podrobnosti o tom, jak obnovit heslo, najdete v e-mailu." },
-        "notfound": { "string": "<strong>E-mailová adresa není zaregistrovaná!</strong> Zkontrolujte ji prosím a zkuste to znovu" }
+        "info": {
+          "string": "Vložte e-mailovou adresu, kterou jste použili při registraci"
+        },
+        "success": {
+          "string": "Podrobnosti o tom, jak obnovit heslo, najdete v e-mailu."
+        },
+        "notfound": {
+          "string": "<strong>E-mailová adresa není zaregistrovaná!</strong> Zkontrolujte ji prosím a zkuste to znovu"
+        }
       }
     },
     "finish": {
@@ -18,7 +24,9 @@
       },
       "messages": {
         "info": { "string": "Vyberte nové heslo" },
-        "success": { "string": "<strong>Vaše heslo bylo obnoveno.</strong> Prosím" },
+        "success": {
+          "string": "<strong>Vaše heslo bylo obnoveno.</strong> Prosím"
+        },
         "keymissing": { "string": "Chybí aktivační klíč." },
         "keyinvalid": { "string": "Aktivační klíč je neplatný." },
         "keyexpired": {
@@ -33,7 +41,9 @@
             "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
           }
         },
-        "error": { "string": "Heslo nelze znovu nastavit. Nezapomeňte, že žádost o heslo platí pouze 24 hodin." }
+        "error": {
+          "string": "Heslo nelze znovu nastavit. Nezapomeňte, že žádost o heslo platí pouze 24 hodin."
+        }
       }
     }
   }

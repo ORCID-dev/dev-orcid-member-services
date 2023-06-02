@@ -9,29 +9,37 @@ import javax.validation.constraints.Size;
  */
 public class UserVM {
 
-  @NotNull
-  @Size(min = 1, max = 50)
-  private String login;
+      @NotNull
+      @Size(min = 1, max = 50)
+      private String login;
 
-  private Set<String> authorities;
+      private Set<String> authorities;
 
-  public UserVM() {}
+      public UserVM() {}
 
-  public UserVM(String login, Set<String> authorities) {
-    this.login = login;
-    this.authorities = authorities;
-  }
+      public UserVM(String login, Set<String> authorities) {
+            this.login = login;
+            this.authorities = authorities;
+      }
 
-  public String getLogin() {
-    return login;
-  }
+      public String getLogin() {
+            return login;
+      }
 
-  public Set<String> getAuthorities() {
-    return authorities;
-  }
+      public Set<String> getAuthorities() {
+            return authorities;
+      }
 
-  @Override
-  public String toString() {
-    return "UserVM{" + "login='" + login + '\'' + ", authorities=" + authorities + "}";
-  }
+      @Override
+      public String toString() {
+            return (
+                  "UserVM{" +
+                  "login='" +
+                  login +
+                  '\'' +
+                  ", authorities=" +
+                  authorities +
+                  "}"
+            );
+      }
 }

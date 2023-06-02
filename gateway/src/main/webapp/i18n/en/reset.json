@@ -7,8 +7,12 @@
       },
       "messages": {
         "info": { "string": "Enter the email address you used to register" },
-        "success": { "string": "Check your emails for details on how to reset your password." },
-        "notfound": { "string": "<strong>Email address isn't registered!</strong> Please check and try again" }
+        "success": {
+          "string": "Check your emails for details on how to reset your password."
+        },
+        "notfound": {
+          "string": "<strong>Email address isn't registered!</strong> Please check and try again"
+        }
       }
     },
     "finish": {
@@ -18,7 +22,9 @@
       },
       "messages": {
         "info": { "string": "Choose a new password" },
-        "success": { "string": "<strong>Your password has been reset.</strong> Please " },
+        "success": {
+          "string": "<strong>Your password has been reset.</strong> Please "
+        },
         "keymissing": { "string": "The activation key is missing." },
         "keyinvalid": { "string": "The activation key is invalid." },
         "keyexpired": {
@@ -33,7 +39,9 @@
             "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
           }
         },
-        "error": { "string": "Your password couldn't be reset. Remember a password request is only valid for 24 hours." }
+        "error": {
+          "string": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+        }
       }
     }
   }

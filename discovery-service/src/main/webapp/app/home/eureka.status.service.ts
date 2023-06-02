@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs'
 
 export type EurekaStatusKey =
   | 'time'
@@ -10,12 +10,12 @@ export type EurekaStatusKey =
   | 'datacenter'
   | 'isBelowRenewThreshold'
   | 'generalStats'
-  | 'instanceInfo';
+  | 'instanceInfo'
 
 export interface Eureka {
   status: {
-    [key in EurekaStatusKey]?: any;
-  };
+    [key in EurekaStatusKey]?: any
+  }
 }
 
 @Injectable({ providedIn: 'root' })
@@ -23,6 +23,6 @@ export class EurekaStatusService {
   constructor(private http: HttpClient) {}
 
   findAll(): Observable<Eureka> {
-    return this.http.get<Eureka>('api/eureka/status');
+    return this.http.get<Eureka>('api/eureka/status')
   }
 }

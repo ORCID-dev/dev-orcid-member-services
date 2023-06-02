@@ -2,17 +2,17 @@ package io.github.jhipster.registry.service.dto;
 
 public class VersionDTO {
 
-  private String version;
+      private String version;
 
-  public VersionDTO(String version) {
-    this.version = version;
-  }
+      public VersionDTO(String version) {
+            this.version = version;
+      }
 
-  public String getVersion() {
-    return version;
-  }
+      public String getVersion() {
+            return version;
+      }
 
-  public void setVersion(String version) {
-    this.version = version;
-  }
+      public void setVersion(String version) {
+            this.version = version;
+      }
 }

@@ -1,33 +1,41 @@
-import { Injectable } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { Assertion } from 'app/shared/model/assertion.model';
-import { AssertionService } from './assertion.service';
-import { AssertionComponent } from './assertion.component';
-import { AssertionDetailComponent } from './assertion-detail.component';
-import { AssertionUpdateComponent } from './assertion-update.component';
-import { AssertionDeletePopupComponent } from './assertion-delete-dialog.component';
-import { AssertionImportPopupComponent } from './assertion-import-dialog.component';
-import { SendNotificationsPopupComponent } from './send-notifications-dialog.component';
-import { IAssertion } from 'app/shared/model/assertion.model';
+import { Injectable } from '@angular/core'
+import { HttpResponse } from '@angular/common/http'
+import {
+  Resolve,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Routes,
+} from '@angular/router'
+import { JhiResolvePagingParams } from 'ng-jhipster'
+import { UserRouteAccessService } from 'app/core'
+import { Observable, of } from 'rxjs'
+import { filter, map } from 'rxjs/operators'
+import { Assertion } from 'app/shared/model/assertion.model'
+import { AssertionService } from './assertion.service'
+import { AssertionComponent } from './assertion.component'
+import { AssertionDetailComponent } from './assertion-detail.component'
+import { AssertionUpdateComponent } from './assertion-update.component'
+import { AssertionDeletePopupComponent } from './assertion-delete-dialog.component'
+import { AssertionImportPopupComponent } from './assertion-import-dialog.component'
+import { SendNotificationsPopupComponent } from './send-notifications-dialog.component'
+import { IAssertion } from 'app/shared/model/assertion.model'
 
 @Injectable({ providedIn: 'root' })
 export class AssertionResolve implements Resolve<IAssertion> {
   constructor(private service: AssertionService) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IAssertion> {
-    const id = route.params['id'] ? route.params['id'] : null;
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<IAssertion> {
+    const id = route.params['id'] ? route.params['id'] : null
     if (id) {
       return this.service.find(id).pipe(
         filter((response: HttpResponse<Assertion>) => response.ok),
         map((assertion: HttpResponse<Assertion>) => assertion.body)
-      );
+      )
     }
-    return of(new Assertion());
+    return of(new Assertion())
   }
 }
 
@@ -81,7 +89,7 @@ export const assertionRoute: Routes = [
     },
     canActivate: [UserRouteAccessService],
   },
-];
+]
 
 export const assertionPopupRoute: Routes = [
   {
@@ -123,4 +131,4 @@ export const assertionPopupRoute: Routes = [
     canActivate: [UserRouteAccessService],
     outlet: 'popup',
   },
-];
+]

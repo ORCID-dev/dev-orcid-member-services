@@ -1,9 +1,9 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { JhiLanguageService } from 'ng-jhipster'
+import { JhiLanguageHelper } from 'app/core'
 
-import { GatewaySharedModule } from 'app/shared';
+import { GatewaySharedModule } from 'app/shared'
 import {
   MSMemberComponent,
   MSMemberDetailComponent,
@@ -14,9 +14,9 @@ import {
   MSMemberImportDialogComponent,
   msMemberRoute,
   msMemberPopupRoute,
-} from './';
+} from './'
 
-const ENTITY_STATES = [...msMemberRoute, ...msMemberPopupRoute];
+const ENTITY_STATES = [...msMemberRoute, ...msMemberPopupRoute]
 
 @NgModule({
   imports: [GatewaySharedModule, RouterModule.forChild(ENTITY_STATES)],
@@ -41,11 +41,14 @@ const ENTITY_STATES = [...msMemberRoute, ...msMemberPopupRoute];
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MSUserServiceMSMemberModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
+  constructor(
+    private languageService: JhiLanguageService,
+    private languageHelper: JhiLanguageHelper
+  ) {
     this.languageHelper.language.subscribe((languageKey: string) => {
       if (languageKey !== undefined) {
-        this.languageService.changeLanguage(languageKey);
+        this.languageService.changeLanguage(languageKey)
       }
-    });
+    })
   }
 }

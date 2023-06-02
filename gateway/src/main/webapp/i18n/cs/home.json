@@ -7,10 +7,16 @@
         "text": {
           "string": "Členský portál ORCID je sada nástrojů, které pomáhají institucím co nejlépe využít jejich členství v ORCID. Některé nástroje již máme k dispozici a aktivně vyvíjíme další, které našim členům umožňují:"
         },
-        "bullet1": { "string": "Zadat/aktualizovat údaje k záznamům výzkumníků v ORCID" },
+        "bullet1": {
+          "string": "Zadat/aktualizovat údaje k záznamům výzkumníků v ORCID"
+        },
         "bullet2": { "string": "Přístup k datům a zprávám" },
-        "bullet3": { "string": "Spravujte informace své organizace o členství v ORCID" },
-        "bullet4": { "string": "Spravujte přihlašovací údaje své organizace pro ORCID API" }
+        "bullet3": {
+          "string": "Spravujte informace své organizace o členství v ORCID"
+        },
+        "bullet4": {
+          "string": "Spravujte přihlašovací údaje své organizace pro ORCID API"
+        }
       },
       "section2": {
         "text": { "string": "Momentálně dostupné nástroje:" },
@@ -33,11 +39,15 @@
         "table": {
           "line1": {
             "heading": { "string": "Návod pro správu účtu" },
-            "description": { "string": "Průvodce, jak spravovat přístup uživatelů k členskému portálu" }
+            "description": {
+              "string": "Průvodce, jak spravovat přístup uživatelů k členskému portálu"
+            }
           },
           "line2": {
             "heading": { "string": "Návod pro Správce přidružení" },
-            "description": { "string": "Průvodce pro zaměstnance vaší instituce, kteří budou používat Affiliation Manager" }
+            "description": {
+              "string": "Průvodce pro zaměstnance vaší instituce, kteří budou používat Affiliation Manager"
+            }
           },
           "line3": {
             "heading": { "string": "Průvodce nahlašováním členů" },
@@ -47,7 +57,9 @@
       },
       "section4": {
         "heading": { "string": "Kontakty na podporu" },
-        "text": { "string": "Pro pomoc nebo otázky ohledně členského portálu prosím kontaktujte:" },
+        "text": {
+          "string": "Pro pomoc nebo otázky ohledně členského portálu prosím kontaktujte:"
+        },
         "bullet1": {
           "text": { "string": "Váš" },
           "linkText": { "string": "organizace vedení konsorcia" }
@@ -65,7 +77,9 @@
       "signIntoOrcid": { "string": "přihlaste se do svého záznamu ORCID" }
     },
     "loggedIn": {
-      "message": { "string": "Jste přihlášeni jako uživatel <strong>{{username}}</strong>" }
+      "message": {
+        "string": "Jste přihlášeni jako uživatel <strong>{{username}}</strong>"
+      }
     }
   }
 }

@@ -1,29 +1,36 @@
-import './vendor.ts';
+import './vendor.ts'
 
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgxWebstorageModule } from 'ngx-webstorage';
-import { NgJhipsterModule } from 'ng-jhipster';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
+import { HTTP_INTERCEPTORS } from '@angular/common/http'
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap'
+import { NgxWebstorageModule } from 'ngx-webstorage'
+import { NgJhipsterModule } from 'ng-jhipster'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
-import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
-import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-import { GatewaySharedModule } from 'app/shared';
-import { GatewayCoreModule } from 'app/core';
-import { GatewayAppRoutingModule } from './app-routing.module';
-import { GatewayHomeModule } from './home/home.module';
-import { GatewayLandingPageModule } from './landing-page/landing-page.module';
-import { GatewayAccountModule } from './account/account.module';
-import { GatewayEntityModule } from './entities/entity.module';
-import { GatewayReportModule } from './report/report.module';
-import * as moment from 'moment';
+import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor'
+import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor'
+import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor'
+import { GatewaySharedModule } from 'app/shared'
+import { GatewayCoreModule } from 'app/core'
+import { GatewayAppRoutingModule } from './app-routing.module'
+import { GatewayHomeModule } from './home/home.module'
+import { GatewayLandingPageModule } from './landing-page/landing-page.module'
+import { GatewayAccountModule } from './account/account.module'
+import { GatewayEntityModule } from './entities/entity.module'
+import { GatewayReportModule } from './report/report.module'
+import * as moment from 'moment'
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
-import { QuillModule } from 'ngx-quill';
+import {
+  JhiMainComponent,
+  NavbarComponent,
+  FooterComponent,
+  PageRibbonComponent,
+  ActiveMenuDirective,
+  ErrorComponent,
+} from './layouts'
+import { QuillModule } from 'ngx-quill'
 
 @NgModule({
   imports: [
@@ -48,7 +55,14 @@ import { QuillModule } from 'ngx-quill';
     GatewayAppRoutingModule,
     QuillModule.forRoot(),
   ],
-  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
+  declarations: [
+    JhiMainComponent,
+    NavbarComponent,
+    ErrorComponent,
+    PageRibbonComponent,
+    ActiveMenuDirective,
+    FooterComponent,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -71,6 +85,6 @@ import { QuillModule } from 'ngx-quill';
 })
 export class GatewayAppModule {
   constructor(private dpConfig: NgbDatepickerConfig) {
-    this.dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
+    this.dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 }
   }
 }

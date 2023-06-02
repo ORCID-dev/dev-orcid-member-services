@@ -1,13 +1,16 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { JHipsterRegistrySharedModule } from 'app/shared/shared.module';
+import { NgModule } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { JHipsterRegistrySharedModule } from 'app/shared/shared.module'
 
-import { MetricsMonitoringComponent } from './metrics.component';
+import { MetricsMonitoringComponent } from './metrics.component'
 
-import { metricsRoute } from './metrics.route';
+import { metricsRoute } from './metrics.route'
 
 @NgModule({
-  imports: [JHipsterRegistrySharedModule, RouterModule.forChild([metricsRoute])],
+  imports: [
+    JHipsterRegistrySharedModule,
+    RouterModule.forChild([metricsRoute]),
+  ],
   declarations: [MetricsMonitoringComponent],
 })
 export class MetricsModule {}

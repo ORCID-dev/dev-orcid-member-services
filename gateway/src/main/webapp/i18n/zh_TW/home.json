@@ -33,11 +33,15 @@
         "table": {
           "line1": {
             "heading": { "string": "帳號管理指南" },
-            "description": { "string": "有關如何管理您的成員對成員入口存取權限的指南" }
+            "description": {
+              "string": "有關如何管理您的成員對成員入口存取權限的指南"
+            }
           },
           "line2": {
             "heading": { "string": "機關管理者指南" },
-            "description": { "string": "供您所屬單位使用機關管理系統之工作人員查閱的指南" }
+            "description": {
+              "string": "供您所屬單位使用機關管理系統之工作人員查閱的指南"
+            }
           },
           "line3": {
             "heading": { "string": "成員報告指南" },
@@ -47,7 +51,9 @@
       },
       "section4": {
         "heading": { "string": "支援窗口" },
-        "text": { "string": "如果需要有關會員入口網站的協助或有疑問，請連絡：" },
+        "text": {
+          "string": "如果需要有關會員入口網站的協助或有疑問，請連絡："
+        },
         "bullet1": {
           "text": { "string": "您的" },
           "linkText": { "string": "聯盟領導組織" }
@@ -65,7 +71,9 @@
       "signIntoOrcid": { "string": "登入您的 ORCID 紀錄" }
     },
     "loggedIn": {
-      "message": { "string": "您已以使用者「<strong>{{username}}</strong>」的身分登入" }
+      "message": {
+        "string": "您已以使用者「<strong>{{username}}</strong>」的身分登入"
+      }
     }
   }
 }

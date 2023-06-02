@@ -33,100 +33,143 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 
-@SpringBootTest(classes = { JHipsterRegistryApp.class, UaaTestSecurityConfiguration.class })
+@SpringBootTest(
+      classes = {
+            JHipsterRegistryApp.class, UaaTestSecurityConfiguration.class,
+      }
+)
 @TestPropertySource(properties = "eureka.client.fetch-registry: false")
 @ActiveProfiles("uaa")
 public class UaaAuthorizationHeaderUtilIT {
 
-  @MockBean(name = "uaaRestTemplate")
-  private RestTemplate restTemplate;
+      @MockBean(name = "uaaRestTemplate")
+      private RestTemplate restTemplate;
 
-  @Autowired
-  private UaaAuthorizationHeaderUtil authorizationHeaderUtil;
+      @Autowired
+      private UaaAuthorizationHeaderUtil authorizationHeaderUtil;
 
-  @Autowired
-  private OAuth2AuthorizedClientService authorizedClientService;
+      @Autowired
+      private OAuth2AuthorizedClientService authorizedClientService;
 
-  @Autowired
-  private ClientRegistrationRepository clientRegistrationRepository;
+      @Autowired
+      private ClientRegistrationRepository clientRegistrationRepository;
 
-  private Authentication authentication;
+      private Authentication authentication;
 
-  @BeforeEach
-  public void setup() {
-    authentication = createAuthentication();
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+      @BeforeEach
+      public void setup() {
+            authentication = createAuthentication();
+            SecurityContextHolder
+                  .getContext()
+                  .setAuthentication(authentication);
 
-    authorizedClientService.removeAuthorizedClient(CLIENT_REGISTRATION_ID, authentication.getName());
-  }
+            authorizedClientService.removeAuthorizedClient(
+                  CLIENT_REGISTRATION_ID,
+                  authentication.getName()
+            );
+      }
 
-  @Test
-  public void testAuthorizationHeaderWithExistingAuthorizedClient() {
-    // GIVEN
-    OAuth2AccessToken accessToken = new OAuth2AccessToken(
-      OAuth2AccessToken.TokenType.BEARER,
-      "existingTokenValue",
-      Instant.now().minus(Duration.ofHours(1)),
-      Instant.now().plus(Duration.ofHours(1))
-    );
-    authorizedClientService.saveAuthorizedClient(createAuthorizedClient(accessToken), authentication);
+      @Test
+      public void testAuthorizationHeaderWithExistingAuthorizedClient() {
+            // GIVEN
+            OAuth2AccessToken accessToken = new OAuth2AccessToken(
+                  OAuth2AccessToken.TokenType.BEARER,
+                  "existingTokenValue",
+                  Instant.now().minus(Duration.ofHours(1)),
+                  Instant.now().plus(Duration.ofHours(1))
+            );
+            authorizedClientService.saveAuthorizedClient(
+                  createAuthorizedClient(accessToken),
+                  authentication
+            );
 
-    String authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
+            String authorizationHeader =
+                  authorizationHeaderUtil.getAuthorizationHeader();
 
-    assertThat(authorizationHeader).isNotEmpty();
-    assertThat(authorizationHeader).isEqualTo("Bearer existingTokenValue");
-  }
+            assertThat(authorizationHeader).isNotEmpty();
+            assertThat(authorizationHeader)
+                  .isEqualTo("Bearer existingTokenValue");
+      }
 
-  @Test
-  public void testAuthorizationHeaderWithNotExistingAuthorizedClient() {
-    doReturn(ResponseEntity.ok(createAccessTokenResponse("tokenValue")))
-      .when(restTemplate)
-      .exchange(any(RequestEntity.class), ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any());
+      @Test
+      public void testAuthorizationHeaderWithNotExistingAuthorizedClient() {
+            doReturn(ResponseEntity.ok(createAccessTokenResponse("tokenValue")))
+                  .when(restTemplate)
+                  .exchange(
+                        any(RequestEntity.class),
+                        ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any()
+                  );
 
-    String authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
+            String authorizationHeader =
+                  authorizationHeaderUtil.getAuthorizationHeader();
 
-    assertThat(authorizationHeader).isNotEmpty();
-    assertThat(authorizationHeader).isEqualTo("Bearer tokenValue");
-  }
+            assertThat(authorizationHeader).isNotEmpty();
+            assertThat(authorizationHeader).isEqualTo("Bearer tokenValue");
+      }
 
-  @Test
-  public void testAuthorizationHeaderWithExpiredAccessToken() {
-    OAuth2AccessToken accessToken = new OAuth2AccessToken(
-      OAuth2AccessToken.TokenType.BEARER,
-      "existingTokenValue",
-      Instant.now().minus(Duration.ofHours(1)),
-      Instant.now().minus(Duration.ofMinutes(2))
-    );
-    authorizedClientService.saveAuthorizedClient(createAuthorizedClient(accessToken), authentication);
+      @Test
+      public void testAuthorizationHeaderWithExpiredAccessToken() {
+            OAuth2AccessToken accessToken = new OAuth2AccessToken(
+                  OAuth2AccessToken.TokenType.BEARER,
+                  "existingTokenValue",
+                  Instant.now().minus(Duration.ofHours(1)),
+                  Instant.now().minus(Duration.ofMinutes(2))
+            );
+            authorizedClientService.saveAuthorizedClient(
+                  createAuthorizedClient(accessToken),
+                  authentication
+            );
 
-    doReturn(ResponseEntity.ok(createAccessTokenResponse("refreshTokenValue")))
-      .when(restTemplate)
-      .exchange(any(RequestEntity.class), ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any());
+            doReturn(
+                  ResponseEntity.ok(
+                        createAccessTokenResponse("refreshTokenValue")
+                  )
+            )
+                  .when(restTemplate)
+                  .exchange(
+                        any(RequestEntity.class),
+                        ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any()
+                  );
 
-    String authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
+            String authorizationHeader =
+                  authorizationHeaderUtil.getAuthorizationHeader();
 
-    assertThat(authorizationHeader).isNotEmpty();
-    assertThat(authorizationHeader).isEqualTo("Bearer refreshTokenValue");
-  }
+            assertThat(authorizationHeader).isNotEmpty();
+            assertThat(authorizationHeader)
+                  .isEqualTo("Bearer refreshTokenValue");
+      }
 
-  private OAuth2AuthorizedClient createAuthorizedClient(OAuth2AccessToken accessToken) {
-    ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(CLIENT_REGISTRATION_ID);
-    return new OAuth2AuthorizedClient(clientRegistration, authentication.getName(), accessToken);
-  }
+      private OAuth2AuthorizedClient createAuthorizedClient(
+            OAuth2AccessToken accessToken
+      ) {
+            ClientRegistration clientRegistration =
+                  clientRegistrationRepository.findByRegistrationId(
+                        CLIENT_REGISTRATION_ID
+                  );
+            return new OAuth2AuthorizedClient(
+                  clientRegistration,
+                  authentication.getName(),
+                  accessToken
+            );
+      }
 
-  private Authentication createAuthentication() {
-    return new UsernamePasswordAuthenticationToken(
-      "test-user",
-      "test-password",
-      Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
-    );
-  }
+      private Authentication createAuthentication() {
+            return new UsernamePasswordAuthenticationToken(
+                  "test-user",
+                  "test-password",
+                  Collections.singletonList(
+                        new SimpleGrantedAuthority(AuthoritiesConstants.USER)
+                  )
+            );
+      }
 
-  private OAuth2AccessTokenResponse createAccessTokenResponse(String tokenValue) {
-    return OAuth2AccessTokenResponse
-      .withToken(tokenValue)
-      .tokenType(OAuth2AccessToken.TokenType.BEARER)
-      .expiresIn(Instant.now().plusSeconds(3600).getEpochSecond())
-      .build();
-  }
+      private OAuth2AccessTokenResponse createAccessTokenResponse(
+            String tokenValue
+      ) {
+            return OAuth2AccessTokenResponse
+                  .withToken(tokenValue)
+                  .tokenType(OAuth2AccessToken.TokenType.BEARER)
+                  .expiresIn(Instant.now().plusSeconds(3600).getEpochSecond())
+                  .build();
+      }
 }

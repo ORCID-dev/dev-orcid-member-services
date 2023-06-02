@@ -26,47 +26,62 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @Profile(JHipsterConstants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {
 
-  private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);
+      private final Logger log = LoggerFactory.getLogger(
+            CloudDatabaseConfiguration.class
+      );
 
-  @Bean
-  public MongoDbFactory mongoFactory() {
-    return connectionFactory().mongoDbFactory();
-  }
+      @Bean
+      public MongoDbFactory mongoFactory() {
+            return connectionFactory().mongoDbFactory();
+      }
 
-  @Bean
-  public LocalValidatorFactoryBean validator() {
-    return new LocalValidatorFactoryBean();
-  }
+      @Bean
+      public LocalValidatorFactoryBean validator() {
+            return new LocalValidatorFactoryBean();
+      }
 
-  @Bean
-  public ValidatingMongoEventListener validatingMongoEventListener() {
-    return new ValidatingMongoEventListener(validator());
-  }
+      @Bean
+      public ValidatingMongoEventListener validatingMongoEventListener() {
+            return new ValidatingMongoEventListener(validator());
+      }
 
-  @Bean
-  public MongoCustomConversions customConversions() {
-    List<Converter<?, ?>> converterList = new ArrayList<>();
-    converterList.add(DateToZonedDateTimeConverter.INSTANCE);
-    converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
-    converterList.add(DurationToLongConverter.INSTANCE);
-    return new MongoCustomConversions(converterList);
-  }
+      @Bean
+      public MongoCustomConversions customConversions() {
+            List<Converter<?, ?>> converterList = new ArrayList<>();
+            converterList.add(DateToZonedDateTimeConverter.INSTANCE);
+            converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
+            converterList.add(DurationToLongConverter.INSTANCE);
+            return new MongoCustomConversions(converterList);
+      }
 
-  @Bean
-  public Mongobee mongobee(MongoDbFactory mongoDbFactory, MongoTemplate mongoTemplate, Cloud cloud) {
-    log.debug("Configuring Cloud Mongobee");
-    List<ServiceInfo> matchingServiceInfos = cloud.getServiceInfos(MongoDbFactory.class);
+      @Bean
+      public Mongobee mongobee(
+            MongoDbFactory mongoDbFactory,
+            MongoTemplate mongoTemplate,
+            Cloud cloud
+      ) {
+            log.debug("Configuring Cloud Mongobee");
+            List<ServiceInfo> matchingServiceInfos = cloud.getServiceInfos(
+                  MongoDbFactory.class
+            );
 
-    if (matchingServiceInfos.size() != 1) {
-      throw new CloudException("No unique service matching MongoDbFactory found. Expected 1, found " + matchingServiceInfos.size());
-    }
-    MongoServiceInfo info = (MongoServiceInfo) matchingServiceInfos.get(0);
-    Mongobee mongobee = new Mongobee(info.getUri());
-    mongobee.setDbName(mongoDbFactory.getDb().getName());
-    mongobee.setMongoTemplate(mongoTemplate);
-    // package to scan for migrations
-    mongobee.setChangeLogsScanPackage("org.orcid.memberportal.service.user.config.dbmigrations");
-    mongobee.setEnabled(true);
-    return mongobee;
-  }
+            if (matchingServiceInfos.size() != 1) {
+                  throw new CloudException(
+                        "No unique service matching MongoDbFactory found. Expected 1, found " +
+                        matchingServiceInfos.size()
+                  );
+            }
+            MongoServiceInfo info = (MongoServiceInfo) matchingServiceInfos.get(
+                  0
+            );
+            Mongobee mongobee = new Mongobee(info.getUri());
+            mongobee.setDbName(mongoDbFactory.getDb().getName());
+            mongobee.setMongoTemplate(mongoTemplate);
+            // package to scan for migrations
+            mongobee.setChangeLogsScanPackage(
+                  "org.orcid.memberportal.service.user.config.dbmigrations"
+            );
+            mongobee.setEnabled(true);
+            return mongobee;
+      }
 }

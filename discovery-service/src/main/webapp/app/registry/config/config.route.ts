@@ -1,5 +1,5 @@
-import { Route } from '@angular/router';
-import { ConfigComponent } from './config.component';
+import { Route } from '@angular/router'
+import { ConfigComponent } from './config.component'
 
 export const configRoute: Route = {
   path: '',
@@ -7,4 +7,4 @@ export const configRoute: Route = {
   data: {
     pageTitle: 'Configuration',
   },
-};
+}

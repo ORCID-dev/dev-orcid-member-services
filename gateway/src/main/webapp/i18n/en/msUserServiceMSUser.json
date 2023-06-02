@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "Import users from CSV" }
       },
       "delete": {
-        "question": { "string": "Are you sure you want to delete user {{ login }}?" }
+        "question": {
+          "string": "Are you sure you want to delete user {{ login }}?"
+        }
       },
       "changeOwnership": {
         "question": {
@@ -27,9 +29,13 @@
         "title": { "string": "Import users" },
         "label": { "string": "Please select the CSV file to upload" },
         "filePath": { "string": "File path" },
-        "emptyFile": { "string": "There is no file to upload. Please select one." },
+        "emptyFile": {
+          "string": "There is no file to upload. Please select one."
+        },
         "errors": {
-          "label": { "string": "Oops! There was a problem processing your data. Pleases fix the errors below and try again" }
+          "label": {
+            "string": "Oops! There was a problem processing your data. Pleases fix the errors below and try again"
+          }
         }
       },
       "assertionService": {

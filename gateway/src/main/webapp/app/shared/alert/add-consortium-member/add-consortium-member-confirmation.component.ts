@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core'
 
 @Component({
   selector: 'add-consortium-member-confirmation',
@@ -6,12 +6,12 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['add-consortium-member-confirmation.scss'],
 })
 export class AddConsortiumMemberConfirmationComponent {
-  alerts: any[];
+  alerts: any[]
   constructor() {}
 
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKeydown() {
-    this.hide();
+    this.hide()
   }
 
   hide() {

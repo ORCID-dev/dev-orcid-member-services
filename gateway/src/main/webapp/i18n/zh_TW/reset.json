@@ -7,8 +7,12 @@
       },
       "messages": {
         "info": { "string": "輸入您使用的電子郵件地址以登錄" },
-        "success": { "string": "請查收您的電子郵件，以獲得重設密碼的相關資訊。" },
-        "notfound": { "string": "<strong> 電子郵件地址尚未登錄！</strong> 請在檢查後再試一次" }
+        "success": {
+          "string": "請查收您的電子郵件，以獲得重設密碼的相關資訊。"
+        },
+        "notfound": {
+          "string": "<strong> 電子郵件地址尚未登錄！</strong> 請在檢查後再試一次"
+        }
       }
     },
     "finish": {
@@ -33,7 +37,9 @@
             "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
           }
         },
-        "error": { "string": "無法重設您的密碼。請記得密碼要求只在 24 小時內有效。" }
+        "error": {
+          "string": "無法重設您的密碼。請記得密碼要求只在 24 小時內有效。"
+        }
       }
     }
   }

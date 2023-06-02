@@ -1,0 +1,27 @@
+overrides:
+  - files:
+      - "*.js"
+      - "*.ts"
+    options:
+      # FIXME: why in orcid-angular?
+      trailingComma: "es5"
+      # FIXME: why in orcid-angular?
+      semi: false
+      # NOTE: angular core project default
+      singleQuote: true
+      # FIXME: why from orcid-angular? opposite to core
+      bracketSpacing: true
+      # NOTE: angular core uses 100 jhipster uses 140
+      printWidth: 80
+      # NOTE: js and ts rules jhipster
+      arrowParens: avoid
+      # NOTE: jsx and tsx rules jhipster
+      bracketSameLine: false
+      # NOTE: xml rules jhipster
+      xmlWhitespaceSensitivity: ignore
+
+  - files:
+      - "*.java"
+    options:
+      # override the google code formatter default of tabWidth to match the Spring style
+      tabWidth: 6

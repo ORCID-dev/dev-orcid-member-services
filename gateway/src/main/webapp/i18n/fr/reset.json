@@ -6,9 +6,15 @@
         "button": { "string": "Réinitialiser le mot de passe" }
       },
       "messages": {
-        "info": { "string": "Saisissez l'adresse e-mail que vous avez utilisée pour vous inscrire" },
-        "success": { "string": "Vérifiez vos e-mails pour plus d'informations sur la réinitialisation de votre mot de passe." },
-        "notfound": { "string": "<strong>L'adresse e-mail n'est pas enregistrée !</strong> Veuillez vérifier et réessayer" }
+        "info": {
+          "string": "Saisissez l'adresse e-mail que vous avez utilisée pour vous inscrire"
+        },
+        "success": {
+          "string": "Vérifiez vos e-mails pour plus d'informations sur la réinitialisation de votre mot de passe."
+        },
+        "notfound": {
+          "string": "<strong>L'adresse e-mail n'est pas enregistrée !</strong> Veuillez vérifier et réessayer"
+        }
       }
     },
     "finish": {
@@ -18,7 +24,9 @@
       },
       "messages": {
         "info": { "string": "Choisissez un nouveau mot de passe" },
-        "success": { "string": "<strong>Votre mot de passe a été réinitialisé.</strong> Veuillez" },
+        "success": {
+          "string": "<strong>Votre mot de passe a été réinitialisé.</strong> Veuillez"
+        },
         "keymissing": { "string": "La clé d'activation est manquante." },
         "keyinvalid": { "string": "La clé d'activation est invalide." },
         "keyexpired": {

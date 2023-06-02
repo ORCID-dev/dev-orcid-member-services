@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core'
 
 @Component({
   selector: 'app-contact-update-confirmation-alert',
@@ -6,12 +6,12 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['../lightbox-modal.scss'],
 })
 export class ContactUpdateConfirmationAlert {
-  alerts: any[];
+  alerts: any[]
   constructor() {}
 
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKeydown() {
-    this.hide();
+    this.hide()
   }
 
   hide() {

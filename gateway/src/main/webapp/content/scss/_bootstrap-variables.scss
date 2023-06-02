@@ -1,4 +1,4 @@
-@use 'noto-sans';
+@use "noto-sans";
 /*
 * Bootstrap overrides https://getbootstrap.com/docs/4.0/getting-started/theming/
 * All values defined in bootstrap source
@@ -45,7 +45,7 @@ $body-color: rgba(0, 0, 0, 0.87);
 // Typography:
 // Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif: 'Noto Sans', san-serif;
+$font-family-sans-serif: "Noto Sans", san-serif;
 
 $font-size-base: 1rem;
 

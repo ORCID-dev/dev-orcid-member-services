@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "Importa gli utenti da CSV" }
       },
       "delete": {
-        "question": { "string": "Sei sicuro di voler eliminare l'utente {{ login }}?\n" }
+        "question": {
+          "string": "Sei sicuro di voler eliminare l'utente {{ login }}?\n"
+        }
       },
       "changeOwnership": {
         "question": {
@@ -27,7 +29,9 @@
         "title": { "string": "Importa utenti\n" },
         "label": { "string": "Seleziona il file CSV da caricare" },
         "filePath": { "string": "Percorso file" },
-        "emptyFile": { "string": "Non ci sono file da caricare. Selezionane uno." },
+        "emptyFile": {
+          "string": "Non ci sono file da caricare. Selezionane uno."
+        },
         "errors": {
           "label": {
             "string": "Oops! Si è verificato un problema durante l'elaborazione dei dati. Correggi gli errori indicati qui di seguito e riprova"

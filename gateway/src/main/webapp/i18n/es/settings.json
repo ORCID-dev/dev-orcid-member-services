@@ -5,7 +5,9 @@
     "security": {
       "mfa": { "string": "Autenticación de dos factores" },
       "heading": { "string": "Seguridad" },
-      "mfaInstructions": { "string": "Escanee el código QR usando su aplicación 2FA e ingrese a continuación el código de verificación." },
+      "mfaInstructions": {
+        "string": "Escanee el código QR usando su aplicación 2FA e ingrese a continuación el código de verificación."
+      },
       "mfaExplain": {
         "string": "Añada seguridad adicional a su cuenta del portal de miembros de ORCID activando la autenticación de dos factores. Cada vez que inicie sesión, se le pedirá que introduzca un código de seis dígitos que le enviaremos a su aplicación de autenticación preferida."
       },
@@ -18,7 +20,9 @@
         }
       },
       "mfaCannotScan": {
-        "one": { "string": "<strong>¿No puede escanear el código QR?</strong>" },
+        "one": {
+          "string": "<strong>¿No puede escanear el código QR?</strong>"
+        },
         "two": { "string": "Obtenga un código de texto en su lugar" },
         "three": { "string": "e introdúzcalo en su aplicación 2FA" }
       },
@@ -30,7 +34,9 @@
       "preferText": { "string": "¿Prefiere un código de texto?" },
       "switchOnMfa": { "string": "Activar 2FA" },
       "switchOffMfa": { "string": "Desactivar 2FA" },
-      "backupCodes": { "string": "Tome nota de los siguientes códigos de respaldo; solo se mostrarán esta vez." },
+      "backupCodes": {
+        "string": "Tome nota de los siguientes códigos de respaldo; solo se mostrarán esta vez."
+      },
       "otpError": { "string": "Código de verificación incorrecto" },
       "verificationCode": { "string": "Código de verificación" },
       "mfaUpdated": { "string": "Configuración 2FA actualizada" }
@@ -49,20 +55,32 @@
     },
     "messages": {
       "error": {
-        "fail": { "string": "<strong>¡Se ha producido un error!</strong> No se ha podido guardar la configuración." },
-        "emailexists": { "string": "<strong>¡El correo electrónico ya está en uso!</strong> Elija otro." }
+        "fail": {
+          "string": "<strong>¡Se ha producido un error!</strong> No se ha podido guardar la configuración."
+        },
+        "emailexists": {
+          "string": "<strong>¡El correo electrónico ya está en uso!</strong> Elija otro."
+        }
       },
       "success": { "string": "<strong>¡Ajustes guardados!</strong>" },
       "validate": {
         "firstname": {
           "required": { "string": "Hace falta indicar el nombre." },
-          "minlength": { "string": "El nombre tiene que contener al menos un carácter" },
-          "maxlength": { "string": "El nombre no puede tener más de 50 caracteres" }
+          "minlength": {
+            "string": "El nombre tiene que contener al menos un carácter"
+          },
+          "maxlength": {
+            "string": "El nombre no puede tener más de 50 caracteres"
+          }
         },
         "lastname": {
           "required": { "string": "Se requiere su apellido." },
-          "minlength": { "string": "Su apellido debe tener al menos 1 carácter" },
-          "maxlength": { "string": "El apellido no puede tener más de 50 caracteres" }
+          "minlength": {
+            "string": "Su apellido debe tener al menos 1 carácter"
+          },
+          "maxlength": {
+            "string": "El apellido no puede tener más de 50 caracteres"
+          }
         }
       }
     }

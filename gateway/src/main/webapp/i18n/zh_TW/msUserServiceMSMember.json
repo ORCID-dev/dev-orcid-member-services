@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "由 CSV 檔案匯入成員" }
       },
       "delete": {
-        "question": { "string": "您確定要從成員入口中刪除 {{ clientName }} 嗎？" },
+        "question": {
+          "string": "您確定要從成員入口中刪除 {{ clientName }} 嗎？"
+        },
         "anyUsersAndAffiliations": {
           "string": "任何與此成員連結的使用者和機關也將會一併自成員入口中刪除，但已新增至 ORCID 註冊檔的資料仍將保留在 ORCID 中。"
         }
@@ -23,7 +25,9 @@
         "emptyFile": { "string": "沒有可以上傳的檔案。請選擇一個檔案。" },
         "filePath": { "string": "檔案路徑" },
         "errors": {
-          "label": { "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次" }
+          "label": {
+            "string": "糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次"
+          }
         }
       },
       "clientId": {

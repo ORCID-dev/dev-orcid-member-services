@@ -9,7 +9,9 @@
       "405": { "string": "此 URL 不支持您使用的 HTTP 动词。" },
       "500": { "string": "内部服务器错误。" }
     },
-    "concurrencyFailure": { "string": "其他用户与您同时修改了此数据。您的更改已被拒绝。" },
+    "concurrencyFailure": {
+      "string": "其他用户与您同时修改了此数据。您的更改已被拒绝。"
+    },
     "validation": { "string": "服务器验证错误。" },
     "email": { "string": "电子邮件不是有效格式" },
     "size": { "string": "不符合最小/最大要求！" },
@@ -20,7 +22,9 @@
     "disambiguationSource": { "string": "组织源不能为空。" },
     "emailUsed": { "string": "该电子邮件已注册" },
     "ownerExists": { "string": "组织已有所有者。" },
-    "memberNotFound": { "string": "找不到具有 salesForceId {{ params }} 的会员" },
+    "memberNotFound": {
+      "string": "找不到具有 salesForceId {{ params }} 的会员"
+    },
     "salesForceIdUsed": { "string": "已存在具有该 Salesforce ID 的会员" },
     "affiliationOtherOrganization": { "string": "此机构不属于您的组织" },
     "emailAffiliationUsed": {

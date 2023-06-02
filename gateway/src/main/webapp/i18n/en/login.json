@@ -9,14 +9,18 @@
       "rememberme": { "string": "Remember me" },
       "button": { "string": "Sign in" },
       "mfaCode": {
-        "prompt": { "string": "Please enter the MFA code from your authenticator app" },
+        "prompt": {
+          "string": "Please enter the MFA code from your authenticator app"
+        },
         "error": { "string": "Invalid MFA code" },
         "label": { "string": "MFA code" }
       }
     },
     "messages": {
       "error": {
-        "authentication": { "string": "<strong>Failed to sign in!</strong> Please check your credentials and try again." }
+        "authentication": {
+          "string": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
+        }
       }
     },
     "password": {

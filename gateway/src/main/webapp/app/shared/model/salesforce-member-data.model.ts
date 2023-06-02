@@ -1,63 +1,63 @@
-import { SFMemberContact } from './salesforce-member-contact.model';
-import { SFMemberOrgIds } from './salesforce-member-org-id.model';
+import { SFMemberContact } from './salesforce-member-contact.model'
+import { SFMemberOrgIds } from './salesforce-member-org-id.model'
 
 export interface ISFMemberData {
-  id?: string;
-  consortiaMember?: boolean;
-  consortiaLeadId?: string;
-  isConsortiumLead?: boolean;
-  name?: string;
-  publicDisplayName?: string;
-  website?: string;
-  billingCountry?: string;
-  memberType?: string;
-  publicDisplayDescriptionHtml?: string;
-  logoUrl?: string;
-  publicDisplayEmail?: string;
-  membershipStartDateString?: string;
-  membershipEndDateString?: string;
-  consortiumLeadName?: string;
-  consortiumMembers?: ISFConsortiumMemberData[];
-  contacts?: SFMemberContact[];
-  orgIds?: SFMemberOrgIds;
+  id?: string
+  consortiaMember?: boolean
+  consortiaLeadId?: string
+  isConsortiumLead?: boolean
+  name?: string
+  publicDisplayName?: string
+  website?: string
+  billingCountry?: string
+  memberType?: string
+  publicDisplayDescriptionHtml?: string
+  logoUrl?: string
+  publicDisplayEmail?: string
+  membershipStartDateString?: string
+  membershipEndDateString?: string
+  consortiumLeadName?: string
+  consortiumMembers?: ISFConsortiumMemberData[]
+  contacts?: SFMemberContact[]
+  orgIds?: SFMemberOrgIds
 }
 
 export interface ISFConsortiumMemberData {
-  orgName?: string;
-  salesforceId?: string;
-  metadata?: ISFConsortiumMemberMetadata;
-  terminationMonth?: string;
-  terminationYear?: string;
+  orgName?: string
+  salesforceId?: string
+  metadata?: ISFConsortiumMemberMetadata
+  terminationMonth?: string
+  terminationYear?: string
 }
 
 export interface ISFConsortiumMemberMetadata {
-  name?: string;
+  name?: string
 }
 
 export interface ISFRawMemberData {
-  Id?: string;
-  Consortia_Member__c?: boolean;
-  Consortium_Lead__c?: string;
-  Name?: string;
-  Public_Display_Name__c?: string;
-  Website?: string;
-  BillingCountry?: string;
-  Research_Community__c?: string;
-  Public_Display_Description__c?: string;
-  Logo_Description__c?: string;
-  Public_Display_Email__c?: string;
-  Last_membership_start_date__c?: string;
-  Last_membership_end_date__c?: string;
-  consortiumOpportunities: [ISFRawConsortiumMemberData];
+  Id?: string
+  Consortia_Member__c?: boolean
+  Consortium_Lead__c?: string
+  Name?: string
+  Public_Display_Name__c?: string
+  Website?: string
+  BillingCountry?: string
+  Research_Community__c?: string
+  Public_Display_Description__c?: string
+  Logo_Description__c?: string
+  Public_Display_Email__c?: string
+  Last_membership_start_date__c?: string
+  Last_membership_end_date__c?: string
+  consortiumOpportunities: [ISFRawConsortiumMemberData]
 }
 
 export interface ISFRawConsortiumMemberData {
-  AccountId?: string;
-  Account?: ISFRawConsortiumMemberMetadata;
+  AccountId?: string
+  Account?: ISFRawConsortiumMemberMetadata
 }
 
 export interface ISFRawConsortiumMemberMetadata {
-  Public_Display_Name__c?: string;
+  Public_Display_Name__c?: string
 }
 
 export class SFMemberData implements ISFMemberData {
@@ -84,5 +84,10 @@ export class SFMemberData implements ISFMemberData {
 }
 
 export class SFConsortiumMemberData implements ISFConsortiumMemberData {
-  constructor(public salesforceId?: string, public orgName?: string, public terminationMonth?: string, public terminationYear?: string) {}
+  constructor(
+    public salesforceId?: string,
+    public orgName?: string,
+    public terminationMonth?: string,
+    public terminationYear?: string
+  ) {}
 }

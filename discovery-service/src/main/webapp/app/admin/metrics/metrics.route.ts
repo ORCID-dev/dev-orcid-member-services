@@ -1,6 +1,6 @@
-import { Route } from '@angular/router';
+import { Route } from '@angular/router'
 
-import { MetricsMonitoringComponent } from './metrics.component';
+import { MetricsMonitoringComponent } from './metrics.component'
 
 export const metricsRoute: Route = {
   path: '',
@@ -8,4 +8,4 @@ export const metricsRoute: Route = {
   data: {
     pageTitle: 'Application Metrics',
   },
-};
+}

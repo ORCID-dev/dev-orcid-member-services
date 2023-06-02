@@ -7,103 +7,105 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
-  private String mailDomain;
+      private String mailDomain;
 
-  private String mailApiKey;
+      private String mailApiKey;
 
-  private String mailApiUrl;
+      private String mailApiUrl;
 
-  private String mailFromAddress;
+      private String mailFromAddress;
 
-  private String mailFromName;
+      private String mailFromName;
 
-  private boolean mailTestMode;
+      private boolean mailTestMode;
 
-  private String baseUrl;
+      private String baseUrl;
 
-  private String sendActivationRemindersDelay;
+      private String sendActivationRemindersDelay;
 
-  private String encryptSalt;
+      private String encryptSalt;
 
-  private String encryptKey;
+      private String encryptKey;
 
-  public String getMailDomain() {
-    return mailDomain;
-  }
+      public String getMailDomain() {
+            return mailDomain;
+      }
 
-  public void setMailDomain(String mailDomain) {
-    this.mailDomain = mailDomain;
-  }
+      public void setMailDomain(String mailDomain) {
+            this.mailDomain = mailDomain;
+      }
 
-  public String getMailApiKey() {
-    return mailApiKey;
-  }
+      public String getMailApiKey() {
+            return mailApiKey;
+      }
 
-  public void setMailApiKey(String mailApiKey) {
-    this.mailApiKey = mailApiKey;
-  }
+      public void setMailApiKey(String mailApiKey) {
+            this.mailApiKey = mailApiKey;
+      }
 
-  public String getMailFromAddress() {
-    return mailFromAddress;
-  }
+      public String getMailFromAddress() {
+            return mailFromAddress;
+      }
 
-  public void setMailFromAddress(String mailFromAddress) {
-    this.mailFromAddress = mailFromAddress;
-  }
+      public void setMailFromAddress(String mailFromAddress) {
+            this.mailFromAddress = mailFromAddress;
+      }
 
-  public String getMailFromName() {
-    return mailFromName;
-  }
+      public String getMailFromName() {
+            return mailFromName;
+      }
 
-  public void setMailFromName(String mailFromName) {
-    this.mailFromName = mailFromName;
-  }
+      public void setMailFromName(String mailFromName) {
+            this.mailFromName = mailFromName;
+      }
 
-  public String getBaseUrl() {
-    return baseUrl;
-  }
+      public String getBaseUrl() {
+            return baseUrl;
+      }
 
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
-  }
+      public void setBaseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
+      }
 
-  public String getMailApiUrl() {
-    return mailApiUrl;
-  }
+      public String getMailApiUrl() {
+            return mailApiUrl;
+      }
 
-  public void setMailApiUrl(String mailApiUrl) {
-    this.mailApiUrl = mailApiUrl;
-  }
+      public void setMailApiUrl(String mailApiUrl) {
+            this.mailApiUrl = mailApiUrl;
+      }
 
-  public boolean isMailTestMode() {
-    return mailTestMode;
-  }
+      public boolean isMailTestMode() {
+            return mailTestMode;
+      }
 
-  public void setMailTestMode(boolean mailTestMode) {
-    this.mailTestMode = mailTestMode;
-  }
+      public void setMailTestMode(boolean mailTestMode) {
+            this.mailTestMode = mailTestMode;
+      }
 
-  public String getSendActivationRemindersDelay() {
-    return sendActivationRemindersDelay;
-  }
+      public String getSendActivationRemindersDelay() {
+            return sendActivationRemindersDelay;
+      }
 
-  public void setSendActivationRemindersDelay(String sendActivationRemindersDelay) {
-    this.sendActivationRemindersDelay = sendActivationRemindersDelay;
-  }
+      public void setSendActivationRemindersDelay(
+            String sendActivationRemindersDelay
+      ) {
+            this.sendActivationRemindersDelay = sendActivationRemindersDelay;
+      }
 
-  public String getEncryptSalt() {
-    return encryptSalt;
-  }
+      public String getEncryptSalt() {
+            return encryptSalt;
+      }
 
-  public void setEncryptSalt(String encryptSalt) {
-    this.encryptSalt = encryptSalt;
-  }
+      public void setEncryptSalt(String encryptSalt) {
+            this.encryptSalt = encryptSalt;
+      }
 
-  public String getEncryptKey() {
-    return encryptKey;
-  }
+      public String getEncryptKey() {
+            return encryptKey;
+      }
 
-  public void setEncryptKey(String encryptKey) {
-    this.encryptKey = encryptKey;
-  }
+      public void setEncryptKey(String encryptKey) {
+            this.encryptKey = encryptKey;
+      }
 }

@@ -14,16 +14,24 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class UserScheduledTasks {
 
-  private final Logger log = LoggerFactory.getLogger(UserScheduledTasks.class);
+      private final Logger log = LoggerFactory.getLogger(
+            UserScheduledTasks.class
+      );
 
-  @Autowired
-  private UserService userService;
+      @Autowired
+      private UserService userService;
 
-  @Scheduled(fixedDelayString = "${application.sendActivationRemindersDelay}")
-  @SchedulerLock(name = "sendActivationReminders", lockAtMostFor = "20m", lockAtLeastFor = "10m")
-  public void sendActivationReminders() throws JAXBException {
-    log.info("Running cron to send activation reminders");
-    userService.sendActivationReminders();
-    log.info("Reminders sent");
-  }
+      @Scheduled(
+            fixedDelayString = "${application.sendActivationRemindersDelay}"
+      )
+      @SchedulerLock(
+            name = "sendActivationReminders",
+            lockAtMostFor = "20m",
+            lockAtLeastFor = "10m"
+      )
+      public void sendActivationReminders() throws JAXBException {
+            log.info("Running cron to send activation reminders");
+            userService.sendActivationReminders();
+            log.info("Reminders sent");
+      }
 }

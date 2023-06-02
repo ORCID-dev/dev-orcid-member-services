@@ -12,27 +12,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class AssertionNormalizerImpl implements AssertionNormalizer {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AssertionNormalizerImpl.class);
+      private static final Logger LOG = LoggerFactory.getLogger(
+            AssertionNormalizerImpl.class
+      );
 
-  @Autowired
-  private List<OrgNormalizer> orgNormalizers;
+      @Autowired
+      private List<OrgNormalizer> orgNormalizers;
 
-  @Override
-  public Assertion normalize(Assertion assertion) {
-    OrgNormalizer normalizer = getMatchingNormalizer(assertion.getDisambiguationSource());
-    if (normalizer != null) {
-      assertion.setDisambiguatedOrgId(normalizer.normalizeOrgId(assertion.getDisambiguatedOrgId()));
-    }
-    return assertion;
-  }
-
-  private OrgNormalizer getMatchingNormalizer(String orgType) {
-    for (OrgNormalizer normalizer : orgNormalizers) {
-      if (orgType.equals(normalizer.getOrgSource())) {
-        return normalizer;
+      @Override
+      public Assertion normalize(Assertion assertion) {
+            OrgNormalizer normalizer = getMatchingNormalizer(
+                  assertion.getDisambiguationSource()
+            );
+            if (normalizer != null) {
+                  assertion.setDisambiguatedOrgId(
+                        normalizer.normalizeOrgId(
+                              assertion.getDisambiguatedOrgId()
+                        )
+                  );
+            }
+            return assertion;
       }
-    }
-    LOG.warn("No normalizer found for org type {}", orgType);
-    return null;
-  }
+
+      private OrgNormalizer getMatchingNormalizer(String orgType) {
+            for (OrgNormalizer normalizer : orgNormalizers) {
+                  if (orgType.equals(normalizer.getOrgSource())) {
+                        return normalizer;
+                  }
+            }
+            LOG.warn("No normalizer found for org type {}", orgType);
+            return null;
+      }
 }

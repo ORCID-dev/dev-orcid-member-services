@@ -25,71 +25,99 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class HealthResource {
 
-  private final Logger LOG = LoggerFactory.getLogger(HealthResource.class);
+      private final Logger LOG = LoggerFactory.getLogger(HealthResource.class);
 
-  @Autowired
-  private HealthService healthService;
+      @Autowired
+      private HealthService healthService;
 
-  @Autowired
-  private EurekaService eurekaService;
+      @Autowired
+      private EurekaService eurekaService;
 
-  /**
-   * GET  /check/<encoded healthcheck url> : get healthcheck details via backend from encoded url supplied
-   *
-   * @return health check details
-   * @throws IOException
-   */
-  @GetMapping(path = "/health/{appName}/{serviceId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CompositeHealthDTO> healthCheck(
-    @PathVariable("appName") String appName,
-    @PathVariable("serviceId") String serviceId
-  ) throws IOException {
-    appName = URLDecoder.decode(appName, "UTF-8");
-    serviceId = URLDecoder.decode(serviceId, "UTF-8");
+      /**
+       * GET  /check/<encoded healthcheck url> : get healthcheck details via backend from encoded url supplied
+       *
+       * @return health check details
+       * @throws IOException
+       */
+      @GetMapping(
+            path = "/health/{appName}/{serviceId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+      )
+      public ResponseEntity<CompositeHealthDTO> healthCheck(
+            @PathVariable("appName") String appName,
+            @PathVariable("serviceId") String serviceId
+      ) throws IOException {
+            appName = URLDecoder.decode(appName, "UTF-8");
+            serviceId = URLDecoder.decode(serviceId, "UTF-8");
 
-    Map<String, Object> selectedApp = getSelectedApp(appName);
-    if (selectedApp == null) {
-      LOG.error("Unable to find selected app {} for health check!", appName);
-      return ResponseEntity.notFound().build();
-    }
+            Map<String, Object> selectedApp = getSelectedApp(appName);
+            if (selectedApp == null) {
+                  LOG.error(
+                        "Unable to find selected app {} for health check!",
+                        appName
+                  );
+                  return ResponseEntity.notFound().build();
+            }
 
-    Map<String, Object> selectedInstance = getSelectedInstance(selectedApp, serviceId);
-    if (selectedInstance == null) {
-      LOG.error("Unable to find selected instance of {} for health check!", appName);
-      return ResponseEntity.notFound().build();
-    }
+            Map<String, Object> selectedInstance = getSelectedInstance(
+                  selectedApp,
+                  serviceId
+            );
+            if (selectedInstance == null) {
+                  LOG.error(
+                        "Unable to find selected instance of {} for health check!",
+                        appName
+                  );
+                  return ResponseEntity.notFound().build();
+            }
 
-    String healthCheckUrl = (String) selectedInstance.get("healthCheckUrl");
-    try {
-      SimpleHealthDTO health = healthService.checkHealth(healthCheckUrl);
-      CompositeHealthDTO compositeHealth = new CompositeHealthDTO();
-      compositeHealth.setStatus(health.getStatus());
-      compositeHealth.getComponents().put(appName, health.getStatus());
-      return ResponseEntity.ok(compositeHealth);
-    } catch (IOException e) {
-      LOG.error("Error checking conducting health check", e);
-      throw e;
-    }
-  }
-
-  private Map<String, Object> getSelectedInstance(Map<String, Object> selectedApp, String serviceId) {
-    @SuppressWarnings("unchecked")
-    List<Map<String, Object>> instances = (List<Map<String, Object>>) selectedApp.get("instances");
-    for (Map<String, Object> instance : instances) {
-      if (serviceId != null && serviceId.equalsIgnoreCase((String) instance.get("instanceId"))) {
-        return instance;
+            String healthCheckUrl = (String) selectedInstance.get(
+                  "healthCheckUrl"
+            );
+            try {
+                  SimpleHealthDTO health = healthService.checkHealth(
+                        healthCheckUrl
+                  );
+                  CompositeHealthDTO compositeHealth = new CompositeHealthDTO();
+                  compositeHealth.setStatus(health.getStatus());
+                  compositeHealth
+                        .getComponents()
+                        .put(appName, health.getStatus());
+                  return ResponseEntity.ok(compositeHealth);
+            } catch (IOException e) {
+                  LOG.error("Error checking conducting health check", e);
+                  throw e;
+            }
       }
-    }
-    return null;
-  }
 
-  private Map<String, Object> getSelectedApp(String appName) {
-    List<Map<String, Object>> applications = eurekaService.getApplications();
-    for (Map<String, Object> app : applications) {
-      if (appName.equalsIgnoreCase((String) app.get("name"))) {
-        return app;
+      private Map<String, Object> getSelectedInstance(
+            Map<String, Object> selectedApp,
+            String serviceId
+      ) {
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> instances =
+                  (List<Map<String, Object>>) selectedApp.get("instances");
+            for (Map<String, Object> instance : instances) {
+                  if (
+                        serviceId != null &&
+                        serviceId.equalsIgnoreCase(
+                              (String) instance.get("instanceId")
+                        )
+                  ) {
+                        return instance;
+                  }
+            }
+            return null;
       }
-    }
-    return null;
-  }
+
+      private Map<String, Object> getSelectedApp(String appName) {
+            List<Map<String, Object>> applications =
+                  eurekaService.getApplications();
+            for (Map<String, Object> app : applications) {
+                  if (appName.equalsIgnoreCase((String) app.get("name"))) {
+                        return app;
+                  }
+            }
+            return null;
+      }
 }

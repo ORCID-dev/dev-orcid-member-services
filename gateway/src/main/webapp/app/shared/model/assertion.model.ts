@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import { Moment } from 'moment'
 
 export const enum AffiliationSection {
   EMPLOYMENT = 'EMPLOYMENT',
@@ -11,46 +11,46 @@ export const enum AffiliationSection {
 }
 
 export interface IAssertion {
-  addedToORCID?: Moment;
-  affiliationSection?: AffiliationSection;
-  created?: Moment;
-  deletedFromORCID?: Moment;
-  departmentName?: string;
-  disambiguatedOrgId?: string;
-  disambiguationSource?: string;
-  email?: string;
-  endDay?: string;
-  endMonth?: string;
-  endYear?: string;
-  externalId?: string;
-  externalIdType?: string;
-  externalIdUrl?: string;
-  id?: string;
-  modified?: Moment;
-  orcidError?: string;
-  orcidId?: string;
-  orgCity?: string;
-  orgCountry?: string;
-  orgName?: string;
-  orgRegion?: string;
-  ownerId?: string;
-  putCode?: string;
-  roleTitle?: string;
-  salesforceId?: string;
-  startMonth?: string;
-  startDay?: string;
-  startYear?: string;
-  status?: string;
-  updated?: boolean;
-  updatedInORCID?: Moment;
-  url?: string;
-  lastModifiedBy?: string;
-  permissionLink?: string;
-  prettyStatus?: string;
-  notificationSent?: Moment;
-  invitationSent?: Moment;
-  notificationLastSent?: Moment;
-  invitationLastSent?: Moment;
+  addedToORCID?: Moment
+  affiliationSection?: AffiliationSection
+  created?: Moment
+  deletedFromORCID?: Moment
+  departmentName?: string
+  disambiguatedOrgId?: string
+  disambiguationSource?: string
+  email?: string
+  endDay?: string
+  endMonth?: string
+  endYear?: string
+  externalId?: string
+  externalIdType?: string
+  externalIdUrl?: string
+  id?: string
+  modified?: Moment
+  orcidError?: string
+  orcidId?: string
+  orgCity?: string
+  orgCountry?: string
+  orgName?: string
+  orgRegion?: string
+  ownerId?: string
+  putCode?: string
+  roleTitle?: string
+  salesforceId?: string
+  startMonth?: string
+  startDay?: string
+  startYear?: string
+  status?: string
+  updated?: boolean
+  updatedInORCID?: Moment
+  url?: string
+  lastModifiedBy?: string
+  permissionLink?: string
+  prettyStatus?: string
+  notificationSent?: Moment
+  invitationSent?: Moment
+  notificationLastSent?: Moment
+  invitationLastSent?: Moment
 }
 
 export class Assertion implements IAssertion {
@@ -96,9 +96,9 @@ export class Assertion implements IAssertion {
     public invitationSent?: Moment,
     public invitationLastSent?: Moment
   ) {
-    this.addedToORCID = this.addedToORCID || null;
-    this.updated = this.updated || null;
-    this.updatedInORCID = this.updatedInORCID || null;
-    this.permissionLink = this.permissionLink || null;
+    this.addedToORCID = this.addedToORCID || null
+    this.updated = this.updated || null
+    this.updatedInORCID = this.updatedInORCID || null
+    this.permissionLink = this.permissionLink || null
   }
 }

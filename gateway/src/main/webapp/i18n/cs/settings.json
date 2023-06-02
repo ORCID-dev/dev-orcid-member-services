@@ -5,7 +5,9 @@
     "security": {
       "mfa": { "string": "Dvoufázové ověření" },
       "heading": { "string": "Zabezpečení" },
-      "mfaInstructions": { "string": "Naskenujte QR kód pomocí vaší aplikace pro dvoufázové ověření a vložte ověřovací kód níže." },
+      "mfaInstructions": {
+        "string": "Naskenujte QR kód pomocí vaší aplikace pro dvoufázové ověření a vložte ověřovací kód níže."
+      },
       "mfaExplain": {
         "string": "Přidejte další stupeň zabezpečení do svého účtu členského portálu ORCID povolením dvoufázového ověření. Při každém přihlášení budete vyzváni k zadání šestimístného kódu, který zašleme do vámi preferované ověřovací aplikace."
       },
@@ -20,7 +22,9 @@
       "mfaCannotScan": {
         "one": { "string": "<strong>Nejde vám QR kód naskenovat?</strong>" },
         "two": { "string": "Získejte namísto toho SMS kód" },
-        "three": { "string": "a vložte jej do své aplikace pro dvoufázové ověření místo " }
+        "three": {
+          "string": "a vložte jej do své aplikace pro dvoufázové ověření místo "
+        }
       },
       "mfaTextCodeSteps": {
         "one": {
@@ -30,7 +34,9 @@
       "preferText": { "string": "Preferujete textový kód?" },
       "switchOnMfa": { "string": "Zapnout dvoufázové ověření" },
       "switchOffMfa": { "string": "Vypnout dvoufázové ověření" },
-      "backupCodes": { "string": "Poznamenejte si následující záložní kódy, toto je jediný případ, kdy se zobrazí." },
+      "backupCodes": {
+        "string": "Poznamenejte si následující záložní kódy, toto je jediný případ, kdy se zobrazí."
+      },
       "otpError": { "string": "Nesprávný ověřovací kód" },
       "verificationCode": { "string": "Ověřovací kód" },
       "mfaUpdated": { "string": "Nastavení dvoufázového ověření aktualizováno" }
@@ -49,20 +55,32 @@
     },
     "messages": {
       "error": {
-        "fail": { "string": "<strong>Vyskytla se chyba!</strong> Nastavení nemohlo být uloženo." },
-        "emailexists": { "string": "<strong>E-mail se již používá!</strong> Vyberte prosím jiný." }
+        "fail": {
+          "string": "<strong>Vyskytla se chyba!</strong> Nastavení nemohlo být uloženo."
+        },
+        "emailexists": {
+          "string": "<strong>E-mail se již používá!</strong> Vyberte prosím jiný."
+        }
       },
       "success": { "string": "<strong>Nastavení uloženo!</strong>" },
       "validate": {
         "firstname": {
           "required": { "string": "Vaše křestní jméno je povinné." },
-          "minlength": { "string": "Vaše jméno musí obsahovat alespoň jeden znak" },
-          "maxlength": { "string": "Křestní jméno nesmí být delší než 50 znaků" }
+          "minlength": {
+            "string": "Vaše jméno musí obsahovat alespoň jeden znak"
+          },
+          "maxlength": {
+            "string": "Křestní jméno nesmí být delší než 50 znaků"
+          }
         },
         "lastname": {
           "required": { "string": "Vaše příjmení musí být uvedeno." },
-          "minlength": { "string": "Vaše příjmení musí obsahovat alespoň jeden znak" },
-          "maxlength": { "string": "Vaše příjmení nesmí být delší než 50 znaků" }
+          "minlength": {
+            "string": "Vaše příjmení musí obsahovat alespoň jeden znak"
+          },
+          "maxlength": {
+            "string": "Vaše příjmení nesmí být delší než 50 znaků"
+          }
         }
       }
     }

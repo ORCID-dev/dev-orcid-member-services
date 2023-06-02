@@ -2,7 +2,9 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": { "string": "Duplikovat přidružení. Toto přidružení bylo již vytvořeno." }
+        "duplicate": {
+          "string": "Duplikovat přidružení. Toto přidružení bylo již vytvořeno."
+        }
       }
     }
   },
@@ -14,7 +16,9 @@
         "createOrEditLabel": { "string": "Přidat nebo upravit přidružení" },
         "notFound": { "string": "Nenalezena žádná přidružení" },
         "uploadLabel": { "string": "Importujte afiliace z CSV" },
-        "permissionNotificationsLabel": { "string": "Odeslat oznámení oprávnění" },
+        "permissionNotificationsLabel": {
+          "string": "Odeslat oznámení oprávnění"
+        },
         "forHelpTroubleshooting": {
           "string": "Pokud potřebujete pomoc s řešením této chyby, obraťte se prosím na své vedení konsorcia nebo na member@orcid.org. Níže přiložte snímek obrazovky s chybovou zprávou."
         }
@@ -58,7 +62,9 @@
         "successMessage": {
           "string": "Váš soubor CSV byl nahrán ke zpracování. Jakmile bude soubor zpracován, dáme vám vědět e-mailem."
         },
-        "failure": { "string": "Při nahrávání vašeho CSV souboru ke zpracování došlo k problému." }
+        "failure": {
+          "string": "Při nahrávání vašeho CSV souboru ke zpracování došlo k problému."
+        }
       },
       "notifications": {
         "title": { "string": "Odeslat oznámení povolení" },
@@ -71,7 +77,9 @@
         "languageDescription": {
           "string": "V jakém jazyce by měla být oznámení odeslána?"
         },
-        "alreadyInProgress": { "string": "Žádost zasílat oznámení vašim uživatelům už se zpracovává. Zkuste to znovu později" },
+        "alreadyInProgress": {
+          "string": "Žádost zasílat oznámení vašim uživatelům už se zpracovává. Zkuste to znovu později"
+        },
         "notificationInProgress": {
           "string": "Proces oznámení byl zahájen. Jakmile bude dokončen, zašleme vám e-mail."
         },
@@ -149,7 +157,9 @@
       "pending": { "string": "Čeká na vyřízení" },
       "inOrcid": { "string": "V ORCID" },
       "userGrantedAccess": { "string": "Uživatel udělil přístup" },
-      "UserDeletedFromOrcid": { "string": "Uživatelský účet byl odstraněn z ORCID" },
+      "UserDeletedFromOrcid": {
+        "string": "Uživatelský účet byl odstraněn z ORCID"
+      },
       "userRevokedAccess": { "string": "Uživatel odvolal přístup" },
       "errorAddingToOrcid": { "string": "Chyba při přidávání do ORCID" },
       "errorUpdatingInOrcid": { "string": "Chyba při aktualizaci v ORCID" },
@@ -180,7 +190,9 @@
       "created": { "string": "Přidružení vytvořeno" },
       "updated": { "string": "Přidružení aktualizováno" },
       "deleted": { "string": "Afiliace smazána" },
-      "problemDeleting": { "string": "Při odstraňování tohoto přidružení se vyskytl problém" }
+      "problemDeleting": {
+        "string": "Při odstraňování tohoto přidružení se vyskytl problém"
+      }
     }
   }
 }

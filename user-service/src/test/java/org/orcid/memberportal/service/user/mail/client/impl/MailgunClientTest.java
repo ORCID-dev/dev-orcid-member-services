@@ -26,49 +26,76 @@ import org.orcid.memberportal.service.user.mail.MailException;
 
 public class MailgunClientTest {
 
-  @Mock
-  private ApplicationProperties applicationProperties;
+      @Mock
+      private ApplicationProperties applicationProperties;
 
-  @Mock
-  private HttpClient httpClient;
+      @Mock
+      private HttpClient httpClient;
 
-  @Captor
-  private ArgumentCaptor<HttpPost> postCaptor;
+      @Captor
+      private ArgumentCaptor<HttpPost> postCaptor;
 
-  @InjectMocks
-  private MailgunClient mailgunClient;
+      @InjectMocks
+      private MailgunClient mailgunClient;
 
-  @BeforeEach
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    Mockito.when(applicationProperties.getMailFromAddress()).thenReturn("mp@orcid.org");
-    Mockito.when(applicationProperties.getMailFromName()).thenReturn("member portal");
-    Mockito.when(applicationProperties.getMailApiUrl()).thenReturn("https://orcid.org");
-  }
-
-  @Test
-  public void testSendMail() throws MailException, ClientProtocolException, IOException {
-    Mockito
-      .when(httpClient.execute(Mockito.any(HttpPost.class)))
-      .thenReturn(new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK")));
-    mailgunClient.sendMail("recipient@orcid.org", "test email", "<p>test email</p>");
-    Mockito.verify(httpClient).execute(postCaptor.capture());
-    HttpPost post = postCaptor.getValue();
-    UrlEncodedFormEntity entity = (UrlEncodedFormEntity) post.getEntity();
-    assertThat(entity.getContentType().getValue()).isEqualTo("application/x-www-form-urlencoded; charset=UTF-8");
-
-    List<NameValuePair> params = URLEncodedUtils.parse(post.getEntity());
-    for (NameValuePair pair : params) {
-      if (pair.getName().equals("to")) {
-        assertThat(pair.getValue()).isEqualTo("recipient@orcid.org");
-      }
-      if (pair.getName().equals("subject")) {
-        assertThat(pair.getValue()).isEqualTo("test email");
+      @BeforeEach
+      public void setUp() {
+            MockitoAnnotations.initMocks(this);
+            Mockito
+                  .when(applicationProperties.getMailFromAddress())
+                  .thenReturn("mp@orcid.org");
+            Mockito
+                  .when(applicationProperties.getMailFromName())
+                  .thenReturn("member portal");
+            Mockito
+                  .when(applicationProperties.getMailApiUrl())
+                  .thenReturn("https://orcid.org");
       }
 
-      if (pair.getName().equals("html")) {
-        assertThat(pair.getValue()).isEqualTo("<p>test email</p>");
+      @Test
+      public void testSendMail()
+            throws MailException, ClientProtocolException, IOException {
+            Mockito
+                  .when(httpClient.execute(Mockito.any(HttpPost.class)))
+                  .thenReturn(
+                        new BasicHttpResponse(
+                              new BasicStatusLine(
+                                    new ProtocolVersion("HTTP", 2, 0),
+                                    200,
+                                    "OK"
+                              )
+                        )
+                  );
+            mailgunClient.sendMail(
+                  "recipient@orcid.org",
+                  "test email",
+                  "<p>test email</p>"
+            );
+            Mockito.verify(httpClient).execute(postCaptor.capture());
+            HttpPost post = postCaptor.getValue();
+            UrlEncodedFormEntity entity =
+                  (UrlEncodedFormEntity) post.getEntity();
+            assertThat(entity.getContentType().getValue())
+                  .isEqualTo(
+                        "application/x-www-form-urlencoded; charset=UTF-8"
+                  );
+
+            List<NameValuePair> params = URLEncodedUtils.parse(
+                  post.getEntity()
+            );
+            for (NameValuePair pair : params) {
+                  if (pair.getName().equals("to")) {
+                        assertThat(pair.getValue())
+                              .isEqualTo("recipient@orcid.org");
+                  }
+                  if (pair.getName().equals("subject")) {
+                        assertThat(pair.getValue()).isEqualTo("test email");
+                  }
+
+                  if (pair.getName().equals("html")) {
+                        assertThat(pair.getValue())
+                              .isEqualTo("<p>test email</p>");
+                  }
+            }
       }
-    }
-  }
 }

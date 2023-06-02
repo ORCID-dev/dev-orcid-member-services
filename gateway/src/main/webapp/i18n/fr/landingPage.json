@@ -3,8 +3,12 @@
     "title": { "string": "Services aux membres ORCID" },
     "connectionExists": {
       "youHaveAlready": { "string": "Vous avez déjà accordé" },
-      "permissionToUpdate": { "string": "permission de mettre à jour votre dossier ORCID" },
-      "youDoNot": { "string": "Vous n'avez rien à faire de plus pour le moment." },
+      "permissionToUpdate": {
+        "string": "permission de mettre à jour votre dossier ORCID"
+      },
+      "youDoNot": {
+        "string": "Vous n'avez rien à faire de plus pour le moment."
+      },
       "differentUser": {
         "string": "Ce lien d'autorisation a déjà été utilisé. Veuillez contacter {{ clientName }} pour obtenir un nouveau lien d'autorisation."
       }
@@ -16,9 +20,15 @@
     },
     "denied": {
       "youHaveDenied": { "string": "Oups, vous avez refusé l'accès." },
-      "willNotBeAble": { "string": "ne pourra pas mettre à jour votre dossier ORCID." },
-      "ifThisWas": { "string": "Si c'est une erreur, cliquez sur le bouton ci-dessous pour autoriser l'accès." },
-      "grantAccess": { "string": "Autoriser {{ clientName }} à mettre à jour mon dossier ORCID" }
+      "willNotBeAble": {
+        "string": "ne pourra pas mettre à jour votre dossier ORCID."
+      },
+      "ifThisWas": {
+        "string": "Si c'est une erreur, cliquez sur le bouton ci-dessous pour autoriser l'accès."
+      },
+      "grantAccess": {
+        "string": "Autoriser {{ clientName }} à mettre à jour mon dossier ORCID"
+      }
     },
     "success": {
       "thanks": { "string": "Merci, {{ given_name}} {{ family_name }}" },

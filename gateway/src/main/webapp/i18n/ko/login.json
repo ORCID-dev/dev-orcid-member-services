@@ -16,7 +16,9 @@
     },
     "messages": {
       "error": {
-        "authentication": { "string": "<strong>로그인에 실패했습니다!</strong> 사용자 자격 증명을 확인하여 다시 시도해 주세요." }
+        "authentication": {
+          "string": "<strong>로그인에 실패했습니다!</strong> 사용자 자격 증명을 확인하여 다시 시도해 주세요."
+        }
       }
     },
     "password": {

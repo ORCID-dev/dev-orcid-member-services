@@ -7,9 +7,13 @@
         "text": {
           "string": "ORCIDメンバーポータルは、機関がORCIDのメンバーシップを最大限に活用するのに役立つツールスイートです。すでにいくつかのツールが利用可能であり、またメンバーが以下のことを行えるようにする他のツールも積極的に開発しています："
         },
-        "bullet1": { "string": "研究者のORCIDレコードのデータを追加 / 更新する" },
+        "bullet1": {
+          "string": "研究者のORCIDレコードのデータを追加 / 更新する"
+        },
         "bullet2": { "string": "データおよびレポートにアクセスする" },
-        "bullet3": { "string": "組織のORCIDメンバーシップ情報の管理を行います" },
+        "bullet3": {
+          "string": "組織のORCIDメンバーシップ情報の管理を行います"
+        },
         "bullet4": { "string": "あなたの組織のORCID API認証情報を管理します" }
       },
       "section2": {
@@ -33,21 +37,29 @@
         "table": {
           "line1": {
             "heading": { "string": "アカウント管理ガイド" },
-            "description": { "string": "メンバーポータルにアクセスするユーザーをどのように管理するかについて説明する" }
+            "description": {
+              "string": "メンバーポータルにアクセスするユーザーをどのように管理するかについて説明する"
+            }
           },
           "line2": {
             "heading": { "string": "アフィリエーションマネージャーガイド" },
-            "description": { "string": "アフィリエーションマネージャーを使用する、貴機関在籍スタッフ向けガイド" }
+            "description": {
+              "string": "アフィリエーションマネージャーを使用する、貴機関在籍スタッフ向けガイド"
+            }
           },
           "line3": {
             "heading": { "string": "メンバーレポートガイド" },
-            "description": { "string": "メンバーレポートの読み方に関するガイド" }
+            "description": {
+              "string": "メンバーレポートの読み方に関するガイド"
+            }
           }
         }
       },
       "section4": {
         "heading": { "string": "サポート用連絡先" },
-        "text": { "string": "メンバー ポータルに関するヘルプ、あるいはご質問については、以下までご連絡ください :" },
+        "text": {
+          "string": "メンバー ポータルに関するヘルプ、あるいはご質問については、以下までご連絡ください :"
+        },
         "bullet1": {
           "text": { "string": "あなたの" },
           "linkText": { "string": "コンソーシアム責任者の組織" }
@@ -65,7 +77,9 @@
       "signIntoOrcid": { "string": "あなたのORCIDレコードにサインインします" }
     },
     "loggedIn": {
-      "message": { "string": "あなたは、ユーザー「<strong>{{username}}</strong>」としてログインしています。" }
+      "message": {
+        "string": "あなたは、ユーザー「<strong>{{username}}</strong>」としてログインしています。"
+      }
     }
   }
 }

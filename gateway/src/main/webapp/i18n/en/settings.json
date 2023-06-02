@@ -5,7 +5,9 @@
     "security": {
       "mfa": { "string": "Two-factor Authentication" },
       "heading": { "string": "Security" },
-      "mfaInstructions": { "string": "Scan the QR code using your 2FA app and enter the verification code below." },
+      "mfaInstructions": {
+        "string": "Scan the QR code using your 2FA app and enter the verification code below."
+      },
       "mfaExplain": {
         "string": "Add extra security to your ORCID member portal account by enabling two-factor authentication. Each time you sign in, you'll be prompted to enter a six-digit code we send to your preferred authentication application."
       },
@@ -13,7 +15,9 @@
         "one": {
           "string": "<strong>Install a two-factor authentication app</strong><br />A 2FA app is required to create the six-digit code you need to access your account each time you sign in. Most apps are for mobile devices; some are also available as desktop or web-based apps. Download and install your preferred 2FA app, such as <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>, <a href='https://freeotp.github.io/'>FreeOTP</a>, or <a href='https://authy.com/'>Authy</a>."
         },
-        "two": { "string": "<strong>Scan this QR code with your device</strong><br />Open your 2FA app and scan the image below." }
+        "two": {
+          "string": "<strong>Scan this QR code with your device</strong><br />Open your 2FA app and scan the image below."
+        }
       },
       "mfaCannotScan": {
         "one": { "string": "<strong>Can't scan the QR code?</strong>" },
@@ -28,7 +32,9 @@
       "preferText": { "string": "Prefer a text code?" },
       "switchOnMfa": { "string": "Switch on 2FA" },
       "switchOffMfa": { "string": "Switch off 2FA" },
-      "backupCodes": { "string": "Make a note of the following backup codes, this is the only time they will be shown." },
+      "backupCodes": {
+        "string": "Make a note of the following backup codes, this is the only time they will be shown."
+      },
       "otpError": { "string": "Incorrect verification code" },
       "verificationCode": { "string": "Verification code" },
       "mfaUpdated": { "string": "2FA settings updated" }
@@ -47,20 +53,32 @@
     },
     "messages": {
       "error": {
-        "fail": { "string": "<strong>An error has occurred!</strong> Settings could not be saved." },
-        "emailexists": { "string": "<strong>Email is already in use!</strong> Please choose another one." }
+        "fail": {
+          "string": "<strong>An error has occurred!</strong> Settings could not be saved."
+        },
+        "emailexists": {
+          "string": "<strong>Email is already in use!</strong> Please choose another one."
+        }
       },
       "success": { "string": "<strong>Settings saved!</strong>" },
       "validate": {
         "firstname": {
           "required": { "string": "Your first name is required." },
-          "minlength": { "string": "Your first name is required to be at least 1 character" },
-          "maxlength": { "string": "Your first name cannot be longer than 50 characters" }
+          "minlength": {
+            "string": "Your first name is required to be at least 1 character"
+          },
+          "maxlength": {
+            "string": "Your first name cannot be longer than 50 characters"
+          }
         },
         "lastname": {
           "required": { "string": "Your last name is required." },
-          "minlength": { "string": "Your last name is required to be at least 1 character" },
-          "maxlength": { "string": "Your last name cannot be longer than 50 characters" }
+          "minlength": {
+            "string": "Your last name is required to be at least 1 character"
+          },
+          "maxlength": {
+            "string": "Your last name cannot be longer than 50 characters"
+          }
         }
       }
     }

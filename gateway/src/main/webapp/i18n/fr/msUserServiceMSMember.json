@@ -6,10 +6,14 @@
         "createLabel": { "string": "Ajouter un membre" },
         "createOrEditLabel": { "string": "Ajouter ou modifier un membre" },
         "notFound": { "string": "Aucun membre à afficher" },
-        "uploadLabel": { "string": "Importer des membres depuis un fichier CSV" }
+        "uploadLabel": {
+          "string": "Importer des membres depuis un fichier CSV"
+        }
       },
       "delete": {
-        "question": { "string": "Êtes-vous sûr(e) de vouloir supprimer {{ clientName }} du portail des membres ?" },
+        "question": {
+          "string": "Êtes-vous sûr(e) de vouloir supprimer {{ clientName }} du portail des membres ?"
+        },
         "anyUsersAndAffiliations": {
           "string": "Tous les utilisateurs et affiliations associés à ce membre seront supprimés du portail des membres. Toutefois, les données ajoutées au registre d'ORCID resteront sur ORCID."
         }
@@ -19,8 +23,12 @@
       },
       "import": {
         "title": { "string": "Importer des membres" },
-        "label": { "string": "Veuillez sélectionner un fichier CSV à télécharger" },
-        "emptyFile": { "string": "Il n'y a aucun fichier à publier. Veuillez en sélectionner un." },
+        "label": {
+          "string": "Veuillez sélectionner un fichier CSV à télécharger"
+        },
+        "emptyFile": {
+          "string": "Il n'y a aucun fichier à publier. Veuillez en sélectionner un."
+        },
         "filePath": { "string": "Chemin d'accès au fichier" },
         "errors": {
           "label": {
@@ -30,7 +38,9 @@
       },
       "clientId": {
         "label": { "string": "ID client" },
-        "note": { "string": "Note : l'ID client doit avoir l'OBO membre activé ET" },
+        "note": {
+          "string": "Note : l'ID client doit avoir l'OBO membre activé ET"
+        },
         "addedAsRedirect": { "string": "ajouté comme URI de redirection dans" }
       },
       "clientName": { "string": "Nom du membre" },

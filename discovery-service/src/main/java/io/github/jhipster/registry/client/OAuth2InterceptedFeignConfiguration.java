@@ -12,8 +12,10 @@ import org.springframework.context.annotation.Profile;
 @Profile(PROFILE_OAUTH2)
 public class OAuth2InterceptedFeignConfiguration {
 
-  @Bean(name = "oauth2RequestInterceptor")
-  public RequestInterceptor getOAuth2RequestInterceptor(AuthorizationHeaderUtil headerUtil) {
-    return new TokenRelayRequestInterceptor(headerUtil);
-  }
+      @Bean(name = "oauth2RequestInterceptor")
+      public RequestInterceptor getOAuth2RequestInterceptor(
+            AuthorizationHeaderUtil headerUtil
+      ) {
+            return new TokenRelayRequestInterceptor(headerUtil);
+      }
 }

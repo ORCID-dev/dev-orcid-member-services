@@ -6,9 +6,15 @@
         "button": { "string": "Ripristina la password" }
       },
       "messages": {
-        "info": { "string": "Inserisci l'indirizzo e-mail che hai usato per registrarti\n" },
-        "success": { "string": "Controlla la tua email per tutti i dettagli su come ripristinare la tua password." },
-        "notfound": { "string": "<strong>L'indirizzo e-mail non è registrato!</strong> Controlla e riprova" }
+        "info": {
+          "string": "Inserisci l'indirizzo e-mail che hai usato per registrarti\n"
+        },
+        "success": {
+          "string": "Controlla la tua email per tutti i dettagli su come ripristinare la tua password."
+        },
+        "notfound": {
+          "string": "<strong>L'indirizzo e-mail non è registrato!</strong> Controlla e riprova"
+        }
       }
     },
     "finish": {
@@ -18,7 +24,9 @@
       },
       "messages": {
         "info": { "string": "Scegli una nuova password\n" },
-        "success": { "string": "<strong>La tua password è stata reimpostata.</strong> Per favore\n\n" },
+        "success": {
+          "string": "<strong>La tua password è stata reimpostata.</strong> Per favore\n\n"
+        },
         "keymissing": { "string": "Manca la chiave di attivazione." },
         "keyinvalid": { "string": "La chiave di attivazione non è valida." },
         "keyexpired": {

@@ -1,6 +1,6 @@
-import { Route } from '@angular/router';
+import { Route } from '@angular/router'
 
-import { ActivateComponent } from './activate.component';
+import { ActivateComponent } from './activate.component'
 
 export const activateRoute: Route = {
   path: 'activate',
@@ -9,4 +9,4 @@ export const activateRoute: Route = {
     authorities: [],
     pageTitle: 'activate.title.string',
   },
-};
+}

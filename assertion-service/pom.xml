@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
     <modelVersion>4.0.0</modelVersion>
 
@@ -38,9 +38,12 @@
         <maven.version>3.0.0</maven.version>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
-        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <project.reporting.outputEncoding
+        >UTF-8</project.reporting.outputEncoding>
+        <project.testresult.directory
+        >${project.build.directory}/test-results</project.testresult.directory>
+        <maven.build.timestamp.format
+        >yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
@@ -75,11 +78,16 @@
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
-        <jacoco.reportFolder>${project.build.directory}/jacoco</jacoco.reportFolder>
-        <jacoco.utReportFile>${jacoco.reportFolder}/test.exec</jacoco.utReportFile>
-        <jacoco.itReportFile>${jacoco.reportFolder}/integrationTest.exec</jacoco.itReportFile>
-        <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
-        <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
+        <jacoco.reportFolder
+        >${project.build.directory}/jacoco</jacoco.reportFolder>
+        <jacoco.utReportFile
+        >${jacoco.reportFolder}/test.exec</jacoco.utReportFile>
+        <jacoco.itReportFile
+        >${jacoco.reportFolder}/integrationTest.exec</jacoco.itReportFile>
+        <junit.utReportFolder
+        >${project.testresult.directory}/test</junit.utReportFolder>
+        <junit.itReportFolder
+        >${project.testresult.directory}/integrationTest</junit.itReportFolder>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -311,10 +319,10 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-        </dependency>
+          <dependency>
+              <groupId>io.dropwizard.metrics</groupId>
+              <artifactId>metrics-core</artifactId>
+          </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
         <!-- https://mvnrepository.com/artifact/org.codehaus.jettison/jettison -->
         <dependency>
@@ -526,11 +534,15 @@
                     </executions>
                     <configuration>
                         <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                        <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                        <generateGitPropertiesFile
+                        >true</generateGitPropertiesFile>
                         <includeOnlyProperties>
-                            <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
-                            <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
-                            <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                            <includeOnlyProperty
+                            >^git.commit.id.abbrev$</includeOnlyProperty>
+                            <includeOnlyProperty
+                            >^git.commit.id.describe$</includeOnlyProperty>
+                            <includeOnlyProperty
+                            >^git.branch$</includeOnlyProperty>
                         </includeOnlyProperties>
                     </configuration>
                 </plugin>
@@ -558,7 +570,8 @@
                             </goals>
                             <configuration>
                                 <dataFile>${jacoco.utReportFile}</dataFile>
-                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
+                                <outputDirectory
+                                >${jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                         <execution>
@@ -580,7 +593,8 @@
                             </goals>
                             <configuration>
                                 <dataFile>${jacoco.itReportFile}</dataFile>
-                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
+                                <outputDirectory
+                                >${jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -594,19 +608,22 @@
                             <image>eclipse-temurin:11-jre-focal</image>
                         </from>
                         <to>
-                            <image>${DOCKER_REG}/assertionservice:${release.tag}</image>
+                            <image
+                            >${DOCKER_REG}/assertionservice:${release.tag}</image>
                         </to>
                         <container>
                             <entrypoint>
                                 <shell>sh</shell>
                                 <option>-c</option>
-                                <arg>chmod +x /entrypoint.sh &amp;&amp; sync &amp;&amp; /entrypoint.sh</arg>
+                                <arg
+                                >chmod +x /entrypoint.sh &amp;&amp; sync &amp;&amp; /entrypoint.sh</arg>
                             </entrypoint>
                             <ports>
                                 <port>8092</port>
                             </ports>
                             <environment>
-                                <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+                                <SPRING_OUTPUT_ANSI_ENABLED
+                                >ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
                                 <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
                             </environment>
                             <useCurrentTimestamp>true</useCurrentTimestamp>
@@ -654,11 +671,12 @@
                         <rules>
                             <requireMavenVersion>
                                 <message
-                >You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
+                                >You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK 8 to 12.</message>
+                                <message
+                                >You are running an incompatible version of Java. JHipster supports JDK 8 to 12.</message>
                                 <version>[1.8,13)</version>
                             </requireJavaVersion>
                         </rules>
@@ -684,21 +702,25 @@
                                 <goal>copy-resources</goal>
                             </goals>
                             <configuration>
-                                <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                                <useDefaultDelimiters>false</useDefaultDelimiters>
+                                <outputDirectory
+                                >${project.build.directory}/classes</outputDirectory>
+                                <useDefaultDelimiters
+                                >false</useDefaultDelimiters>
                                 <delimiters>
                                     <delimiter>#</delimiter>
                                 </delimiters>
                                 <resources>
                                     <resource>
-                                        <directory>src/main/resources/</directory>
+                                        <directory
+                                        >src/main/resources/</directory>
                                         <filtering>true</filtering>
                                         <includes>
                                             <include>config/*.yml</include>
                                         </includes>
                                     </resource>
                                     <resource>
-                                        <directory>src/main/resources/</directory>
+                                        <directory
+                                        >src/main/resources/</directory>
                                         <filtering>false</filtering>
                                         <excludes>
                                             <exclude>config/*.yml</exclude>
@@ -716,7 +738,8 @@
                     <configuration>
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
-                        <reportsDirectory>${junit.utReportFolder}</reportsDirectory>
+                        <reportsDirectory
+                        >${junit.utReportFolder}</reportsDirectory>
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
@@ -730,10 +753,12 @@
                     <configuration>
                         <!-- Due to spring-boot repackage, without adding this property test classes are not found
                              See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                        <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                        <classesDirectory
+                        >${project.build.outputDirectory}</classesDirectory>
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
-                        <reportsDirectory>${junit.itReportFolder}</reportsDirectory>
+                        <reportsDirectory
+                        >${junit.itReportFolder}</reportsDirectory>
                         <includes>
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
@@ -798,7 +823,8 @@
             </dependencies>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}</spring.profiles.active>
+                <spring.profiles.active
+                >dev${profile.tls}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -816,7 +842,8 @@
                         <configuration>
                             <filesets>
                                 <fileset>
-                                    <directory>target/classes/static/</directory>
+                                    <directory
+                                    >target/classes/static/</directory>
                                 </fileset>
                             </filesets>
                         </configuration>
@@ -844,7 +871,8 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}</spring.profiles.active>
+                <spring.profiles.active
+                >prod${profile.swagger}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -864,7 +892,8 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
+                            <warSourceIncludes
+                            >WEB-INF/**,META-INF/**</warSourceIncludes>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                         </configuration>
                     </plugin>

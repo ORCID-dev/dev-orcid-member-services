@@ -9,82 +9,82 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "send_notifications_request")
 public class SendNotificationsRequest implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+      private static final long serialVersionUID = 1L;
 
-  @Id
-  private String id;
+      @Id
+      private String id;
 
-  @Field("email")
-  private String email;
+      @Field("email")
+      private String email;
 
-  @Field("salesforce_id")
-  private String salesforceId;
+      @Field("salesforce_id")
+      private String salesforceId;
 
-  @Field("date_requested")
-  private Instant dateRequested;
+      @Field("date_requested")
+      private Instant dateRequested;
 
-  @Field("date_completed")
-  private Instant dateCompleted;
+      @Field("date_completed")
+      private Instant dateCompleted;
 
-  @Field("notifications_sent")
-  private int notificationsSent;
+      @Field("notifications_sent")
+      private int notificationsSent;
 
-  @Field("emails_sent")
-  private int emailsSent;
+      @Field("emails_sent")
+      private int emailsSent;
 
-  public String getId() {
-    return id;
-  }
+      public String getId() {
+            return id;
+      }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+      public void setId(String id) {
+            this.id = id;
+      }
 
-  public String getEmail() {
-    return email;
-  }
+      public String getEmail() {
+            return email;
+      }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+      public void setEmail(String email) {
+            this.email = email;
+      }
 
-  public Instant getDateRequested() {
-    return dateRequested;
-  }
+      public Instant getDateRequested() {
+            return dateRequested;
+      }
 
-  public void setDateRequested(Instant dateRequested) {
-    this.dateRequested = dateRequested;
-  }
+      public void setDateRequested(Instant dateRequested) {
+            this.dateRequested = dateRequested;
+      }
 
-  public Instant getDateCompleted() {
-    return dateCompleted;
-  }
+      public Instant getDateCompleted() {
+            return dateCompleted;
+      }
 
-  public void setDateCompleted(Instant dateCompleted) {
-    this.dateCompleted = dateCompleted;
-  }
+      public void setDateCompleted(Instant dateCompleted) {
+            this.dateCompleted = dateCompleted;
+      }
 
-  public String getSalesforceId() {
-    return salesforceId;
-  }
+      public String getSalesforceId() {
+            return salesforceId;
+      }
 
-  public void setSalesforceId(String salesforceId) {
-    this.salesforceId = salesforceId;
-  }
+      public void setSalesforceId(String salesforceId) {
+            this.salesforceId = salesforceId;
+      }
 
-  public int getNotificationsSent() {
-    return notificationsSent;
-  }
+      public int getNotificationsSent() {
+            return notificationsSent;
+      }
 
-  public void setNotificationsSent(int notificationsSent) {
-    this.notificationsSent = notificationsSent;
-  }
+      public void setNotificationsSent(int notificationsSent) {
+            this.notificationsSent = notificationsSent;
+      }
 
-  public int getEmailsSent() {
-    return emailsSent;
-  }
+      public int getEmailsSent() {
+            return emailsSent;
+      }
 
-  public void setEmailsSent(int emailsSent) {
-    this.emailsSent = emailsSent;
-  }
+      public void setEmailsSent(int emailsSent) {
+            this.emailsSent = emailsSent;
+      }
 }

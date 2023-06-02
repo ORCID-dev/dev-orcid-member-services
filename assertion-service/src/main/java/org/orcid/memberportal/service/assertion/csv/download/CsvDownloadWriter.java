@@ -8,23 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class CsvDownloadWriter extends CsvWriter {
 
-  @Autowired
-  protected AssertionRepository assertionsRepository;
+      @Autowired
+      protected AssertionRepository assertionsRepository;
 
-  public abstract String writeCsv(String salesforceId) throws IOException;
+      public abstract String writeCsv(String salesforceId) throws IOException;
 
-  protected String getDateString(String year, String month, String day) {
-    if (!StringUtils.isBlank(year)) {
-      String endDate = year;
-      if (!StringUtils.isBlank(month)) {
-        endDate += '-' + month;
-        if (!StringUtils.isBlank(day)) {
-          endDate += '-' + day;
-        }
+      protected String getDateString(String year, String month, String day) {
+            if (!StringUtils.isBlank(year)) {
+                  String endDate = year;
+                  if (!StringUtils.isBlank(month)) {
+                        endDate += '-' + month;
+                        if (!StringUtils.isBlank(day)) {
+                              endDate += '-' + day;
+                        }
+                  }
+                  return endDate;
+            } else {
+                  return StringUtils.EMPTY;
+            }
       }
-      return endDate;
-    } else {
-      return StringUtils.EMPTY;
-    }
-  }
 }

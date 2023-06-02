@@ -1,4 +1,12 @@
-export const AFFILIATION_TYPES = ['EDUCATION', 'EMPLOYMENT', 'QUALIFICATION', 'INVITED_POSITION', 'DISTINCTION', 'MEMBERSHIP', 'SERVICE'];
+export const AFFILIATION_TYPES = [
+  'EDUCATION',
+  'EMPLOYMENT',
+  'QUALIFICATION',
+  'INVITED_POSITION',
+  'DISTINCTION',
+  'MEMBERSHIP',
+  'SERVICE',
+]
 
 export const ASSERTION_STATUS = {
   USER_DENIED_ACCESS: 'User denied access',
@@ -11,7 +19,7 @@ export const ASSERTION_STATUS = {
   ERROR_ADDING_TO_ORCID: 'Error adding to ORCID',
   ERROR_UPDATING_TO_ORCID: 'Error updating in ORCID',
   ERROR_DELETING_IN_ORCID: 'Error deleting in ORCID',
-};
+}
 
 export const COUNTRIES = {
   Afghanistan: 'AF',
@@ -263,10 +271,10 @@ export const COUNTRIES = {
   Yemen: 'YE',
   Zambia: 'ZM',
   Zimbabwe: 'ZW',
-};
+}
 
-export const ORG_ID_TYPES = ['RINGGOLD', 'GRID', 'ROR'];
+export const ORG_ID_TYPES = ['RINGGOLD', 'GRID', 'ROR']
 
-export const DEFAULT_EARLIEST_YEAR = 1913;
+export const DEFAULT_EARLIEST_YEAR = 1913
 
-export const DEFAULT_LATEST_YEAR_INCREMENT = 10;
+export const DEFAULT_LATEST_YEAR_INCREMENT = 10

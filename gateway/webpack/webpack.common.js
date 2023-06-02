@@ -1,11 +1,11 @@
-const webpack = require('webpack');
-const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const rxPaths = require('rxjs/_esm5/path-mapping');
-const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+const webpack = require('webpack')
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const rxPaths = require('rxjs/_esm5/path-mapping')
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin')
 
-const utils = require('./utils.js');
+const utils = require('./utils.js')
 
 module.exports = options => ({
   resolve: {
@@ -70,11 +70,20 @@ module.exports = options => ({
     new CopyWebpackPlugin([
       { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
       { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
-      { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
+      {
+        from: './node_modules/swagger-ui/dist/swagger-ui.min.js',
+        to: 'swagger-ui/dist/swagger-ui.min.js',
+      },
       { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
       { from: './src/main/webapp/content/', to: 'content' },
-      { from: './node_modules/quill/dist/quill.core.css', to: 'content/css/quill.core.css' },
-      { from: './node_modules/quill/dist/quill.snow.css', to: 'content/css/quill.snow.css' },
+      {
+        from: './node_modules/quill/dist/quill.core.css',
+        to: 'content/css/quill.core.css',
+      },
+      {
+        from: './node_modules/quill/dist/quill.snow.css',
+        to: 'content/css/quill.snow.css',
+      },
       { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
       { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
@@ -83,18 +92,54 @@ module.exports = options => ({
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [
-          { pattern: './src/main/webapp/i18n/en/*.json', fileName: './i18n/en.json' },
-          { pattern: './src/main/webapp/i18n/es/*.json', fileName: './i18n/es.json' },
-          { pattern: './src/main/webapp/i18n/fr/*.json', fileName: './i18n/fr.json' },
-          { pattern: './src/main/webapp/i18n/ja/*.json', fileName: './i18n/ja.json' },
-          { pattern: './src/main/webapp/i18n/zh_TW/*.json', fileName: './i18n/zh_TW.json' },
-          { pattern: './src/main/webapp/i18n/zh_CN/*.json', fileName: './i18n/zh_CN.json' },
-          { pattern: './src/main/webapp/i18n/cs/*.json', fileName: './i18n/cs.json' },
-          { pattern: './src/main/webapp/i18n/it/*.json', fileName: './i18n/it.json' },
-          { pattern: './src/main/webapp/i18n/ko/*.json', fileName: './i18n/ko.json' },
-          { pattern: './src/main/webapp/i18n/pt/*.json', fileName: './i18n/pt.json' },
-          { pattern: './src/main/webapp/i18n/ru/*.json', fileName: './i18n/ru.json' },
-          { pattern: './src/main/webapp/i18n/xx/*.json', fileName: './i18n/xx.json' },
+          {
+            pattern: './src/main/webapp/i18n/en/*.json',
+            fileName: './i18n/en.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/es/*.json',
+            fileName: './i18n/es.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/fr/*.json',
+            fileName: './i18n/fr.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/ja/*.json',
+            fileName: './i18n/ja.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/zh_TW/*.json',
+            fileName: './i18n/zh_TW.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/zh_CN/*.json',
+            fileName: './i18n/zh_CN.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/cs/*.json',
+            fileName: './i18n/cs.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/it/*.json',
+            fileName: './i18n/it.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/ko/*.json',
+            fileName: './i18n/ko.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/pt/*.json',
+            fileName: './i18n/pt.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/ru/*.json',
+            fileName: './i18n/ru.json',
+          },
+          {
+            pattern: './src/main/webapp/i18n/xx/*.json',
+            fileName: './i18n/xx.json',
+          },
           // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
         ],
       },
@@ -107,4 +152,4 @@ module.exports = options => ({
     }),
     new BaseHrefWebpackPlugin({ baseHref: '/' }),
   ],
-});
+})

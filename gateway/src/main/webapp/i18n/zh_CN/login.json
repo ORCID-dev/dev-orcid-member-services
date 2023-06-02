@@ -16,7 +16,9 @@
     },
     "messages": {
       "error": {
-        "authentication": { "string": "<strong>登录失败！</strong>请检查您的凭证并重试。" }
+        "authentication": {
+          "string": "<strong>登录失败！</strong>请检查您的凭证并重试。"
+        }
       }
     },
     "password": {

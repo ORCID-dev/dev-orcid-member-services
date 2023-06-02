@@ -1,7 +1,7 @@
-import { Route } from '@angular/router';
+import { Route } from '@angular/router'
 
-import { UserRouteAccessService } from 'app/core';
-import { SettingsComponent } from './settings.component';
+import { UserRouteAccessService } from 'app/core'
+import { SettingsComponent } from './settings.component'
 
 export const settingsRoute: Route = {
   path: 'settings',
@@ -11,4 +11,4 @@ export const settingsRoute: Route = {
     pageTitle: 'global.menu.account.settings.string',
   },
   canActivate: [UserRouteAccessService],
-};
+}

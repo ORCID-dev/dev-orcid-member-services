@@ -62,11 +62,22 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump']
+        include:
+          [
+            "configprops",
+            "env",
+            "health",
+            "info",
+            "jhimetrics",
+            "logfile",
+            "loggers",
+            "prometheus",
+            "threaddump",
+          ]
   endpoint:
     health:
       show-details: when-authorized
-      roles: 'ROLE_ADMIN'
+      roles: "ROLE_ADMIN"
     jhimetrics:
       enabled: true
   info:
@@ -148,7 +159,7 @@ server:
 # Properties to be exposed on the /info management endpoint
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
-  display-ribbon-on-profiles: 'dev'
+  display-ribbon-on-profiles: "dev"
 
 # ===================================================================
 # JHipster specific properties
@@ -158,7 +169,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'gatewayApp'
+    name: "gatewayApp"
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"

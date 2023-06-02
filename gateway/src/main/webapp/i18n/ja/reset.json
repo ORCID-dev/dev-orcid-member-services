@@ -7,8 +7,12 @@
       },
       "messages": {
         "info": { "string": "登録に使用した e メールアドレスを入力する" },
-        "success": { "string": "お客様のパスワードをどのようにリセットするかにつきましては、詳細は e メールにてご確認ください。" },
-        "notfound": { "string": "<strong>Eメールアドレスが登録されていません！</strong>確認して、もう一度やり直してください" }
+        "success": {
+          "string": "お客様のパスワードをどのようにリセットするかにつきましては、詳細は e メールにてご確認ください。"
+        },
+        "notfound": {
+          "string": "<strong>Eメールアドレスが登録されていません！</strong>確認して、もう一度やり直してください"
+        }
       }
     },
     "finish": {
@@ -18,7 +22,9 @@
       },
       "messages": {
         "info": { "string": "新しいパスワードを選んでください" },
-        "success": { "string": "<strong> お客様のパスワードが変更されました。</strong> 行って下さい。" },
+        "success": {
+          "string": "<strong> お客様のパスワードが変更されました。</strong> 行って下さい。"
+        },
         "keymissing": { "string": "有効化キーがありません。" },
         "keyinvalid": { "string": "有効化キーが無効です。" },
         "keyexpired": {
@@ -33,7 +39,9 @@
             "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
           }
         },
-        "error": { "string": "パスワードがリセットできませんでした。パスワードの要求は 24 時間に限り有効であることにご留意ください。" }
+        "error": {
+          "string": "パスワードがリセットできませんでした。パスワードの要求は 24 時間に限り有効であることにご留意ください。"
+        }
       }
     }
   }

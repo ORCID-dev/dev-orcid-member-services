@@ -14,11 +14,17 @@
     "menu": {
       "memberPortal": { "string": "会员门户" },
       "beta": { "string": "Beta 版" },
-      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "jhipster-needle-menu-add-element": {
+        "string": "JHipster will add additional menu entries here (do not translate!)"
+      },
       "tools": {
         "main": { "string": "工具" },
-        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "assertionServiceAffiliationManager": {
+          "string": "Affiliation Manager"
+        },
+        "jhipster-needle-menu-add-entry": {
+          "string": "JHipster will add additional entities here (do not translate!)"
+        },
         "member": { "string": "会员" }
       },
       "report": {
@@ -42,14 +48,18 @@
         "main": { "string": "管理员" },
         "manageUsers": { "string": "管理用户" },
         "manageMembers": { "string": "管理会员" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+        "jhipster-needle-menu-add-admin-element": {
+          "string": "JHipster will add additional menu entries here (do not translate!)"
+        }
       },
       "resources": {
         "main": { "string": "资源" },
         "accountManagementGuide": { "string": "账户管理指南" },
         "affiliationManagerGuide": { "string": "Affiliation Manager 指南" },
         "memberReportingGuide": { "string": "会员报告指南" },
-        "applyForAffiliationManagerCreds": { "string": "申请 Affiliation Manager 凭证" }
+        "applyForAffiliationManagerCreds": {
+          "string": "申请 Affiliation Manager 凭证"
+        }
       },
       "language": { "string": "语言" }
     },
@@ -109,7 +119,9 @@
     "ribbon": {
       "dev": { "string": "开发" }
     },
-    "item-count": { "string": "当前显示第 {{first}} - {{second}} 个项目，共计 {{total}} 个项目。" }
+    "item-count": {
+      "string": "当前显示第 {{first}} - {{second}} 个项目，共计 {{total}} 个项目。"
+    }
   },
   "entity": {
     "action": {

@@ -1,19 +1,19 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { Observable, of } from 'rxjs'
+import { HttpHeaders, HttpResponse } from '@angular/common/http'
+import { ActivatedRoute, Data } from '@angular/router'
 
-import { GatewayTestModule } from '../../../../test.module';
-import { AssertionComponent } from 'app/entities/assertion/assertion.component';
-import { AssertionService } from 'app/entities/assertion/assertion.service';
-import { Assertion } from 'app/shared/model/assertion.model';
+import { GatewayTestModule } from '../../../../test.module'
+import { AssertionComponent } from 'app/entities/assertion/assertion.component'
+import { AssertionService } from 'app/entities/assertion/assertion.service'
+import { Assertion } from 'app/shared/model/assertion.model'
 
 describe('Component Tests', () => {
   describe('Assertion Management Component', () => {
-    let comp: AssertionComponent;
-    let fixture: ComponentFixture<AssertionComponent>;
-    let service: AssertionService;
+    let comp: AssertionComponent
+    let fixture: ComponentFixture<AssertionComponent>
+    let service: AssertionService
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -38,16 +38,16 @@ describe('Component Tests', () => {
         ],
       })
         .overrideTemplate(AssertionComponent, '')
-        .compileComponents();
+        .compileComponents()
 
-      fixture = TestBed.createComponent(AssertionComponent);
-      comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(AssertionService);
-    });
+      fixture = TestBed.createComponent(AssertionComponent)
+      comp = fixture.componentInstance
+      service = fixture.debugElement.injector.get(AssertionService)
+    })
 
     it('Should call load all on init', () => {
       // GIVEN
-      const headers = new HttpHeaders().append('link', 'link;link');
+      const headers = new HttpHeaders().append('link', 'link;link')
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
@@ -55,19 +55,21 @@ describe('Component Tests', () => {
             headers,
           })
         )
-      );
+      )
 
       // WHEN
-      comp.ngOnInit();
+      comp.ngOnInit()
 
       // THEN
-      expect(service.query).toHaveBeenCalled();
-      expect(comp.assertions[0]).toEqual(jasmine.objectContaining({ id: '123' }));
-    });
+      expect(service.query).toHaveBeenCalled()
+      expect(comp.assertions[0]).toEqual(
+        jasmine.objectContaining({ id: '123' })
+      )
+    })
 
     it('should load a page', () => {
       // GIVEN
-      const headers = new HttpHeaders().append('link', 'link;link');
+      const headers = new HttpHeaders().append('link', 'link;link')
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
@@ -75,12 +77,12 @@ describe('Component Tests', () => {
             headers,
           })
         )
-      );
-    });
+      )
+    })
 
     it('should re-initialize the page', () => {
       // GIVEN
-      const headers = new HttpHeaders().append('link', 'link;link');
+      const headers = new HttpHeaders().append('link', 'link;link')
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
@@ -88,32 +90,34 @@ describe('Component Tests', () => {
             headers,
           })
         )
-      );
+      )
 
-      comp.clear();
+      comp.clear()
 
       // THEN
-      expect(comp.page).toEqual(0);
-      expect(service.query).toHaveBeenCalledTimes(2);
-      expect(comp.assertions[0]).toEqual(jasmine.objectContaining({ id: '123' }));
-    });
+      expect(comp.page).toEqual(0)
+      expect(service.query).toHaveBeenCalledTimes(2)
+      expect(comp.assertions[0]).toEqual(
+        jasmine.objectContaining({ id: '123' })
+      )
+    })
     it('should calculate the sort attribute for an id', () => {
       // WHEN
-      const result = comp.sort();
+      const result = comp.sort()
 
       // THEN
-      expect(result).toEqual(['id,desc']);
-    });
+      expect(result).toEqual(['id,desc'])
+    })
 
     it('should calculate the sort attribute for a non-id attribute', () => {
       // GIVEN
-      comp.predicate = 'name';
+      comp.predicate = 'name'
 
       // WHEN
-      const result = comp.sort();
+      const result = comp.sort()
 
       // THEN
-      expect(result).toEqual(['name,desc', 'id']);
-    });
-  });
-});
+      expect(result).toEqual(['name,desc', 'id'])
+    })
+  })
+})

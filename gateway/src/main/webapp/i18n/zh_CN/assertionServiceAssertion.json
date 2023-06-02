@@ -71,7 +71,9 @@
         "languageDescription": {
           "string": "通知应以哪种语言发送？"
         },
-        "alreadyInProgress": { "string": "向用户发送通知的请求已经在进行中。请稍后再试。" },
+        "alreadyInProgress": {
+          "string": "向用户发送通知的请求已经在进行中。请稍后再试。"
+        },
         "notificationInProgress": {
           "string": "通知流程已启动。系统将尽快通过电子邮件通知您。"
         },

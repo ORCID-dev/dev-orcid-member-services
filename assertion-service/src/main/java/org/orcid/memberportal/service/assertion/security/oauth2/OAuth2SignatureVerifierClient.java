@@ -11,15 +11,15 @@ import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
  * @see UaaSignatureVerifierClient
  */
 public interface OAuth2SignatureVerifierClient {
-  /**
-   * Returns the {@link SignatureVerifier} used to verify JWT tokens. Fetches
-   * the public key from the Authorization server to create this verifier.
-   *
-   * @return the new verifier used to verify JWT signatures. Will be null if
-   *         we cannot contact the token endpoint.
-   * @throws Exception
-   *             if we could not create a {@link SignatureVerifier} or contact
-   *             the token endpoint.
-   */
-  SignatureVerifier getSignatureVerifier() throws Exception;
+      /**
+       * Returns the {@link SignatureVerifier} used to verify JWT tokens. Fetches
+       * the public key from the Authorization server to create this verifier.
+       *
+       * @return the new verifier used to verify JWT signatures. Will be null if
+       *         we cannot contact the token endpoint.
+       * @throws Exception
+       *             if we could not create a {@link SignatureVerifier} or contact
+       *             the token endpoint.
+       */
+      SignatureVerifier getSignatureVerifier() throws Exception;
 }

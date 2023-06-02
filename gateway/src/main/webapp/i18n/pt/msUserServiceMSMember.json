@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "Importar membros de CSV" }
       },
       "delete": {
-        "question": { "string": "Tem a certeza que quer eliminar {{ clientName }} do Portal de Membros?" },
+        "question": {
+          "string": "Tem a certeza que quer eliminar {{ clientName }} do Portal de Membros?"
+        },
         "anyUsersAndAffiliations": {
           "string": "Quaisquer utilizadores e afiliações associadas a este membro também serão eliminados do Portal de Membros, no entanto os dados adicionados ao Registo ORCID permanecerão no ORCID."
         }
@@ -20,16 +22,24 @@
       "import": {
         "title": { "string": "Importar membros" },
         "label": { "string": "Selecione um ficheiro CSV para enviar" },
-        "emptyFile": { "string": "Não existem ficheiros para carregar. Por favor selecione um." },
+        "emptyFile": {
+          "string": "Não existem ficheiros para carregar. Por favor selecione um."
+        },
         "filePath": { "string": "Caminho do ficheiro" },
         "errors": {
-          "label": { "string": "Ups! Ocorreu um problema ao processar os seus dados. Corrija os erros abaixo e tente novamente" }
+          "label": {
+            "string": "Ups! Ocorreu um problema ao processar os seus dados. Corrija os erros abaixo e tente novamente"
+          }
         }
       },
       "clientId": {
         "label": { "string": "ID de cliente" },
-        "note": { "string": "Nota: O ID de cliente deve ter o OBO de Membro ativado E" },
-        "addedAsRedirect": { "string": "adicionado como um URI de reencaminhamento em" }
+        "note": {
+          "string": "Nota: O ID de cliente deve ter o OBO de Membro ativado E"
+        },
+        "addedAsRedirect": {
+          "string": "adicionado como um URI de reencaminhamento em"
+        }
       },
       "clientName": { "string": "Nome do Membro" },
       "clientSecret": { "string": "Segredo do Cliente" },

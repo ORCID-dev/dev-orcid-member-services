@@ -1,17 +1,30 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants';
-import { AccountService } from 'app/core';
-import { MSMemberService } from 'app/entities/member';
-import { AddConsortiumMemberConfirmationComponent, AlertService } from 'app/shared';
-import { COUNTRIES } from 'app/shared/constants/orcid-api.constants';
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
+import { EMAIL_REGEXP, URL_REGEXP } from 'app/app.constants'
+import { AccountService } from 'app/core'
+import { MSMemberService } from 'app/entities/member'
+import {
+  AddConsortiumMemberConfirmationComponent,
+  AlertService,
+} from 'app/shared'
+import { COUNTRIES } from 'app/shared/constants/orcid-api.constants'
 
-import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model';
-import { ISFNewConsortiumMember, SFNewConsortiumMember } from 'app/shared/model/salesforce-new-consortium-member.model';
-import { IMSUser } from 'app/shared/model/user.model';
-import { DateUtilService } from 'app/shared/util/date-util.service';
-import { Subscription } from 'rxjs';
+import { ISFMemberData } from 'app/shared/model/salesforce-member-data.model'
+import {
+  ISFNewConsortiumMember,
+  SFNewConsortiumMember,
+} from 'app/shared/model/salesforce-new-consortium-member.model'
+import { IMSUser } from 'app/shared/model/user.model'
+import { DateUtilService } from 'app/shared/util/date-util.service'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-consortium-member-add',
@@ -19,18 +32,18 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./consortium-member-add.scss'],
 })
 export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
-  COUNTRIES = COUNTRIES;
-  memberDataSubscription: Subscription;
-  account: IMSUser;
-  memberData: ISFMemberData;
-  isSaving: boolean;
-  invalidForm: boolean;
-  routeData: any;
-  editForm: FormGroup;
-  currentMonth: number;
-  currentYear: number;
-  monthList: string[];
-  yearList: string[];
+  COUNTRIES = COUNTRIES
+  memberDataSubscription: Subscription
+  account: IMSUser
+  memberData: ISFMemberData
+  isSaving: boolean
+  invalidForm: boolean
+  routeData: any
+  editForm: FormGroup
+  currentMonth: number
+  currentYear: number
+  monthList: string[]
+  yearList: string[]
 
   rolesData = [
     { id: 1, selected: false, name: 'Main relationship contact' },
@@ -39,7 +52,7 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
     { id: 4, selected: false, name: 'Invoice contact' },
     { id: 5, selected: false, name: 'Comms contact' },
     { id: 6, selected: false, name: 'Product contact' },
-  ];
+  ]
 
   constructor(
     private memberService: MSMemberService,
@@ -53,13 +66,13 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.accountService.identity().then(account => {
-      this.account = account;
-    });
+      this.account = account
+    })
 
-    this.currentMonth = this.dateUtilService.getCurrentMonthNumber();
-    this.currentYear = this.dateUtilService.getCurrentYear();
-    this.monthList = this.dateUtilService.getMonthsList();
-    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(10);
+    this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
+    this.currentYear = this.dateUtilService.getCurrentYear()
+    this.monthList = this.dateUtilService.getMonthsList()
+    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(10)
     this.editForm = this.fb.group(
       {
         orgName: [null, [Validators.required, Validators.maxLength(41)]],
@@ -70,34 +83,42 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
         country: [null, [Validators.maxLength(40)]],
         postcode: [null, [Validators.maxLength(40)]],
         trademarkLicense: [null, [Validators.required]],
-        startMonth: [this.monthList[this.currentMonth - 1][0], [Validators.required]],
+        startMonth: [
+          this.monthList[this.currentMonth - 1][0],
+          [Validators.required],
+        ],
         startYear: [this.yearList[0], [Validators.required]],
         contactName: [null, [Validators.maxLength(40)]],
         contactJobTitle: [null, [Validators.maxLength(128)]],
-        contactEmail: [null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(40)]],
+        contactEmail: [
+          null,
+          [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(40)],
+        ],
         contactPhone: [null, [Validators.maxLength(40)]],
       },
       { validator: this.dateValidator.bind(this) }
-    );
+    )
 
-    this.memberDataSubscription = this.memberService.memberData.subscribe(data => {
-      this.memberData = data;
-    });
+    this.memberDataSubscription = this.memberService.memberData.subscribe(
+      data => {
+        this.memberData = data
+      }
+    )
     this.editForm.valueChanges.subscribe(() => {
       if (this.editForm.status === 'VALID') {
-        this.invalidForm = false;
+        this.invalidForm = false
       }
-    });
+    })
   }
 
   dateValidator(form) {
-    const startMonth = form.controls['startMonth'].value;
-    const startYear = form.controls['startYear'].value;
+    const startMonth = form.controls['startMonth'].value
+    const startYear = form.controls['startYear'].value
 
     if (startYear == this.currentYear && startMonth < this.currentMonth) {
-      return { invalidDate: true };
+      return { invalidDate: true }
     }
-    return null;
+    return null
   }
 
   updateForm(consortiumMember: ISFNewConsortiumMember) {
@@ -116,11 +137,11 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
       contactJobTitle: consortiumMember.contactJobTitle,
       contactEmail: consortiumMember.contactEmail,
       contactPhone: consortiumMember.contactPhone,
-    });
+    })
   }
 
   ngOnDestroy(): void {
-    this.memberDataSubscription.unsubscribe();
+    this.memberDataSubscription.unsubscribe()
   }
 
   createNewConsortiumMemberFromForm(): ISFNewConsortiumMember {
@@ -142,42 +163,42 @@ export class ConsortiumMemberAddComponent implements OnInit, OnDestroy {
       this.editForm.get('contactJobTitle').value,
       this.editForm.get('contactEmail').value,
       this.editForm.get('contactPhone').value
-    );
+    )
   }
 
   save() {
     if (this.editForm.status === 'INVALID') {
-      this.editForm.markAllAsTouched();
-      this.invalidForm = true;
+      this.editForm.markAllAsTouched()
+      this.invalidForm = true
     } else {
-      this.invalidForm = false;
-      this.isSaving = true;
-      const newConsortiumMember = this.createNewConsortiumMemberFromForm();
+      this.invalidForm = false
+      this.isSaving = true
+      const newConsortiumMember = this.createNewConsortiumMemberFromForm()
 
       this.memberService.addConsortiumMember(newConsortiumMember).subscribe(
         res => {
           if (res) {
-            this.onSaveSuccess();
+            this.onSaveSuccess()
           } else {
-            console.error(res);
-            this.onSaveError();
+            console.error(res)
+            this.onSaveError()
           }
         },
         err => {
-          console.error(err);
-          this.onSaveError();
+          console.error(err)
+          this.onSaveError()
         }
-      );
+      )
     }
   }
 
   onSaveSuccess() {
-    this.isSaving = false;
-    this.alertService.activeAlert.next(AddConsortiumMemberConfirmationComponent);
-    this.router.navigate(['']);
+    this.isSaving = false
+    this.alertService.activeAlert.next(AddConsortiumMemberConfirmationComponent)
+    this.router.navigate([''])
   }
 
   onSaveError() {
-    this.isSaving = false;
+    this.isSaving = false
   }
 }

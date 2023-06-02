@@ -10,32 +10,38 @@ import org.springframework.core.Ordered;
 
 public class AuthorizationHeaderFilter extends ZuulFilter {
 
-  private final AuthorizationHeaderUtil headerUtil;
+      private final AuthorizationHeaderUtil headerUtil;
 
-  public AuthorizationHeaderFilter(AuthorizationHeaderUtil headerUtil) {
-    this.headerUtil = headerUtil;
-  }
+      public AuthorizationHeaderFilter(AuthorizationHeaderUtil headerUtil) {
+            this.headerUtil = headerUtil;
+      }
 
-  @Override
-  public String filterType() {
-    return PRE_TYPE;
-  }
+      @Override
+      public String filterType() {
+            return PRE_TYPE;
+      }
 
-  @Override
-  public int filterOrder() {
-    return Ordered.LOWEST_PRECEDENCE;
-  }
+      @Override
+      public int filterOrder() {
+            return Ordered.LOWEST_PRECEDENCE;
+      }
 
-  @Override
-  public boolean shouldFilter() {
-    return true;
-  }
+      @Override
+      public boolean shouldFilter() {
+            return true;
+      }
 
-  @Override
-  public Object run() {
-    RequestContext ctx = RequestContext.getCurrentContext();
-    Optional<String> authorizationHeader = headerUtil.getAuthorizationHeader();
-    authorizationHeader.ifPresent(s -> ctx.addZuulRequestHeader(TokenRelayRequestInterceptor.AUTHORIZATION, s));
-    return null;
-  }
+      @Override
+      public Object run() {
+            RequestContext ctx = RequestContext.getCurrentContext();
+            Optional<String> authorizationHeader =
+                  headerUtil.getAuthorizationHeader();
+            authorizationHeader.ifPresent(s ->
+                  ctx.addZuulRequestHeader(
+                        TokenRelayRequestInterceptor.AUTHORIZATION,
+                        s
+                  )
+            );
+            return null;
+      }
 }

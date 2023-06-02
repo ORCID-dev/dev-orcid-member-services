@@ -14,24 +14,27 @@ import javax.servlet.http.HttpServletRequestWrapper;
  */
 class CookiesHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-  /**
-   * The new cookies of the request. Use these instead of the ones found in
-   * the wrapped request.
-   */
-  private Cookie[] cookies;
+      /**
+       * The new cookies of the request. Use these instead of the ones found in
+       * the wrapped request.
+       */
+      private Cookie[] cookies;
 
-  public CookiesHttpServletRequestWrapper(HttpServletRequest request, Cookie[] cookies) {
-    super(request);
-    this.cookies = cookies;
-  }
+      public CookiesHttpServletRequestWrapper(
+            HttpServletRequest request,
+            Cookie[] cookies
+      ) {
+            super(request);
+            this.cookies = cookies;
+      }
 
-  /**
-   * Return the modified cookies instead of the original ones.
-   *
-   * @return the modified cookies.
-   */
-  @Override
-  public Cookie[] getCookies() {
-    return cookies;
-  }
+      /**
+       * Return the modified cookies instead of the original ones.
+       *
+       * @return the modified cookies.
+       */
+      @Override
+      public Cookie[] getCookies() {
+            return cookies;
+      }
 }

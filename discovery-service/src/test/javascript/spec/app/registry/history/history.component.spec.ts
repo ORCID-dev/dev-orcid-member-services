@@ -1,14 +1,21 @@
-import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { of } from 'rxjs';
-import { JHipsterRegistryTestModule } from '../../../test.module';
-import { RefreshService } from 'app/shared/refresh/refresh.service';
-import { HistoryComponent } from 'app/registry/history/history.component';
-import { HistoryService } from 'app/registry/history/history.service';
+import {
+  ComponentFixture,
+  TestBed,
+  async,
+  inject,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing'
+import { of } from 'rxjs'
+import { JHipsterRegistryTestModule } from '../../../test.module'
+import { RefreshService } from 'app/shared/refresh/refresh.service'
+import { HistoryComponent } from 'app/registry/history/history.component'
+import { HistoryService } from 'app/registry/history/history.service'
 
 describe('Component Tests', () => {
   describe('HistoryComponent', () => {
-    let comp: HistoryComponent;
-    let fixture: ComponentFixture<HistoryComponent>;
+    let comp: HistoryComponent
+    let fixture: ComponentFixture<HistoryComponent>
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -17,14 +24,14 @@ describe('Component Tests', () => {
         providers: [HistoryService, RefreshService],
       })
         .overrideTemplate(HistoryComponent, '')
-        .compileComponents();
-    }));
+        .compileComponents()
+    }))
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(HistoryComponent);
-      comp = fixture.componentInstance;
-      fixture.detectChanges();
-    });
+      fixture = TestBed.createComponent(HistoryComponent)
+      comp = fixture.componentInstance
+      fixture.detectChanges()
+    })
 
     it('refresh data', fakeAsync(
       inject([HistoryService], (service: HistoryService) => {
@@ -35,16 +42,16 @@ describe('Component Tests', () => {
           registered: {
             '11022017': 'instance2',
           },
-        };
-        spyOn(service, 'findAll').and.returnValue(of(response));
+        }
+        spyOn(service, 'findAll').and.returnValue(of(response))
 
-        comp.refresh();
-        tick();
+        comp.refresh()
+        tick()
 
-        expect(service.findAll).toHaveBeenCalled();
-        expect(comp.eurekaHistory).toEqual(response);
+        expect(service.findAll).toHaveBeenCalled()
+        expect(comp.eurekaHistory).toEqual(response)
       })
-    ));
+    ))
 
     it('activate registered tab', fakeAsync(
       inject([HistoryService], (service: HistoryService) => {
@@ -55,15 +62,15 @@ describe('Component Tests', () => {
           registered: {
             '11022017': 'instance2',
           },
-        };
-        spyOn(service, 'findAll').and.returnValue(of(response));
+        }
+        spyOn(service, 'findAll').and.returnValue(of(response))
 
-        comp.ngOnInit();
-        tick();
-        comp.activate('registered');
+        comp.ngOnInit()
+        tick()
+        comp.activate('registered')
 
-        expect(comp.histories![11022017]).toEqual('instance2');
+        expect(comp.histories![11022017]).toEqual('instance2')
       })
-    ));
-  });
-});
+    ))
+  })
+})

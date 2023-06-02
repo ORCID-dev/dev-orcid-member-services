@@ -7,10 +7,16 @@
         "text": {
           "string": "El portal para miembros de ORCID es un conjunto de herramientas que ayudan a las instituciones a sacar el máximo provecho de su afiliación a ORCID. Ya tenemos algunas herramientas disponibles y estamos desarrollando activamente otras que permiten a nuestros miembros:"
         },
-        "bullet1": { "string": "Agregar / actualizar datos en los registros ORCID de los investigadores" },
+        "bullet1": {
+          "string": "Agregar / actualizar datos en los registros ORCID de los investigadores"
+        },
         "bullet2": { "string": "Acceder a datos e informes " },
-        "bullet3": { "string": "Administre la información de afiliación ORCID de su organización" },
-        "bullet4": { "string": "Gestione las credenciales de la API de ORCID de su organización" }
+        "bullet3": {
+          "string": "Administre la información de afiliación ORCID de su organización"
+        },
+        "bullet4": {
+          "string": "Gestione las credenciales de la API de ORCID de su organización"
+        }
       },
       "section2": {
         "text": { "string": "Herramientas disponibles actualmente:" },
@@ -33,21 +39,29 @@
         "table": {
           "line1": {
             "heading": { "string": "Guía de gestión de cuentas" },
-            "description": { "string": "Guía sobre cómo administrar el acceso de sus usuarios al Portal de miembros" }
+            "description": {
+              "string": "Guía sobre cómo administrar el acceso de sus usuarios al Portal de miembros"
+            }
           },
           "line2": {
             "heading": { "string": "Guía del administrador de afiliación" },
-            "description": { "string": "Guía para el personal de su institución que utilizará el «Gestor de afiliaciones»" }
+            "description": {
+              "string": "Guía para el personal de su institución que utilizará el «Gestor de afiliaciones»"
+            }
           },
           "line3": {
             "heading": { "string": "Guía de informes de los miembros" },
-            "description": { "string": "Guía sobre cómo leer los informes de sus miembros" }
+            "description": {
+              "string": "Guía sobre cómo leer los informes de sus miembros"
+            }
           }
         }
       },
       "section4": {
         "heading": { "string": "Contactos de asistencia" },
-        "text": { "string": "Si necesita ayuda o tiene alguna pregunta sobre el portal para miembros, póngase en contacto con:" },
+        "text": {
+          "string": "Si necesita ayuda o tiene alguna pregunta sobre el portal para miembros, póngase en contacto con:"
+        },
         "bullet1": {
           "text": { "string": "Su " },
           "linkText": { "string": "organización principal del consorcio" }
@@ -65,7 +79,9 @@
       "signIntoOrcid": { "string": "inicie sesión en su registro ORCID" }
     },
     "loggedIn": {
-      "message": { "string": "Ha iniciado sesión como usuario <strong>{{username}}</strong>" }
+      "message": {
+        "string": "Ha iniciado sesión como usuario <strong>{{username}}</strong>"
+      }
     }
   }
 }

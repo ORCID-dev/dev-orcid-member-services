@@ -5,7 +5,9 @@
     "security": {
       "mfa": { "string": "2段階認証" },
       "heading": { "string": "セキュリティ" },
-      "mfaInstructions": { "string": "2段階認証アプリを使用してQRコードをスキャンしてから、以下に認証コードを入力してください。" },
+      "mfaInstructions": {
+        "string": "2段階認証アプリを使用してQRコードをスキャンしてから、以下に認証コードを入力してください。"
+      },
       "mfaExplain": {
         "string": "2段階認証を有効にして、ORCIDメンバーポータルアカウントにさらなるセキュリティ対策を追加しましょう。サインインをするたびに、ご希望の認証アプリケーションに送信される6桁のコードを入力するように要求されます。"
       },
@@ -18,7 +20,9 @@
         }
       },
       "mfaCannotScan": {
-        "one": { "string": "<strong>QRコードのスキャンができませんか？</strong>" },
+        "one": {
+          "string": "<strong>QRコードのスキャンができませんか？</strong>"
+        },
         "two": { "string": "テキストコードを入手" },
         "three": { "string": "して、代わりに2段階認証アプリに入力してください" }
       },
@@ -30,7 +34,9 @@
       "preferText": { "string": "テキストコードをご希望ですか？" },
       "switchOnMfa": { "string": "2段階認証をオンにする" },
       "switchOffMfa": { "string": "2段階認証をオフにする" },
-      "backupCodes": { "string": "次のバックアップコードを控えておいてください。バックアップコードが表示されるのは今回のみになります。" },
+      "backupCodes": {
+        "string": "次のバックアップコードを控えておいてください。バックアップコードが表示されるのは今回のみになります。"
+      },
       "otpError": { "string": "間違った認証コード" },
       "verificationCode": { "string": "認証コード" },
       "mfaUpdated": { "string": "2段階認証の設定が更新されました" }
@@ -49,14 +55,20 @@
     },
     "messages": {
       "error": {
-        "fail": { "string": "<strong>エラーが発生しました！</strong>設定を保存できませんでした。" },
-        "emailexists": { "string": "<strong>Eメールはすでに使われています！</strong>別のものをお選びください。" }
+        "fail": {
+          "string": "<strong>エラーが発生しました！</strong>設定を保存できませんでした。"
+        },
+        "emailexists": {
+          "string": "<strong>Eメールはすでに使われています！</strong>別のものをお選びください。"
+        }
       },
       "success": { "string": "<strong>設定が保存されました！</strong>" },
       "validate": {
         "firstname": {
           "required": { "string": "名が必要です。" },
-          "minlength": { "string": "お客様の名前には少なくとも 1 文字必要です" },
+          "minlength": {
+            "string": "お客様の名前には少なくとも 1 文字必要です"
+          },
           "maxlength": { "string": "名を50文字超にすることはできません" }
         },
         "lastname": {

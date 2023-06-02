@@ -4,12 +4,16 @@
       "home": {
         "title": { "string": "Управление пользователями" },
         "createLabel": { "string": "Добавить пользователя" },
-        "createOrEditLabel": { "string": "Добавить или редактировать пользователя" },
+        "createOrEditLabel": {
+          "string": "Добавить или редактировать пользователя"
+        },
         "notFound": { "string": "Нет пользователей для показа" },
         "uploadLabel": { "string": "Импортировать пользователей из CSV" }
       },
       "delete": {
-        "question": { "string": "Вы уверены, что хотите удалить пользователя {{ login }}?" }
+        "question": {
+          "string": "Вы уверены, что хотите удалить пользователя {{ login }}?"
+        }
       },
       "changeOwnership": {
         "question": {
@@ -27,9 +31,13 @@
         "title": { "string": "Импортировать пользователей" },
         "label": { "string": "Выберите CSV-файл для загрузки" },
         "filePath": { "string": "Путь файла" },
-        "emptyFile": { "string": "Нет файла для загрузки. Пожалуйста, выберите." },
+        "emptyFile": {
+          "string": "Нет файла для загрузки. Пожалуйста, выберите."
+        },
         "errors": {
-          "label": { "string": "Ой! При обработке ваших данных возникла проблема. Пожалуйста, исправьте ошибки ниже и повторите попытку" }
+          "label": {
+            "string": "Ой! При обработке ваших данных возникла проблема. Пожалуйста, исправьте ошибки ниже и повторите попытку"
+          }
         }
       },
       "assertionService": {
@@ -43,7 +51,9 @@
       "lastName": { "string": "Фамилия" },
       "mainContact": { "string": "Владелец организации" },
       "salesforceId": { "string": "Организация" },
-      "parentSalesforceId": { "string": "Родительский идентификатор Salesforce" },
+      "parentSalesforceId": {
+        "string": "Родительский идентификатор Salesforce"
+      },
       "activated": { "string": "Активировано" },
       "isAdmin": { "string": "Администратор" },
       "createdBy": { "string": "Создано" },

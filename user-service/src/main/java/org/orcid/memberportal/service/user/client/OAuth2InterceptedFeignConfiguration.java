@@ -8,14 +8,19 @@ import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 
 public class OAuth2InterceptedFeignConfiguration {
 
-  private final LoadBalancedResourceDetails loadBalancedResourceDetails;
+      private final LoadBalancedResourceDetails loadBalancedResourceDetails;
 
-  public OAuth2InterceptedFeignConfiguration(LoadBalancedResourceDetails loadBalancedResourceDetails) {
-    this.loadBalancedResourceDetails = loadBalancedResourceDetails;
-  }
+      public OAuth2InterceptedFeignConfiguration(
+            LoadBalancedResourceDetails loadBalancedResourceDetails
+      ) {
+            this.loadBalancedResourceDetails = loadBalancedResourceDetails;
+      }
 
-  @Bean(name = "oauth2RequestInterceptor")
-  public RequestInterceptor getOAuth2RequestInterceptor() {
-    return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), loadBalancedResourceDetails);
-  }
+      @Bean(name = "oauth2RequestInterceptor")
+      public RequestInterceptor getOAuth2RequestInterceptor() {
+            return new OAuth2FeignRequestInterceptor(
+                  new DefaultOAuth2ClientContext(),
+                  loadBalancedResourceDetails
+            );
+      }
 }

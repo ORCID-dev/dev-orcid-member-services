@@ -6,8 +6,12 @@
         "button": { "string": "Repetir contraseña" }
       },
       "messages": {
-        "info": { "string": "Introduzca la dirección de correo electrónico que utilizó para registrarse" },
-        "success": { "string": "Consulte sus correos electrónicos para consultar información para restablecer su contraseña." },
+        "info": {
+          "string": "Introduzca la dirección de correo electrónico que utilizó para registrarse"
+        },
+        "success": {
+          "string": "Consulte sus correos electrónicos para consultar información para restablecer su contraseña."
+        },
         "notfound": {
           "string": "<strong>¡La dirección de correo electrónico no está registrada!</strong> Compruébalo e inténtalo de nuevo."
         }
@@ -20,7 +24,9 @@
       },
       "messages": {
         "info": { "string": "Elija una nueva contraseña" },
-        "success": { "string": "<strong>Se ha restablecido su contraseña.</strong> Por favor," },
+        "success": {
+          "string": "<strong>Se ha restablecido su contraseña.</strong> Por favor,"
+        },
         "keymissing": { "string": "Falta la clave de activación." },
         "keyinvalid": { "string": "La clave de activación no es válida." },
         "keyexpired": {

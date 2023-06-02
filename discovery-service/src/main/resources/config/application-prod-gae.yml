@@ -37,10 +37,10 @@ jhipster:
         # (you can type `echo 'secret-key'|base64` on your command line)
         base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
   cors:
-    allowed-origins: 'https://jhipsterproject.appspot.com'
-    allowed-methods: '*'
-    allowed-headers: '*'
-    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allowed-origins: "https://jhipsterproject.appspot.com"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
     allow-credentials: true
     max-age: 1800
 eureka:

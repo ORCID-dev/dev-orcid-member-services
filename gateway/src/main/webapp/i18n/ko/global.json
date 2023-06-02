@@ -14,11 +14,17 @@
     "menu": {
       "memberPortal": { "string": "회원 포털" },
       "beta": { "string": "베타" },
-      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "jhipster-needle-menu-add-element": {
+        "string": "JHipster will add additional menu entries here (do not translate!)"
+      },
       "tools": {
         "main": { "string": "도구" },
-        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "assertionServiceAffiliationManager": {
+          "string": "Affiliation Manager"
+        },
+        "jhipster-needle-menu-add-entry": {
+          "string": "JHipster will add additional entities here (do not translate!)"
+        },
         "member": { "string": "회원" }
       },
       "report": {
@@ -42,14 +48,18 @@
         "main": { "string": "관리자" },
         "manageUsers": { "string": "사용자 관리" },
         "manageMembers": { "string": "회원 관리" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+        "jhipster-needle-menu-add-admin-element": {
+          "string": "JHipster will add additional menu entries here (do not translate!)"
+        }
       },
       "resources": {
         "main": { "string": "리소스" },
         "accountManagementGuide": { "string": "계정 관리 가이드" },
         "affiliationManagerGuide": { "string": "Affiliation Manager 가이드" },
         "memberReportingGuide": { "string": "회원 보고 안내" },
-        "applyForAffiliationManagerCreds": { "string": "Affiliation Manager 자격 증명 신청" }
+        "applyForAffiliationManagerCreds": {
+          "string": "Affiliation Manager 자격 증명 신청"
+        }
       },
       "language": { "string": "언어" }
     },
@@ -81,7 +91,9 @@
         }
       },
       "error": {
-        "dontmatch": { "string": "비밀번호와 비밀번호 확인이 일치하지 않습니다!" }
+        "dontmatch": {
+          "string": "비밀번호와 비밀번호 확인이 일치하지 않습니다!"
+        }
       },
       "validate": {
         "newpassword": {
@@ -93,7 +105,9 @@
         "confirmpassword": {
           "required": { "string": "확인 비밀번호가 필요합니다." },
           "minlength": { "string": "확인 비밀번호는 4자 이상이어야 합니다." },
-          "maxlength": { "string": "확인 비밀번호는 50자를 초과할 수 없습니다." }
+          "maxlength": {
+            "string": "확인 비밀번호는 50자를 초과할 수 없습니다."
+          }
         },
         "email": {
           "required": { "string": "이메일은 필수 항목입니다." },
@@ -109,7 +123,9 @@
     "ribbon": {
       "dev": { "string": "개발" }
     },
-    "item-count": { "string": "{{total}} 항목 중 {{first}} - {{second}} 항목 표시." }
+    "item-count": {
+      "string": "{{total}} 항목 중 {{first}} - {{second}} 항목 표시."
+    }
   },
   "entity": {
     "action": {
@@ -148,11 +164,17 @@
       "min": { "string": "이 필드는 {{ min }} 이상이어야 합니다." },
       "max": { "string": "이 필드는 {{ max }}보다 클 수 없습니다." },
       "minbytes": { "string": "이 항목은 {{ min }}바이트 이상이어야 합니다." },
-      "maxbytes": { "string": "이 필드는 {{ max }}바이트를 초과할 수 없습니다." },
-      "pattern": { "string": "이 필드는 {{ pattern }}의 패턴을 따라야 합니다." },
+      "maxbytes": {
+        "string": "이 필드는 {{ max }}바이트를 초과할 수 없습니다."
+      },
+      "pattern": {
+        "string": "이 필드는 {{ pattern }}의 패턴을 따라야 합니다."
+      },
       "number": { "string": "이 항목은 숫자여야 합니다." },
       "datetimelocal": { "string": "이 필드는 날짜 및 시간이어야 합니다." },
-      "patternLogin": { "string": "이 필드에는 문자, 숫자 및 전자 메일 주소만 포함될 수 있습니다." },
+      "patternLogin": {
+        "string": "이 필드에는 문자, 숫자 및 전자 메일 주소만 포함될 수 있습니다."
+      },
       "email": { "string": "유효한 이메일 주소를 입력해 주세요." },
       "endDate": { "string": "시작 날짜는 종료 날짜 이후일 수 없습니다." },
       "disambiguatedOrgId": {
@@ -165,14 +187,20 @@
     "server.not.reachable": { "string": "서버에 연결할 수 없습니다" },
     "url.not.found": { "string": "찾을 수 없습니다" },
     "notnull": { "string": "{{ fieldName }} 필드는 비워둘 수 없습니다!" },
-    "size": { "string": "{{ fieldName }} 필드가 최소/최대 크기 요건을 충족하지 않습니다!" },
+    "size": {
+      "string": "{{ fieldName }} 필드가 최소/최대 크기 요건을 충족하지 않습니다!"
+    },
     "userexists": { "string": "이미 사용 중인 로그인 이름입니다!" },
     "emailexists": { "string": "이메일이 이미 사용 중입니다!" },
-    "idexists": { "string": "새 {{ entityName }}에는 ID가 이미 있을 수 없습니다" },
+    "idexists": {
+      "string": "새 {{ entityName }}에는 ID가 이미 있을 수 없습니다"
+    },
     "delete.auth.user": { "string": "기존 사용자를 삭제할 수 없습니다." },
     "delete.main.contact": { "string": "조직 소유자를 삭제할 수 없습니다." },
     "delete.last.admin": { "string": "마지막 관리자를 삭제할 수 없습니다." },
-    "member.no.admin.allowed": { "string": "관리 사용자는 이 회원과 연결할 수 없습니다" },
+    "member.no.admin.allowed": {
+      "string": "관리 사용자는 이 회원과 연결할 수 없습니다"
+    },
     "clientidinvalid": {
       "string": "잘못된 클라이언트 ID입니다. 클라이언트 ID는 XXXX-XXXX-XXXX-XXXX 또는 APP-XXXXXXXXXXXXXXXX이어야 합니다. X는 숫자 또는 대문자일 수 있습니다"
     },

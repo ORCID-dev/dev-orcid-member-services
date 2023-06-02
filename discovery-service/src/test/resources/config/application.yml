@@ -70,7 +70,7 @@ management:
 
 jhipster:
   clientApp:
-    name: 'jHipsterRegistryApp'
+    name: "jHipsterRegistryApp"
   logging:
     # To test json console appender
     use-json-format: true # By default, logs are in Json format

@@ -27,9 +27,13 @@
         "title": { "string": "Importovat uživatele" },
         "label": { "string": "Vyberte CSV soubor, který chcete nahrát" },
         "filePath": { "string": "Cesta k souboru" },
-        "emptyFile": { "string": "Neexistuje žádný soubor k nahrání. Prosím vyberte jej." },
+        "emptyFile": {
+          "string": "Neexistuje žádný soubor k nahrání. Prosím vyberte jej."
+        },
         "errors": {
-          "label": { "string": "Jejda! Při zpracování vašich údajů došlo k problému. Opravte prosím níže uvedené chyby a zkuste to znovu" }
+          "label": {
+            "string": "Jejda! Při zpracování vašich údajů došlo k problému. Opravte prosím níže uvedené chyby a zkuste to znovu"
+          }
         }
       },
       "assertionService": {

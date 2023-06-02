@@ -13,34 +13,39 @@ import org.springframework.stereotype.Component;
 @Profile(PROFILE_UAA)
 public class UaaAuthorizationHeaderFilter extends ZuulFilter {
 
-  private final UaaAuthorizationHeaderUtil authorizationHeaderUtil;
+      private final UaaAuthorizationHeaderUtil authorizationHeaderUtil;
 
-  public UaaAuthorizationHeaderFilter(UaaAuthorizationHeaderUtil authorizationHeaderUtil) {
-    this.authorizationHeaderUtil = authorizationHeaderUtil;
-  }
+      public UaaAuthorizationHeaderFilter(
+            UaaAuthorizationHeaderUtil authorizationHeaderUtil
+      ) {
+            this.authorizationHeaderUtil = authorizationHeaderUtil;
+      }
 
-  @Override
-  public String filterType() {
-    return PRE_TYPE;
-  }
+      @Override
+      public String filterType() {
+            return PRE_TYPE;
+      }
 
-  @Override
-  public int filterOrder() {
-    return 0;
-  }
+      @Override
+      public int filterOrder() {
+            return 0;
+      }
 
-  @Override
-  public boolean shouldFilter() {
-    RequestContext ctx = RequestContext.getCurrentContext();
-    return ctx.getRequest().getRequestURI().startsWith("/services");
-  }
+      @Override
+      public boolean shouldFilter() {
+            RequestContext ctx = RequestContext.getCurrentContext();
+            return ctx.getRequest().getRequestURI().startsWith("/services");
+      }
 
-  @Override
-  public Object run() {
-    RequestContext ctx = RequestContext.getCurrentContext();
-    // Add specific authorization headers for UAA
-    ctx.addZuulRequestHeader(AUTHORIZATION_HEADER, authorizationHeaderUtil.getAuthorizationHeader());
+      @Override
+      public Object run() {
+            RequestContext ctx = RequestContext.getCurrentContext();
+            // Add specific authorization headers for UAA
+            ctx.addZuulRequestHeader(
+                  AUTHORIZATION_HEADER,
+                  authorizationHeaderUtil.getAuthorizationHeader()
+            );
 
-    return null;
-  }
+            return null;
+      }
 }

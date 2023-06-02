@@ -1,7 +1,7 @@
-import { Route } from '@angular/router';
+import { Route } from '@angular/router'
 
-import { UserRouteAccessService } from 'app/core';
-import { PasswordComponent } from './password.component';
+import { UserRouteAccessService } from 'app/core'
+import { PasswordComponent } from './password.component'
 
 export const passwordRoute: Route = {
   path: 'password',
@@ -11,4 +11,4 @@ export const passwordRoute: Route = {
     pageTitle: 'global.menu.account.password.string',
   },
   canActivate: [UserRouteAccessService],
-};
+}

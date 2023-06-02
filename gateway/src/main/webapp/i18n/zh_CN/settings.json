@@ -5,7 +5,9 @@
     "security": {
       "mfa": { "string": "双重验证" },
       "heading": { "string": "安全性" },
-      "mfaInstructions": { "string": "使用 2FA app 扫描二维码，并输入以下验证码。" },
+      "mfaInstructions": {
+        "string": "使用 2FA app 扫描二维码，并输入以下验证码。"
+      },
       "mfaExplain": {
         "string": "启用双重身份验证，为您的 ORCID 成员门户账户增加额外的安全性。每次登录时，系统都会提示您输入发送到您首选身份验证应用程序的六位数验证码。"
       },
@@ -13,7 +15,9 @@
         "one": {
           "string": "<strong>安装双重身份验证应用</strong><br />每次登录时都需要 2FA 应用程序来创建访问帐户所需的六位数代码。大多数应用程序适用于移动设备；有些还可以作为桌面或基于 Web 的应用程序使用。下载并安装您首选的 2FA 应用，例如 <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'>Google Authenticator</a>、<a href='https://freeotp.github.io/'>FreeOTP</a> 或 <a href='https://authy.com/'>Authy</a>。"
         },
-        "two": { "string": "<strong>使用设备扫描此二维码</strong><br />打开 2FA 应用并扫描下方图像。" }
+        "two": {
+          "string": "<strong>使用设备扫描此二维码</strong><br />打开 2FA 应用并扫描下方图像。"
+        }
       },
       "mfaCannotScan": {
         "one": { "string": "<strong>无法扫描二维码？</strong>" },
@@ -48,7 +52,9 @@
     "messages": {
       "error": {
         "fail": { "string": "<strong>出现错误！</strong>设置无法保存。" },
-        "emailexists": { "string": "<strong>电子邮件已被使用！</strong>请选择其他电子邮件" }
+        "emailexists": {
+          "string": "<strong>电子邮件已被使用！</strong>请选择其他电子邮件"
+        }
       },
       "success": { "string": "<strong>设置已保存！</strong>" },
       "validate": {

@@ -6,8 +6,9 @@ import org.springframework.context.annotation.Bean;
 
 public class OAuth2UserClientFeignConfiguration {
 
-  @Bean(name = "userFeignClientInterceptor")
-  public RequestInterceptor getUserFeignClientInterceptor() throws IOException {
-    return new UserFeignClientInterceptor();
-  }
+      @Bean(name = "userFeignClientInterceptor")
+      public RequestInterceptor getUserFeignClientInterceptor()
+            throws IOException {
+            return new UserFeignClientInterceptor();
+      }
 }

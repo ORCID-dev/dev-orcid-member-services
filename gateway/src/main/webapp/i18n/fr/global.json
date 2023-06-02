@@ -14,11 +14,17 @@
     "menu": {
       "memberPortal": { "string": "Portail des membres" },
       "beta": { "string": "Béta" },
-      "jhipster-needle-menu-add-element": { "string": "JHipster ajoutera des entrées de menu supplémentaires ici (ne pas traduire !)" },
+      "jhipster-needle-menu-add-element": {
+        "string": "JHipster ajoutera des entrées de menu supplémentaires ici (ne pas traduire !)"
+      },
       "tools": {
         "main": { "string": "Outils" },
-        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "assertionServiceAffiliationManager": {
+          "string": "Affiliation Manager"
+        },
+        "jhipster-needle-menu-add-entry": {
+          "string": "JHipster will add additional entities here (do not translate!)"
+        },
         "member": { "string": "Membre" }
       },
       "report": {
@@ -42,14 +48,18 @@
         "main": { "string": "Administrateur" },
         "manageUsers": { "string": "Gérer les utilisateurs" },
         "manageMembers": { "string": "Gérer les membres" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+        "jhipster-needle-menu-add-admin-element": {
+          "string": "JHipster will add additional menu entries here (do not translate!)"
+        }
       },
       "resources": {
         "main": { "string": "Ressources" },
         "accountManagementGuide": { "string": "Guide de gestion de compte" },
         "affiliationManagerGuide": { "string": "Guide Affiliation Manager" },
         "memberReportingGuide": { "string": "Guide de signalement de membres" },
-        "applyForAffiliationManagerCreds": { "string": "Demander des identifiants Affiliation Manager" }
+        "applyForAffiliationManagerCreds": {
+          "string": "Demander des identifiants Affiliation Manager"
+        }
       },
       "language": { "string": "Langue" }
     },
@@ -60,8 +70,12 @@
       "currentpassword.placeholder": { "string": "Mot de passe actuel" },
       "newpassword.label": { "string": "Nouveau mot de passe" },
       "newpassword.placeholder": { "string": "Nouveau mot de passe" },
-      "confirmpassword.label": { "string": "Confirmation du nouveau mot de passe" },
-      "confirmpassword.placeholder": { "string": "Confirmer le nouveau mot de passe" },
+      "confirmpassword.label": {
+        "string": "Confirmation du nouveau mot de passe"
+      },
+      "confirmpassword.placeholder": {
+        "string": "Confirmer le nouveau mot de passe"
+      },
       "email.label": { "string": "E-mail" },
       "email.placeholder": { "string": "Votre adresse e-mail" },
       "search": { "string": "Recherche…" }
@@ -81,25 +95,41 @@
         }
       },
       "error": {
-        "dontmatch": { "string": "Le mot de passe et sa confirmation ne correspondent pas !" }
+        "dontmatch": {
+          "string": "Le mot de passe et sa confirmation ne correspondent pas !"
+        }
       },
       "validate": {
         "newpassword": {
           "required": { "string": "Votre mot de passe est requis." },
-          "minlength": { "string": "Votre mot de passe doit contenir au moins 4 caractères." },
-          "maxlength": { "string": "Votre mot de passe ne doit pas compter plus de 50 caractères." },
+          "minlength": {
+            "string": "Votre mot de passe doit contenir au moins 4 caractères."
+          },
+          "maxlength": {
+            "string": "Votre mot de passe ne doit pas compter plus de 50 caractères."
+          },
           "strength": { "string": "Robustesse du mot de passe :" }
         },
         "confirmpassword": {
-          "required": { "string": "Votre mot de passe de confirmation est obligatoire." },
-          "minlength": { "string": "Votre confirmation de mot de passe doit compter au moins quatre caractères." },
-          "maxlength": { "string": "Votre mot de passe de confirmation ne peut pas comporter plus de 50 caractères." }
+          "required": {
+            "string": "Votre mot de passe de confirmation est obligatoire."
+          },
+          "minlength": {
+            "string": "Votre confirmation de mot de passe doit compter au moins quatre caractères."
+          },
+          "maxlength": {
+            "string": "Votre mot de passe de confirmation ne peut pas comporter plus de 50 caractères."
+          }
         },
         "email": {
           "required": { "string": "Votre adresse e-mail est obligatoire." },
           "invalid": { "string": "Votre adresse e-mail n'est pas valide." },
-          "minlength": { "string": "Votre adresse e-mail doit compter au moins cinq caractères." },
-          "maxlength": { "string": "Votre e-mail ne peut pas dépasser 50 caractères." }
+          "minlength": {
+            "string": "Votre adresse e-mail doit compter au moins cinq caractères."
+          },
+          "maxlength": {
+            "string": "Votre e-mail ne peut pas dépasser 50 caractères."
+          }
         }
       }
     },
@@ -109,7 +139,9 @@
     "ribbon": {
       "dev": { "string": "Développement" }
     },
-    "item-count": { "string": "Montrer entre {{first}} et {{second}} éléments sur {{total}}." }
+    "item-count": {
+      "string": "Montrer entre {{first}} et {{second}} éléments sur {{total}}."
+    }
   },
   "entity": {
     "action": {
@@ -143,18 +175,36 @@
     },
     "validation": {
       "required": { "string": "Ce champ est obligatoire." },
-      "minlength": { "string": "Ce champ doit contenir au moins {{ min }} caractères." },
-      "maxlength": { "string": "Ce champ ne peut pas comporter plus de {{ max }} caractères." },
+      "minlength": {
+        "string": "Ce champ doit contenir au moins {{ min }} caractères."
+      },
+      "maxlength": {
+        "string": "Ce champ ne peut pas comporter plus de {{ max }} caractères."
+      },
       "min": { "string": "Ce champ devrait être d'au moins {{ min }}." },
-      "max": { "string": "Ce champ ne peut pas présenter une valeur supérieure à {{ max }}." },
-      "minbytes": { "string": "Ce champ doit présenter une valeur d'au moins {{ min }} octets." },
-      "maxbytes": { "string": "Ce champ ne peut pas présenter une valeur supérieure à {{ max }} octets." },
-      "pattern": { "string": "Ce champ doit suivre le modèle de {{ pattern }}." },
+      "max": {
+        "string": "Ce champ ne peut pas présenter une valeur supérieure à {{ max }}."
+      },
+      "minbytes": {
+        "string": "Ce champ doit présenter une valeur d'au moins {{ min }} octets."
+      },
+      "maxbytes": {
+        "string": "Ce champ ne peut pas présenter une valeur supérieure à {{ max }} octets."
+      },
+      "pattern": {
+        "string": "Ce champ doit suivre le modèle de {{ pattern }}."
+      },
       "number": { "string": "Ce champ doit être un nombre." },
-      "datetimelocal": { "string": "Ce champ doit être une date et une heure." },
-      "patternLogin": { "string": "Ce champ ne peut contenir que des lettres, des chiffres et des adresses e-mail." },
+      "datetimelocal": {
+        "string": "Ce champ doit être une date et une heure."
+      },
+      "patternLogin": {
+        "string": "Ce champ ne peut contenir que des lettres, des chiffres et des adresses e-mail."
+      },
       "email": { "string": "Veuillez saisir une adresse e-mail valide." },
-      "endDate": { "string": "La date de début ne peut être postérieure à la date de fin." },
+      "endDate": {
+        "string": "La date de début ne peut être postérieure à la date de fin."
+      },
       "disambiguatedOrgId": {
         "string": "Ce champ est obligatoire. L'identifiant d'organisation GRID doit commencer par « grid » (par ex., grid.12344) ou doit être une URL GRID valide. L'identifiant d'organisation RINGGOLD doit être un numéro."
       }
@@ -165,14 +215,26 @@
     "server.not.reachable": { "string": "Le serveur n'est pas joignable." },
     "url.not.found": { "string": "Introuvable" },
     "notnull": { "string": "Le champ {{ fieldName }} ne peut pas être vide !" },
-    "size": { "string": "Le champ {{ fieldName }} ne répond aux exigences en matière de taille minimale/maximale !" },
+    "size": {
+      "string": "Le champ {{ fieldName }} ne répond aux exigences en matière de taille minimale/maximale !"
+    },
     "userexists": { "string": "Nom de connexion déjà utilisé !" },
     "emailexists": { "string": "Cette adresse e-mail est déjà utilisée !" },
-    "idexists": { "string": "Une nouvelle {{ entityName }} ne peut pas déjà avoir d'identifiant" },
-    "delete.auth.user": { "string": "Impossible de supprimer l'utilisateur actuel." },
-    "delete.main.contact": { "string": "Impossible de supprimer le propriétaire de l'organisation." },
-    "delete.last.admin": { "string": "Impossible de supprimer le dernier administrateur." },
-    "member.no.admin.allowed": { "string": "Les utilisateurs administrateurs ne peuvent pas être associés à ce membre." },
+    "idexists": {
+      "string": "Une nouvelle {{ entityName }} ne peut pas déjà avoir d'identifiant"
+    },
+    "delete.auth.user": {
+      "string": "Impossible de supprimer l'utilisateur actuel."
+    },
+    "delete.main.contact": {
+      "string": "Impossible de supprimer le propriétaire de l'organisation."
+    },
+    "delete.last.admin": {
+      "string": "Impossible de supprimer le dernier administrateur."
+    },
+    "member.no.admin.allowed": {
+      "string": "Les utilisateurs administrateurs ne peuvent pas être associés à ce membre."
+    },
     "clientidinvalid": {
       "string": "Identifiant de client non valide. Il doit présenter un format XXXX-XXXX-XXXX-XXXX ou APP-XXXXXXXXXXXXXXXX. « X » peut être un chiffre ou une majuscule."
     },

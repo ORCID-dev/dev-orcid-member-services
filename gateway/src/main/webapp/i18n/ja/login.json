@@ -16,7 +16,9 @@
     },
     "messages": {
       "error": {
-        "authentication": { "string": "<strong> サインインに失敗しました。</strong> 認証情報をご確認の上、再度お試し下さい。 " }
+        "authentication": {
+          "string": "<strong> サインインに失敗しました。</strong> 認証情報をご確認の上、再度お試し下さい。 "
+        }
       }
     },
     "password": {

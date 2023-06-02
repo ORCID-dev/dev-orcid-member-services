@@ -1,29 +1,32 @@
 /* tslint:disable max-line-length */
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { take, map } from 'rxjs/operators';
-import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { MSUserService } from 'app/entities/user/user.service';
-import { IMSUser, MSUser } from 'app/shared/model/user.model';
+import { TestBed, getTestBed } from '@angular/core/testing'
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing'
+import { take, map } from 'rxjs/operators'
+import * as moment from 'moment'
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants'
+import { MSUserService } from 'app/entities/user/user.service'
+import { IMSUser, MSUser } from 'app/shared/model/user.model'
 
 describe('Service Tests', () => {
   describe('Member service users service', () => {
-    let injector: TestBed;
-    let service: MSUserService;
-    let httpMock: HttpTestingController;
-    let elemDefault: IMSUser;
-    let expectedResult;
-    let currentDate: moment.Moment;
+    let injector: TestBed
+    let service: MSUserService
+    let httpMock: HttpTestingController
+    let elemDefault: IMSUser
+    let expectedResult
+    let currentDate: moment.Moment
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
-      });
-      expectedResult = {};
-      injector = getTestBed();
-      service = injector.get(MSUserService);
-      httpMock = injector.get(HttpTestingController);
-      currentDate = moment();
+      })
+      expectedResult = {}
+      injector = getTestBed()
+      service = injector.get(MSUserService)
+      httpMock = injector.get(HttpTestingController)
+      currentDate = moment()
 
       elemDefault = new MSUser(
         'ID',
@@ -40,8 +43,8 @@ describe('Service Tests', () => {
         false,
         false,
         currentDate
-      );
-    });
+      )
+    })
 
     describe('Service methods', () => {
       it('should find an element', async () => {
@@ -51,16 +54,16 @@ describe('Service Tests', () => {
             lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
-        );
+        )
         service
           .find('123')
           .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
+          .subscribe(resp => (expectedResult = resp))
 
-        const req = httpMock.expectOne({ method: 'GET' });
-        req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: elemDefault });
-      });
+        const req = httpMock.expectOne({ method: 'GET' })
+        req.flush(returnedFromService)
+        expect(expectedResult).toMatchObject({ body: elemDefault })
+      })
 
       it('should create a MSUserService', async () => {
         const returnedFromService = Object.assign(
@@ -70,22 +73,22 @@ describe('Service Tests', () => {
             lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
-        );
+        )
         const expected = Object.assign(
           {
             createdDate: currentDate,
             lastModifiedDate: currentDate,
           },
           returnedFromService
-        );
+        )
         service
           .create(new MSUser(null))
           .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
-        const req = httpMock.expectOne({ method: 'POST' });
-        req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: expected });
-      });
+          .subscribe(resp => (expectedResult = resp))
+        const req = httpMock.expectOne({ method: 'POST' })
+        req.flush(returnedFromService)
+        expect(expectedResult).toMatchObject({ body: expected })
+      })
 
       it('should update a MSUserService', async () => {
         const returnedFromService = Object.assign(
@@ -105,7 +108,7 @@ describe('Service Tests', () => {
             lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
-        );
+        )
 
         const expected = Object.assign(
           {
@@ -113,15 +116,15 @@ describe('Service Tests', () => {
             lastModifiedDate: currentDate,
           },
           returnedFromService
-        );
+        )
         service
           .update(expected)
           .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
-        const req = httpMock.expectOne({ method: 'PUT' });
-        req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: expected });
-      });
+          .subscribe(resp => (expectedResult = resp))
+        const req = httpMock.expectOne({ method: 'PUT' })
+        req.flush(returnedFromService)
+        expect(expectedResult).toMatchObject({ body: expected })
+      })
 
       it('should return a list of MSUserService', async () => {
         const returnedFromService = Object.assign(
@@ -141,38 +144,40 @@ describe('Service Tests', () => {
             lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
-        );
+        )
         const expected = Object.assign(
           {
             createdDate: currentDate,
             lastModifiedDate: currentDate,
           },
           returnedFromService
-        );
+        )
         service
           .query(expected)
           .pipe(
             take(1),
             map(resp => resp.body)
           )
-          .subscribe(body => (expectedResult = body));
-        const req = httpMock.expectOne({ method: 'GET' });
-        req.flush([returnedFromService]);
-        httpMock.verify();
-        expect(expectedResult).toContainEqual(expected);
-      });
+          .subscribe(body => (expectedResult = body))
+        const req = httpMock.expectOne({ method: 'GET' })
+        req.flush([returnedFromService])
+        httpMock.verify()
+        expect(expectedResult).toContainEqual(expected)
+      })
 
       it('should delete a MSUserService', async () => {
-        const rxPromise = service.delete('123').subscribe(resp => (expectedResult = resp.ok));
+        const rxPromise = service
+          .delete('123')
+          .subscribe(resp => (expectedResult = resp.ok))
 
-        const req = httpMock.expectOne({ method: 'DELETE' });
-        req.flush({ status: 200 });
-        expect(expectedResult);
-      });
-    });
+        const req = httpMock.expectOne({ method: 'DELETE' })
+        req.flush({ status: 200 })
+        expect(expectedResult)
+      })
+    })
 
     afterEach(() => {
-      httpMock.verify();
-    });
-  });
-});
+      httpMock.verify()
+    })
+  })
+})

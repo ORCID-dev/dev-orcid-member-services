@@ -1,18 +1,18 @@
-import { Component, OnDestroy } from '@angular/core';
-import { EncryptionService } from './encryption.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy } from '@angular/core'
+import { EncryptionService } from './encryption.service'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 @Component({
   selector: 'jhi-encryption',
   templateUrl: './encryption.component.html',
 })
 export class EncryptionComponent implements OnDestroy {
-  showMore = true;
-  textToEncrypt = '';
-  encryptedText = '';
-  result = '';
-  private unsubscribe$ = new Subject();
+  showMore = true
+  textToEncrypt = ''
+  encryptedText = ''
+  result = ''
+  private unsubscribe$ = new Subject()
 
   constructor(private encryptionService: EncryptionService) {}
 
@@ -22,13 +22,13 @@ export class EncryptionComponent implements OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         response => {
-          this.result = response;
-          this.encryptedText = response;
+          this.result = response
+          this.encryptedText = response
         },
         () => {
-          this.result = '';
+          this.result = ''
         }
-      );
+      )
   }
 
   decrypt(): void {
@@ -37,18 +37,18 @@ export class EncryptionComponent implements OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         response => {
-          this.result = response;
-          this.textToEncrypt = response;
+          this.result = response
+          this.textToEncrypt = response
         },
         () => {
-          this.result = '';
+          this.result = ''
         }
-      );
+      )
   }
 
   ngOnDestroy(): void {
     // prevent memory leak when component destroyed
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.unsubscribe$.next()
+    this.unsubscribe$.complete()
   }
 }

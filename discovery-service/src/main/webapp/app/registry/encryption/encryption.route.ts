@@ -1,5 +1,5 @@
-import { Route } from '@angular/router';
-import { EncryptionComponent } from './encryption.component';
+import { Route } from '@angular/router'
+import { EncryptionComponent } from './encryption.component'
 
 export const encryptionRoute: Route = {
   path: '',
@@ -7,4 +7,4 @@ export const encryptionRoute: Route = {
   data: {
     pageTitle: 'Encryption',
   },
-};
+}

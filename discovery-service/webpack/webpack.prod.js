@@ -1,19 +1,19 @@
-const webpack = require('webpack');
-const webpackMerge = require('webpack-merge');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const Visualizer = require('webpack-visualizer-plugin');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
-const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
-const path = require('path');
+const webpack = require('webpack')
+const webpackMerge = require('webpack-merge')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const Visualizer = require('webpack-visualizer-plugin')
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin
+const path = require('path')
 
-const utils = require('./utils.js');
-const commonConfig = require('./webpack.common.js');
+const utils = require('./utils.js')
+const commonConfig = require('./webpack.common.js')
 
-const ENV = 'production';
-const sass = require('sass');
+const ENV = 'production'
+const sass = require('sass')
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
   // Enable source maps. Please note that this will slow down the build.
@@ -160,4 +160,4 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     }),
   ],
   mode: 'production',
-});
+})

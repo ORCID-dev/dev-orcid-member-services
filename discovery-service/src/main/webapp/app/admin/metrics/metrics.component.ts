@@ -1,39 +1,51 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { Subject } from 'rxjs'
 
-import { Metrics, MetricsKey, MetricsService, Thread, ThreadDump } from './metrics.service';
-import { Route } from 'app/shared/routes/route.model';
-import { RoutesService } from 'app/shared/routes/routes.service';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
+import {
+  Metrics,
+  MetricsKey,
+  MetricsService,
+  Thread,
+  ThreadDump,
+} from './metrics.service'
+import { Route } from 'app/shared/routes/route.model'
+import { RoutesService } from 'app/shared/routes/routes.service'
+import { map, switchMap, takeUntil } from 'rxjs/operators'
 
 @Component({
   selector: 'jhi-metrics',
   templateUrl: './metrics.component.html',
 })
 export class MetricsMonitoringComponent implements OnInit, OnDestroy {
-  metrics?: Metrics;
-  threads?: Thread[];
-  updatingMetrics = true;
+  metrics?: Metrics
+  threads?: Thread[]
+  updatingMetrics = true
 
-  activeRoute?: Route;
-  unsubscribe$ = new Subject();
+  activeRoute?: Route
+  unsubscribe$ = new Subject()
 
-  constructor(private metricsService: MetricsService, private changeDetector: ChangeDetectorRef, private routesService: RoutesService) {}
+  constructor(
+    private metricsService: MetricsService,
+    private changeDetector: ChangeDetectorRef,
+    private routesService: RoutesService
+  ) {}
 
   ngOnInit(): void {
-    this.routesService.routeChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(route => {
-      this.activeRoute = route;
-      this.refreshActiveRouteMetrics();
-    });
+    this.routesService.routeChanged$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(route => {
+        this.activeRoute = route
+        this.refreshActiveRouteMetrics()
+      })
   }
 
   refresh(): void {
-    this.routesService.reloadRoutes();
+    this.routesService.reloadRoutes()
   }
 
   refreshActiveRouteMetrics(): void {
     if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-      this.updatingMetrics = true;
+      this.updatingMetrics = true
       this.metricsService
         .getInstanceMetrics(this.activeRoute)
         .pipe(
@@ -42,10 +54,10 @@ export class MetricsMonitoringComponent implements OnInit, OnDestroy {
             this.metricsService.instanceThreadDump(this.activeRoute).pipe(
               takeUntil(this.unsubscribe$),
               map((threadDump: ThreadDump) => {
-                this.metrics = metrics;
-                this.threads = threadDump.threads;
-                this.updatingMetrics = false;
-                this.changeDetector.detectChanges();
+                this.metrics = metrics
+                this.threads = threadDump.threads
+                this.updatingMetrics = false
+                this.changeDetector.detectChanges()
               })
             )
           )
@@ -53,26 +65,30 @@ export class MetricsMonitoringComponent implements OnInit, OnDestroy {
         .subscribe({
           error: error => {
             if (error.status === 500 || error.status === 404) {
-              this.routesService.routeDown(this.activeRoute);
+              this.routesService.routeDown(this.activeRoute)
             }
           },
-        });
+        })
     } else {
-      this.routesService.routeDown(this.activeRoute);
+      this.routesService.routeDown(this.activeRoute)
     }
   }
 
   metricsKeyExists(key: MetricsKey): boolean {
-    return this.metrics && this.metrics[key];
+    return this.metrics && this.metrics[key]
   }
 
   metricsKeyExistsAndObjectNotEmpty(key: MetricsKey): boolean {
-    return this.metrics && this.metrics[key] && JSON.stringify(this.metrics[key]) !== '{}';
+    return (
+      this.metrics &&
+      this.metrics[key] &&
+      JSON.stringify(this.metrics[key]) !== '{}'
+    )
   }
 
   ngOnDestroy(): void {
     // prevent memory leak when component destroyed
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.unsubscribe$.next()
+    this.unsubscribe$.complete()
   }
 }

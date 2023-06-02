@@ -22,29 +22,53 @@ repos:
         name: check yaml
         description: checks yaml files for parseable syntax.
         entry: check-yaml
-        args: ['--allow-multiple-documents']
+        args: ["--allow-multiple-documents"]
         language: python
-        exclude: '.ytt.yaml$'
+        exclude: ".ytt.yaml$"
         types: [yaml]
 
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: 'v2.7.1'
-    hooks:
-      - id: prettier
-        additional_dependencies:
-          - prettier
-          - prettier-plugin-java
-          - '@prettier/plugin-xml@v2.2.0'
+      - id: trailing-whitespace
+        name: trim trailing whitespace
+        description: trims trailing whitespace.
+        entry: trailing-whitespace-fixer
+        language: python
+        types: [text]
+        #stages: [commit, push, manual]
 
+  #   - repo: https://github.com/pre-commit/mirrors-prettier
+  #     rev: v3.0.0-alpha.6
+  #     hooks:
+  #       - id: prettier
+  #         name: prettier-java
+  #         types: [java]
+  #         additional_dependencies:
+  #           - prettier
+  #           - prettier-plugin-java
+  #         args: ["--tab-width", "4", "--print-width", "100"]
+  #
   - repo: local
     hooks:
       - id: actionlint
         name: actionlint
         entry: actionlint
         language: golang
-        additional_dependencies: [github.com/rhysd/actionlint/cmd/actionlint@v1.6.23]
+        additional_dependencies:
+          [github.com/rhysd/actionlint/cmd/actionlint@v1.6.23]
         types: [yaml]
-        files: '^.github/workflows/'
+        files: "^.github/workflows/"
+
+      - id: prettier
+        name: prettier-local
+        types: [text]
+        entry: prettier --write --list-different --ignore-unknown --loglevel debug
+        additional_dependencies:
+          - "prettier@2.8.8"
+          - "@prettier/plugin-xml@v2.2.0"
+          - "prettier-plugin-java@v2.1.0"
+        language: node
+        args: []
+        require_serial: false
+        minimum_pre_commit_version: "0"
 
 ##########
 # pre-commit-ci config
@@ -55,8 +79,8 @@ ci:
 
     for more information, see https://pre-commit.ci
   autofix_prs: true
-  autoupdate_branch: ''
-  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: weekly
   skip: []
   submodules: false

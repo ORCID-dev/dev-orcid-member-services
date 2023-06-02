@@ -9,39 +9,50 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemberService {
 
-  @Autowired
-  private MemberServiceClient memberServiceClient;
+      @Autowired
+      private MemberServiceClient memberServiceClient;
 
-  public String getMemberName(String salesforceId) {
-    ResponseEntity<AssertionServiceMember> response = memberServiceClient.getMember(salesforceId);
-    if (response.getStatusCode().is2xxSuccessful()) {
-      return response.getBody().getClientName();
-    }
-    if (response.getStatusCodeValue() == 404) {
-      return null;
-    }
-    throw new RuntimeException("Error contacting member service");
-  }
-
-  public String getMemberDefaultLanguage(String salesforceId) {
-    ResponseEntity<AssertionServiceMember> response = memberServiceClient.getMember(salesforceId);
-    if (response.getStatusCode().is2xxSuccessful()) {
-      if (response.getBody().getDefaultLanguage() == null) {
-        return "en_US";
-      } else {
-        return response.getBody().getDefaultLanguage();
+      public String getMemberName(String salesforceId) {
+            ResponseEntity<AssertionServiceMember> response =
+                  memberServiceClient.getMember(salesforceId);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                  return response.getBody().getClientName();
+            }
+            if (response.getStatusCodeValue() == 404) {
+                  return null;
+            }
+            throw new RuntimeException("Error contacting member service");
       }
-    }
-    if (response.getStatusCodeValue() == 404) {
-      return null;
-    }
-    throw new RuntimeException("Error contacting member service");
-  }
 
-  public void updateMemberDefaultLanguage(String salesforceId, String language) {
-    ResponseEntity<Void> response = memberServiceClient.updateMemberDefaultLanguage(salesforceId, language);
-    if (!response.getStatusCode().is2xxSuccessful()) {
-      throw new RuntimeException("Error updating member default language");
-    }
-  }
+      public String getMemberDefaultLanguage(String salesforceId) {
+            ResponseEntity<AssertionServiceMember> response =
+                  memberServiceClient.getMember(salesforceId);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                  if (response.getBody().getDefaultLanguage() == null) {
+                        return "en_US";
+                  } else {
+                        return response.getBody().getDefaultLanguage();
+                  }
+            }
+            if (response.getStatusCodeValue() == 404) {
+                  return null;
+            }
+            throw new RuntimeException("Error contacting member service");
+      }
+
+      public void updateMemberDefaultLanguage(
+            String salesforceId,
+            String language
+      ) {
+            ResponseEntity<Void> response =
+                  memberServiceClient.updateMemberDefaultLanguage(
+                        salesforceId,
+                        language
+                  );
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                  throw new RuntimeException(
+                        "Error updating member default language"
+                  );
+            }
+      }
 }

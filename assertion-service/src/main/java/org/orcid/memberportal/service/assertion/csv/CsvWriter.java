@@ -7,14 +7,18 @@ import org.apache.commons.csv.CSVPrinter;
 
 public class CsvWriter {
 
-  public String writeCsv(String[] headers, List<List<String>> rows) throws IOException {
-    StringBuffer buffer = new StringBuffer();
-    CSVPrinter csvPrinter = new CSVPrinter(buffer, CSVFormat.DEFAULT.withHeader(headers));
-    for (List<String> row : rows) {
-      csvPrinter.printRecord(row);
-      csvPrinter.flush();
-    }
-    csvPrinter.close();
-    return buffer.toString();
-  }
+      public String writeCsv(String[] headers, List<List<String>> rows)
+            throws IOException {
+            StringBuffer buffer = new StringBuffer();
+            CSVPrinter csvPrinter = new CSVPrinter(
+                  buffer,
+                  CSVFormat.DEFAULT.withHeader(headers)
+            );
+            for (List<String> row : rows) {
+                  csvPrinter.printRecord(row);
+                  csvPrinter.flush();
+            }
+            csvPrinter.close();
+            return buffer.toString();
+      }
 }

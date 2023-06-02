@@ -36,4 +36,4 @@ Which version of JHipster Registry are you using, is it a regression?
 
 <!-- What OS are you on? is this a problem with all browsers or only IE8? -->
 
-- [ ] Checking this box is mandatory (this is just to show you read everything)
+-   [ ] Checking this box is mandatory (this is just to show you read everything)

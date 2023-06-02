@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AccountService } from 'app/core';
+import { Component } from '@angular/core'
+import { AccountService } from 'app/core'
 
 @Component({
   selector: 'jhi-footer',
@@ -10,6 +10,6 @@ export class FooterComponent {
   constructor(private accountService: AccountService) {}
 
   isAuthenticated() {
-    return this.accountService.isAuthenticated();
+    return this.accountService.isAuthenticated()
   }
 }

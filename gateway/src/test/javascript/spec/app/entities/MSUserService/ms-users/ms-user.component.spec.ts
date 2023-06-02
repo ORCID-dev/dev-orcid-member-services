@@ -1,19 +1,19 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { Observable, of } from 'rxjs'
+import { HttpHeaders, HttpResponse } from '@angular/common/http'
+import { ActivatedRoute, Data } from '@angular/router'
 
-import { GatewayTestModule } from '../../../../test.module';
-import { MSUserComponent } from 'app/entities/user/user.component';
-import { MSUserService } from 'app/entities/user/user.service';
-import { MSUser } from 'app/shared/model/user.model';
+import { GatewayTestModule } from '../../../../test.module'
+import { MSUserComponent } from 'app/entities/user/user.component'
+import { MSUserService } from 'app/entities/user/user.service'
+import { MSUser } from 'app/shared/model/user.model'
 
 describe('Component Tests', () => {
   describe('MSUser Management Component', () => {
-    let comp: MSUserComponent;
-    let fixture: ComponentFixture<MSUserComponent>;
-    let service: MSUserService;
+    let comp: MSUserComponent
+    let fixture: ComponentFixture<MSUserComponent>
+    let service: MSUserService
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -38,16 +38,16 @@ describe('Component Tests', () => {
         ],
       })
         .overrideTemplate(MSUserComponent, '')
-        .compileComponents();
+        .compileComponents()
 
-      fixture = TestBed.createComponent(MSUserComponent);
-      comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(MSUserService);
-    });
+      fixture = TestBed.createComponent(MSUserComponent)
+      comp = fixture.componentInstance
+      service = fixture.debugElement.injector.get(MSUserService)
+    })
 
     it('Should call load all on init', () => {
       // GIVEN
-      const headers = new HttpHeaders().append('link', 'link;link');
+      const headers = new HttpHeaders().append('link', 'link;link')
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
@@ -55,19 +55,19 @@ describe('Component Tests', () => {
             headers,
           })
         )
-      );
+      )
 
       // WHEN
-      comp.ngOnInit();
+      comp.ngOnInit()
 
       // THEN
-      expect(service.query).toHaveBeenCalled();
-      expect(comp.msUser[0]).toEqual(jasmine.objectContaining({ id: '123' }));
-    });
+      expect(service.query).toHaveBeenCalled()
+      expect(comp.msUser[0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    })
 
     it('should load a page', () => {
       // GIVEN
-      const headers = new HttpHeaders().append('link', 'link;link');
+      const headers = new HttpHeaders().append('link', 'link;link')
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
@@ -75,29 +75,29 @@ describe('Component Tests', () => {
             headers,
           })
         )
-      );
+      )
 
       // WHEN
-      comp.loadPage(1);
+      comp.loadPage(1)
 
       // THEN
-      expect(service.query).toHaveBeenCalled();
-      expect(comp.msUser[0]).toEqual(jasmine.objectContaining({ id: '123' }));
-    });
+      expect(service.query).toHaveBeenCalled()
+      expect(comp.msUser[0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    })
 
     it('should not load a page is the page is the same as the previous page', () => {
-      spyOn(service, 'query').and.callThrough();
+      spyOn(service, 'query').and.callThrough()
 
       // WHEN
-      comp.loadPage(0);
+      comp.loadPage(0)
 
       // THEN
-      expect(service.query).toHaveBeenCalledTimes(0);
-    });
+      expect(service.query).toHaveBeenCalledTimes(0)
+    })
 
     it('should re-initialize the page', () => {
       // GIVEN
-      const headers = new HttpHeaders().append('link', 'link;link');
+      const headers = new HttpHeaders().append('link', 'link;link')
       spyOn(service, 'query').and.returnValue(
         of(
           new HttpResponse({
@@ -105,34 +105,34 @@ describe('Component Tests', () => {
             headers,
           })
         )
-      );
+      )
 
       // WHEN
-      comp.loadPage(1);
-      comp.clear();
+      comp.loadPage(1)
+      comp.clear()
 
       // THEN
-      expect(comp.page).toEqual(0);
-      expect(service.query).toHaveBeenCalledTimes(2);
-      expect(comp.msUser[0]).toEqual(jasmine.objectContaining({ id: '123' }));
-    });
+      expect(comp.page).toEqual(0)
+      expect(service.query).toHaveBeenCalledTimes(2)
+      expect(comp.msUser[0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    })
     it('should calculate the sort attribute for an id', () => {
       // WHEN
-      const result = comp.sort();
+      const result = comp.sort()
 
       // THEN
-      expect(result).toEqual(['id,desc']);
-    });
+      expect(result).toEqual(['id,desc'])
+    })
 
     it('should calculate the sort attribute for a non-id attribute', () => {
       // GIVEN
-      comp.predicate = 'name';
+      comp.predicate = 'name'
 
       // WHEN
-      const result = comp.sort();
+      const result = comp.sort()
 
       // THEN
-      expect(result).toEqual(['name,desc', 'id']);
-    });
-  });
-});
+      expect(result).toEqual(['name,desc', 'id'])
+    })
+  })
+})

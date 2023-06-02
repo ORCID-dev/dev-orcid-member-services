@@ -23,63 +23,89 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public class ExceptionTranslatorTest {
 
-  private MockMvc mock;
+      private MockMvc mock;
 
-  @BeforeEach
-  public void setup() {
-    SecurityContextHolder.clearContext();
-    AccountResource control = new AccountResource();
-    this.mock = MockMvcBuilders.standaloneSetup(control).setControllerAdvice(new ExceptionTranslator()).build();
-  }
+      @BeforeEach
+      public void setup() {
+            SecurityContextHolder.clearContext();
+            AccountResource control = new AccountResource();
+            this.mock =
+                  MockMvcBuilders
+                        .standaloneSetup(control)
+                        .setControllerAdvice(new ExceptionTranslator())
+                        .build();
+      }
 
-  @Test
-  public void processValidationErrorTest() throws Exception {
-    UserJWTController control = new UserJWTController(null, null);
-    MockMvc jwtMock = MockMvcBuilders.standaloneSetup(control).setControllerAdvice(new ExceptionTranslator()).build();
-    MvcResult res = jwtMock
-      .perform(
-        post("/api/authenticate")
-          .contentType(MediaType.APPLICATION_JSON)
-          .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL)
-          .content(
-            "{\"username\":\"fakeUsernameTooLongfakeUsernameTooLongfakeUsernameTooLongfakeUsernameTooLong" +
-            "\",\"password\":\"fakePassword\",\"rememberMe\":false}"
-          )
-      )
-      .andExpect(status().isBadRequest())
-      .andReturn();
+      @Test
+      public void processValidationErrorTest() throws Exception {
+            UserJWTController control = new UserJWTController(null, null);
+            MockMvc jwtMock = MockMvcBuilders
+                  .standaloneSetup(control)
+                  .setControllerAdvice(new ExceptionTranslator())
+                  .build();
+            MvcResult res = jwtMock
+                  .perform(
+                        post("/api/authenticate")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .accept(
+                                    MediaType.APPLICATION_JSON,
+                                    MediaType.TEXT_PLAIN,
+                                    MediaType.ALL
+                              )
+                              .content(
+                                    "{\"username\":\"fakeUsernameTooLongfakeUsernameTooLongfakeUsernameTooLongfakeUsernameTooLong" +
+                                    "\",\"password\":\"fakePassword\",\"rememberMe\":false}"
+                              )
+                  )
+                  .andExpect(status().isBadRequest())
+                  .andReturn();
 
-    assertThat(res.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
-  }
+            assertThat(res.getResolvedException())
+                  .isInstanceOf(MethodArgumentNotValidException.class);
+      }
 
-  @Test
-  public void processAccessDeniedExceptionTest() throws Exception {
-    // These lines will throw the wanted exception
-    SecurityContext securityContext = mock(SecurityContext.class);
-    when(securityContext.getAuthentication()).thenThrow(new AccessDeniedException(null));
-    SecurityContextHolder.setContext(securityContext);
+      @Test
+      public void processAccessDeniedExceptionTest() throws Exception {
+            // These lines will throw the wanted exception
+            SecurityContext securityContext = mock(SecurityContext.class);
+            when(securityContext.getAuthentication())
+                  .thenThrow(new AccessDeniedException(null));
+            SecurityContextHolder.setContext(securityContext);
 
-    MvcResult res = mock.perform(get("/api/account")).andExpect(status().isForbidden()).andReturn();
+            MvcResult res = mock
+                  .perform(get("/api/account"))
+                  .andExpect(status().isForbidden())
+                  .andReturn();
 
-    assertThat(res.getResolvedException()).isInstanceOf(AccessDeniedException.class);
-  }
+            assertThat(res.getResolvedException())
+                  .isInstanceOf(AccessDeniedException.class);
+      }
 
-  @Test
-  public void processMethodNotSupportedExceptionTest() throws Exception {
-    MvcResult res = mock.perform(post("/api/account").content("{\"testFakeParam\"}")).andExpect(status().isMethodNotAllowed()).andReturn();
+      @Test
+      public void processMethodNotSupportedExceptionTest() throws Exception {
+            MvcResult res = mock
+                  .perform(post("/api/account").content("{\"testFakeParam\"}"))
+                  .andExpect(status().isMethodNotAllowed())
+                  .andReturn();
 
-    assertThat(res.getResolvedException()).isInstanceOf(HttpRequestMethodNotSupportedException.class);
-  }
+            assertThat(res.getResolvedException())
+                  .isInstanceOf(HttpRequestMethodNotSupportedException.class);
+      }
 
-  @Test
-  public void processRuntimeExceptionTest() throws Exception {
-    // These lines will throw the wanted exception
-    SecurityContext securityContext = mock(SecurityContext.class);
-    when(securityContext.getAuthentication()).thenThrow(new RuntimeException());
-    SecurityContextHolder.setContext(securityContext);
+      @Test
+      public void processRuntimeExceptionTest() throws Exception {
+            // These lines will throw the wanted exception
+            SecurityContext securityContext = mock(SecurityContext.class);
+            when(securityContext.getAuthentication())
+                  .thenThrow(new RuntimeException());
+            SecurityContextHolder.setContext(securityContext);
 
-    MvcResult res = mock.perform(get("/api/account")).andExpect(status().isInternalServerError()).andReturn();
+            MvcResult res = mock
+                  .perform(get("/api/account"))
+                  .andExpect(status().isInternalServerError())
+                  .andReturn();
 
-    assertThat(res.getResolvedException()).isInstanceOf(RuntimeException.class);
-  }
+            assertThat(res.getResolvedException())
+                  .isInstanceOf(RuntimeException.class);
+      }
 }

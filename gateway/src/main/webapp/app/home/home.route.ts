@@ -1,12 +1,12 @@
-import { Route } from '@angular/router';
-import { UserRouteAccessService } from 'app/core';
+import { Route } from '@angular/router'
+import { UserRouteAccessService } from 'app/core'
 
-import { HomeComponent } from './';
-import { MemberInfoEditComponent } from './member-info-landing/member-info-edit/member-info-edit.component';
-import { MemberInfoLandingComponent } from './member-info-landing/member-info-landing.component';
-import { ContactUpdateComponent } from './member-info-landing/contact-update/contact-update.component';
-import { RemoveConsortiumMemberComponent } from './member-info-landing/consortium-members/remove-consortium-member.component';
-import { AddConsortiumMemberComponent } from './member-info-landing/consortium-members/add-consortium-member.component';
+import { HomeComponent } from './'
+import { MemberInfoEditComponent } from './member-info-landing/member-info-edit/member-info-edit.component'
+import { MemberInfoLandingComponent } from './member-info-landing/member-info-landing.component'
+import { ContactUpdateComponent } from './member-info-landing/contact-update/contact-update.component'
+import { RemoveConsortiumMemberComponent } from './member-info-landing/consortium-members/remove-consortium-member.component'
+import { AddConsortiumMemberComponent } from './member-info-landing/consortium-members/add-consortium-member.component'
 
 export const HOME_ROUTE: Route = {
   path: '',
@@ -70,4 +70,4 @@ export const HOME_ROUTE: Route = {
       canActivate: [UserRouteAccessService],
     },
   ],
-};
+}

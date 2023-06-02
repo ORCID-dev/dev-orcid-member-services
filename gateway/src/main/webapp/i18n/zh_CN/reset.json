@@ -8,7 +8,9 @@
       "messages": {
         "info": { "string": "输入用于注册的电子邮件地址" },
         "success": { "string": "请查看电子邮件，了解重置密码的详细信息。" },
-        "notfound": { "string": "<strong>电子邮件地址尚未注册！</strong>请检查并重试" }
+        "notfound": {
+          "string": "<strong>电子邮件地址尚未注册！</strong>请检查并重试"
+        }
       }
     },
     "finish": {
@@ -33,7 +35,9 @@
             "string": "If you are still having problems activating your account or have not received your new activation link, please contact us at membership@orcid.org."
           }
         },
-        "error": { "string": "密码无法重置。请谨记，密码请求仅在 24 小时内有效。" }
+        "error": {
+          "string": "密码无法重置。请谨记，密码请求仅在 24 小时内有效。"
+        }
       }
     }
   }

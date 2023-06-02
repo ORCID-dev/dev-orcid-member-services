@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpErrorResponse } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing'
+import { HttpErrorResponse } from '@angular/common/http'
+import { of, throwError } from 'rxjs'
 
-import { JHipsterRegistryTestModule } from '../../../test.module';
-import { HealthCheckComponent } from 'app/admin/health/health.component';
-import { Health, HealthService } from 'app/admin/health/health.service';
+import { JHipsterRegistryTestModule } from '../../../test.module'
+import { HealthCheckComponent } from 'app/admin/health/health.component'
+import { Health, HealthService } from 'app/admin/health/health.service'
 
 describe('Component Tests', () => {
   describe('HealthCheckComponent', () => {
-    let comp: HealthCheckComponent;
-    let fixture: ComponentFixture<HealthCheckComponent>;
-    let service: HealthService;
+    let comp: HealthCheckComponent
+    let fixture: ComponentFixture<HealthCheckComponent>
+    let service: HealthService
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -18,23 +18,23 @@ describe('Component Tests', () => {
         declarations: [HealthCheckComponent],
       })
         .overrideTemplate(HealthCheckComponent, '')
-        .compileComponents();
-    }));
+        .compileComponents()
+    }))
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(HealthCheckComponent);
-      comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(HealthService);
-    });
+      fixture = TestBed.createComponent(HealthCheckComponent)
+      comp = fixture.componentInstance
+      service = fixture.debugElement.injector.get(HealthService)
+    })
 
     describe('getBadgeClass', () => {
       it('should get badge class', () => {
-        const upBadgeClass = comp.getBadgeClass('UP');
-        const downBadgeClass = comp.getBadgeClass('DOWN');
-        expect(upBadgeClass).toEqual('badge-success');
-        expect(downBadgeClass).toEqual('badge-danger');
-      });
-    });
+        const upBadgeClass = comp.getBadgeClass('UP')
+        const downBadgeClass = comp.getBadgeClass('DOWN')
+        expect(upBadgeClass).toEqual('badge-success')
+        expect(downBadgeClass).toEqual('badge-danger')
+      })
+    })
 
     describe('refresh', () => {
       it('Should handle response on refreshing health data', () => {
@@ -45,17 +45,20 @@ describe('Component Tests', () => {
           appName: 'appName1',
           status: 'UP',
           serviceId: '1',
-        };
-        const health: Health = { status: 'UP', components: { mail: { status: 'UP', details: 'mailDetails' } } };
-        spyOn(service, 'checkInstanceHealth').and.returnValue(of(health));
+        }
+        const health: Health = {
+          status: 'UP',
+          components: { mail: { status: 'UP', details: 'mailDetails' } },
+        }
+        spyOn(service, 'checkInstanceHealth').and.returnValue(of(health))
 
         // WHEN
-        comp.refreshActiveRouteHealth();
+        comp.refreshActiveRouteHealth()
 
         // THEN
-        expect(service.checkInstanceHealth).toHaveBeenCalled();
-        expect(comp.health).toEqual(health);
-      });
+        expect(service.checkInstanceHealth).toHaveBeenCalled()
+        expect(comp.health).toEqual(health)
+      })
 
       it('should handle a 503 on refreshing health data', () => {
         // GIVEN
@@ -65,17 +68,22 @@ describe('Component Tests', () => {
           appName: 'appName1',
           status: 'UP',
           serviceId: '1',
-        };
-        const health: Health = { status: 'DOWN', components: { mail: { status: 'DOWN', details: 'mailDetails' } } };
-        spyOn(service, 'checkInstanceHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: health })));
+        }
+        const health: Health = {
+          status: 'DOWN',
+          components: { mail: { status: 'DOWN', details: 'mailDetails' } },
+        }
+        spyOn(service, 'checkInstanceHealth').and.returnValue(
+          throwError(new HttpErrorResponse({ status: 503, error: health }))
+        )
 
         // WHEN
-        comp.refreshActiveRouteHealth();
+        comp.refreshActiveRouteHealth()
 
         // THEN
-        expect(service.checkInstanceHealth).toHaveBeenCalled();
-        expect(comp.health).toEqual(health);
-      });
-    });
-  });
-});
+        expect(service.checkInstanceHealth).toHaveBeenCalled()
+        expect(comp.health).toEqual(health)
+      })
+    })
+  })
+})

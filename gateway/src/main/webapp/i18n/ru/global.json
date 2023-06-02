@@ -14,11 +14,17 @@
     "menu": {
       "memberPortal": { "string": "Портал для участников" },
       "beta": { "string": "Бета-версия" },
-      "jhipster-needle-menu-add-element": { "string": "JHipster will add additional menu entries here (do not translate!)" },
+      "jhipster-needle-menu-add-element": {
+        "string": "JHipster will add additional menu entries here (do not translate!)"
+      },
       "tools": {
         "main": { "string": "Инструменты" },
-        "assertionServiceAffiliationManager": { "string": "Affiliation Manager" },
-        "jhipster-needle-menu-add-entry": { "string": "JHipster will add additional entities here (do not translate!)" },
+        "assertionServiceAffiliationManager": {
+          "string": "Affiliation Manager"
+        },
+        "jhipster-needle-menu-add-entry": {
+          "string": "JHipster will add additional entities here (do not translate!)"
+        },
         "member": { "string": "Участник" }
       },
       "report": {
@@ -42,14 +48,24 @@
         "main": { "string": "Администратор" },
         "manageUsers": { "string": "Управление пользователями" },
         "manageMembers": { "string": "Управление участниками" },
-        "jhipster-needle-menu-add-admin-element": { "string": "JHipster will add additional menu entries here (do not translate!)" }
+        "jhipster-needle-menu-add-admin-element": {
+          "string": "JHipster will add additional menu entries here (do not translate!)"
+        }
       },
       "resources": {
         "main": { "string": "Ресурсы" },
-        "accountManagementGuide": { "string": "Руководство по управлению аккаунтом" },
-        "affiliationManagerGuide": { "string": "Руководство по работе с Affiliation Manager" },
-        "memberReportingGuide": { "string": "Руководство по отчетам об участниках" },
-        "applyForAffiliationManagerCreds": { "string": "Получить учетные данные Affiliation Manager" }
+        "accountManagementGuide": {
+          "string": "Руководство по управлению аккаунтом"
+        },
+        "affiliationManagerGuide": {
+          "string": "Руководство по работе с Affiliation Manager"
+        },
+        "memberReportingGuide": {
+          "string": "Руководство по отчетам об участниках"
+        },
+        "applyForAffiliationManagerCreds": {
+          "string": "Получить учетные данные Affiliation Manager"
+        }
       },
       "language": { "string": "Язык" }
     },
@@ -86,20 +102,32 @@
       "validate": {
         "newpassword": {
           "required": { "string": "Ваш пароль необходим." },
-          "minlength": { "string": "Ваш пароль должен состоять из минимум 4 символов." },
-          "maxlength": { "string": "Ваш пароль не может состоять из более чем 50 символов." },
+          "minlength": {
+            "string": "Ваш пароль должен состоять из минимум 4 символов."
+          },
+          "maxlength": {
+            "string": "Ваш пароль не может состоять из более чем 50 символов."
+          },
           "strength": { "string": "Надежность пароля:" }
         },
         "confirmpassword": {
           "required": { "string": "Необходимо подтверждение пароля." },
-          "minlength": { "string": "Ваш пароль-подтверждение должен состоять из минимум 4 символов." },
-          "maxlength": { "string": "Ваш пароль-подтверждение не может состоять из более чем 50 символов." }
+          "minlength": {
+            "string": "Ваш пароль-подтверждение должен состоять из минимум 4 символов."
+          },
+          "maxlength": {
+            "string": "Ваш пароль-подтверждение не может состоять из более чем 50 символов."
+          }
         },
         "email": {
           "required": { "string": "Ваш адрес электронной почты необходим." },
           "invalid": { "string": "Ваш электронный адрес недействителен." },
-          "minlength": { "string": "Ваш адрес электронной почты должен содержать не менее 5 символов." },
-          "maxlength": { "string": "Адрес вашей эл. почты не может состоять из более чем 50 символов." }
+          "minlength": {
+            "string": "Ваш адрес электронной почты должен содержать не менее 5 символов."
+          },
+          "maxlength": {
+            "string": "Адрес вашей эл. почты не может состоять из более чем 50 символов."
+          }
         }
       }
     },
@@ -109,7 +137,9 @@
     "ribbon": {
       "dev": { "string": "Развитие" }
     },
-    "item-count": { "string": "Показаны {{first}} - {{second}} из {{total}} элементов." }
+    "item-count": {
+      "string": "Показаны {{first}} - {{second}} из {{total}} элементов."
+    }
   },
   "entity": {
     "action": {
@@ -126,7 +156,9 @@
       "continue": { "string": "Продолжить" },
       "upload": { "string": "Загрузить" },
       "ok": { "string": "ОК" },
-      "activate": { "string": "Отправить повторно электронное письмо для активации" },
+      "activate": {
+        "string": "Отправить повторно электронное письмо для активации"
+      },
       "view": { "string": "Просмотреть" }
     },
     "detail": {
@@ -143,18 +175,34 @@
     },
     "validation": {
       "required": { "string": "Это поле обязательно к заполнению." },
-      "minlength": { "string": "В этом поле должно быть не менее {{ min }} символов." },
-      "maxlength": { "string": "Это поле не может состоять из более чем {{ max }} символов." },
+      "minlength": {
+        "string": "В этом поле должно быть не менее {{ min }} символов."
+      },
+      "maxlength": {
+        "string": "Это поле не может состоять из более чем {{ max }} символов."
+      },
       "min": { "string": "Это поле должно состоять из минимум {{ min }}." },
       "max": { "string": "Это поле не должно быть больше {{ max }}." },
-      "minbytes": { "string": "Это поле должно иметь размер в минимум {{ min }} байт." },
-      "maxbytes": { "string": "Это поле не может быть больше {{ max }} байтов." },
-      "pattern": { "string": "Это поле должно следовать шаблону для {{ pattern }}." },
+      "minbytes": {
+        "string": "Это поле должно иметь размер в минимум {{ min }} байт."
+      },
+      "maxbytes": {
+        "string": "Это поле не может быть больше {{ max }} байтов."
+      },
+      "pattern": {
+        "string": "Это поле должно следовать шаблону для {{ pattern }}."
+      },
       "number": { "string": "В этом поле должен быть номер." },
       "datetimelocal": { "string": "В этом поле нужно указать дату и время." },
-      "patternLogin": { "string": "Это поле может содержать только буквы, цифры и электронные адреса." },
-      "email": { "string": "Пожалуйста, представьте действующий адрес электронной почты." },
-      "endDate": { "string": "Дата начала не может быть позднее даты окончания." },
+      "patternLogin": {
+        "string": "Это поле может содержать только буквы, цифры и электронные адреса."
+      },
+      "email": {
+        "string": "Пожалуйста, представьте действующий адрес электронной почты."
+      },
+      "endDate": {
+        "string": "Дата начала не может быть позднее даты окончания."
+      },
       "disambiguatedOrgId": {
         "string": "Это поле обязательно к заполнению. GRID Идентификатор организации должен начинаться с grid. например, grid.12344 или должен быть действительным URL-адресом grid, RINGGOLD Идентификатор организации должен быть номером. ROR Идентификаторы должны содержать 9 символов и начинаться с 0."
       }
@@ -165,14 +213,24 @@
     "server.not.reachable": { "string": "Сервер недоступен" },
     "url.not.found": { "string": "Не найдено" },
     "notnull": { "string": "Поле {{ fieldName }} не может быть пустым!" },
-    "size": { "string": "Поле {{ fieldName }} не соответствует требованиям к минимальному/максимальному размеру!" },
+    "size": {
+      "string": "Поле {{ fieldName }} не соответствует требованиям к минимальному/максимальному размеру!"
+    },
     "userexists": { "string": "Имя логина уже используется!" },
     "emailexists": { "string": "Адрес электронной почты уже используется!" },
     "idexists": { "string": "Новый {{ entityName }} не может сразу иметь ID" },
-    "delete.auth.user": { "string": "Не удается удалить данного пользователя." },
-    "delete.main.contact": { "string": "Нельзя удалить владельца организации." },
-    "delete.last.admin": { "string": "Невозможно удалить последнего администратора." },
-    "member.no.admin.allowed": { "string": "Пользователи с правами администратора не могут быть связаны с этим участником" },
+    "delete.auth.user": {
+      "string": "Не удается удалить данного пользователя."
+    },
+    "delete.main.contact": {
+      "string": "Нельзя удалить владельца организации."
+    },
+    "delete.last.admin": {
+      "string": "Невозможно удалить последнего администратора."
+    },
+    "member.no.admin.allowed": {
+      "string": "Пользователи с правами администратора не могут быть связаны с этим участником"
+    },
     "clientidinvalid": {
       "string": "Неверный ID клиента. ID клиента должен быть в формате XXXX-XXXX-XXXX-XXXX или APP-XXXXXXXXXXXXXXXX. X может быть цифрой или символом в верхнем регистре"
     },

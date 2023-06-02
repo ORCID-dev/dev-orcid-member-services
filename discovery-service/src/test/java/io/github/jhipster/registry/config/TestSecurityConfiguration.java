@@ -23,50 +23,64 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 @TestConfiguration
 public class TestSecurityConfiguration {
 
-  private final ClientRegistration clientRegistration;
+      private final ClientRegistration clientRegistration;
 
-  public TestSecurityConfiguration() {
-    this.clientRegistration = clientRegistration().build();
-  }
+      public TestSecurityConfiguration() {
+            this.clientRegistration = clientRegistration().build();
+      }
 
-  @Bean
-  ClientRegistrationRepository clientRegistrationRepository() {
-    return new InMemoryClientRegistrationRepository(clientRegistration);
-  }
+      @Bean
+      ClientRegistrationRepository clientRegistrationRepository() {
+            return new InMemoryClientRegistrationRepository(clientRegistration);
+      }
 
-  private ClientRegistration.Builder clientRegistration() {
-    Map<String, Object> metadata = new HashMap<>();
-    metadata.put("end_session_endpoint", "https://jhipster.org/logout");
+      private ClientRegistration.Builder clientRegistration() {
+            Map<String, Object> metadata = new HashMap<>();
+            metadata.put("end_session_endpoint", "https://jhipster.org/logout");
 
-    return ClientRegistration
-      .withRegistrationId("oidc")
-      .redirectUriTemplate("{baseUrl}/{action}/oauth2/code/{registrationId}")
-      .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
-      .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-      .scope("read:user")
-      .authorizationUri("https://jhipster.org/login/oauth/authorize")
-      .tokenUri("https://jhipster.org/login/oauth/access_token")
-      .jwkSetUri("https://jhipster.org/oauth/jwk")
-      .userInfoUri("https://api.jhipster.org/user")
-      .providerConfigurationMetadata(metadata)
-      .userNameAttributeName("id")
-      .clientName("Client Name")
-      .clientId("client-id")
-      .clientSecret("client-secret");
-  }
+            return ClientRegistration
+                  .withRegistrationId("oidc")
+                  .redirectUriTemplate(
+                        "{baseUrl}/{action}/oauth2/code/{registrationId}"
+                  )
+                  .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
+                  .authorizationGrantType(
+                        AuthorizationGrantType.AUTHORIZATION_CODE
+                  )
+                  .scope("read:user")
+                  .authorizationUri(
+                        "https://jhipster.org/login/oauth/authorize"
+                  )
+                  .tokenUri("https://jhipster.org/login/oauth/access_token")
+                  .jwkSetUri("https://jhipster.org/oauth/jwk")
+                  .userInfoUri("https://api.jhipster.org/user")
+                  .providerConfigurationMetadata(metadata)
+                  .userNameAttributeName("id")
+                  .clientName("Client Name")
+                  .clientId("client-id")
+                  .clientSecret("client-secret");
+      }
 
-  @Bean
-  JwtDecoder jwtDecoder() {
-    return mock(JwtDecoder.class);
-  }
+      @Bean
+      JwtDecoder jwtDecoder() {
+            return mock(JwtDecoder.class);
+      }
 
-  @Bean
-  public OAuth2AuthorizedClientService authorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
-    return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
-  }
+      @Bean
+      public OAuth2AuthorizedClientService authorizedClientService(
+            ClientRegistrationRepository clientRegistrationRepository
+      ) {
+            return new InMemoryOAuth2AuthorizedClientService(
+                  clientRegistrationRepository
+            );
+      }
 
-  @Bean
-  public OAuth2AuthorizedClientRepository authorizedClientRepository(OAuth2AuthorizedClientService authorizedClientService) {
-    return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService);
-  }
+      @Bean
+      public OAuth2AuthorizedClientRepository authorizedClientRepository(
+            OAuth2AuthorizedClientService authorizedClientService
+      ) {
+            return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(
+                  authorizedClientService
+            );
+      }
 }

@@ -21,103 +21,165 @@ import org.springframework.stereotype.Component;
 @Component
 public class MailgunClient implements MailClient {
 
-  private final Logger LOGGER = LoggerFactory.getLogger(MailgunClient.class);
+      private final Logger LOGGER = LoggerFactory.getLogger(
+            MailgunClient.class
+      );
 
-  private HttpClient httpClient;
+      private HttpClient httpClient;
 
-  private boolean testMode;
+      private boolean testMode;
 
-  private String mailApiUrl;
+      private String mailApiUrl;
 
-  private String fromName;
+      private String fromName;
 
-  private String fromAddress;
+      private String fromAddress;
 
-  @Override
-  public void sendMail(String to, String cc, String subject, String html) throws MailException {
-    LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
+      @Override
+      public void sendMail(String to, String cc, String subject, String html)
+            throws MailException {
+            LOGGER.info(
+                  "Preparing email {} for sending to {} from {}",
+                  subject,
+                  to,
+                  getFrom()
+            );
 
-    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-    builder.setCharset(StandardCharsets.UTF_8);
-    builder.addTextBody("to", to);
-    builder.addTextBody("cc", cc);
-    builder.addTextBody("from", getFrom());
-    builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
-    builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setCharset(StandardCharsets.UTF_8);
+            builder.addTextBody("to", to);
+            builder.addTextBody("cc", cc);
+            builder.addTextBody("from", getFrom());
+            builder.addPart(
+                  "subject",
+                  new StringBody(
+                        subject,
+                        ContentType.create("text/plain", StandardCharsets.UTF_8)
+                  )
+            );
+            builder.addPart(
+                  "html",
+                  new StringBody(
+                        html,
+                        ContentType.create("text/html", StandardCharsets.UTF_8)
+                  )
+            );
 
-    if (testMode) {
-      builder.addTextBody("o:testmode", "yes");
-      LOGGER.info("Test mode email {} to {}", subject, to);
-      LOGGER.info(html);
-    } else {
-      LOGGER.info("Sending mail {} to {}", subject, to);
-      send(builder);
-    }
-  }
-
-  @Override
-  public void sendMailWithAttachment(String to, String cc, String subject, String html, File file) throws MailException {
-    LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
-
-    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-    builder.setCharset(StandardCharsets.UTF_8);
-    builder.addTextBody("to", to);
-    builder.addTextBody("cc", cc);
-    builder.addTextBody("from", getFrom());
-    builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
-    builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
-    builder.addPart("attachment", new FileBody(file));
-
-    if (testMode) {
-      builder.addTextBody("o:testmode", "yes");
-      LOGGER.info("Test mode email {} with attachment {} to {}", subject, file.getName(), to);
-      LOGGER.info(html);
-    } else {
-      LOGGER.info("Sending mail {} to {}", subject, to);
-      send(builder);
-    }
-  }
-
-  private void send(MultipartEntityBuilder builder) throws MailException {
-    HttpPost post = new HttpPost(mailApiUrl);
-    post.setEntity(builder.build());
-
-    try {
-      HttpResponse response = httpClient.execute(post);
-      if (response.getStatusLine().getStatusCode() != 200) {
-        LOGGER.warn("Received response {} from mailgun", response.getStatusLine().getReasonPhrase());
-        try (InputStream inputStream = response.getEntity().getContent()) {
-          LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
-        }
-      } else {
-        EntityUtils.consume(response.getEntity());
+            if (testMode) {
+                  builder.addTextBody("o:testmode", "yes");
+                  LOGGER.info("Test mode email {} to {}", subject, to);
+                  LOGGER.info(html);
+            } else {
+                  LOGGER.info("Sending mail {} to {}", subject, to);
+                  send(builder);
+            }
       }
-    } catch (IOException e) {
-      throw new MailException("Error posting mail to mailgun", e);
-    }
-  }
 
-  private String getFrom() {
-    return fromName != null ? fromName + " <" + fromAddress + ">" : fromAddress;
-  }
+      @Override
+      public void sendMailWithAttachment(
+            String to,
+            String cc,
+            String subject,
+            String html,
+            File file
+      ) throws MailException {
+            LOGGER.info(
+                  "Preparing email {} for sending to {} from {}",
+                  subject,
+                  to,
+                  getFrom()
+            );
 
-  public void setTestMode(boolean testMode) {
-    this.testMode = testMode;
-  }
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setCharset(StandardCharsets.UTF_8);
+            builder.addTextBody("to", to);
+            builder.addTextBody("cc", cc);
+            builder.addTextBody("from", getFrom());
+            builder.addPart(
+                  "subject",
+                  new StringBody(
+                        subject,
+                        ContentType.create("text/plain", StandardCharsets.UTF_8)
+                  )
+            );
+            builder.addPart(
+                  "html",
+                  new StringBody(
+                        html,
+                        ContentType.create("text/html", StandardCharsets.UTF_8)
+                  )
+            );
+            builder.addPart("attachment", new FileBody(file));
 
-  public void setMailApiUrl(String mailApiUrl) {
-    this.mailApiUrl = mailApiUrl;
-  }
+            if (testMode) {
+                  builder.addTextBody("o:testmode", "yes");
+                  LOGGER.info(
+                        "Test mode email {} with attachment {} to {}",
+                        subject,
+                        file.getName(),
+                        to
+                  );
+                  LOGGER.info(html);
+            } else {
+                  LOGGER.info("Sending mail {} to {}", subject, to);
+                  send(builder);
+            }
+      }
 
-  public void setFromName(String fromName) {
-    this.fromName = fromName;
-  }
+      private void send(MultipartEntityBuilder builder) throws MailException {
+            HttpPost post = new HttpPost(mailApiUrl);
+            post.setEntity(builder.build());
 
-  public void setFromAddress(String fromAddress) {
-    this.fromAddress = fromAddress;
-  }
+            try {
+                  HttpResponse response = httpClient.execute(post);
+                  if (response.getStatusLine().getStatusCode() != 200) {
+                        LOGGER.warn(
+                              "Received response {} from mailgun",
+                              response.getStatusLine().getReasonPhrase()
+                        );
+                        try (
+                              InputStream inputStream = response
+                                    .getEntity()
+                                    .getContent()
+                        ) {
+                              LOGGER.warn(
+                                    new String(
+                                          inputStream.readAllBytes(),
+                                          StandardCharsets.UTF_8
+                                    )
+                              );
+                        }
+                  } else {
+                        EntityUtils.consume(response.getEntity());
+                  }
+            } catch (IOException e) {
+                  throw new MailException("Error posting mail to mailgun", e);
+            }
+      }
 
-  public void setHttpClient(HttpClient httpClient) {
-    this.httpClient = httpClient;
-  }
+      private String getFrom() {
+            return fromName != null
+                  ? fromName + " <" + fromAddress + ">"
+                  : fromAddress;
+      }
+
+      public void setTestMode(boolean testMode) {
+            this.testMode = testMode;
+      }
+
+      public void setMailApiUrl(String mailApiUrl) {
+            this.mailApiUrl = mailApiUrl;
+      }
+
+      public void setFromName(String fromName) {
+            this.fromName = fromName;
+      }
+
+      public void setFromAddress(String fromAddress) {
+            this.fromAddress = fromAddress;
+      }
+
+      public void setHttpClient(HttpClient httpClient) {
+            this.httpClient = httpClient;
+      }
 }

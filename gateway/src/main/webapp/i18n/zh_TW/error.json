@@ -9,7 +9,9 @@
       "405": { "string": "此網址不支援您所使用的 HTTP 動詞。" },
       "500": { "string": "內部伺服器錯誤。" }
     },
-    "concurrencyFailure": { "string": "其他成員與您同時變更了此資料。系統已拒絕您的更動。" },
+    "concurrencyFailure": {
+      "string": "其他成員與您同時變更了此資料。系統已拒絕您的更動。"
+    },
     "validation": { "string": "伺服器發生驗證錯誤。" },
     "email": { "string": "電子郵件不是有效的格式" },
     "size": { "string": "未滿足最大 / 最小的大小條件！" },

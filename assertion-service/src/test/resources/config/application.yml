@@ -63,7 +63,7 @@ server:
 
 jhipster:
   clientApp:
-    name: 'assertionServiceApp'
+    name: "assertionServiceApp"
   security:
     authentication:
       jwt:

@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "Importa membri da CSV" }
       },
       "delete": {
-        "question": { "string": "Sei sicuro di voler eliminare {{ clientName }} dal Portale Membri?\n" },
+        "question": {
+          "string": "Sei sicuro di voler eliminare {{ clientName }} dal Portale Membri?\n"
+        },
         "anyUsersAndAffiliations": {
           "string": "Eventuali utenti e affiliazioni associati a questo membro verranno eliminati anche dal Portale Membri, tuttavia i dati aggiunti al Registro ORCID rimarranno in ORCID."
         }
@@ -20,7 +22,9 @@
       "import": {
         "title": { "string": "Importa i membri" },
         "label": { "string": "Seleziona un file CSV da caricare" },
-        "emptyFile": { "string": "Non ci sono file da caricare. Selezionane uno." },
+        "emptyFile": {
+          "string": "Non ci sono file da caricare. Selezionane uno."
+        },
         "filePath": { "string": "Percorso file" },
         "errors": {
           "label": {
@@ -30,8 +34,12 @@
       },
       "clientId": {
         "label": { "string": "Id cliente" },
-        "note": { "string": "Nota: l'ID cliente deve avere Membro OBO abilitato E" },
-        "addedAsRedirect": { "string": "aggiunto come URI di reindirizzamento in" }
+        "note": {
+          "string": "Nota: l'ID cliente deve avere Membro OBO abilitato E"
+        },
+        "addedAsRedirect": {
+          "string": "aggiunto come URI di reindirizzamento in"
+        }
       },
       "clientName": { "string": "Nome del membro" },
       "clientSecret": { "string": "Chiave di accesso segreta del client" },

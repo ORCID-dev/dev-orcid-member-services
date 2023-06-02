@@ -1,18 +1,18 @@
-const webpack = require('webpack');
-const writeFilePlugin = require('write-file-webpack-plugin');
-const webpackMerge = require('webpack-merge');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
-const path = require('path');
-const sass = require('sass');
+const webpack = require('webpack')
+const writeFilePlugin = require('write-file-webpack-plugin')
+const webpackMerge = require('webpack-merge')
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
+const WebpackNotifierPlugin = require('webpack-notifier')
+const path = require('path')
+const sass = require('sass')
 
-const utils = require('./utils.js');
-const commonConfig = require('./webpack.common.js');
+const utils = require('./utils.js')
+const commonConfig = require('./webpack.common.js')
 
-const ENV = 'development';
+const ENV = 'development'
 
 module.exports = options =>
   webpackMerge(commonConfig({ env: ENV }), {
@@ -20,7 +20,16 @@ module.exports = options =>
       contentBase: './target/classes/static/',
       proxy: [
         {
-          context: ['/api', '/services', '/management', '/config', '/swagger-resources', '/v2/api-docs', '/h2-console', '/auth'],
+          context: [
+            '/api',
+            '/services',
+            '/management',
+            '/config',
+            '/swagger-resources',
+            '/v2/api-docs',
+            '/h2-console',
+            '/auth',
+          ],
           target: `http${options.tls ? 's' : ''}://localhost:8761`,
           secure: false,
           changeOrigin: options.tls,
@@ -137,7 +146,10 @@ module.exports = options =>
           reload: false,
         }
       ),
-      new webpack.ContextReplacementPlugin(/angular(\\|\/)core(\\|\/)/, path.resolve(__dirname, './src/main/webapp/')),
+      new webpack.ContextReplacementPlugin(
+        /angular(\\|\/)core(\\|\/)/,
+        path.resolve(__dirname, './src/main/webapp/')
+      ),
       new writeFilePlugin(),
       new webpack.WatchIgnorePlugin([utils.root('src/test')]),
       new WebpackNotifierPlugin({
@@ -146,4 +158,4 @@ module.exports = options =>
       }),
     ].filter(Boolean),
     mode: 'development',
-  });
+  })

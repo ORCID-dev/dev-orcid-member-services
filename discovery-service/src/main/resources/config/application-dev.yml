@@ -87,10 +87,10 @@ eureka:
 jhipster:
   # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
   cors:
-    allowed-origins: '*'
-    allowed-methods: '*'
-    allowed-headers: '*'
-    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
     allow-credentials: true
     max-age: 1800
   security:

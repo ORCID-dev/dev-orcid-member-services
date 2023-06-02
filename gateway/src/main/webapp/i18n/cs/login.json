@@ -9,7 +9,9 @@
       "rememberme": { "string": "Zapamatujte si mě" },
       "button": { "string": "Přihlásit se" },
       "mfaCode": {
-        "prompt": { "string": "Zadejte prosím MFA kód z aplikace pro ověřování" },
+        "prompt": {
+          "string": "Zadejte prosím MFA kód z aplikace pro ověřování"
+        },
         "error": { "string": "Neplatný MFA kód" },
         "label": { "string": "MFA kód" }
       }

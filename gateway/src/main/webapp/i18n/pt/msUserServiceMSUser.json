@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "Importar utilizadores de CSV" }
       },
       "delete": {
-        "question": { "string": "Tem a certeza de que quer eliminar o utilizador {{ login }}?" }
+        "question": {
+          "string": "Tem a certeza de que quer eliminar o utilizador {{ login }}?"
+        }
       },
       "changeOwnership": {
         "question": {
@@ -27,9 +29,13 @@
         "title": { "string": "Importar utilizadores" },
         "label": { "string": "Selecione o ficheiro CRV que deseja carregar" },
         "filePath": { "string": "Caminho do ficheiro" },
-        "emptyFile": { "string": "Não existe nenhum ficheiro para carregar. Selecione um." },
+        "emptyFile": {
+          "string": "Não existe nenhum ficheiro para carregar. Selecione um."
+        },
         "errors": {
-          "label": { "string": "Ups! Ocorreu um problema com o processamento dos seus dados. Corrija os erros abaixo e tente novamente." }
+          "label": {
+            "string": "Ups! Ocorreu um problema com o processamento dos seus dados. Corrija os erros abaixo e tente novamente."
+          }
         }
       },
       "assertionService": {

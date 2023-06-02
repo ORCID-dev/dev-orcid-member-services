@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "Importer des utilisateurs depuis un CSV" }
       },
       "delete": {
-        "question": { "string": "Êtes-vous sûr(e) de vouloir supprimer l'utilisateur {{ login }} ?" }
+        "question": {
+          "string": "Êtes-vous sûr(e) de vouloir supprimer l'utilisateur {{ login }} ?"
+        }
       },
       "changeOwnership": {
         "question": {
@@ -25,9 +27,13 @@
       },
       "import": {
         "title": { "string": "Importer des utilisateurs" },
-        "label": { "string": "Veuillez sélectionner le fichier CSV à télécharger" },
+        "label": {
+          "string": "Veuillez sélectionner le fichier CSV à télécharger"
+        },
         "filePath": { "string": "Chemin du fichier" },
-        "emptyFile": { "string": "Il n'y a aucun fichier à transférer. Veuillez en sélectionner un." },
+        "emptyFile": {
+          "string": "Il n'y a aucun fichier à transférer. Veuillez en sélectionner un."
+        },
         "errors": {
           "label": {
             "string": "Oups ! Une erreur s'est produite dans le traitement de vos données. Veuillez corriger les erreurs ci-dessous et réessayer"
@@ -45,7 +51,9 @@
       "lastName": { "string": "Nom" },
       "mainContact": { "string": "Propriétaire de l'organisation" },
       "salesforceId": { "string": "Organisation" },
-      "parentSalesforceId": { "string": "Identifiant du service commercial parent" },
+      "parentSalesforceId": {
+        "string": "Identifiant du service commercial parent"
+      },
       "activated": { "string": "Activé" },
       "isAdmin": { "string": "Admin" },
       "createdBy": { "string": "Créé par" },

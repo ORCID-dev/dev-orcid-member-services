@@ -9,7 +9,9 @@
         "uploadLabel": { "string": "从 CSV 导入会员" }
       },
       "delete": {
-        "question": { "string": "确定要将 {{ clientName }} 从会员门户中删除吗？" },
+        "question": {
+          "string": "确定要将 {{ clientName }} 从会员门户中删除吗？"
+        },
         "anyUsersAndAffiliations": {
           "string": "任意与此会员关联的用户以及机构也会从会员门户删除，但是已添加至 ORCID 注册表的数据将保留在 ORCID 中。"
         }
@@ -23,7 +25,9 @@
         "emptyFile": { "string": "没有待上传的文件。请选择一个文件。" },
         "filePath": { "string": "文件路径" },
         "errors": {
-          "label": { "string": "糟糕！处理数据时出现问题。请修复下方错误，然后重试" }
+          "label": {
+            "string": "糟糕！处理数据时出现问题。请修复下方错误，然后重试"
+          }
         }
       },
       "clientId": {

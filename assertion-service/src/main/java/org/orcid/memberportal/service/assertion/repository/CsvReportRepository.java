@@ -7,7 +7,8 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CsvReportRepository extends MongoRepository<CsvReport, String> {
-  @Query("{ status: '" + CsvReport.UNPROCESSED_STATUS + "' }")
-  List<CsvReport> findAllUnprocessed();
+public interface CsvReportRepository
+      extends MongoRepository<CsvReport, String> {
+      @Query("{ status: '" + CsvReport.UNPROCESSED_STATUS + "' }")
+      List<CsvReport> findAllUnprocessed();
 }

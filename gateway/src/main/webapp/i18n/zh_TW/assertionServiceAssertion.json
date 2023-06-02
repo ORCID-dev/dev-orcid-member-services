@@ -71,7 +71,9 @@
         "languageDescription": {
           "string": "通知應以哪種語言傳送？"
         },
-        "alreadyInProgress": { "string": "您提出傳送通知給使用者的要求，系統目前已在處理中，請稍後再試。" },
+        "alreadyInProgress": {
+          "string": "您提出傳送通知給使用者的要求，系統目前已在處理中，請稍後再試。"
+        },
         "notificationInProgress": {
           "string": "通知程序已啟動。程序完成後，系統會儘快透過電子郵件通知您。"
         },

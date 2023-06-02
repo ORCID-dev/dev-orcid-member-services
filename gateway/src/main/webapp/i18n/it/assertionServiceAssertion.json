@@ -2,7 +2,9 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": { "string": "Affiliazione duplicata. Questa affiliazione è stata già creata." }
+        "duplicate": {
+          "string": "Affiliazione duplicata. Questa affiliazione è stata già creata."
+        }
       }
     }
   },
@@ -14,7 +16,9 @@
         "createOrEditLabel": { "string": "Aggiungi o modifica affiliazione" },
         "notFound": { "string": "Nessuna affiliazione trovata" },
         "uploadLabel": { "string": "Importa affiliazioni da CSV" },
-        "permissionNotificationsLabel": { "string": "Invia le notifiche dei permessi" },
+        "permissionNotificationsLabel": {
+          "string": "Invia le notifiche dei permessi"
+        },
         "forHelpTroubleshooting": {
           "string": "Se hai bisogno di aiuto per risolvere questo problema, contatta il tuo responsabile di consorzio oppure usa l'indirizzo membership@orcid.org. Allega uno screenshot del messaggio di errore qui sotto."
         }
@@ -58,7 +62,9 @@
         "successMessage": {
           "string": "Il tuo CSV è stato caricato per l'elaborazione. Ti comunicheremo via email l'avvenuta elaborazione."
         },
-        "failure": { "string": "Si è verificato un problema nel caricamento del tuo CSV che deve essere elaborato." }
+        "failure": {
+          "string": "Si è verificato un problema nel caricamento del tuo CSV che deve essere elaborato."
+        }
       },
       "notifications": {
         "title": { "string": "Invia le notifiche dei permessi" },
@@ -71,7 +77,9 @@
         "languageDescription": {
           "string": "In quale lingua vanno inviate le notifiche?"
         },
-        "alreadyInProgress": { "string": "È già in corso una richiesta per inviare notifiche agli utenti. Riprova più tardi." },
+        "alreadyInProgress": {
+          "string": "È già in corso una richiesta per inviare notifiche agli utenti. Riprova più tardi."
+        },
         "notificationInProgress": {
           "string": "La procedura di notifica è stata avviata. Ti scriveremo non appena sarà completata."
         },
@@ -152,13 +160,17 @@
       "UserDeletedFromOrcid": { "string": "L’utente l’ha eliminato da ORCID" },
       "userRevokedAccess": { "string": "L’utente ha revocato l’accesso" },
       "errorAddingToOrcid": { "string": "Errore nell’aggiunta su ORCID" },
-      "errorUpdatingInOrcid": { "string": "Errore nell’aggiornamento su ORCID" },
+      "errorUpdatingInOrcid": {
+        "string": "Errore nell’aggiornamento su ORCID"
+      },
       "pendingRetryInOrcid": { "string": "Nuovo tentativo in attesa su ORCID" },
       "errorDeletingInOrcid": { "string": "Errore nell’eliminazione su ORCID" },
       "notificationRequested": { "string": "Notifica richiesta" },
       "notificationSent": { "string": "Notifica inviata" },
       "notificationFailed": { "string": "Notifica non riuscita" },
-      "pendingUpdateInOrcid": { "string": "In attesa di aggiornamento su ORCID" }
+      "pendingUpdateInOrcid": {
+        "string": "In attesa di aggiornamento su ORCID"
+      }
     },
     "month": {
       "january": { "string": "Gennaio" },
@@ -180,7 +192,9 @@
       "created": { "string": "Affiliazione creata\n" },
       "updated": { "string": "Affiliazione aggiornata" },
       "deleted": { "string": "Affiliazione eliminata" },
-      "problemDeleting": { "string": "C'è stato un problema nella cancellazione dell'affiliazione" }
+      "problemDeleting": {
+        "string": "C'è stato un problema nella cancellazione dell'affiliazione"
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
-import { Route } from '@angular/router';
-import { ReplicasComponent } from './replicas.component';
+import { Route } from '@angular/router'
+import { ReplicasComponent } from './replicas.component'
 
 export const replicasRoute: Route = {
   path: '',
@@ -7,4 +7,4 @@ export const replicasRoute: Route = {
   data: {
     pageTitle: 'Replicas',
   },
-};
+}

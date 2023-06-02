@@ -2,7 +2,7 @@
 <!DOCTYPE configuration>
 <configuration scan="true">
     <property name="LOG_PATH" value="logs" />
-    
+
     <logger name="javax.activation" level="WARN" />
     <logger name="javax.mail" level="WARN" />
     <logger name="javax.management.remote" level="WARN" />
@@ -42,15 +42,23 @@
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
     </contextListener>
-    
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/member_service.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+    <appender
+        name="FILE"
+        class="ch.qos.logback.core.rolling.RollingFileAppender"
+    >
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"
+        >
+            <fileNamePattern
+            >${LOG_PATH}/member_service.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
-                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter" />
+                <jsonFormatter
+                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"
+                />
                 <appendLineSeparator>true</appendLineSeparator>
             </layout>
         </encoder>
@@ -61,7 +69,8 @@
     </root>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-          <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+          <pattern
+            >%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 

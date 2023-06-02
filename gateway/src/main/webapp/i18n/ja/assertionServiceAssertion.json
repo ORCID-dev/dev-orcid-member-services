@@ -2,7 +2,9 @@
   "error": {
     "assertion": {
       "validation": {
-        "duplicate": { "string": "アフィリエーションを複製する。こちらのアフィリエーションは既に作成されています。" }
+        "duplicate": {
+          "string": "アフィリエーションを複製する。こちらのアフィリエーションは既に作成されています。"
+        }
       }
     }
   },
@@ -27,7 +29,9 @@
           }
         },
         "affiliationsReport": {
-          "button": { "string": "アフィリエーションステータスレポートをリクエスト" },
+          "button": {
+            "string": "アフィリエーションステータスレポートをリクエスト"
+          },
           "confirmation": {
             "string": "アフィリエーションステータスレポートファイルが間もなく届きます。ファイルが届かない場合は、membership@orcid.orgまでご連絡ください。"
           }
@@ -58,7 +62,9 @@
         "successMessage": {
           "string": "あなたのCSVが処理用にアップロードされました。ファイルの処理が完了次第、メールでお知らせします。"
         },
-        "failure": { "string": "処理するためにCSVをアップロードする際に問題が発生しました。" }
+        "failure": {
+          "string": "処理するためにCSVをアップロードする際に問題が発生しました。"
+        }
       },
       "notifications": {
         "title": { "string": "許可通知を送信" },
@@ -71,7 +77,9 @@
         "languageDescription": {
           "string": "どの言語で通知を送信しますか？"
         },
-        "alreadyInProgress": { "string": "ユーザーへの通知送信リクエストを実行中です。後でもう一度お試しください。" },
+        "alreadyInProgress": {
+          "string": "ユーザーへの通知送信リクエストを実行中です。後でもう一度お試しください。"
+        },
         "notificationInProgress": {
           "string": "現在、通知処理を開始しています。手続きが完了し次第、メールでお知らせします。"
         },
@@ -151,10 +159,16 @@
       "userGrantedAccess": { "string": "ユーザーがアクセスを許可しました" },
       "UserDeletedFromOrcid": { "string": "ユーザーがORCIDから削除されました" },
       "userRevokedAccess": { "string": "ユーザーがアクセスを取り消しました" },
-      "errorAddingToOrcid": { "string": "ORCIDへの追加時にエラーが発生しました" },
-      "errorUpdatingInOrcid": { "string": "ORCIDの更新中にエラーが発生しました" },
+      "errorAddingToOrcid": {
+        "string": "ORCIDへの追加時にエラーが発生しました"
+      },
+      "errorUpdatingInOrcid": {
+        "string": "ORCIDの更新中にエラーが発生しました"
+      },
       "pendingRetryInOrcid": { "string": "ORCIDでの再試行を待機中です" },
-      "errorDeletingInOrcid": { "string": "ORCIDでの削除時にエラーが発生しました" },
+      "errorDeletingInOrcid": {
+        "string": "ORCIDでの削除時にエラーが発生しました"
+      },
       "notificationRequested": { "string": "通知をリクエストしました" },
       "notificationSent": { "string": "通知を送信しました" },
       "notificationFailed": { "string": "通知の送信に失敗しました" },
@@ -180,7 +194,9 @@
       "created": { "string": "アフィリエーションが作成されました" },
       "updated": { "string": "アフィリエーションが更新されました" },
       "deleted": { "string": "アフィリエーションが削除されました" },
-      "problemDeleting": { "string": "アフィリエーションの削除中に問題が発生しました" }
+      "problemDeleting": {
+        "string": "アフィリエーションの削除中に問題が発生しました"
+      }
     }
   }
 }

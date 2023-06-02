@@ -8,33 +8,33 @@ import org.springframework.cloud.client.ServiceInstance;
  */
 public class RouteVM {
 
-  private String path;
+      private String path;
 
-  private String serviceId;
+      private String serviceId;
 
-  private List<ServiceInstance> serviceInstances;
+      private List<ServiceInstance> serviceInstances;
 
-  public String getPath() {
-    return path;
-  }
+      public String getPath() {
+            return path;
+      }
 
-  public void setPath(String path) {
-    this.path = path;
-  }
+      public void setPath(String path) {
+            this.path = path;
+      }
 
-  public String getServiceId() {
-    return serviceId;
-  }
+      public String getServiceId() {
+            return serviceId;
+      }
 
-  public void setServiceId(String serviceId) {
-    this.serviceId = serviceId;
-  }
+      public void setServiceId(String serviceId) {
+            this.serviceId = serviceId;
+      }
 
-  public List<ServiceInstance> getServiceInstances() {
-    return serviceInstances;
-  }
+      public List<ServiceInstance> getServiceInstances() {
+            return serviceInstances;
+      }
 
-  public void setServiceInstances(List<ServiceInstance> serviceInstances) {
-    this.serviceInstances = serviceInstances;
-  }
+      public void setServiceInstances(List<ServiceInstance> serviceInstances) {
+            this.serviceInstances = serviceInstances;
+      }
 }
