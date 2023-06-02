@@ -32,141 +32,139 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Profile("!" + Constants.PROFILE_OAUTH2)
 public class JWTSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-      private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-      private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
+    private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
 
-      private final JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-      private final String username;
+    private final String username;
 
-      private final String password;
+    private final String password;
 
-      private final String[] roles;
+    private final String[] roles;
 
-      public JWTSecurityConfiguration(
-            @Value("${spring.security.user.name}") String username,
-            @Value("${spring.security.user.password}") String password,
-            @Value("${spring.security.user.roles}") String[] roles,
-            AuthenticationManagerBuilder authenticationManagerBuilder,
-            Http401UnauthorizedEntryPoint authenticationEntryPoint,
-            JHipsterProperties jHipsterProperties
-      ) {
-            this.username = username;
-            this.password = password;
-            this.roles = roles;
-            this.authenticationManagerBuilder = authenticationManagerBuilder;
-            this.authenticationEntryPoint = authenticationEntryPoint;
-            this.jHipsterProperties = jHipsterProperties;
-      }
+    public JWTSecurityConfiguration(
+        @Value("${spring.security.user.name}") String username,
+        @Value("${spring.security.user.password}") String password,
+        @Value("${spring.security.user.roles}") String[] roles,
+        AuthenticationManagerBuilder authenticationManagerBuilder,
+        Http401UnauthorizedEntryPoint authenticationEntryPoint,
+        JHipsterProperties jHipsterProperties
+    ) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
-      @PostConstruct
-      public void init() {
-            try {
-                  authenticationManagerBuilder
-                        .userDetailsService(userDetailsService())
-                        .passwordEncoder(passwordEncoder());
-            } catch (Exception e) {
-                  throw new BeanInitializationException(
-                        "Security configuration failed",
-                        e
-                  );
-            }
-      }
-
-      @Bean
-      @Override
-      public AuthenticationManager authenticationManagerBean()
-            throws Exception {
-            return super.authenticationManagerBean();
-      }
-
-      @Bean
-      public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-      }
-
-      @Bean
-      public UserDetailsService userDetailsService() {
-            InMemoryUserDetailsManager manager =
-                  new InMemoryUserDetailsManager();
-            manager.createUser(
-                  User
-                        .withUsername(username)
-                        .password(passwordEncoder().encode(password))
-                        .roles(roles)
-                        .build()
+    @PostConstruct
+    public void init() {
+        try {
+            authenticationManagerBuilder
+                .userDetailsService(userDetailsService())
+                .passwordEncoder(passwordEncoder());
+        } catch (Exception e) {
+            throw new BeanInitializationException(
+                "Security configuration failed",
+                e
             );
-            return manager;
-      }
+        }
+    }
 
-      @Override
-      public void configure(WebSecurity web) {
-            web
-                  .ignoring()
-                  .antMatchers("/app/**/*.{js,html}")
-                  .antMatchers("/swagger-ui/**")
-                  .antMatchers("/content/**");
-      }
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
-      @Override
-      protected void configure(HttpSecurity http) throws Exception {
-            http
-                  .cors()
-                  .and()
-                  .exceptionHandling()
-                  .authenticationEntryPoint(authenticationEntryPoint)
-                  .and()
-                  .csrf()
-                  .disable()
-                  .headers()
-                  .frameOptions()
-                  .disable()
-                  .and()
-                  .sessionManagement()
-                  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                  .and()
-                  .httpBasic()
-                  .realmName("JHipster Registry")
-                  .and()
-                  .authorizeRequests()
-                  .antMatchers("/services/**")
-                  .authenticated()
-                  .antMatchers("/eureka/**")
-                  .hasAuthority(AuthoritiesConstants.ADMIN)
-                  .antMatchers("/config/**")
-                  .hasAuthority(AuthoritiesConstants.ADMIN)
-                  .antMatchers("/api/authenticate")
-                  .permitAll()
-                  .antMatchers("/api/version")
-                  .permitAll()
-                  .antMatchers("/api/**")
-                  .hasAuthority(AuthoritiesConstants.ADMIN)
-                  .antMatchers("/management/health")
-                  .permitAll()
-                  .antMatchers("/management/**")
-                  .hasAuthority(AuthoritiesConstants.ADMIN)
-                  .antMatchers("/v2/api-docs/**")
-                  .permitAll()
-                  .antMatchers("/swagger-resources/configuration/**")
-                  .permitAll()
-                  .antMatchers("/swagger-ui/index.html")
-                  .hasAuthority(AuthoritiesConstants.ADMIN)
-                  .and()
-                  .apply(securityConfigurerAdapter());
-      }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-      private JWTConfigurer securityConfigurerAdapter() {
-            return new JWTConfigurer(tokenProvider());
-      }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(
+            User
+                .withUsername(username)
+                .password(passwordEncoder().encode(password))
+                .roles(roles)
+                .build()
+        );
+        return manager;
+    }
 
-      @Bean
-      public TokenProvider tokenProvider() {
-            return new TokenProvider(jHipsterProperties);
-      }
+    @Override
+    public void configure(WebSecurity web) {
+        web
+            .ignoring()
+            .antMatchers("/app/**/*.{js,html}")
+            .antMatchers("/swagger-ui/**")
+            .antMatchers("/content/**");
+    }
 
-      @Bean
-      public JWTTokenRelayFilter tokenRelayFilter() {
-            return new JWTTokenRelayFilter();
-      }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .cors()
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(authenticationEntryPoint)
+            .and()
+            .csrf()
+            .disable()
+            .headers()
+            .frameOptions()
+            .disable()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .httpBasic()
+            .realmName("JHipster Registry")
+            .and()
+            .authorizeRequests()
+            .antMatchers("/services/**")
+            .authenticated()
+            .antMatchers("/eureka/**")
+            .hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/config/**")
+            .hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/authenticate")
+            .permitAll()
+            .antMatchers("/api/version")
+            .permitAll()
+            .antMatchers("/api/**")
+            .hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/management/health")
+            .permitAll()
+            .antMatchers("/management/**")
+            .hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/v2/api-docs/**")
+            .permitAll()
+            .antMatchers("/swagger-resources/configuration/**")
+            .permitAll()
+            .antMatchers("/swagger-ui/index.html")
+            .hasAuthority(AuthoritiesConstants.ADMIN)
+            .and()
+            .apply(securityConfigurerAdapter());
+    }
+
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider());
+    }
+
+    @Bean
+    public TokenProvider tokenProvider() {
+        return new TokenProvider(jHipsterProperties);
+    }
+
+    @Bean
+    public JWTTokenRelayFilter tokenRelayFilter() {
+        return new JWTTokenRelayFilter();
+    }
 }

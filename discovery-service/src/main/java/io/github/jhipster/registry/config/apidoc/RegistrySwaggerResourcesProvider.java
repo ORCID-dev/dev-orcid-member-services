@@ -18,40 +18,40 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 @Primary
 @Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class RegistrySwaggerResourcesProvider
-      implements SwaggerResourcesProvider {
+    implements SwaggerResourcesProvider {
 
-      private final RouteLocator routeLocator;
+    private final RouteLocator routeLocator;
 
-      public RegistrySwaggerResourcesProvider(RouteLocator routeLocator) {
-            this.routeLocator = routeLocator;
-      }
+    public RegistrySwaggerResourcesProvider(RouteLocator routeLocator) {
+        this.routeLocator = routeLocator;
+    }
 
-      @Override
-      public List<SwaggerResource> get() {
-            List<SwaggerResource> resources = new ArrayList<>();
+    @Override
+    public List<SwaggerResource> get() {
+        List<SwaggerResource> resources = new ArrayList<>();
 
-            //Add the registry swagger resource that correspond to the jhipster-registry's own swagger doc
-            resources.add(swaggerResource("jhipster-registry", "/v2/api-docs"));
+        //Add the registry swagger resource that correspond to the jhipster-registry's own swagger doc
+        resources.add(swaggerResource("jhipster-registry", "/v2/api-docs"));
 
-            //Add the registered microservices swagger docs as additional swagger resources
-            List<Route> routes = routeLocator.getRoutes();
-            routes.forEach(route -> {
-                  resources.add(
-                        swaggerResource(
-                              route.getId(),
-                              route.getFullPath().replace("**", "v2/api-docs")
-                        )
-                  );
-            });
+        //Add the registered microservices swagger docs as additional swagger resources
+        List<Route> routes = routeLocator.getRoutes();
+        routes.forEach(route -> {
+            resources.add(
+                swaggerResource(
+                    route.getId(),
+                    route.getFullPath().replace("**", "v2/api-docs")
+                )
+            );
+        });
 
-            return resources;
-      }
+        return resources;
+    }
 
-      private SwaggerResource swaggerResource(String name, String location) {
-            SwaggerResource swaggerResource = new SwaggerResource();
-            swaggerResource.setName(name);
-            swaggerResource.setLocation(location);
-            swaggerResource.setSwaggerVersion("2.0");
-            return swaggerResource;
-      }
+    private SwaggerResource swaggerResource(String name, String location) {
+        SwaggerResource swaggerResource = new SwaggerResource();
+        swaggerResource.setName(name);
+        swaggerResource.setLocation(location);
+        swaggerResource.setSwaggerVersion("2.0");
+        return swaggerResource;
+    }
 }

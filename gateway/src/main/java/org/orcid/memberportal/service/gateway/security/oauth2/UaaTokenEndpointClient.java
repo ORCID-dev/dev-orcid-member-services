@@ -15,37 +15,37 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class UaaTokenEndpointClient
-      extends OAuth2TokenEndpointClientAdapter
-      implements OAuth2TokenEndpointClient {
+    extends OAuth2TokenEndpointClientAdapter
+    implements OAuth2TokenEndpointClient {
 
-      public UaaTokenEndpointClient(
-            @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
-            JHipsterProperties jHipsterProperties,
-            OAuth2Properties oAuth2Properties
-      ) {
-            super(restTemplate, jHipsterProperties, oAuth2Properties);
-      }
+    public UaaTokenEndpointClient(
+        @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
+        JHipsterProperties jHipsterProperties,
+        OAuth2Properties oAuth2Properties
+    ) {
+        super(restTemplate, jHipsterProperties, oAuth2Properties);
+    }
 
-      @Override
-      protected void addAuthentication(
-            HttpHeaders reqHeaders,
-            MultiValueMap<String, String> formParams
-      ) {
-            reqHeaders.add("Authorization", getAuthorizationHeader());
-      }
+    @Override
+    protected void addAuthentication(
+        HttpHeaders reqHeaders,
+        MultiValueMap<String, String> formParams
+    ) {
+        reqHeaders.add("Authorization", getAuthorizationHeader());
+    }
 
-      /**
-       * @return a Basic authorization header to be used to talk to UAA.
-       */
-      protected String getAuthorizationHeader() {
-            String clientId = getClientId();
-            String clientSecret = getClientSecret();
-            String authorization = clientId + ":" + clientSecret;
-            return (
-                  "Basic " +
-                  Base64Utils.encodeToString(
-                        authorization.getBytes(StandardCharsets.UTF_8)
-                  )
-            );
-      }
+    /**
+     * @return a Basic authorization header to be used to talk to UAA.
+     */
+    protected String getAuthorizationHeader() {
+        String clientId = getClientId();
+        String clientSecret = getClientSecret();
+        String authorization = clientId + ":" + clientSecret;
+        return (
+            "Basic " +
+            Base64Utils.encodeToString(
+                authorization.getBytes(StandardCharsets.UTF_8)
+            )
+        );
+    }
 }

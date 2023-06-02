@@ -11,76 +11,76 @@ import org.springframework.stereotype.Service;
 @Service
 public class AssertionService {
 
-      private static final Logger LOG = LoggerFactory.getLogger(
-            AssertionService.class
-      );
+    private static final Logger LOG = LoggerFactory.getLogger(
+        AssertionService.class
+    );
 
-      @Autowired
-      private AssertionServiceClient assertionServiceClient;
+    @Autowired
+    private AssertionServiceClient assertionServiceClient;
 
-      public String getOwnerIdForOrcidUser(String encryptedEmail) {
+    public String getOwnerIdForOrcidUser(String encryptedEmail) {
+        ResponseEntity<String> response = assertionServiceClient.getOwnerOfUser(
+            encryptedEmail
+        );
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        } else {
+            return null;
+        }
+    }
+
+    public void deleteAssertionsForSalesforceIn(String salesforceId) {
+        try {
             ResponseEntity<String> response =
-                  assertionServiceClient.getOwnerOfUser(encryptedEmail);
-            if (response.getStatusCode().is2xxSuccessful()) {
-                  return response.getBody();
-            } else {
-                  return null;
-            }
-      }
-
-      public void deleteAssertionsForSalesforceIn(String salesforceId) {
-            try {
-                  ResponseEntity<String> response =
-                        assertionServiceClient.deleteAssertionsForSalesforceId(
-                              salesforceId
-                        );
-                  if (!response.getStatusCode().is2xxSuccessful()) {
-                        LOG.warn(
-                              "Error deleting assertions for  salesforceId {}, response code {}",
-                              salesforceId,
-                              response.getStatusCodeValue()
-                        );
-                        throw new BadRequestAlertException(
-                              "Unable to delete assertions for salesforceId " +
-                              salesforceId,
-                              "member",
-                              "deleteAssertionsForSalesforceId.string"
-                        );
-                  }
-            } catch (Exception e) {
-                  LOG.error(
-                        "Error when trying to delete assertions for salesforceId: " +
-                        salesforceId,
-                        e
-                  );
-                  throw new BadRequestAlertException(
-                        "Unable to delete assertions for salesforceId " +
-                        salesforceId,
-                        "member",
-                        "deleteAssertionsForSalesforceId.string"
-                  );
-            }
-      }
-
-      public void updateAssertionsSalesforceId(
-            String salesforceId,
-            String newSalesforceId
-      ) {
-            ResponseEntity<String> response =
-                  assertionServiceClient.updateAssertionsSalesforceId(
-                        salesforceId,
-                        newSalesforceId
-                  );
+                assertionServiceClient.deleteAssertionsForSalesforceId(
+                    salesforceId
+                );
             if (!response.getStatusCode().is2xxSuccessful()) {
-                  LOG.warn(
-                        "Error updating assertions for  salesforceId {} to the new salesforceId {}, response code {}",
-                        salesforceId,
-                        newSalesforceId,
-                        response.getStatusCodeValue()
-                  );
-                  throw new RuntimeException(
-                        "Error updating assertions' salesforce ids"
-                  );
+                LOG.warn(
+                    "Error deleting assertions for  salesforceId {}, response code {}",
+                    salesforceId,
+                    response.getStatusCodeValue()
+                );
+                throw new BadRequestAlertException(
+                    "Unable to delete assertions for salesforceId " +
+                    salesforceId,
+                    "member",
+                    "deleteAssertionsForSalesforceId.string"
+                );
             }
-      }
+        } catch (Exception e) {
+            LOG.error(
+                "Error when trying to delete assertions for salesforceId: " +
+                salesforceId,
+                e
+            );
+            throw new BadRequestAlertException(
+                "Unable to delete assertions for salesforceId " + salesforceId,
+                "member",
+                "deleteAssertionsForSalesforceId.string"
+            );
+        }
+    }
+
+    public void updateAssertionsSalesforceId(
+        String salesforceId,
+        String newSalesforceId
+    ) {
+        ResponseEntity<String> response =
+            assertionServiceClient.updateAssertionsSalesforceId(
+                salesforceId,
+                newSalesforceId
+            );
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            LOG.warn(
+                "Error updating assertions for  salesforceId {} to the new salesforceId {}, response code {}",
+                salesforceId,
+                newSalesforceId,
+                response.getStatusCodeValue()
+            );
+            throw new RuntimeException(
+                "Error updating assertions' salesforce ids"
+            );
+        }
+    }
 }

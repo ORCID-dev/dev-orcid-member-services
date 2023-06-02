@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class HealthService {
 
-      @Autowired
-      private HealthClient healthClient;
+    @Autowired
+    private HealthClient healthClient;
 
-      public SimpleHealthDTO checkHealth(String healthCheckUrl)
-            throws IOException {
-            return healthClient.getHealth(healthCheckUrl);
-      }
+    public SimpleHealthDTO checkHealth(String healthCheckUrl)
+        throws IOException {
+        return healthClient.getHealth(healthCheckUrl);
+    }
 }

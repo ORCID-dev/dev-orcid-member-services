@@ -18,43 +18,42 @@ import org.springframework.web.client.RestTemplate;
 @Profile(PROFILE_UAA)
 public class UaaConfiguration {
 
-      public static final String CLIENT_REGISTRATION_ID = "uaa";
+    public static final String CLIENT_REGISTRATION_ID = "uaa";
 
-      private final ClientRegistrationRepository clientRegistrationRepository;
-      private final RestTemplateBuilder restTemplateBuilder;
+    private final ClientRegistrationRepository clientRegistrationRepository;
+    private final RestTemplateBuilder restTemplateBuilder;
 
-      public UaaConfiguration(
-            ClientRegistrationRepository clientRegistrationRepository,
-            RestTemplateBuilder restTemplateBuilder
-      ) {
-            this.clientRegistrationRepository = clientRegistrationRepository;
-            this.restTemplateBuilder = restTemplateBuilder;
-      }
+    public UaaConfiguration(
+        ClientRegistrationRepository clientRegistrationRepository,
+        RestTemplateBuilder restTemplateBuilder
+    ) {
+        this.clientRegistrationRepository = clientRegistrationRepository;
+        this.restTemplateBuilder = restTemplateBuilder;
+    }
 
-      @Bean
-      @LoadBalanced
-      public RestTemplate uaaRestTemplate() {
-            ClientRegistration clientRegistration =
-                  clientRegistrationRepository.findByRegistrationId(
-                        CLIENT_REGISTRATION_ID
-                  );
-            if (null == clientRegistration) {
-                  throw new IllegalArgumentException(
-                        "Invalid Client Registration with Id: " +
-                        CLIENT_REGISTRATION_ID
-                  );
-            }
+    @Bean
+    @LoadBalanced
+    public RestTemplate uaaRestTemplate() {
+        ClientRegistration clientRegistration =
+            clientRegistrationRepository.findByRegistrationId(
+                CLIENT_REGISTRATION_ID
+            );
+        if (null == clientRegistration) {
+            throw new IllegalArgumentException(
+                "Invalid Client Registration with Id: " + CLIENT_REGISTRATION_ID
+            );
+        }
 
-            return restTemplateBuilder
-                  .messageConverters(
-                        new FormHttpMessageConverter(),
-                        new OAuth2AccessTokenResponseHttpMessageConverter()
-                  )
-                  .errorHandler(new OAuth2ErrorResponseErrorHandler())
-                  .basicAuthentication(
-                        clientRegistration.getClientId(),
-                        clientRegistration.getClientSecret()
-                  )
-                  .build();
-      }
+        return restTemplateBuilder
+            .messageConverters(
+                new FormHttpMessageConverter(),
+                new OAuth2AccessTokenResponseHttpMessageConverter()
+            )
+            .errorHandler(new OAuth2ErrorResponseErrorHandler())
+            .basicAuthentication(
+                clientRegistration.getClientId(),
+                clientRegistration.getClientSecret()
+            )
+            .build();
+    }
 }

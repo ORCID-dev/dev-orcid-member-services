@@ -25,94 +25,88 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptUtil implements InitializingBean {
 
-      @Autowired
-      private ApplicationProperties applicationProperties;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
-      private SecretKeyFactory factory;
+    private SecretKeyFactory factory;
 
-      private KeySpec spec;
+    private KeySpec spec;
 
-      public String encrypt(String toEncrypt) {
-            try {
-                  Key key = new SecretKeySpec(
-                        factory.generateSecret(spec).getEncoded(),
-                        "AES"
-                  );
-                  Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-                  c.init(
-                        Cipher.ENCRYPT_MODE,
-                        key,
-                        new IvParameterSpec(
-                              hex(applicationProperties.getEncryptSalt())
-                        )
-                  );
+    public String encrypt(String toEncrypt) {
+        try {
+            Key key = new SecretKeySpec(
+                factory.generateSecret(spec).getEncoded(),
+                "AES"
+            );
+            Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            c.init(
+                Cipher.ENCRYPT_MODE,
+                key,
+                new IvParameterSpec(hex(applicationProperties.getEncryptSalt()))
+            );
 
-                  byte[] encVal = c.doFinal(toEncrypt.getBytes());
-                  return new String(Base64.encodeBase64URLSafe(encVal));
-            } catch (
-                  NoSuchAlgorithmException
-                  | InvalidKeySpecException
-                  | NoSuchPaddingException
-                  | InvalidKeyException
-                  | InvalidAlgorithmParameterException
-                  | IllegalBlockSizeException
-                  | BadPaddingException n
-            ) {
-                  throw new RuntimeException(n);
-            }
-      }
+            byte[] encVal = c.doFinal(toEncrypt.getBytes());
+            return new String(Base64.encodeBase64URLSafe(encVal));
+        } catch (
+            NoSuchAlgorithmException
+            | InvalidKeySpecException
+            | NoSuchPaddingException
+            | InvalidKeyException
+            | InvalidAlgorithmParameterException
+            | IllegalBlockSizeException
+            | BadPaddingException n
+        ) {
+            throw new RuntimeException(n);
+        }
+    }
 
-      public String decrypt(String toDecrypt) {
-            try {
-                  Key key = new SecretKeySpec(
-                        factory.generateSecret(spec).getEncoded(),
-                        "AES"
-                  );
-                  Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-                  c.init(
-                        Cipher.DECRYPT_MODE,
-                        key,
-                        new IvParameterSpec(
-                              hex(applicationProperties.getEncryptSalt())
-                        )
-                  );
-                  return new String(c.doFinal(Base64.decodeBase64(toDecrypt)));
-            } catch (
-                  NoSuchAlgorithmException
-                  | InvalidKeySpecException
-                  | NoSuchPaddingException
-                  | InvalidKeyException
-                  | InvalidAlgorithmParameterException
-                  | IllegalBlockSizeException
-                  | BadPaddingException n
-            ) {
-                  throw new RuntimeException(n);
-            }
-      }
+    public String decrypt(String toDecrypt) {
+        try {
+            Key key = new SecretKeySpec(
+                factory.generateSecret(spec).getEncoded(),
+                "AES"
+            );
+            Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            c.init(
+                Cipher.DECRYPT_MODE,
+                key,
+                new IvParameterSpec(hex(applicationProperties.getEncryptSalt()))
+            );
+            return new String(c.doFinal(Base64.decodeBase64(toDecrypt)));
+        } catch (
+            NoSuchAlgorithmException
+            | InvalidKeySpecException
+            | NoSuchPaddingException
+            | InvalidKeyException
+            | InvalidAlgorithmParameterException
+            | IllegalBlockSizeException
+            | BadPaddingException n
+        ) {
+            throw new RuntimeException(n);
+        }
+    }
 
-      private static byte[] hex(String str) {
-            try {
-                  return Hex.decodeHex(str.toCharArray());
-            } catch (DecoderException e) {
-                  throw new IllegalStateException(e);
-            }
-      }
+    private static byte[] hex(String str) {
+        try {
+            return Hex.decodeHex(str.toCharArray());
+        } catch (DecoderException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
-      @Override
-      public void afterPropertiesSet() throws Exception {
-            try {
-                  factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-                  spec =
-                        new PBEKeySpec(
-                              applicationProperties
-                                    .getEncryptKey()
-                                    .toCharArray(),
-                              hex(applicationProperties.getEncryptSalt()),
-                              1000,
-                              128
-                        );
-            } catch (NoSuchAlgorithmException e) {
-                  throw new RuntimeException(e);
-            }
-      }
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        try {
+            factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            spec =
+                new PBEKeySpec(
+                    applicationProperties.getEncryptKey().toCharArray(),
+                    hex(applicationProperties.getEncryptSalt()),
+                    1000,
+                    128
+                );
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

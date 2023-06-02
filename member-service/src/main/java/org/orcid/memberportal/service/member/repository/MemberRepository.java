@@ -13,18 +13,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface MemberRepository extends MongoRepository<Member, String> {
-      Optional<Member> findBySalesforceId(String salesforceId);
+    Optional<Member> findBySalesforceId(String salesforceId);
 
-      Optional<Member> findByClientName(String clientName);
+    Optional<Member> findByClientName(String clientName);
 
-      Boolean existsBySalesforceId(String salesforceId);
+    Boolean existsBySalesforceId(String salesforceId);
 
-      List<Member> findAllByOrderByClientNameAsc();
+    List<Member> findAllByOrderByClientNameAsc();
 
-      Page<Member> findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
-            String clientName,
-            String salesforceId,
-            String parentSalesforceId,
-            Pageable pageable
-      );
+    Page<Member> findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
+        String clientName,
+        String salesforceId,
+        String parentSalesforceId,
+        Pageable pageable
+    );
 }

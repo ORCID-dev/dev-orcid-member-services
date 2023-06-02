@@ -8,23 +8,23 @@ import java.util.Map;
  */
 public class EurekaVM {
 
-      private List<Map<String, Object>> applications;
+    private List<Map<String, Object>> applications;
 
-      private Map<String, Object> status;
+    private Map<String, Object> status;
 
-      public List<Map<String, Object>> getApplications() {
-            return applications;
-      }
+    public List<Map<String, Object>> getApplications() {
+        return applications;
+    }
 
-      public void setApplications(List<Map<String, Object>> applications) {
-            this.applications = applications;
-      }
+    public void setApplications(List<Map<String, Object>> applications) {
+        this.applications = applications;
+    }
 
-      public Map<String, Object> getStatus() {
-            return status;
-      }
+    public Map<String, Object> getStatus() {
+        return status;
+    }
 
-      public void setStatus(Map<String, Object> status) {
-            this.status = status;
-      }
+    public void setStatus(Map<String, Object> status) {
+        this.status = status;
+    }
 }

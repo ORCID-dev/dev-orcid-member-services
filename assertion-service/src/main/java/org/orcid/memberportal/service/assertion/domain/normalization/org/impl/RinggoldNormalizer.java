@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class RinggoldNormalizer implements OrgNormalizer {
 
-      @Override
-      public String normalizeOrgId(String orgId) {
-            return orgId;
-      }
+    @Override
+    public String normalizeOrgId(String orgId) {
+        return orgId;
+    }
 
-      @Override
-      public String getOrgSource() {
-            return Constants.RINGGOLD_ORG_SOURCE;
-      }
+    @Override
+    public String getOrgSource() {
+        return Constants.RINGGOLD_ORG_SOURCE;
+    }
 }

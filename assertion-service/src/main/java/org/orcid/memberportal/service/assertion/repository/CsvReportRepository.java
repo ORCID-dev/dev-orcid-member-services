@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CsvReportRepository
-      extends MongoRepository<CsvReport, String> {
-      @Query("{ status: '" + CsvReport.UNPROCESSED_STATUS + "' }")
-      List<CsvReport> findAllUnprocessed();
+    extends MongoRepository<CsvReport, String> {
+    @Query("{ status: '" + CsvReport.UNPROCESSED_STATUS + "' }")
+    List<CsvReport> findAllUnprocessed();
 }

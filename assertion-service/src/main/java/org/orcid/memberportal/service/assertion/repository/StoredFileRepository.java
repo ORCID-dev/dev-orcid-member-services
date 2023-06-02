@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StoredFileRepository
-      extends MongoRepository<StoredFile, String> {
-      @Query("{fileType: ?0, dateProcessed: null}")
-      List<StoredFile> findUnprocessedByType(String type);
+    extends MongoRepository<StoredFile, String> {
+    @Query("{fileType: ?0, dateProcessed: null}")
+    List<StoredFile> findUnprocessedByType(String type);
 
-      @Query("{ dateProcessed: { $exists: true }}")
-      List<StoredFile> findProcessedFiles();
+    @Query("{ dateProcessed: { $exists: true }}")
+    List<StoredFile> findProcessedFiles();
 }

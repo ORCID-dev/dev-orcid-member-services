@@ -15,63 +15,57 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
  */
 public class CookieTokenExtractorTest {
 
-      private CookieTokenExtractor cookieTokenExtractor;
+    private CookieTokenExtractor cookieTokenExtractor;
 
-      @BeforeEach
-      public void init() {
-            cookieTokenExtractor = new CookieTokenExtractor();
-      }
+    @BeforeEach
+    public void init() {
+        cookieTokenExtractor = new CookieTokenExtractor();
+    }
 
-      @Test
-      public void testExtractTokenCookie() {
-            MockHttpServletRequest request =
-                  OAuth2AuthenticationServiceTest.createMockHttpServletRequest();
-            Authentication authentication = cookieTokenExtractor.extract(
-                  request
-            );
-            Assertions.assertEquals(
-                  OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
-                  authentication.getPrincipal().toString()
-            );
-      }
+    @Test
+    public void testExtractTokenCookie() {
+        MockHttpServletRequest request =
+            OAuth2AuthenticationServiceTest.createMockHttpServletRequest();
+        Authentication authentication = cookieTokenExtractor.extract(request);
+        Assertions.assertEquals(
+            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
+            authentication.getPrincipal().toString()
+        );
+    }
 
-      @Test
-      public void testExtractTokenHeader() {
-            MockHttpServletRequest request = new MockHttpServletRequest(
-                  HttpMethod.GET.name(),
-                  "http://www.test.com"
-            );
-            request.addHeader(
-                  "Authorization",
-                  OAuth2AccessToken.BEARER_TYPE +
-                  " " +
-                  OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE
-            );
-            Authentication authentication = cookieTokenExtractor.extract(
-                  request
-            );
-            Assertions.assertEquals(
-                  OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
-                  authentication.getPrincipal().toString()
-            );
-      }
+    @Test
+    public void testExtractTokenHeader() {
+        MockHttpServletRequest request = new MockHttpServletRequest(
+            HttpMethod.GET.name(),
+            "http://www.test.com"
+        );
+        request.addHeader(
+            "Authorization",
+            OAuth2AccessToken.BEARER_TYPE +
+            " " +
+            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE
+        );
+        Authentication authentication = cookieTokenExtractor.extract(request);
+        Assertions.assertEquals(
+            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
+            authentication.getPrincipal().toString()
+        );
+    }
 
-      @Test
-      public void testExtractTokenParam() {
-            MockHttpServletRequest request = new MockHttpServletRequest(
-                  HttpMethod.GET.name(),
-                  "http://www.test.com"
-            );
-            request.addParameter(
-                  OAuth2AccessToken.ACCESS_TOKEN,
-                  OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE
-            );
-            Authentication authentication = cookieTokenExtractor.extract(
-                  request
-            );
-            Assertions.assertEquals(
-                  OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
-                  authentication.getPrincipal().toString()
-            );
-      }
+    @Test
+    public void testExtractTokenParam() {
+        MockHttpServletRequest request = new MockHttpServletRequest(
+            HttpMethod.GET.name(),
+            "http://www.test.com"
+        );
+        request.addParameter(
+            OAuth2AccessToken.ACCESS_TOKEN,
+            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE
+        );
+        Authentication authentication = cookieTokenExtractor.extract(request);
+        Assertions.assertEquals(
+            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
+            authentication.getPrincipal().toString()
+        );
+    }
 }

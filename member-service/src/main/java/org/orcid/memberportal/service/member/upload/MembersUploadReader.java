@@ -5,8 +5,8 @@ import java.io.InputStream;
 import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 
 public interface MembersUploadReader {
-      public MemberUpload readMemberUpload(
-            InputStream inputStream,
-            MemberServiceUser user
-      ) throws IOException;
+    public MemberUpload readMemberUpload(
+        InputStream inputStream,
+        MemberServiceUser user
+    ) throws IOException;
 }

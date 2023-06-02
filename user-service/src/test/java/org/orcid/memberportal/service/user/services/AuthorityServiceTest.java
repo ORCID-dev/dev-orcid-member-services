@@ -16,383 +16,333 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuthorityServiceTest {
 
-      @Mock
-      private MemberService memberService;
+    @Mock
+    private MemberService memberService;
 
-      @InjectMocks
-      private AuthorityService authorityService;
+    @InjectMocks
+    private AuthorityService authorityService;
 
-      @BeforeEach
-      public void setUp() {
-            MockitoAnnotations.initMocks(this);
-            SecurityContextHolder.setContext(
-                  new MockSecurityContext("username")
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        SecurityContextHolder.setContext(new MockSecurityContext("username"));
+    }
+
+    @Test
+    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminEnabled() {
+        Mockito
+            .when(
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    Mockito.eq("salesforce-id")
+                )
+            )
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsConsortiumLead(
+                    Mockito.eq("salesforce-id")
+                )
+            )
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsAdminEnabled(Mockito.eq("salesforce-id"))
+            )
+            .thenReturn(true);
+
+        User user = new User();
+        user.setSalesforceId("salesforce-id");
+        user.setAdmin(true);
+        user.setMainContact(true);
+
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        assertThat(authorities).isNotNull();
+        assertThat(authorities.size()).isEqualTo(5);
+        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.ADMIN)).isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
+            .isTrue();
+        assertThat(
+            authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)
+        )
+            .isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD))
+            .isTrue();
+
+        Mockito
+            .verify(memberService)
+            .memberExistsWithSalesforceIdAndAssertionsEnabled(
+                Mockito.eq("salesforce-id")
             );
-      }
+        Mockito
+            .verify(memberService)
+            .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
+        Mockito
+            .verify(memberService)
+            .memberIsAdminEnabled(Mockito.eq("salesforce-id"));
+    }
 
-      @Test
-      void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminEnabled() {
-            Mockito
-                  .when(
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsConsortiumLead(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsAdminEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
+    @Test
+    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminNotEnabledOnMember() {
+        Mockito
+            .when(
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    Mockito.eq("salesforce-id")
+                )
+            )
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsConsortiumLead(
+                    Mockito.eq("salesforce-id")
+                )
+            )
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsAdminEnabled(Mockito.eq("salesforce-id"))
+            )
+            .thenReturn(false);
 
-            User user = new User();
-            user.setSalesforceId("salesforce-id");
-            user.setAdmin(true);
-            user.setMainContact(true);
+        User user = new User();
+        user.setSalesforceId("salesforce-id");
+        user.setAdmin(true);
+        user.setMainContact(true);
 
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        assertThat(authorities).isNotNull();
+        assertThat(authorities.size()).isEqualTo(4);
+        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
+            .isTrue();
+        assertThat(
+            authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)
+        )
+            .isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD))
+            .isTrue();
+
+        Mockito
+            .verify(memberService)
+            .memberExistsWithSalesforceIdAndAssertionsEnabled(
+                Mockito.eq("salesforce-id")
             );
-            assertThat(authorities).isNotNull();
-            assertThat(authorities.size()).isEqualTo(5);
-            assertThat(authorities.contains(AuthoritiesConstants.USER))
-                  .isTrue();
-            assertThat(authorities.contains(AuthoritiesConstants.ADMIN))
-                  .isTrue();
-            assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
-                  .isTrue();
-            assertThat(
-                  authorities.contains(
-                        AuthoritiesConstants.ASSERTION_SERVICE_ENABLED
-                  )
+        Mockito
+            .verify(memberService)
+            .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
+        Mockito
+            .verify(memberService)
+            .memberIsAdminEnabled(Mockito.eq("salesforce-id"));
+    }
+
+    @Test
+    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminDisabledOnUser() {
+        Mockito
+            .when(
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
-            assertThat(
-                  authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsConsortiumLead(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
+            .thenReturn(true);
 
-            Mockito
-                  .verify(memberService)
-                  .memberExistsWithSalesforceIdAndAssertionsEnabled(
-                        Mockito.eq("salesforce-id")
-                  );
-            Mockito
-                  .verify(memberService)
-                  .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-            Mockito
-                  .verify(memberService)
-                  .memberIsAdminEnabled(Mockito.eq("salesforce-id"));
-      }
+        User user = new User();
+        user.setSalesforceId("salesforce-id");
+        user.setAdmin(false);
+        user.setMainContact(true);
 
-      @Test
-      void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminNotEnabledOnMember() {
-            Mockito
-                  .when(
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsConsortiumLead(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsAdminEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(false);
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        assertThat(authorities).isNotNull();
+        assertThat(authorities.size()).isEqualTo(4);
+        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
+            .isTrue();
+        assertThat(
+            authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)
+        )
+            .isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD))
+            .isTrue();
 
-            User user = new User();
-            user.setSalesforceId("salesforce-id");
-            user.setAdmin(true);
-            user.setMainContact(true);
-
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
+        Mockito
+            .verify(memberService)
+            .memberExistsWithSalesforceIdAndAssertionsEnabled(
+                Mockito.eq("salesforce-id")
             );
-            assertThat(authorities).isNotNull();
-            assertThat(authorities.size()).isEqualTo(4);
-            assertThat(authorities.contains(AuthoritiesConstants.USER))
-                  .isTrue();
-            assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
-                  .isTrue();
-            assertThat(
-                  authorities.contains(
-                        AuthoritiesConstants.ASSERTION_SERVICE_ENABLED
-                  )
+        Mockito
+            .verify(memberService)
+            .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
+    }
+
+    @Test
+    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminDisabledOnUserAndOrg() {
+        Mockito
+            .when(
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
-            assertThat(
-                  authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsConsortiumLead(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
+            .thenReturn(true);
 
-            Mockito
-                  .verify(memberService)
-                  .memberExistsWithSalesforceIdAndAssertionsEnabled(
-                        Mockito.eq("salesforce-id")
-                  );
-            Mockito
-                  .verify(memberService)
-                  .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-            Mockito
-                  .verify(memberService)
-                  .memberIsAdminEnabled(Mockito.eq("salesforce-id"));
-      }
+        User user = new User();
+        user.setSalesforceId("salesforce-id");
+        user.setAdmin(false);
+        user.setMainContact(true);
 
-      @Test
-      void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminDisabledOnUser() {
-            Mockito
-                  .when(
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsConsortiumLead(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        assertThat(authorities).isNotNull();
+        assertThat(authorities.size()).isEqualTo(4);
+        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
+            .isTrue();
+        assertThat(
+            authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)
+        )
+            .isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD))
+            .isTrue();
 
-            User user = new User();
-            user.setSalesforceId("salesforce-id");
-            user.setAdmin(false);
-            user.setMainContact(true);
-
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
+        Mockito
+            .verify(memberService)
+            .memberExistsWithSalesforceIdAndAssertionsEnabled(
+                Mockito.eq("salesforce-id")
             );
-            assertThat(authorities).isNotNull();
-            assertThat(authorities.size()).isEqualTo(4);
-            assertThat(authorities.contains(AuthoritiesConstants.USER))
-                  .isTrue();
-            assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
-                  .isTrue();
-            assertThat(
-                  authorities.contains(
-                        AuthoritiesConstants.ASSERTION_SERVICE_ENABLED
-                  )
+        Mockito
+            .verify(memberService)
+            .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
+    }
+
+    @Test
+    void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadNotOrgOwner() {
+        Mockito
+            .when(
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
-            assertThat(
-                  authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsConsortiumLead(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
+            .thenReturn(true);
 
-            Mockito
-                  .verify(memberService)
-                  .memberExistsWithSalesforceIdAndAssertionsEnabled(
-                        Mockito.eq("salesforce-id")
-                  );
-            Mockito
-                  .verify(memberService)
-                  .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-      }
+        User user = new User();
+        user.setSalesforceId("salesforce-id");
+        user.setAdmin(false);
+        user.setMainContact(false);
 
-      @Test
-      void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadOrgOwnerAdminDisabledOnUserAndOrg() {
-            Mockito
-                  .when(
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsConsortiumLead(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        assertThat(authorities).isNotNull();
+        assertThat(authorities.size()).isEqualTo(3);
+        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
+        assertThat(
+            authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)
+        )
+            .isTrue();
+        assertThat(authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD))
+            .isTrue();
 
-            User user = new User();
-            user.setSalesforceId("salesforce-id");
-            user.setAdmin(false);
-            user.setMainContact(true);
-
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
+        Mockito
+            .verify(memberService)
+            .memberExistsWithSalesforceIdAndAssertionsEnabled(
+                Mockito.eq("salesforce-id")
             );
-            assertThat(authorities).isNotNull();
-            assertThat(authorities.size()).isEqualTo(4);
-            assertThat(authorities.contains(AuthoritiesConstants.USER))
-                  .isTrue();
-            assertThat(authorities.contains(AuthoritiesConstants.ORG_OWNER))
-                  .isTrue();
-            assertThat(
-                  authorities.contains(
-                        AuthoritiesConstants.ASSERTION_SERVICE_ENABLED
-                  )
+        Mockito
+            .verify(memberService)
+            .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
+    }
+
+    @Test
+    void testGetAuthoritiesForUser_assertionsEnabledNotConsortiumLead() {
+        Mockito
+            .when(
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
-            assertThat(
-                  authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)
+            .thenReturn(true);
+        Mockito
+            .when(
+                memberService.memberIsConsortiumLead(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
+            .thenReturn(false);
 
-            Mockito
-                  .verify(memberService)
-                  .memberExistsWithSalesforceIdAndAssertionsEnabled(
-                        Mockito.eq("salesforce-id")
-                  );
-            Mockito
-                  .verify(memberService)
-                  .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-      }
+        User user = new User();
+        user.setSalesforceId("salesforce-id");
+        user.setAdmin(false);
+        user.setMainContact(false);
 
-      @Test
-      void testGetAuthoritiesForUser_assertionsEnabledConsortiumLeadNotOrgOwner() {
-            Mockito
-                  .when(
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsConsortiumLead(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        assertThat(authorities).isNotNull();
+        assertThat(authorities.size()).isEqualTo(2);
+        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
+        assertThat(
+            authorities.contains(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED)
+        )
+            .isTrue();
 
-            User user = new User();
-            user.setSalesforceId("salesforce-id");
-            user.setAdmin(false);
-            user.setMainContact(false);
-
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
+        Mockito
+            .verify(memberService)
+            .memberExistsWithSalesforceIdAndAssertionsEnabled(
+                Mockito.eq("salesforce-id")
             );
-            assertThat(authorities).isNotNull();
-            assertThat(authorities.size()).isEqualTo(3);
-            assertThat(authorities.contains(AuthoritiesConstants.USER))
-                  .isTrue();
-            assertThat(
-                  authorities.contains(
-                        AuthoritiesConstants.ASSERTION_SERVICE_ENABLED
-                  )
+        Mockito
+            .verify(memberService)
+            .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
+    }
+
+    @Test
+    void testGetAuthoritiesForUser_noAssertionsEnabled() {
+        Mockito
+            .when(
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
-            assertThat(
-                  authorities.contains(AuthoritiesConstants.CONSORTIUM_LEAD)
+            .thenReturn(false);
+        Mockito
+            .when(
+                memberService.memberIsConsortiumLead(
+                    Mockito.eq("salesforce-id")
+                )
             )
-                  .isTrue();
+            .thenReturn(false);
 
-            Mockito
-                  .verify(memberService)
-                  .memberExistsWithSalesforceIdAndAssertionsEnabled(
-                        Mockito.eq("salesforce-id")
-                  );
-            Mockito
-                  .verify(memberService)
-                  .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-      }
+        User user = new User();
+        user.setSalesforceId("salesforce-id");
+        user.setAdmin(false);
+        user.setMainContact(false);
 
-      @Test
-      void testGetAuthoritiesForUser_assertionsEnabledNotConsortiumLead() {
-            Mockito
-                  .when(
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(true);
-            Mockito
-                  .when(
-                        memberService.memberIsConsortiumLead(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(false);
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        assertThat(authorities).isNotNull();
+        assertThat(authorities.size()).isEqualTo(1);
+        assertThat(authorities.contains(AuthoritiesConstants.USER)).isTrue();
 
-            User user = new User();
-            user.setSalesforceId("salesforce-id");
-            user.setAdmin(false);
-            user.setMainContact(false);
-
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
+        Mockito
+            .verify(memberService)
+            .memberExistsWithSalesforceIdAndAssertionsEnabled(
+                Mockito.eq("salesforce-id")
             );
-            assertThat(authorities).isNotNull();
-            assertThat(authorities.size()).isEqualTo(2);
-            assertThat(authorities.contains(AuthoritiesConstants.USER))
-                  .isTrue();
-            assertThat(
-                  authorities.contains(
-                        AuthoritiesConstants.ASSERTION_SERVICE_ENABLED
-                  )
-            )
-                  .isTrue();
-
-            Mockito
-                  .verify(memberService)
-                  .memberExistsWithSalesforceIdAndAssertionsEnabled(
-                        Mockito.eq("salesforce-id")
-                  );
-            Mockito
-                  .verify(memberService)
-                  .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-      }
-
-      @Test
-      void testGetAuthoritiesForUser_noAssertionsEnabled() {
-            Mockito
-                  .when(
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(false);
-            Mockito
-                  .when(
-                        memberService.memberIsConsortiumLead(
-                              Mockito.eq("salesforce-id")
-                        )
-                  )
-                  .thenReturn(false);
-
-            User user = new User();
-            user.setSalesforceId("salesforce-id");
-            user.setAdmin(false);
-            user.setMainContact(false);
-
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
-            );
-            assertThat(authorities).isNotNull();
-            assertThat(authorities.size()).isEqualTo(1);
-            assertThat(authorities.contains(AuthoritiesConstants.USER))
-                  .isTrue();
-
-            Mockito
-                  .verify(memberService)
-                  .memberExistsWithSalesforceIdAndAssertionsEnabled(
-                        Mockito.eq("salesforce-id")
-                  );
-            Mockito
-                  .verify(memberService)
-                  .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
-      }
+        Mockito
+            .verify(memberService)
+            .memberIsConsortiumLead(Mockito.eq("salesforce-id"));
+    }
 }

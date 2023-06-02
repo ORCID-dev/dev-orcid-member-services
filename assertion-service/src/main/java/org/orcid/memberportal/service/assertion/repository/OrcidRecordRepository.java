@@ -11,15 +11,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrcidRecordRepository
-      extends MongoRepository<OrcidRecord, String> {
-      Optional<OrcidRecord> findOneByEmail(String email);
+    extends MongoRepository<OrcidRecord, String> {
+    Optional<OrcidRecord> findOneByEmail(String email);
 
-      @Query(value = "{tokens: {salesforce_id: ?0}}")
-      List<OrcidRecord> findAllToInvite(String salesforceId);
+    @Query(value = "{tokens: {salesforce_id: ?0}}")
+    List<OrcidRecord> findAllToInvite(String salesforceId);
 
-      @Query("{tokens: {salesforce_id: ?0}}")
-      Page<OrcidRecord> findBySalesforceId(
-            String salesforceId,
-            Pageable pageable
-      );
+    @Query("{tokens: {salesforce_id: ?0}}")
+    Page<OrcidRecord> findBySalesforceId(
+        String salesforceId,
+        Pageable pageable
+    );
 }

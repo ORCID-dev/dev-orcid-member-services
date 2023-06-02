@@ -5,13 +5,13 @@ package org.orcid.memberportal.service.user.web.rest.vm;
  */
 public class KeyVM {
 
-      private String key;
+    private String key;
 
-      public String getKey() {
-            return key;
-      }
+    public String getKey() {
+        return key;
+    }
 
-      public void setKey(String key) {
-            this.key = key;
-      }
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

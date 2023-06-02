@@ -30,146 +30,138 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest(classes = JHipsterRegistryApp.class)
 public class UserJWTControllerIT {
 
-      @MockBean
-      private TokenProvider tokenProvider;
+    @MockBean
+    private TokenProvider tokenProvider;
 
-      @Autowired
-      private AuthenticationManagerBuilder authenticationManagerBuilder;
+    @Autowired
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
 
-      @Autowired
-      private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-      private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-      @BeforeEach
-      public void setup() {
-            UserJWTController userJWTController = new UserJWTController(
-                  tokenProvider,
-                  authenticationManagerBuilder
+    @BeforeEach
+    public void setup() {
+        UserJWTController userJWTController = new UserJWTController(
+            tokenProvider,
+            authenticationManagerBuilder
+        );
+        this.mockMvc =
+            MockMvcBuilders
+                .standaloneSetup(userJWTController)
+                .setControllerAdvice(exceptionTranslator)
+                .build();
+    }
+
+    @Test
+    public void normalAuthentication() throws Exception {
+        // Normal authentication
+        LoginVM vm = new LoginVM();
+        vm.setUsername("admin");
+        vm.setPassword("admin");
+        vm.setRememberMe(true);
+
+        doReturn("fakeToken")
+            .when(tokenProvider)
+            .createToken(
+                Mockito.any(Authentication.class),
+                Mockito.anyBoolean()
             );
-            this.mockMvc =
-                  MockMvcBuilders
-                        .standaloneSetup(userJWTController)
-                        .setControllerAdvice(exceptionTranslator)
-                        .build();
-      }
 
-      @Test
-      public void normalAuthentication() throws Exception {
-            // Normal authentication
-            LoginVM vm = new LoginVM();
-            vm.setUsername("admin");
-            vm.setPassword("admin");
-            vm.setRememberMe(true);
+        mockMvc
+            .perform(
+                post("/api/authenticate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(
+                        MediaType.APPLICATION_JSON,
+                        MediaType.TEXT_PLAIN,
+                        MediaType.ALL
+                    )
+                    .content(new ObjectMapper().writeValueAsString(vm))
+            )
+            .andExpect(content().string("{\"id_token\":\"fakeToken\"}"))
+            .andExpect(status().isOk());
+    }
 
-            doReturn("fakeToken")
-                  .when(tokenProvider)
-                  .createToken(
-                        Mockito.any(Authentication.class),
-                        Mockito.anyBoolean()
-                  );
-
-            mockMvc
-                  .perform(
-                        post("/api/authenticate")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .accept(
-                                    MediaType.APPLICATION_JSON,
-                                    MediaType.TEXT_PLAIN,
-                                    MediaType.ALL
-                              )
-                              .content(
-                                    new ObjectMapper().writeValueAsString(vm)
-                              )
-                  )
-                  .andExpect(content().string("{\"id_token\":\"fakeToken\"}"))
-                  .andExpect(status().isOk());
-      }
-
-      @Test
-      public void authenticationException() throws Exception {
-            // Authentication exception throws
-            doThrow(new AuthenticationException(null) {})
-                  .when(tokenProvider)
-                  .createToken(
-                        Mockito.any(Authentication.class),
-                        Mockito.anyBoolean()
-                  );
-
-            mockMvc
-                  .perform(
-                        post("/api/authenticate")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .accept(
-                                    MediaType.APPLICATION_JSON,
-                                    MediaType.TEXT_PLAIN,
-                                    MediaType.ALL
-                              )
-                  )
-                  .andExpect(status().isBadRequest())
-                  .andExpect(
-                        jsonPath("$.message")
-                              .value(
-                                    startsWith(
-                                          "Bad Request: Required request body is missing"
-                                    )
-                              )
-                  );
-      }
-
-      @Test
-      public void badCredentials() throws Exception {
-            LoginVM vm = new LoginVM();
-            vm.setUsername("badcred");
-            vm.setPassword("badcred");
-            vm.setRememberMe(true);
-
-            mockMvc
-                  .perform(
-                        post("/api/authenticate")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .accept(
-                                    MediaType.APPLICATION_JSON,
-                                    MediaType.TEXT_PLAIN,
-                                    MediaType.ALL
-                              )
-                              .content(
-                                    new ObjectMapper().writeValueAsString(vm)
-                              )
-                  )
-                  .andExpect(status().isUnauthorized())
-                  .andExpect(
-                        jsonPath("$.message")
-                              .value("Unauthorized: Bad credentials")
-                  );
-      }
-
-      @Test
-      public void getIdTokenTest() {
-            assertThat(new UserJWTController.JWTToken("id").getIdToken())
-                  .isNotNull();
-            assertThat(new UserJWTController.JWTToken("id").getIdToken())
-                  .isEqualTo("id");
-            assertThat(new UserJWTController.JWTToken(null).getIdToken())
-                  .isNull();
-      }
-
-      @Test
-      public void setIdTokenTest() {
-            UserJWTController.JWTToken token = new UserJWTController.JWTToken(
-                  "id"
+    @Test
+    public void authenticationException() throws Exception {
+        // Authentication exception throws
+        doThrow(new AuthenticationException(null) {})
+            .when(tokenProvider)
+            .createToken(
+                Mockito.any(Authentication.class),
+                Mockito.anyBoolean()
             );
-            assertThat(token.getIdToken()).isNotNull();
 
-            assertThat(token.getIdToken()).isNotEqualTo("id2");
-            token.setIdToken("id2");
-            assertThat(token.getIdToken()).isEqualTo("id2");
+        mockMvc
+            .perform(
+                post("/api/authenticate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(
+                        MediaType.APPLICATION_JSON,
+                        MediaType.TEXT_PLAIN,
+                        MediaType.ALL
+                    )
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(
+                jsonPath("$.message")
+                    .value(
+                        startsWith(
+                            "Bad Request: Required request body is missing"
+                        )
+                    )
+            );
+    }
 
-            token.setIdToken(null);
-            assertThat(token.getIdToken()).isNull();
+    @Test
+    public void badCredentials() throws Exception {
+        LoginVM vm = new LoginVM();
+        vm.setUsername("badcred");
+        vm.setPassword("badcred");
+        vm.setRememberMe(true);
 
-            token = new UserJWTController.JWTToken(null);
-            token.setIdToken(null);
-            assertThat(token.getIdToken()).isNull();
-      }
+        mockMvc
+            .perform(
+                post("/api/authenticate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(
+                        MediaType.APPLICATION_JSON,
+                        MediaType.TEXT_PLAIN,
+                        MediaType.ALL
+                    )
+                    .content(new ObjectMapper().writeValueAsString(vm))
+            )
+            .andExpect(status().isUnauthorized())
+            .andExpect(
+                jsonPath("$.message").value("Unauthorized: Bad credentials")
+            );
+    }
+
+    @Test
+    public void getIdTokenTest() {
+        assertThat(new UserJWTController.JWTToken("id").getIdToken())
+            .isNotNull();
+        assertThat(new UserJWTController.JWTToken("id").getIdToken())
+            .isEqualTo("id");
+        assertThat(new UserJWTController.JWTToken(null).getIdToken()).isNull();
+    }
+
+    @Test
+    public void setIdTokenTest() {
+        UserJWTController.JWTToken token = new UserJWTController.JWTToken("id");
+        assertThat(token.getIdToken()).isNotNull();
+
+        assertThat(token.getIdToken()).isNotEqualTo("id2");
+        token.setIdToken("id2");
+        assertThat(token.getIdToken()).isEqualTo("id2");
+
+        token.setIdToken(null);
+        assertThat(token.getIdToken()).isNull();
+
+        token = new UserJWTController.JWTToken(null);
+        token.setIdToken(null);
+        assertThat(token.getIdToken()).isNull();
+    }
 }

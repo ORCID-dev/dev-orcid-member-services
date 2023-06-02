@@ -31,45 +31,45 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 public class DatabaseConfiguration {
 
-      private final Logger log = LoggerFactory.getLogger(
-            DatabaseConfiguration.class
-      );
+    private final Logger log = LoggerFactory.getLogger(
+        DatabaseConfiguration.class
+    );
 
-      @Bean
-      public ValidatingMongoEventListener validatingMongoEventListener() {
-            return new ValidatingMongoEventListener(validator());
-      }
+    @Bean
+    public ValidatingMongoEventListener validatingMongoEventListener() {
+        return new ValidatingMongoEventListener(validator());
+    }
 
-      @Bean
-      public LocalValidatorFactoryBean validator() {
-            return new LocalValidatorFactoryBean();
-      }
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
+    }
 
-      @Bean
-      public MongoCustomConversions customConversions() {
-            List<Converter<?, ?>> converters = new ArrayList<>();
-            converters.add(DateToZonedDateTimeConverter.INSTANCE);
-            converters.add(ZonedDateTimeToDateConverter.INSTANCE);
-            return new MongoCustomConversions(converters);
-      }
+    @Bean
+    public MongoCustomConversions customConversions() {
+        List<Converter<?, ?>> converters = new ArrayList<>();
+        converters.add(DateToZonedDateTimeConverter.INSTANCE);
+        converters.add(ZonedDateTimeToDateConverter.INSTANCE);
+        return new MongoCustomConversions(converters);
+    }
 
-      @Bean
-      public Mongobee mongobee(
-            MongoClient mongoClient,
-            MongoTemplate mongoTemplate,
-            MongoProperties mongoProperties,
-            Environment environment
-      ) {
-            log.debug("Configuring Mongobee");
-            Mongobee mongobee = new Mongobee(mongoClient);
-            mongobee.setSpringEnvironment(environment);
-            mongobee.setDbName(mongoProperties.getMongoClientDatabase());
-            mongobee.setMongoTemplate(mongoTemplate);
-            // package to scan for migrations
-            mongobee.setChangeLogsScanPackage(
-                  "org.orcid.memberportal.service.member.config.dbmigrations"
-            );
-            mongobee.setEnabled(true);
-            return mongobee;
-      }
+    @Bean
+    public Mongobee mongobee(
+        MongoClient mongoClient,
+        MongoTemplate mongoTemplate,
+        MongoProperties mongoProperties,
+        Environment environment
+    ) {
+        log.debug("Configuring Mongobee");
+        Mongobee mongobee = new Mongobee(mongoClient);
+        mongobee.setSpringEnvironment(environment);
+        mongobee.setDbName(mongoProperties.getMongoClientDatabase());
+        mongobee.setMongoTemplate(mongoTemplate);
+        // package to scan for migrations
+        mongobee.setChangeLogsScanPackage(
+            "org.orcid.memberportal.service.member.config.dbmigrations"
+        );
+        mongobee.setEnabled(true);
+        return mongobee;
+    }
 }

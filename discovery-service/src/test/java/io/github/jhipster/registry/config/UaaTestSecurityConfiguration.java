@@ -17,35 +17,33 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 @TestConfiguration
 public class UaaTestSecurityConfiguration {
 
-      private final ClientRegistration clientRegistration;
+    private final ClientRegistration clientRegistration;
 
-      public UaaTestSecurityConfiguration() {
-            this.clientRegistration = clientRegistration().build();
-      }
+    public UaaTestSecurityConfiguration() {
+        this.clientRegistration = clientRegistration().build();
+    }
 
-      @Bean
-      ClientRegistrationRepository clientRegistrationRepository() {
-            return new InMemoryClientRegistrationRepository(clientRegistration);
-      }
+    @Bean
+    ClientRegistrationRepository clientRegistrationRepository() {
+        return new InMemoryClientRegistrationRepository(clientRegistration);
+    }
 
-      private ClientRegistration.Builder clientRegistration() {
-            return ClientRegistration
-                  .withRegistrationId(CLIENT_REGISTRATION_ID)
-                  .authorizationGrantType(
-                        AuthorizationGrantType.CLIENT_CREDENTIALS
-                  )
-                  .tokenUri("https://uaa/oauth/token")
-                  .clientName("Client Name")
-                  .clientId("client-id")
-                  .clientSecret("client-secret");
-      }
+    private ClientRegistration.Builder clientRegistration() {
+        return ClientRegistration
+            .withRegistrationId(CLIENT_REGISTRATION_ID)
+            .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+            .tokenUri("https://uaa/oauth/token")
+            .clientName("Client Name")
+            .clientId("client-id")
+            .clientSecret("client-secret");
+    }
 
-      @Bean
-      public OAuth2AuthorizedClientService authorizedClientService(
-            ClientRegistrationRepository clientRegistrationRepository
-      ) {
-            return new InMemoryOAuth2AuthorizedClientService(
-                  clientRegistrationRepository
-            );
-      }
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService(
+        ClientRegistrationRepository clientRegistrationRepository
+    ) {
+        return new InMemoryOAuth2AuthorizedClientService(
+            clientRegistrationRepository
+        );
+    }
 }

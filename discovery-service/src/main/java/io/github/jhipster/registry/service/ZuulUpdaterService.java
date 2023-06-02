@@ -24,146 +24,121 @@ import org.springframework.stereotype.Service;
 @Service
 public class ZuulUpdaterService {
 
-      private final Logger log = LoggerFactory.getLogger(
-            ZuulUpdaterService.class
-      );
+    private final Logger log = LoggerFactory.getLogger(
+        ZuulUpdaterService.class
+    );
 
-      private final RouteLocator routeLocator;
+    private final RouteLocator routeLocator;
 
-      private final ZuulProperties zuulProperties;
+    private final ZuulProperties zuulProperties;
 
-      private final ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher publisher;
 
-      public ZuulUpdaterService(
-            RouteLocator routeLocator,
-            ZuulProperties zuulProperties,
-            ApplicationEventPublisher publisher
-      ) {
-            this.routeLocator = routeLocator;
-            this.zuulProperties = zuulProperties;
-            this.publisher = publisher;
-      }
+    public ZuulUpdaterService(
+        RouteLocator routeLocator,
+        ZuulProperties zuulProperties,
+        ApplicationEventPublisher publisher
+    ) {
+        this.routeLocator = routeLocator;
+        this.zuulProperties = zuulProperties;
+        this.publisher = publisher;
+    }
 
-      @Scheduled(fixedDelay = 5_000)
-      public void updateZuulRoutes() {
-            boolean isDirty = false;
+    @Scheduled(fixedDelay = 5_000)
+    public void updateZuulRoutes() {
+        boolean isDirty = false;
 
-            List<Application> applications = EurekaServerContextHolder
-                  .getInstance()
-                  .getServerContext()
-                  .getRegistry()
-                  .getApplications()
-                  .getRegisteredApplications();
+        List<Application> applications = EurekaServerContextHolder
+            .getInstance()
+            .getServerContext()
+            .getRegistry()
+            .getApplications()
+            .getRegisteredApplications();
 
-            for (Application application : applications) {
-                  for (InstanceInfo instanceInfos : application.getInstances()) {
-                        if (
-                              !instanceInfos
-                                    .getStatus()
-                                    .equals(InstanceInfo.InstanceStatus.UP) &&
-                              !instanceInfos
-                                    .getStatus()
-                                    .equals(
-                                          InstanceInfo.InstanceStatus.STARTING
-                                    )
-                        ) continue;
-                        String instanceId = instanceInfos.getId();
-                        String url = instanceInfos.getHomePageUrl();
+        for (Application application : applications) {
+            for (InstanceInfo instanceInfos : application.getInstances()) {
+                if (
+                    !instanceInfos
+                        .getStatus()
+                        .equals(InstanceInfo.InstanceStatus.UP) &&
+                    !instanceInfos
+                        .getStatus()
+                        .equals(InstanceInfo.InstanceStatus.STARTING)
+                ) continue;
+                String instanceId = instanceInfos.getId();
+                String url = instanceInfos.getHomePageUrl();
+                log.debug("Checking instance {} - {} ", instanceId, url);
+
+                ZuulRouteDTO route = new ZuulRouteDTO(
+                    instanceId,
+                    "/" +
+                    application.getName().toLowerCase() +
+                    "/" +
+                    instanceId +
+                    "/**",
+                    null,
+                    url,
+                    zuulProperties.isStripPrefix(),
+                    zuulProperties.getRetryable(),
+                    Collections.emptySet(),
+                    instanceInfos.getStatus().toString()
+                );
+
+                if (zuulProperties.getRoutes().containsKey(instanceId)) {
+                    log.debug("Instance '{}' already registered", instanceId);
+                    if (
+                        !zuulProperties
+                            .getRoutes()
+                            .get(instanceId)
+                            .getUrl()
+                            .equals(url) ||
+                        !(
+                            (ZuulRouteDTO) zuulProperties
+                                .getRoutes()
+                                .get(instanceId)
+                        ).getStatus()
+                            .equals(instanceInfos.getStatus().toString())
+                    ) {
                         log.debug(
-                              "Checking instance {} - {} ",
-                              instanceId,
-                              url
+                            "Updating instance '{}' with new URL: {}",
+                            instanceId,
+                            url
                         );
-
-                        ZuulRouteDTO route = new ZuulRouteDTO(
-                              instanceId,
-                              "/" +
-                              application.getName().toLowerCase() +
-                              "/" +
-                              instanceId +
-                              "/**",
-                              null,
-                              url,
-                              zuulProperties.isStripPrefix(),
-                              zuulProperties.getRetryable(),
-                              Collections.emptySet(),
-                              instanceInfos.getStatus().toString()
-                        );
-
-                        if (
-                              zuulProperties.getRoutes().containsKey(instanceId)
-                        ) {
-                              log.debug(
-                                    "Instance '{}' already registered",
-                                    instanceId
-                              );
-                              if (
-                                    !zuulProperties
-                                          .getRoutes()
-                                          .get(instanceId)
-                                          .getUrl()
-                                          .equals(url) ||
-                                    !(
-                                          (ZuulRouteDTO) zuulProperties
-                                                .getRoutes()
-                                                .get(instanceId)
-                                    ).getStatus()
-                                          .equals(
-                                                instanceInfos
-                                                      .getStatus()
-                                                      .toString()
-                                          )
-                              ) {
-                                    log.debug(
-                                          "Updating instance '{}' with new URL: {}",
-                                          instanceId,
-                                          url
-                                    );
-                                    zuulProperties
-                                          .getRoutes()
-                                          .put(instanceId, route);
-                                    isDirty = true;
-                              }
-                        } else {
-                              log.debug(
-                                    "Adding instance '{}' with URL: {}",
-                                    instanceId,
-                                    url
-                              );
-                              zuulProperties.getRoutes().put(instanceId, route);
-                              isDirty = true;
-                        }
-                  }
-            }
-            List<String> zuulRoutesToRemove = new ArrayList<>();
-            for (String key : zuulProperties.getRoutes().keySet()) {
-                  if (
-                        applications
-                              .stream()
-                              .flatMap(application ->
-                                    application.getInstances().stream()
-                              )
-                              .filter(instanceInfo ->
-                                    instanceInfo.getId().equals(key)
-                              )
-                              .count() ==
-                        0
-                  ) {
-                        log.debug("Removing instance '{}'", key);
-                        zuulRoutesToRemove.add(key);
+                        zuulProperties.getRoutes().put(instanceId, route);
                         isDirty = true;
-                  }
+                    }
+                } else {
+                    log.debug(
+                        "Adding instance '{}' with URL: {}",
+                        instanceId,
+                        url
+                    );
+                    zuulProperties.getRoutes().put(instanceId, route);
+                    isDirty = true;
+                }
             }
-            for (String key : zuulRoutesToRemove) {
-                  zuulProperties.getRoutes().remove(key);
+        }
+        List<String> zuulRoutesToRemove = new ArrayList<>();
+        for (String key : zuulProperties.getRoutes().keySet()) {
+            if (
+                applications
+                    .stream()
+                    .flatMap(application -> application.getInstances().stream())
+                    .filter(instanceInfo -> instanceInfo.getId().equals(key))
+                    .count() ==
+                0
+            ) {
+                log.debug("Removing instance '{}'", key);
+                zuulRoutesToRemove.add(key);
+                isDirty = true;
             }
-            if (isDirty) {
-                  log.info(
-                        "Zuul routes have changed - refreshing the configuration"
-                  );
-                  this.publisher.publishEvent(
-                              new RoutesRefreshedEvent(routeLocator)
-                        );
-            }
-      }
+        }
+        for (String key : zuulRoutesToRemove) {
+            zuulProperties.getRoutes().remove(key);
+        }
+        if (isDirty) {
+            log.info("Zuul routes have changed - refreshing the configuration");
+            this.publisher.publishEvent(new RoutesRefreshedEvent(routeLocator));
+        }
+    }
 }

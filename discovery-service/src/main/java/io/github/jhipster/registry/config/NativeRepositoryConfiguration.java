@@ -14,11 +14,11 @@ import org.springframework.context.annotation.Profile;
 @Profile("native")
 class NativeRepositoryConfiguration {
 
-      @Bean
-      public NativeEnvironmentRepository nativeEnvironmentRepository(
-            NativeEnvironmentRepositoryFactory factory,
-            NativeEnvironmentProperties environmentProperties
-      ) {
-            return factory.build(environmentProperties);
-      }
+    @Bean
+    public NativeEnvironmentRepository nativeEnvironmentRepository(
+        NativeEnvironmentRepositoryFactory factory,
+        NativeEnvironmentProperties environmentProperties
+    ) {
+        return factory.build(environmentProperties);
+    }
 }

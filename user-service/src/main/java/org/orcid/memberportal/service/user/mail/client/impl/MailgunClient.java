@@ -24,85 +24,77 @@ import org.springframework.stereotype.Component;
 @Component
 public class MailgunClient implements MailClient {
 
-      private final Logger LOGGER = LoggerFactory.getLogger(
-            MailgunClient.class
-      );
+    private final Logger LOGGER = LoggerFactory.getLogger(MailgunClient.class);
 
-      @Autowired
-      private ApplicationProperties applicationProperties;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
-      @Autowired
-      private HttpClient client;
+    @Autowired
+    private HttpClient client;
 
-      @Override
-      public void sendMail(String to, String subject, String html)
-            throws MailException {
-            LOGGER.info(
-                  "Preparing email {} for sending to {} from {}",
-                  subject,
-                  to,
-                  getFrom()
+    @Override
+    public void sendMail(String to, String subject, String html)
+        throws MailException {
+        LOGGER.info(
+            "Preparing email {} for sending to {} from {}",
+            subject,
+            to,
+            getFrom()
+        );
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        urlParameters.add(new BasicNameValuePair("to", to));
+        urlParameters.add(new BasicNameValuePair("from", getFrom()));
+        urlParameters.add(new BasicNameValuePair("subject", subject));
+        urlParameters.add(new BasicNameValuePair("html", html));
+
+        if (applicationProperties.isMailTestMode()) {
+            urlParameters.add(new BasicNameValuePair("o:testmode", "yes"));
+            LOGGER.info("Test mode email {} to {}", subject, to);
+            LOGGER.info(html);
+        }
+
+        HttpPost post = new HttpPost(applicationProperties.getMailApiUrl());
+        try {
+            post.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new MailException(
+                "Error encoding url params for post body",
+                e
             );
-            List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("to", to));
-            urlParameters.add(new BasicNameValuePair("from", getFrom()));
-            urlParameters.add(new BasicNameValuePair("subject", subject));
-            urlParameters.add(new BasicNameValuePair("html", html));
+        }
 
-            if (applicationProperties.isMailTestMode()) {
-                  urlParameters.add(
-                        new BasicNameValuePair("o:testmode", "yes")
-                  );
-                  LOGGER.info("Test mode email {} to {}", subject, to);
-                  LOGGER.info(html);
+        try {
+            LOGGER.info("Sending mail {} to {}", subject, to);
+            HttpResponse response = client.execute(post);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                LOGGER.warn(
+                    "Received response {} from mailgun: {}",
+                    response.getStatusLine().getReasonPhrase()
+                );
+                try (
+                    InputStream inputStream = response.getEntity().getContent()
+                ) {
+                    LOGGER.warn(
+                        new String(
+                            inputStream.readAllBytes(),
+                            StandardCharsets.UTF_8
+                        )
+                    );
+                }
+            } else {
+                EntityUtils.consume(response.getEntity());
             }
+        } catch (IOException e) {
+            throw new MailException("Error posting mail to mailgun", e);
+        }
+    }
 
-            HttpPost post = new HttpPost(applicationProperties.getMailApiUrl());
-            try {
-                  post.setEntity(
-                        new UrlEncodedFormEntity(urlParameters, "UTF-8")
-                  );
-            } catch (UnsupportedEncodingException e) {
-                  throw new MailException(
-                        "Error encoding url params for post body",
-                        e
-                  );
-            }
-
-            try {
-                  LOGGER.info("Sending mail {} to {}", subject, to);
-                  HttpResponse response = client.execute(post);
-                  if (response.getStatusLine().getStatusCode() != 200) {
-                        LOGGER.warn(
-                              "Received response {} from mailgun: {}",
-                              response.getStatusLine().getReasonPhrase()
-                        );
-                        try (
-                              InputStream inputStream = response
-                                    .getEntity()
-                                    .getContent()
-                        ) {
-                              LOGGER.warn(
-                                    new String(
-                                          inputStream.readAllBytes(),
-                                          StandardCharsets.UTF_8
-                                    )
-                              );
-                        }
-                  } else {
-                        EntityUtils.consume(response.getEntity());
-                  }
-            } catch (IOException e) {
-                  throw new MailException("Error posting mail to mailgun", e);
-            }
-      }
-
-      private String getFrom() {
-            return applicationProperties.getMailFromName() != null
-                  ? applicationProperties.getMailFromName() +
-                  " <" +
-                  applicationProperties.getMailFromAddress() +
-                  ">"
-                  : applicationProperties.getMailFromAddress();
-      }
+    private String getFrom() {
+        return applicationProperties.getMailFromName() != null
+            ? applicationProperties.getMailFromName() +
+            " <" +
+            applicationProperties.getMailFromAddress() +
+            ">"
+            : applicationProperties.getMailFromAddress();
+    }
 }

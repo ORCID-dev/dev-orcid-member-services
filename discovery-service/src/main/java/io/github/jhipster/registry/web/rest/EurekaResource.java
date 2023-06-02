@@ -34,132 +34,126 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class EurekaResource {
 
-      private final Logger log = LoggerFactory.getLogger(EurekaResource.class);
+    private final Logger log = LoggerFactory.getLogger(EurekaResource.class);
 
-      @Autowired
-      private EurekaService eurekaService;
+    @Autowired
+    private EurekaService eurekaService;
 
-      /**
-       * GET  /eureka/applications : get Eureka applications information
-       */
-      @GetMapping("/eureka/applications")
-      public ResponseEntity<EurekaVM> eureka() {
-            EurekaVM eurekaVM = new EurekaVM();
-            eurekaVM.setApplications(eurekaService.getApplications());
-            return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
-      }
+    /**
+     * GET  /eureka/applications : get Eureka applications information
+     */
+    @GetMapping("/eureka/applications")
+    public ResponseEntity<EurekaVM> eureka() {
+        EurekaVM eurekaVM = new EurekaVM();
+        eurekaVM.setApplications(eurekaService.getApplications());
+        return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
+    }
 
-      /**
-       * GET  /eureka/lastn : get Eureka registrations
-       */
-      @GetMapping("/eureka/lastn")
-      public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
-            Map<String, Map<Long, String>> lastn = new HashMap<>();
-            PeerAwareInstanceRegistryImpl registry =
-                  (PeerAwareInstanceRegistryImpl) eurekaService.getRegistry();
-            Map<Long, String> canceledMap = registry
-                  .getLastNCanceledInstances()
-                  .stream()
-                  .collect(toMap(Pair::first, Pair::second));
-            lastn.put("canceled", canceledMap);
-            Map<Long, String> registeredMap = registry
-                  .getLastNRegisteredInstances()
-                  .stream()
-                  .collect(toMap(Pair::first, Pair::second));
-            lastn.put("registered", registeredMap);
-            return new ResponseEntity<>(lastn, HttpStatus.OK);
-      }
+    /**
+     * GET  /eureka/lastn : get Eureka registrations
+     */
+    @GetMapping("/eureka/lastn")
+    public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
+        Map<String, Map<Long, String>> lastn = new HashMap<>();
+        PeerAwareInstanceRegistryImpl registry =
+            (PeerAwareInstanceRegistryImpl) eurekaService.getRegistry();
+        Map<Long, String> canceledMap = registry
+            .getLastNCanceledInstances()
+            .stream()
+            .collect(toMap(Pair::first, Pair::second));
+        lastn.put("canceled", canceledMap);
+        Map<Long, String> registeredMap = registry
+            .getLastNRegisteredInstances()
+            .stream()
+            .collect(toMap(Pair::first, Pair::second));
+        lastn.put("registered", registeredMap);
+        return new ResponseEntity<>(lastn, HttpStatus.OK);
+    }
 
-      /**
-       * GET  /eureka/replicas : get Eureka replicas
-       */
-      @GetMapping("/eureka/replicas")
-      public ResponseEntity<List<String>> replicas() {
-            List<String> replicas = new ArrayList<>();
-            eurekaService
-                  .getServerContext()
-                  .getPeerEurekaNodes()
-                  .getPeerNodesView()
-                  .forEach(node -> {
-                        try {
-                              // The URL is parsed in order to remove login/password information
-                              URI uri = new URI(node.getServiceUrl());
-                              replicas.add(uri.getHost() + ":" + uri.getPort());
-                        } catch (URISyntaxException e) {
-                              log.warn(
-                                    "Could not parse peer Eureka node URL: {}",
-                                    e.getMessage()
-                              );
-                        }
-                  });
+    /**
+     * GET  /eureka/replicas : get Eureka replicas
+     */
+    @GetMapping("/eureka/replicas")
+    public ResponseEntity<List<String>> replicas() {
+        List<String> replicas = new ArrayList<>();
+        eurekaService
+            .getServerContext()
+            .getPeerEurekaNodes()
+            .getPeerNodesView()
+            .forEach(node -> {
+                try {
+                    // The URL is parsed in order to remove login/password information
+                    URI uri = new URI(node.getServiceUrl());
+                    replicas.add(uri.getHost() + ":" + uri.getPort());
+                } catch (URISyntaxException e) {
+                    log.warn(
+                        "Could not parse peer Eureka node URL: {}",
+                        e.getMessage()
+                    );
+                }
+            });
 
-            return new ResponseEntity<>(replicas, HttpStatus.OK);
-      }
+        return new ResponseEntity<>(replicas, HttpStatus.OK);
+    }
 
-      /**
-       * GET  /eureka/status : get Eureka status
-       */
-      @GetMapping("/eureka/status")
-      public ResponseEntity<EurekaVM> eurekaStatus() {
-            EurekaVM eurekaVM = new EurekaVM();
-            eurekaVM.setStatus(getEurekaStatus());
-            return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
-      }
+    /**
+     * GET  /eureka/status : get Eureka status
+     */
+    @GetMapping("/eureka/status")
+    public ResponseEntity<EurekaVM> eurekaStatus() {
+        EurekaVM eurekaVM = new EurekaVM();
+        eurekaVM.setStatus(getEurekaStatus());
+        return new ResponseEntity<>(eurekaVM, HttpStatus.OK);
+    }
 
-      private Map<String, Object> getEurekaStatus() {
-            Map<String, Object> stats = new HashMap<>();
-            stats.put("time", new Date());
-            stats.put("currentTime", StatusResource.getCurrentTimeAsString());
-            stats.put("upTime", StatusInfo.getUpTime());
-            stats.put(
-                  "environment",
-                  ConfigurationManager
-                        .getDeploymentContext()
-                        .getDeploymentEnvironment()
-            );
-            stats.put(
-                  "datacenter",
-                  ConfigurationManager
-                        .getDeploymentContext()
-                        .getDeploymentDatacenter()
-            );
+    private Map<String, Object> getEurekaStatus() {
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("time", new Date());
+        stats.put("currentTime", StatusResource.getCurrentTimeAsString());
+        stats.put("upTime", StatusInfo.getUpTime());
+        stats.put(
+            "environment",
+            ConfigurationManager
+                .getDeploymentContext()
+                .getDeploymentEnvironment()
+        );
+        stats.put(
+            "datacenter",
+            ConfigurationManager
+                .getDeploymentContext()
+                .getDeploymentDatacenter()
+        );
 
-            PeerAwareInstanceRegistry registry = eurekaService.getRegistry();
+        PeerAwareInstanceRegistry registry = eurekaService.getRegistry();
 
-            stats.put(
-                  "isBelowRenewThreshold",
-                  registry.isBelowRenewThresold() == 1
-            );
+        stats.put(
+            "isBelowRenewThreshold",
+            registry.isBelowRenewThresold() == 1
+        );
 
-            populateInstanceInfo(stats);
+        populateInstanceInfo(stats);
 
-            return stats;
-      }
+        return stats;
+    }
 
-      private void populateInstanceInfo(Map<String, Object> model) {
-            StatusInfo statusInfo;
-            try {
-                  statusInfo = new StatusResource().getStatusInfo();
-            } catch (Exception e) {
-                  log.error(e.getMessage());
-                  statusInfo =
-                        StatusInfo.Builder
-                              .newBuilder()
-                              .isHealthy(false)
-                              .build();
-            }
-            if (statusInfo != null && statusInfo.getGeneralStats() != null) {
-                  model.put("generalStats", statusInfo.getGeneralStats());
-            }
-            if (statusInfo != null && statusInfo.getInstanceInfo() != null) {
-                  InstanceInfo instanceInfo = statusInfo.getInstanceInfo();
-                  Map<String, String> instanceMap = new HashMap<>();
-                  instanceMap.put("ipAddr", instanceInfo.getIPAddr());
-                  instanceMap.put(
-                        "status",
-                        instanceInfo.getStatus().toString()
-                  );
-                  model.put("instanceInfo", instanceMap);
-            }
-      }
+    private void populateInstanceInfo(Map<String, Object> model) {
+        StatusInfo statusInfo;
+        try {
+            statusInfo = new StatusResource().getStatusInfo();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            statusInfo =
+                StatusInfo.Builder.newBuilder().isHealthy(false).build();
+        }
+        if (statusInfo != null && statusInfo.getGeneralStats() != null) {
+            model.put("generalStats", statusInfo.getGeneralStats());
+        }
+        if (statusInfo != null && statusInfo.getInstanceInfo() != null) {
+            InstanceInfo instanceInfo = statusInfo.getInstanceInfo();
+            Map<String, String> instanceMap = new HashMap<>();
+            instanceMap.put("ipAddr", instanceInfo.getIPAddr());
+            instanceMap.put("status", instanceInfo.getStatus().toString());
+            model.put("instanceInfo", instanceMap);
+        }
+    }
 }

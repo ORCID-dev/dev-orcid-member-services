@@ -34,74 +34,68 @@ import org.springframework.web.context.WebApplicationContext;
  * Integration tests for the {@link LogoutResource} REST controller.
  */
 @SpringBootTest(
-      classes = { JHipsterRegistryApp.class, TestSecurityConfiguration.class }
+    classes = { JHipsterRegistryApp.class, TestSecurityConfiguration.class }
 )
 @ActiveProfiles("oauth2")
 public class LogoutResourceIT {
 
-      @Autowired
-      private ClientRegistrationRepository registrations;
+    @Autowired
+    private ClientRegistrationRepository registrations;
 
-      @Autowired
-      private WebApplicationContext context;
+    @Autowired
+    private WebApplicationContext context;
 
-      private static final String ID_TOKEN =
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
-            ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm" +
-            "p0aSI6ImQzNWRmMTRkLTA5ZjYtNDhmZi04YTkzLTdjNmYwMzM5MzE1OSIsImlhdCI6MTU0M" +
-            "Tk3MTU4MywiZXhwIjoxNTQxOTc1MTgzfQ.QaQOarmV8xEUYV7yvWzX3cUE_4W1luMcWCwpr" +
-            "oqqUrg";
+    private static final String ID_TOKEN =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
+        ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm" +
+        "p0aSI6ImQzNWRmMTRkLTA5ZjYtNDhmZi04YTkzLTdjNmYwMzM5MzE1OSIsImlhdCI6MTU0M" +
+        "Tk3MTU4MywiZXhwIjoxNTQxOTc1MTgzfQ.QaQOarmV8xEUYV7yvWzX3cUE_4W1luMcWCwpr" +
+        "oqqUrg";
 
-      private MockMvc restLogoutMockMvc;
+    private MockMvc restLogoutMockMvc;
 
-      @BeforeEach
-      public void before() throws Exception {
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("groups", "ROLE_USER");
-            claims.put("sub", 123);
-            OidcIdToken idToken = new OidcIdToken(
-                  ID_TOKEN,
-                  Instant.now(),
-                  Instant.now().plusSeconds(60),
-                  claims
-            );
-            SecurityContextHolder
-                  .getContext()
-                  .setAuthentication(authenticationToken(idToken));
-            SecurityContextHolderAwareRequestFilter authInjector =
-                  new SecurityContextHolderAwareRequestFilter();
-            authInjector.afterPropertiesSet();
+    @BeforeEach
+    public void before() throws Exception {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("groups", "ROLE_USER");
+        claims.put("sub", 123);
+        OidcIdToken idToken = new OidcIdToken(
+            ID_TOKEN,
+            Instant.now(),
+            Instant.now().plusSeconds(60),
+            claims
+        );
+        SecurityContextHolder
+            .getContext()
+            .setAuthentication(authenticationToken(idToken));
+        SecurityContextHolderAwareRequestFilter authInjector =
+            new SecurityContextHolderAwareRequestFilter();
+        authInjector.afterPropertiesSet();
 
-            this.restLogoutMockMvc =
-                  MockMvcBuilders.webAppContextSetup(this.context).build();
-      }
+        this.restLogoutMockMvc =
+            MockMvcBuilders.webAppContextSetup(this.context).build();
+    }
 
-      @Test
-      public void getLogoutInformation() throws Exception {
-            String logoutUrl =
-                  this.registrations.findByRegistrationId("oidc")
-                        .getProviderDetails()
-                        .getConfigurationMetadata()
-                        .get("end_session_endpoint")
-                        .toString();
-            restLogoutMockMvc
-                  .perform(post("/api/logout"))
-                  .andExpect(status().isOk())
-                  .andExpect(
-                        content().contentType(MediaType.APPLICATION_JSON_VALUE)
-                  )
-                  .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
-                  .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
-      }
+    @Test
+    public void getLogoutInformation() throws Exception {
+        String logoutUrl =
+            this.registrations.findByRegistrationId("oidc")
+                .getProviderDetails()
+                .getConfigurationMetadata()
+                .get("end_session_endpoint")
+                .toString();
+        restLogoutMockMvc
+            .perform(post("/api/logout"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
+            .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
+    }
 
-      private OAuth2AuthenticationToken authenticationToken(
-            OidcIdToken idToken
-      ) {
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(
-                  new SimpleGrantedAuthority(AuthoritiesConstants.USER)
-            );
-            OidcUser user = new DefaultOidcUser(authorities, idToken);
-            return new OAuth2AuthenticationToken(user, authorities, "oidc");
-      }
+    private OAuth2AuthenticationToken authenticationToken(OidcIdToken idToken) {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        OidcUser user = new DefaultOidcUser(authorities, idToken);
+        return new OAuth2AuthenticationToken(user, authorities, "oidc");
+    }
 }

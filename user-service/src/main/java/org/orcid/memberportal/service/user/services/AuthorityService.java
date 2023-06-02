@@ -11,51 +11,45 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorityService {
 
-      @Autowired
-      private MemberService memberService;
+    @Autowired
+    private MemberService memberService;
 
-      public Set<String> getAuthoritiesForUser(User user) {
-            Set<String> authorities = Stream
-                  .of(AuthoritiesConstants.USER)
-                  .collect(Collectors.toSet());
+    public Set<String> getAuthoritiesForUser(User user) {
+        Set<String> authorities = Stream
+            .of(AuthoritiesConstants.USER)
+            .collect(Collectors.toSet());
+        if (
+            !org.apache.commons.lang3.StringUtils.isBlank(
+                user.getSalesforceId()
+            )
+        ) {
             if (
-                  !org.apache.commons.lang3.StringUtils.isBlank(
-                        user.getSalesforceId()
-                  )
+                memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
+                    user.getSalesforceId()
+                )
             ) {
-                  if (
-                        memberService.memberExistsWithSalesforceIdAndAssertionsEnabled(
-                              user.getSalesforceId()
-                        )
-                  ) {
-                        authorities.add(
-                              AuthoritiesConstants.ASSERTION_SERVICE_ENABLED
-                        );
-                  }
-
-                  if (
-                        memberService.memberIsConsortiumLead(
-                              user.getSalesforceId()
-                        )
-                  ) {
-                        authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
-                  }
+                authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);
             }
 
-            if (
-                  user.getMainContact() != null &&
-                  user.getMainContact().booleanValue()
-            ) {
-                  authorities.add(AuthoritiesConstants.ORG_OWNER);
+            if (memberService.memberIsConsortiumLead(user.getSalesforceId())) {
+                authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
             }
+        }
 
-            if (
-                  user.getAdmin() != null &&
-                  user.getAdmin().booleanValue() &&
-                  memberService.memberIsAdminEnabled(user.getSalesforceId())
-            ) {
-                  authorities.add(AuthoritiesConstants.ADMIN);
-            }
-            return authorities;
-      }
+        if (
+            user.getMainContact() != null &&
+            user.getMainContact().booleanValue()
+        ) {
+            authorities.add(AuthoritiesConstants.ORG_OWNER);
+        }
+
+        if (
+            user.getAdmin() != null &&
+            user.getAdmin().booleanValue() &&
+            memberService.memberIsAdminEnabled(user.getSalesforceId())
+        ) {
+            authorities.add(AuthoritiesConstants.ADMIN);
+        }
+        return authorities;
+    }
 }

@@ -14,46 +14,47 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionLinksCsvWriter extends CsvDownloadWriter {
 
-      private static final String[] HEADERS = new String[] { "email", "link" };
+    private static final String[] HEADERS = new String[] { "email", "link" };
 
-      @Autowired
-      private EncryptUtil encryptUtil;
+    @Autowired
+    private EncryptUtil encryptUtil;
 
-      @Autowired
-      private ApplicationProperties applicationProperties;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
-      @Autowired
-      private OrcidRecordService orcidRecordService;
+    @Autowired
+    private OrcidRecordService orcidRecordService;
 
-      @Override
-      public String writeCsv(String salesforceId) throws IOException {
-            return super.writeCsv(HEADERS, getRows(salesforceId));
-      }
+    @Override
+    public String writeCsv(String salesforceId) throws IOException {
+        return super.writeCsv(HEADERS, getRows(salesforceId));
+    }
 
-      private List<List<String>> getRows(String salesforceId) {
-            List<List<String>> rows = new ArrayList<>();
-            String landingPageUrl = applicationProperties.getLandingPageUrl();
-            List<OrcidRecord> records =
-                  orcidRecordService.getRecordsWithoutTokens(salesforceId);
+    private List<List<String>> getRows(String salesforceId) {
+        List<List<String>> rows = new ArrayList<>();
+        String landingPageUrl = applicationProperties.getLandingPageUrl();
+        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(
+            salesforceId
+        );
 
-            for (OrcidRecord record : records) {
-                  String email = record.getEmail();
-                  long count = assertionsRepository.countByEmailAndSalesforceId(
-                        email,
-                        salesforceId
-                  );
-                  if (count > 0) {
-                        String encrypted = encryptUtil.encrypt(
-                              salesforceId + "&&" + email
-                        );
-                        String link = landingPageUrl + "?state=" + encrypted;
+        for (OrcidRecord record : records) {
+            String email = record.getEmail();
+            long count = assertionsRepository.countByEmailAndSalesforceId(
+                email,
+                salesforceId
+            );
+            if (count > 0) {
+                String encrypted = encryptUtil.encrypt(
+                    salesforceId + "&&" + email
+                );
+                String link = landingPageUrl + "?state=" + encrypted;
 
-                        List<String> row = new ArrayList<>();
-                        row.add(email);
-                        row.add(link);
-                        rows.add(row);
-                  }
+                List<String> row = new ArrayList<>();
+                row.add(email);
+                row.add(link);
+                rows.add(row);
             }
-            return rows;
-      }
+        }
+        return rows;
+    }
 }

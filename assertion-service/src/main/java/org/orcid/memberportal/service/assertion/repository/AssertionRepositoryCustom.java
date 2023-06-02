@@ -7,15 +7,15 @@ import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCoun
 import org.springframework.data.domain.Pageable;
 
 public interface AssertionRepositoryCustom {
-      List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable);
+    List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable);
 
-      List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable);
+    List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable);
 
-      List<MemberAssertionStatusCount> getMemberAssertionStatusCounts();
+    List<MemberAssertionStatusCount> getMemberAssertionStatusCounts();
 
-      void updateStatusPendingToNotificationRequested(String salesforceId);
+    void updateStatusPendingToNotificationRequested(String salesforceId);
 
-      Iterator<String> findDistinctEmailsWithNotificationRequested(
-            String salesforceId
-      );
+    Iterator<String> findDistinctEmailsWithNotificationRequested(
+        String salesforceId
+    );
 }

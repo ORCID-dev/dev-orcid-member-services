@@ -23,67 +23,67 @@ import org.springframework.web.client.RestTemplate;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-      private final OAuth2Properties oAuth2Properties;
+    private final OAuth2Properties oAuth2Properties;
 
-      public SecurityConfiguration(OAuth2Properties oAuth2Properties) {
-            this.oAuth2Properties = oAuth2Properties;
-      }
+    public SecurityConfiguration(OAuth2Properties oAuth2Properties) {
+        this.oAuth2Properties = oAuth2Properties;
+    }
 
-      @Override
-      public void configure(HttpSecurity http) throws Exception {
-            http
-                  .csrf()
-                  .disable()
-                  .headers()
-                  .frameOptions()
-                  .disable()
-                  .and()
-                  .sessionManagement()
-                  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                  .and()
-                  .authorizeRequests()
-                  .antMatchers("/api/id-token")
-                  .permitAll()
-                  .antMatchers("/api/assertion/record/**")
-                  .permitAll()
-                  .antMatchers("/api/**")
-                  .authenticated()
-                  .antMatchers("/management/health")
-                  .permitAll()
-                  .antMatchers("/management/**")
-                  .hasAuthority(AuthoritiesConstants.ADMIN);
-      }
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+            .csrf()
+            .disable()
+            .headers()
+            .frameOptions()
+            .disable()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+            .antMatchers("/api/id-token")
+            .permitAll()
+            .antMatchers("/api/assertion/record/**")
+            .permitAll()
+            .antMatchers("/api/**")
+            .authenticated()
+            .antMatchers("/management/health")
+            .permitAll()
+            .antMatchers("/management/**")
+            .hasAuthority(AuthoritiesConstants.ADMIN);
+    }
 
-      @Bean
-      public TokenStore tokenStore(
-            JwtAccessTokenConverter jwtAccessTokenConverter
-      ) {
-            return new JwtTokenStore(jwtAccessTokenConverter);
-      }
+    @Bean
+    public TokenStore tokenStore(
+        JwtAccessTokenConverter jwtAccessTokenConverter
+    ) {
+        return new JwtTokenStore(jwtAccessTokenConverter);
+    }
 
-      @Bean
-      public JwtAccessTokenConverter jwtAccessTokenConverter(
-            OAuth2SignatureVerifierClient signatureVerifierClient
-      ) {
-            return new OAuth2JwtAccessTokenConverter(
-                  oAuth2Properties,
-                  signatureVerifierClient
-            );
-      }
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter(
+        OAuth2SignatureVerifierClient signatureVerifierClient
+    ) {
+        return new OAuth2JwtAccessTokenConverter(
+            oAuth2Properties,
+            signatureVerifierClient
+        );
+    }
 
-      @Bean
-      @Qualifier("loadBalancedRestTemplate")
-      public RestTemplate loadBalancedRestTemplate(
-            RestTemplateCustomizer customizer
-      ) {
-            RestTemplate restTemplate = new RestTemplate();
-            customizer.customize(restTemplate);
-            return restTemplate;
-      }
+    @Bean
+    @Qualifier("loadBalancedRestTemplate")
+    public RestTemplate loadBalancedRestTemplate(
+        RestTemplateCustomizer customizer
+    ) {
+        RestTemplate restTemplate = new RestTemplate();
+        customizer.customize(restTemplate);
+        return restTemplate;
+    }
 
-      @Bean
-      @Qualifier("vanillaRestTemplate")
-      public RestTemplate vanillaRestTemplate() {
-            return new RestTemplate();
-      }
+    @Bean
+    @Qualifier("vanillaRestTemplate")
+    public RestTemplate vanillaRestTemplate() {
+        return new RestTemplate();
+    }
 }

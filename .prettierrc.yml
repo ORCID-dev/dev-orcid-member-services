@@ -24,4 +24,4 @@ overrides:
       - "*.java"
     options:
       # override the google code formatter default of tabWidth to match the Spring style
-      tabWidth: 6
+      tabWidth: 4

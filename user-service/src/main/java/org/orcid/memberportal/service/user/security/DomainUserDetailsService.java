@@ -22,75 +22,71 @@ import org.springframework.stereotype.Component;
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
 
-      private final Logger log = LoggerFactory.getLogger(
-            DomainUserDetailsService.class
-      );
+    private final Logger log = LoggerFactory.getLogger(
+        DomainUserDetailsService.class
+    );
 
-      private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-      private final AuthorityService authorityService;
+    private final AuthorityService authorityService;
 
-      public DomainUserDetailsService(
-            UserRepository userRepository,
-            AuthorityService authorityService
-      ) {
-            this.userRepository = userRepository;
-            this.authorityService = authorityService;
-      }
+    public DomainUserDetailsService(
+        UserRepository userRepository,
+        AuthorityService authorityService
+    ) {
+        this.userRepository = userRepository;
+        this.authorityService = authorityService;
+    }
 
-      @Override
-      public UserDetails loadUserByUsername(final String login) {
-            log.debug("Authenticating {}", login);
+    @Override
+    public UserDetails loadUserByUsername(final String login) {
+        log.debug("Authenticating {}", login);
 
-            if (new EmailValidator().isValid(login, null)) {
-                  return userRepository
-                        .findOneByEmailIgnoreCase(login)
-                        .map(user -> createSpringSecurityUser(login, user))
-                        .orElseThrow(() ->
-                              new UsernameNotFoundException(
-                                    "User with email " +
-                                    login +
-                                    " was not found in the database"
-                              )
-                        );
-            }
-
-            String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
+        if (new EmailValidator().isValid(login, null)) {
             return userRepository
-                  .findOneByEmailIgnoreCase(lowercaseLogin)
-                  .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-                  .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                              "User " +
-                              lowercaseLogin +
-                              " was not found in the database"
-                        )
-                  );
-      }
+                .findOneByEmailIgnoreCase(login)
+                .map(user -> createSpringSecurityUser(login, user))
+                .orElseThrow(() ->
+                    new UsernameNotFoundException(
+                        "User with email " +
+                        login +
+                        " was not found in the database"
+                    )
+                );
+        }
 
-      private org.springframework.security.core.userdetails.User createSpringSecurityUser(
-            String lowercaseLogin,
-            User user
-      ) {
-            if (!user.getActivated()) {
-                  throw new UserNotActivatedException(
-                        "User " + lowercaseLogin + " was not activated"
-                  );
-            }
-            return new org.springframework.security.core.userdetails.User(
-                  user.getEmail(),
-                  user.getPassword(),
-                  getGrantedAuthorities(user)
+        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
+        return userRepository
+            .findOneByEmailIgnoreCase(lowercaseLogin)
+            .map(user -> createSpringSecurityUser(lowercaseLogin, user))
+            .orElseThrow(() ->
+                new UsernameNotFoundException(
+                    "User " + lowercaseLogin + " was not found in the database"
+                )
             );
-      }
+    }
 
-      private List<GrantedAuthority> getGrantedAuthorities(User user) {
-            Set<String> authorities = authorityService.getAuthoritiesForUser(
-                  user
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(
+        String lowercaseLogin,
+        User user
+    ) {
+        if (!user.getActivated()) {
+            throw new UserNotActivatedException(
+                "User " + lowercaseLogin + " was not activated"
             );
-            return authorities
-                  .stream()
-                  .map(s -> new SimpleGrantedAuthority(s))
-                  .collect(Collectors.toList());
-      }
+        }
+        return new org.springframework.security.core.userdetails.User(
+            user.getEmail(),
+            user.getPassword(),
+            getGrantedAuthorities(user)
+        );
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(User user) {
+        Set<String> authorities = authorityService.getAuthoritiesForUser(user);
+        return authorities
+            .stream()
+            .map(s -> new SimpleGrantedAuthority(s))
+            .collect(Collectors.toList());
+    }
 }

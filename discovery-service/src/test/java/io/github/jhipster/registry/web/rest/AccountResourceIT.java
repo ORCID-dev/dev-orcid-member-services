@@ -21,46 +21,40 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest(classes = JHipsterRegistryApp.class)
 public class AccountResourceIT {
 
-      @Autowired
-      private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-      private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-      @BeforeEach
-      public void setup() {
-            AccountResource accountUserMockResource = new AccountResource();
-            this.mockMvc =
-                  MockMvcBuilders
-                        .standaloneSetup(accountUserMockResource)
-                        .setControllerAdvice(exceptionTranslator)
-                        .build();
-      }
+    @BeforeEach
+    public void setup() {
+        AccountResource accountUserMockResource = new AccountResource();
+        this.mockMvc =
+            MockMvcBuilders
+                .standaloneSetup(accountUserMockResource)
+                .setControllerAdvice(exceptionTranslator)
+                .build();
+    }
 
-      @Test
-      @WithMockUser(username = "test", roles = "ADMIN")
-      public void testGetExistingAccount() throws Exception {
-            mockMvc
-                  .perform(
-                        get("/api/account").accept(MediaType.APPLICATION_JSON)
-                  )
-                  .andExpect(status().isOk())
-                  .andExpect(
-                        content().contentType(MediaType.APPLICATION_JSON_VALUE)
-                  )
-                  .andExpect(jsonPath("$.login").value("test"))
-                  .andExpect(
-                        jsonPath("$.authorities")
-                              .value(AuthoritiesConstants.ADMIN)
-                  );
-      }
+    @Test
+    @WithMockUser(username = "test", roles = "ADMIN")
+    public void testGetExistingAccount() throws Exception {
+        mockMvc
+            .perform(get("/api/account").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.login").value("test"))
+            .andExpect(
+                jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN)
+            );
+    }
 
-      @Test
-      public void testGetUnknownAccount() throws Exception {
-            mockMvc
-                  .perform(
-                        get("/api/account")
-                              .accept(MediaType.APPLICATION_PROBLEM_JSON)
-                  )
-                  .andExpect(status().isInternalServerError());
-      }
+    @Test
+    public void testGetUnknownAccount() throws Exception {
+        mockMvc
+            .perform(
+                get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON)
+            )
+            .andExpect(status().isInternalServerError());
+    }
 }

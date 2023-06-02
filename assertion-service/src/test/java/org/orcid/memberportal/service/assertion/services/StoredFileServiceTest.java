@@ -25,158 +25,148 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 class StoredFileServiceTest {
 
-      @InjectMocks
-      private StoredFileService storedFileService;
+    @InjectMocks
+    private StoredFileService storedFileService;
 
-      @Mock
-      private StoredFileRepository storedFileRepository;
+    @Mock
+    private StoredFileRepository storedFileRepository;
 
-      @Captor
-      private ArgumentCaptor<StoredFile> storedFileCaptor;
+    @Captor
+    private ArgumentCaptor<StoredFile> storedFileCaptor;
 
-      private File storedFilesDir;
+    private File storedFilesDir;
 
-      private File memberAssertionStatsDir;
+    private File memberAssertionStatsDir;
 
-      private File assertionUploadsDir;
+    private File assertionUploadsDir;
 
-      private ApplicationProperties properties;
+    private ApplicationProperties properties;
 
-      @BeforeEach
-      public void setUp() throws IOException {
-            MockitoAnnotations.initMocks(this);
+    @BeforeEach
+    public void setUp() throws IOException {
+        MockitoAnnotations.initMocks(this);
 
-            storedFilesDir = File.createTempFile("test-dir", "");
-            if (!storedFilesDir.delete()) {
-                  throw new RuntimeException(
-                        "Test couldn't delete file " +
-                        storedFilesDir.getAbsolutePath()
-                  );
-            }
-            if (!storedFilesDir.mkdir()) {
-                  throw new RuntimeException(
-                        "Test couldn't create dir " +
-                        storedFilesDir.getAbsolutePath()
-                  );
-            }
-
-            memberAssertionStatsDir = new File(storedFilesDir, "stats");
-            if (!memberAssertionStatsDir.mkdir()) {
-                  throw new RuntimeException(
-                        "Test couldn't create dir " +
-                        memberAssertionStatsDir.getAbsolutePath()
-                  );
-            }
-
-            assertionUploadsDir = new File(storedFilesDir, "uploads");
-            if (!assertionUploadsDir.mkdir()) {
-                  throw new RuntimeException(
-                        "Test couldn't create dir " +
-                        assertionUploadsDir.getAbsolutePath()
-                  );
-            }
-
-            properties = new ApplicationProperties();
-            properties.setMemberAssertionStatsDirectory(
-                  memberAssertionStatsDir.getAbsolutePath()
+        storedFilesDir = File.createTempFile("test-dir", "");
+        if (!storedFilesDir.delete()) {
+            throw new RuntimeException(
+                "Test couldn't delete file " + storedFilesDir.getAbsolutePath()
             );
-            properties.setAssertionsCsvUploadDirectory(
-                  assertionUploadsDir.getAbsolutePath()
+        }
+        if (!storedFilesDir.mkdir()) {
+            throw new RuntimeException(
+                "Test couldn't create dir " + storedFilesDir.getAbsolutePath()
             );
-            properties.setStoredFileLifespan(7);
+        }
 
-            ReflectionTestUtils.setField(
-                  storedFileService,
-                  "applicationProperties",
-                  properties
+        memberAssertionStatsDir = new File(storedFilesDir, "stats");
+        if (!memberAssertionStatsDir.mkdir()) {
+            throw new RuntimeException(
+                "Test couldn't create dir " +
+                memberAssertionStatsDir.getAbsolutePath()
             );
-      }
+        }
 
-      @AfterEach
-      public void tearDown() throws IOException {
-            FileUtils.deleteDirectory(storedFilesDir);
-      }
-
-      @Test
-      void testStoreMemberAssertionStatsFile() throws IOException {
-            File file = storedFileService.storeMemberAssertionStatsFile(
-                  "some content"
+        assertionUploadsDir = new File(storedFilesDir, "uploads");
+        if (!assertionUploadsDir.mkdir()) {
+            throw new RuntimeException(
+                "Test couldn't create dir " +
+                assertionUploadsDir.getAbsolutePath()
             );
-            assertThat(file.getParent())
-                  .isEqualTo(memberAssertionStatsDir.getAbsolutePath());
-            Mockito
-                  .verify(storedFileRepository)
-                  .save(storedFileCaptor.capture());
-            StoredFile saved = storedFileCaptor.getValue();
-            assertThat(saved.getFileLocation()).isNotNull();
-            assertThat(saved.getFileLocation())
-                  .startsWith(memberAssertionStatsDir.getAbsolutePath());
-            assertThat(saved.getFileLocation()).endsWith(".csv");
-            assertThat(saved.getFileType()).isNotNull();
-            assertThat(saved.getFileType())
-                  .isEqualTo(
-                        StoredFileService.MEMBER_ASSERTION_STATS_FILE_TYPE
-                  );
-            assertThat(saved.getDateWritten()).isNotNull();
-            assertThat(saved.getRemovalDate()).isNotNull();
-            assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS))
-                  .isEqualTo(saved.getDateWritten());
-      }
+        }
 
-      @Test
-      void testStoreAssertionsCsvFile() throws IOException {
-            InputStream inputStream = new ByteArrayInputStream(
-                  "some content".getBytes()
+        properties = new ApplicationProperties();
+        properties.setMemberAssertionStatsDirectory(
+            memberAssertionStatsDir.getAbsolutePath()
+        );
+        properties.setAssertionsCsvUploadDirectory(
+            assertionUploadsDir.getAbsolutePath()
+        );
+        properties.setStoredFileLifespan(7);
+
+        ReflectionTestUtils.setField(
+            storedFileService,
+            "applicationProperties",
+            properties
+        );
+    }
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        FileUtils.deleteDirectory(storedFilesDir);
+    }
+
+    @Test
+    void testStoreMemberAssertionStatsFile() throws IOException {
+        File file = storedFileService.storeMemberAssertionStatsFile(
+            "some content"
+        );
+        assertThat(file.getParent())
+            .isEqualTo(memberAssertionStatsDir.getAbsolutePath());
+        Mockito.verify(storedFileRepository).save(storedFileCaptor.capture());
+        StoredFile saved = storedFileCaptor.getValue();
+        assertThat(saved.getFileLocation()).isNotNull();
+        assertThat(saved.getFileLocation())
+            .startsWith(memberAssertionStatsDir.getAbsolutePath());
+        assertThat(saved.getFileLocation()).endsWith(".csv");
+        assertThat(saved.getFileType()).isNotNull();
+        assertThat(saved.getFileType())
+            .isEqualTo(StoredFileService.MEMBER_ASSERTION_STATS_FILE_TYPE);
+        assertThat(saved.getDateWritten()).isNotNull();
+        assertThat(saved.getRemovalDate()).isNotNull();
+        assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS))
+            .isEqualTo(saved.getDateWritten());
+    }
+
+    @Test
+    void testStoreAssertionsCsvFile() throws IOException {
+        InputStream inputStream = new ByteArrayInputStream(
+            "some content".getBytes()
+        );
+        storedFileService.storeAssertionsCsvFile(
+            inputStream,
+            "filename",
+            getUser()
+        );
+        Mockito.verify(storedFileRepository).save(storedFileCaptor.capture());
+        StoredFile saved = storedFileCaptor.getValue();
+        assertThat(saved.getFileLocation()).isNotNull();
+        assertThat(saved.getFileLocation())
+            .startsWith(storedFilesDir.getAbsolutePath());
+        assertThat(saved.getFileLocation()).endsWith(".csv");
+        assertThat(saved.getFileType()).isNotNull();
+        assertThat(saved.getFileType())
+            .isEqualTo(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
+        assertThat(saved.getDateWritten()).isNotNull();
+        assertThat(saved.getRemovalDate()).isNotNull();
+        assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS))
+            .isEqualTo(saved.getDateWritten());
+        assertThat(saved.getOriginalFilename()).isEqualTo("filename");
+    }
+
+    @Test
+    void testGetUnprocessedStoredFilesByType() {
+        storedFileService.getUnprocessedStoredFilesByType(
+            StoredFileService.ASSERTIONS_CSV_FILE_TYPE
+        );
+        Mockito
+            .verify(storedFileRepository)
+            .findUnprocessedByType(
+                Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)
             );
-            storedFileService.storeAssertionsCsvFile(
-                  inputStream,
-                  "filename",
-                  getUser()
-            );
-            Mockito
-                  .verify(storedFileRepository)
-                  .save(storedFileCaptor.capture());
-            StoredFile saved = storedFileCaptor.getValue();
-            assertThat(saved.getFileLocation()).isNotNull();
-            assertThat(saved.getFileLocation())
-                  .startsWith(storedFilesDir.getAbsolutePath());
-            assertThat(saved.getFileLocation()).endsWith(".csv");
-            assertThat(saved.getFileType()).isNotNull();
-            assertThat(saved.getFileType())
-                  .isEqualTo(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
-            assertThat(saved.getDateWritten()).isNotNull();
-            assertThat(saved.getRemovalDate()).isNotNull();
-            assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS))
-                  .isEqualTo(saved.getDateWritten());
-            assertThat(saved.getOriginalFilename()).isEqualTo("filename");
-      }
+    }
 
-      @Test
-      void testGetUnprocessedStoredFilesByType() {
-            storedFileService.getUnprocessedStoredFilesByType(
-                  StoredFileService.ASSERTIONS_CSV_FILE_TYPE
-            );
-            Mockito
-                  .verify(storedFileRepository)
-                  .findUnprocessedByType(
-                        Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)
-                  );
-      }
+    @Test
+    void testMarkAsProcessed() {
+        StoredFile storedFile = new StoredFile();
+        storedFileService.markAsProcessed(storedFile);
+        Mockito.verify(storedFileRepository).save(storedFileCaptor.capture());
+        StoredFile saved = storedFileCaptor.getValue();
+        assertThat(saved.getDateProcessed()).isNotNull();
+    }
 
-      @Test
-      void testMarkAsProcessed() {
-            StoredFile storedFile = new StoredFile();
-            storedFileService.markAsProcessed(storedFile);
-            Mockito
-                  .verify(storedFileRepository)
-                  .save(storedFileCaptor.capture());
-            StoredFile saved = storedFileCaptor.getValue();
-            assertThat(saved.getDateProcessed()).isNotNull();
-      }
-
-      private AssertionServiceUser getUser() {
-            AssertionServiceUser user = new AssertionServiceUser();
-            user.setId("some id");
-            return user;
-      }
+    private AssertionServiceUser getUser() {
+        AssertionServiceUser user = new AssertionServiceUser();
+        user.setId("some id");
+        return user;
+    }
 }

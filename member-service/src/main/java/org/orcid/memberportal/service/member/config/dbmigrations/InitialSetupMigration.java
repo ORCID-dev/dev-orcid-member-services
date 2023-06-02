@@ -15,44 +15,37 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 @ChangeLog(order = "001")
 public class InitialSetupMigration {
 
-      private static final Logger LOG = LoggerFactory.getLogger(
-            InitialSetupMigration.class
-      );
+    private static final Logger LOG = LoggerFactory.getLogger(
+        InitialSetupMigration.class
+    );
 
-      @ChangeSet(order = "01", author = "initiator", id = "01-addMembers")
-      public void addMembers(
-            MongoTemplate mongoTemplate,
-            Environment environment
-      ) {
-            Member orcidMember = new Member();
-            String salesForceId = "001G000001AP83e";
+    @ChangeSet(order = "01", author = "initiator", id = "01-addMembers")
+    public void addMembers(
+        MongoTemplate mongoTemplate,
+        Environment environment
+    ) {
+        Member orcidMember = new Member();
+        String salesForceId = "001G000001AP83e";
 
-            if (
-                  environment.getProperty("application_orcidOrgSalesForceId") !=
-                  null
-            ) {
-                  salesForceId =
-                        environment.getProperty(
-                              "application.orcidOrgSalesForceId"
-                        );
-            }
-            String clientId = "APP-1ERTY7037V1I8FE5";
-            if (
-                  environment.getProperty("application.orcidOrgClientId") !=
-                  null
-            ) {
-                  clientId =
-                        environment.getProperty("application.orcidOrgClientId");
-            }
-            orcidMember.setId("ORCID, Inc");
-            orcidMember.setClientName("ORCID, Inc");
-            orcidMember.setSalesforceId(salesForceId);
-            orcidMember.setClientId(clientId);
-            orcidMember.setIsConsortiumLead(true);
-            orcidMember.setAssertionServiceEnabled(true);
-            orcidMember.setSuperadminEnabled(true);
-            orcidMember.setCreatedBy("admin@orcid.org");
-            orcidMember.setCreatedDate(Instant.now());
-            mongoTemplate.save(orcidMember);
-      }
+        if (
+            environment.getProperty("application_orcidOrgSalesForceId") != null
+        ) {
+            salesForceId =
+                environment.getProperty("application.orcidOrgSalesForceId");
+        }
+        String clientId = "APP-1ERTY7037V1I8FE5";
+        if (environment.getProperty("application.orcidOrgClientId") != null) {
+            clientId = environment.getProperty("application.orcidOrgClientId");
+        }
+        orcidMember.setId("ORCID, Inc");
+        orcidMember.setClientName("ORCID, Inc");
+        orcidMember.setSalesforceId(salesForceId);
+        orcidMember.setClientId(clientId);
+        orcidMember.setIsConsortiumLead(true);
+        orcidMember.setAssertionServiceEnabled(true);
+        orcidMember.setSuperadminEnabled(true);
+        orcidMember.setCreatedBy("admin@orcid.org");
+        orcidMember.setCreatedDate(Instant.now());
+        mongoTemplate.save(orcidMember);
+    }
 }

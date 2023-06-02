@@ -24,65 +24,63 @@ import org.springframework.web.bind.annotation.*;
 @Profile("!" + Constants.PROFILE_OAUTH2)
 public class UserJWTController {
 
-      private final TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-      private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-      public UserJWTController(
-            TokenProvider tokenProvider,
-            AuthenticationManagerBuilder authenticationManagerBuilder
-      ) {
-            this.tokenProvider = tokenProvider;
-            this.authenticationManagerBuilder = authenticationManagerBuilder;
-      }
+    public UserJWTController(
+        TokenProvider tokenProvider,
+        AuthenticationManagerBuilder authenticationManagerBuilder
+    ) {
+        this.tokenProvider = tokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+    }
 
-      @PostMapping("/authenticate")
-      public ResponseEntity<JWTToken> authorize(
-            @Valid @RequestBody LoginVM loginVM
-      ) {
-            UsernamePasswordAuthenticationToken authenticationToken =
-                  new UsernamePasswordAuthenticationToken(
-                        loginVM.getUsername(),
-                        loginVM.getPassword()
-                  );
-
-            Authentication authentication = authenticationManagerBuilder
-                  .getObject()
-                  .authenticate(authenticationToken);
-            SecurityContextHolder
-                  .getContext()
-                  .setAuthentication(authentication);
-            boolean rememberMe = (loginVM.isRememberMe() == null)
-                  ? false
-                  : loginVM.isRememberMe();
-            String jwt = tokenProvider.createToken(authentication, rememberMe);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-            return new ResponseEntity<>(
-                  new JWTToken(jwt),
-                  httpHeaders,
-                  HttpStatus.OK
+    @PostMapping("/authenticate")
+    public ResponseEntity<JWTToken> authorize(
+        @Valid @RequestBody LoginVM loginVM
+    ) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(
+                loginVM.getUsername(),
+                loginVM.getPassword()
             );
-      }
 
-      /**
-       * Object to return as body in JWT Authentication.
-       */
-      static class JWTToken {
+        Authentication authentication = authenticationManagerBuilder
+            .getObject()
+            .authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        boolean rememberMe = (loginVM.isRememberMe() == null)
+            ? false
+            : loginVM.isRememberMe();
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return new ResponseEntity<>(
+            new JWTToken(jwt),
+            httpHeaders,
+            HttpStatus.OK
+        );
+    }
 
-            private String idToken;
+    /**
+     * Object to return as body in JWT Authentication.
+     */
+    static class JWTToken {
 
-            JWTToken(String idToken) {
-                  this.idToken = idToken;
-            }
+        private String idToken;
 
-            @JsonProperty("id_token")
-            String getIdToken() {
-                  return idToken;
-            }
+        JWTToken(String idToken) {
+            this.idToken = idToken;
+        }
 
-            void setIdToken(String idToken) {
-                  this.idToken = idToken;
-            }
-      }
+        @JsonProperty("id_token")
+        String getIdToken() {
+            return idToken;
+        }
+
+        void setIdToken(String idToken) {
+            this.idToken = idToken;
+        }
+    }
 }

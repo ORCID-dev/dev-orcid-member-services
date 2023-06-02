@@ -24,169 +24,160 @@ import org.springframework.stereotype.Service;
 @Service
 public class CsvReportService {
 
-      private static final Logger LOG = LoggerFactory.getLogger(
-            CsvReportService.class
-      );
+    private static final Logger LOG = LoggerFactory.getLogger(
+        CsvReportService.class
+    );
 
-      static final String MEMBER_ASSERTION_STATS_FILE_TYPE = "assertion-stats";
+    static final String MEMBER_ASSERTION_STATS_FILE_TYPE = "assertion-stats";
 
-      static final String ASSERTIONS_CSV_FILE_TYPE = "assertions-csv";
+    static final String ASSERTIONS_CSV_FILE_TYPE = "assertions-csv";
 
-      static final String CSV_REPORT_FILE_TYPE = "csv-report";
+    static final String CSV_REPORT_FILE_TYPE = "csv-report";
 
-      @Autowired
-      private CsvReportRepository csvReportRepository;
+    @Autowired
+    private CsvReportRepository csvReportRepository;
 
-      @Autowired
-      private UserService userService;
+    @Autowired
+    private UserService userService;
 
-      @Autowired
-      private AssertionsReportCsvWriter assertionsReportCsvWriter;
+    @Autowired
+    private AssertionsReportCsvWriter assertionsReportCsvWriter;
 
-      @Autowired
-      private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
+    @Autowired
+    private AssertionsForEditCsvWriter assertionsForEditCsvWriter;
 
-      @Autowired
-      private PermissionLinksCsvWriter permissionLinksCsvWriter;
+    @Autowired
+    private PermissionLinksCsvWriter permissionLinksCsvWriter;
 
-      @Autowired
-      private StoredFileService storedFileService;
+    @Autowired
+    private StoredFileService storedFileService;
 
-      @Autowired
-      private MailService mailService;
+    @Autowired
+    private MailService mailService;
 
-      @Autowired
-      private MessageSource messageSource;
+    @Autowired
+    private MessageSource messageSource;
 
-      public void storeCsvReportRequest(
-            String userId,
-            String filename,
-            String type
-      ) {
-            Instant now = Instant.now();
-            CsvReport csvReport = new CsvReport();
-            csvReport.setDateRequested(now);
-            csvReport.setOwnerId(userId);
-            csvReport.setReportType(type);
-            csvReport.setStatus(CsvReport.UNPROCESSED_STATUS);
-            csvReport.setOriginalFilename(filename);
-            csvReportRepository.save(csvReport);
-      }
+    public void storeCsvReportRequest(
+        String userId,
+        String filename,
+        String type
+    ) {
+        Instant now = Instant.now();
+        CsvReport csvReport = new CsvReport();
+        csvReport.setDateRequested(now);
+        csvReport.setOwnerId(userId);
+        csvReport.setReportType(type);
+        csvReport.setStatus(CsvReport.UNPROCESSED_STATUS);
+        csvReport.setOriginalFilename(filename);
+        csvReportRepository.save(csvReport);
+    }
 
-      public void processCsvReports() {
-            LOG.info("Processing pending CSV reports");
-            List<CsvReport> reports = csvReportRepository.findAllUnprocessed();
-            reports.forEach(r -> {
-                  try {
-                        processCsvReportRequest(r);
-                  } catch (IOException e) {
-                        LOG.warn(
-                              "Failed to generate CSV report of type {} for user {}",
-                              r.getReportType(),
-                              r.getOwnerId(),
-                              e
-                        );
-                        StringWriter sw = new StringWriter();
-                        PrintWriter pw = new PrintWriter(sw);
-                        e.printStackTrace(pw);
-                        r.setError(sw.toString());
-                        r.setStatus(CsvReport.FAILURE_STATUS);
-                        csvReportRepository.save(r);
-                  }
-            });
-            LOG.info("CSV reports processed");
-      }
-
-      private void processCsvReportRequest(CsvReport csvReport)
-            throws IOException {
-            AssertionServiceUser user = userService.getUserById(
-                  csvReport.getOwnerId()
-            );
-            String salesforceId = user.getSalesforceId();
-            Locale locale = LocaleUtils.getLocale(user.getLangKey());
-
-            String subject = null;
-            String content = null;
-            String report = null;
-
-            LOG.info(
-                  "Generating csv report of type {} for user {}",
-                  csvReport.getReportType(),
-                  user.getEmail()
-            );
-            if (
-                  CsvReport.ASSERTIONS_FOR_EDIT_TYPE.equals(
-                        csvReport.getReportType()
-                  )
-            ) {
-                  report = assertionsForEditCsvWriter.writeCsv(salesforceId);
-                  subject =
-                        messageSource.getMessage(
-                              "email.csvReport.affiliationsForEdit.subject",
-                              null,
-                              locale
-                        );
-                  content =
-                        messageSource.getMessage(
-                              "email.csvReport.affiliationsForEdit.content",
-                              null,
-                              locale
-                        );
-            } else if (
-                  CsvReport.ASSERTIONS_REPORT_TYPE.equals(
-                        csvReport.getReportType()
-                  )
-            ) {
-                  report = assertionsReportCsvWriter.writeCsv(salesforceId);
-                  subject =
-                        messageSource.getMessage(
-                              "email.csvReport.affiliationStatusReport.subject",
-                              null,
-                              locale
-                        );
-                  content =
-                        messageSource.getMessage(
-                              "email.csvReport.affiliationStatusReport.content",
-                              null,
-                              locale
-                        );
-            } else if (
-                  CsvReport.PERMISSION_LINKS_TYPE.equals(
-                        csvReport.getReportType()
-                  )
-            ) {
-                  report = permissionLinksCsvWriter.writeCsv(salesforceId);
-                  subject =
-                        messageSource.getMessage(
-                              "email.csvReport.permissionLinks.subject",
-                              null,
-                              locale
-                        );
-                  content =
-                        messageSource.getMessage(
-                              "email.csvReport.permissionLinks.content",
-                              null,
-                              locale
-                        );
+    public void processCsvReports() {
+        LOG.info("Processing pending CSV reports");
+        List<CsvReport> reports = csvReportRepository.findAllUnprocessed();
+        reports.forEach(r -> {
+            try {
+                processCsvReportRequest(r);
+            } catch (IOException e) {
+                LOG.warn(
+                    "Failed to generate CSV report of type {} for user {}",
+                    r.getReportType(),
+                    r.getOwnerId(),
+                    e
+                );
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                r.setError(sw.toString());
+                r.setStatus(CsvReport.FAILURE_STATUS);
+                csvReportRepository.save(r);
             }
+        });
+        LOG.info("CSV reports processed");
+    }
 
-            StoredFile storedFile = storedFileService.storeCsvReportFile(
-                  report,
-                  csvReport.getOriginalFilename(),
-                  user
-            );
-            csvReport.setDateGenerated(storedFile.getDateWritten());
-            csvReport.setStatus(CsvReport.SUCCESS_STATUS);
-            csvReportRepository.save(csvReport);
+    private void processCsvReportRequest(CsvReport csvReport)
+        throws IOException {
+        AssertionServiceUser user = userService.getUserById(
+            csvReport.getOwnerId()
+        );
+        String salesforceId = user.getSalesforceId();
+        Locale locale = LocaleUtils.getLocale(user.getLangKey());
 
-            LOG.info(
-                  "Report generated. Sending report to {},,,",
-                  user.getEmail()
-            );
-            File reportFile = new File(storedFile.getFileLocation());
-            mailService.sendCsvReportMail(reportFile, user, subject, content);
-            LOG.info("Report sent to {}", user.getEmail());
+        String subject = null;
+        String content = null;
+        String report = null;
 
-            storedFileService.markAsProcessed(storedFile);
-      }
+        LOG.info(
+            "Generating csv report of type {} for user {}",
+            csvReport.getReportType(),
+            user.getEmail()
+        );
+        if (
+            CsvReport.ASSERTIONS_FOR_EDIT_TYPE.equals(csvReport.getReportType())
+        ) {
+            report = assertionsForEditCsvWriter.writeCsv(salesforceId);
+            subject =
+                messageSource.getMessage(
+                    "email.csvReport.affiliationsForEdit.subject",
+                    null,
+                    locale
+                );
+            content =
+                messageSource.getMessage(
+                    "email.csvReport.affiliationsForEdit.content",
+                    null,
+                    locale
+                );
+        } else if (
+            CsvReport.ASSERTIONS_REPORT_TYPE.equals(csvReport.getReportType())
+        ) {
+            report = assertionsReportCsvWriter.writeCsv(salesforceId);
+            subject =
+                messageSource.getMessage(
+                    "email.csvReport.affiliationStatusReport.subject",
+                    null,
+                    locale
+                );
+            content =
+                messageSource.getMessage(
+                    "email.csvReport.affiliationStatusReport.content",
+                    null,
+                    locale
+                );
+        } else if (
+            CsvReport.PERMISSION_LINKS_TYPE.equals(csvReport.getReportType())
+        ) {
+            report = permissionLinksCsvWriter.writeCsv(salesforceId);
+            subject =
+                messageSource.getMessage(
+                    "email.csvReport.permissionLinks.subject",
+                    null,
+                    locale
+                );
+            content =
+                messageSource.getMessage(
+                    "email.csvReport.permissionLinks.content",
+                    null,
+                    locale
+                );
+        }
+
+        StoredFile storedFile = storedFileService.storeCsvReportFile(
+            report,
+            csvReport.getOriginalFilename(),
+            user
+        );
+        csvReport.setDateGenerated(storedFile.getDateWritten());
+        csvReport.setStatus(CsvReport.SUCCESS_STATUS);
+        csvReportRepository.save(csvReport);
+
+        LOG.info("Report generated. Sending report to {},,,", user.getEmail());
+        File reportFile = new File(storedFile.getFileLocation());
+        mailService.sendCsvReportMail(reportFile, user, subject, content);
+        LOG.info("Report sent to {}", user.getEmail());
+
+        storedFileService.markAsProcessed(storedFile);
+    }
 }

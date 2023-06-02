@@ -22,50 +22,48 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 public class LoggingConfiguration {
 
-      public LoggingConfiguration(
-            @Value("${spring.application.name}") String appName,
-            @Value("${server.port}") String serverPort,
-            JHipsterProperties jHipsterProperties,
-            ObjectProvider<BuildProperties> buildProperties,
-            ObjectMapper mapper
-      ) throws JsonProcessingException {
-            LoggerContext context =
-                  (LoggerContext) LoggerFactory.getILoggerFactory();
+    public LoggingConfiguration(
+        @Value("${spring.application.name}") String appName,
+        @Value("${server.port}") String serverPort,
+        JHipsterProperties jHipsterProperties,
+        ObjectProvider<BuildProperties> buildProperties,
+        ObjectMapper mapper
+    ) throws JsonProcessingException {
+        LoggerContext context =
+            (LoggerContext) LoggerFactory.getILoggerFactory();
 
-            Map<String, String> map = new HashMap<>();
-            map.put("app_name", appName);
-            map.put("app_port", serverPort);
-            buildProperties.ifAvailable(it ->
-                  map.put("version", it.getVersion())
+        Map<String, String> map = new HashMap<>();
+        map.put("app_name", appName);
+        map.put("app_port", serverPort);
+        buildProperties.ifAvailable(it -> map.put("version", it.getVersion()));
+        String customFields = mapper.writeValueAsString(map);
+
+        JHipsterProperties.Logging loggingProperties =
+            jHipsterProperties.getLogging();
+        JHipsterProperties.Logging.Logstash logstashProperties =
+            loggingProperties.getLogstash();
+
+        if (loggingProperties.isUseJsonFormat()) {
+            addJsonConsoleAppender(context, customFields);
+        }
+        if (logstashProperties.isEnabled()) {
+            addLogstashTcpSocketAppender(
+                context,
+                customFields,
+                logstashProperties
             );
-            String customFields = mapper.writeValueAsString(map);
-
-            JHipsterProperties.Logging loggingProperties =
-                  jHipsterProperties.getLogging();
-            JHipsterProperties.Logging.Logstash logstashProperties =
-                  loggingProperties.getLogstash();
-
-            if (loggingProperties.isUseJsonFormat()) {
-                  addJsonConsoleAppender(context, customFields);
-            }
-            if (logstashProperties.isEnabled()) {
-                  addLogstashTcpSocketAppender(
-                        context,
-                        customFields,
-                        logstashProperties
-                  );
-            }
-            if (
-                  loggingProperties.isUseJsonFormat() ||
-                  logstashProperties.isEnabled()
-            ) {
-                  addContextListener(context, customFields, loggingProperties);
-            }
-            if (jHipsterProperties.getMetrics().getLogs().isEnabled()) {
-                  setMetricsMarkerLogbackFilter(
-                        context,
-                        loggingProperties.isUseJsonFormat()
-                  );
-            }
-      }
+        }
+        if (
+            loggingProperties.isUseJsonFormat() ||
+            logstashProperties.isEnabled()
+        ) {
+            addContextListener(context, customFields, loggingProperties);
+        }
+        if (jHipsterProperties.getMetrics().getLogs().isEnabled()) {
+            setMetricsMarkerLogbackFilter(
+                context,
+                loggingProperties.isUseJsonFormat()
+            );
+        }
+    }
 }
