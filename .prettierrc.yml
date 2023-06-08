@@ -1,3 +1,7 @@
+# NOTE: xml rules jhipster
+# this allows prettier to run over pom.xml files
+xmlWhitespaceSensitivity: ignore
+
 overrides:
   - files:
       - "*.js"
@@ -17,11 +21,17 @@ overrides:
       arrowParens: avoid
       # NOTE: jsx and tsx rules jhipster
       bracketSameLine: false
-      # NOTE: xml rules jhipster
-      xmlWhitespaceSensitivity: ignore
+
+  - files:
+      - "*.xml"
+    options:
+      tabWidth: 2
+      printWidth: 1000
 
   - files:
       - "*.java"
     options:
       # override the google code formatter default of tabWidth to match the Spring style
       tabWidth: 4
+
+

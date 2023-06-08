@@ -62,18 +62,30 @@ repos:
     hooks:
       - id: prettier
         name: prettier
-        types: [text]
+        # types: [text]
+        types: [ java, javascript ]
         additional_dependencies:
           - prettier
           - prettier-plugin-java
           - "@prettier/plugin-xml@v2.2.0"
 
-  - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.1
+  - repo: https://github.com/ejba/pre-commit-maven
+    rev: v0.3.3
     hooks:
-      - id: remove-tabs
-        args: [--whitespaces-count, "2"] # defaults to: 4
+      -   id: maven-spotless-check
 
+
+#   - repo: https://github.com/lsst-ts/pre-commit-xmllint
+#     rev: v1.0.0
+#     hooks:
+#       - id: format-xmllint
+# 
+  #   - repo: https://github.com/Lucas-C/pre-commit-hooks
+  #     rev: v1.5.1
+  #     hooks:
+  #       - id: remove-tabs
+  #         args: [--whitespaces-count, "2"] # defaults to: 4
+  #
   - repo: local
     hooks:
       - id: actionlint
