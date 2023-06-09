@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.orcid</groupId>
@@ -10,7 +10,7 @@
   <properties>
     <!-- Build properties -->
     <maven.version>3.0.0</maven.version>
-        <java.version>11</java.version>
+    <java.version>11</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -21,8 +21,8 @@
     <m2e.apt.activation>jdt_apt</m2e.apt.activation>
     <run.addResources>false</run.addResources>
     <!-- These remain empty unless the corresponding profile is active -->
-    <profile.swagger/>
-    <profile.tls/>
+    <profile.swagger />
+    <profile.tls />
     <!-- Dependency versions -->
     <jhipster-dependencies.version>3.0.3</jhipster-dependencies.version>
     <!-- The spring-boot version should match the one managed by
@@ -499,7 +499,7 @@
               </goals>
               <configuration>
                 <rules>
-                  <DependencyConvergence/>
+                  <DependencyConvergence />
                 </rules>
                 <fail>false</fail>
               </configuration>
@@ -914,7 +914,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <ignore/>
+                        <ignore />
                       </action>
                     </pluginExecution>
                   </pluginExecutions>
