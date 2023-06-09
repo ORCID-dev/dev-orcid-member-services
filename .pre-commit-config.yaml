@@ -68,18 +68,19 @@ repos:
         types: [yaml]
         files: "^.github/workflows/"
 
-      - id: maven-spotless-check
-        name: maven spotless check
-        description: Runs spotless:check goal
-        entry: mvn -f spotless/pom.xml spotless:check
+      - id: maven-spotless-apply
+        name: maven spotless apply
+        description: Runs spotless:apply goal
+        entry: |
+            env MAVEN_OPTS="-client -XX:TieredStopAtLevel=1 -Xverify:none -XX:+TieredCompilation"
+            mvn --batch-mode -f spotless/pom.xml spotless:apply
         language: system
         types: [xml]
         pass_filenames: false
 
       - id: prettier
         name: prettier-local
-        #types: [javascript]
-        types: [xml]
+        types: [javascript,css,xml]
         entry: prettier --write --list-different --ignore-unknown
         #entry: prettier --check --loglevel debug
         additional_dependencies:
