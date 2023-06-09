@@ -11,8 +11,6 @@ source shellkit_bootstrap.sh
 current_dir=`pwd`
 checkout_name=$(basename `pwd`)
 NAME="$(basename "${0}")"
-build_envs="prod sandbox qa int"
-tag="v2.0.1"
 current_dir=`pwd`
 
 #
@@ -61,4 +59,10 @@ sk-asdf-install-tool-versions
 _asdf_java_update_java_home
 
 sk-dir-make ~/log
+
+echo "installing pre-commit to run lints"
+pre-commit install
+
+echo "installing prettier npms which can be used to debug prettier"
+npm install -g prettier@2.8.8 prettier-plugin-java@2.1.0 @prettier/plugin-xml@2.2.0
 
