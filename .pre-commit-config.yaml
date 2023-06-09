@@ -27,13 +27,6 @@ repos:
         exclude: ".ytt.yaml$"
         types: [yaml]
 
-      - id: check-json
-        name: check json
-        description: checks json files for parseable syntax.
-        entry: check-json
-        language: python
-        types: [json]
-
       - id: check-merge-conflict
         name: check for merge conflicts
         description: checks for files that contain merge conflict strings.
@@ -56,6 +49,11 @@ repos:
         language: python
         exclude: ".csv$"
         types: [text]
+
+  - repo: https://gitlab.com/bmares/check-json5
+    rev: v1.0.0
+    hooks:
+      - id: check-json5
 
   - repo: local
     hooks:
