@@ -71,8 +71,9 @@ repos:
       - id: maven-spotless-check
         name: maven spotless check
         description: Runs spotless:check goal
-        entry: mvn -f spotless.xml spotless:check
+        entry: mvn -f spotless/pom.xml spotless:check
         language: system
+        types: [xml]
         pass_filenames: false
 
       - id: prettier
@@ -87,6 +88,7 @@ repos:
           - "prettier-plugin-java@v2.1.0"
         language: node
         args: []
+        exclude: ".pom$"
         require_serial: false
         minimum_pre_commit_version: "0"
 
