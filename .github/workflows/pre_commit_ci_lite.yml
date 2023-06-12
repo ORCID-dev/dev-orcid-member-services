@@ -1,4 +1,6 @@
-name: lint
+name: pre_commit_ci_lite
+
+# NOTE: this action will only apply changes on a pr action
 
 on:
   workflow_call:
@@ -31,4 +33,6 @@ jobs:
       # lockdown all 3rd party repos to git shas
       - uses: pre-commit/action@5f528da5c95691c4cf42ff76a4d10854b62cbb82
 
+      - uses: pre-commit-ci/lite-action@v1.0.1
+        if: always()
 

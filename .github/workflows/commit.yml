@@ -3,12 +3,11 @@ name: commit
 # run lints even before someone submits a pr
 
 on:
-  pull_request:
   push:
     branches:
       - '**' # run on any branch
-    #  - '!main'
-    #  - '!development'
+      - '!main'
+      - '!development'
 
 # cancel running job if another commit comes in
 concurrency:
