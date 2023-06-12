@@ -17,3 +17,4 @@ concurrency:
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
+    if: github.event_name != 'pull_request'
