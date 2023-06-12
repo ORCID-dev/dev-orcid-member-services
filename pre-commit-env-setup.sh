@@ -24,7 +24,7 @@ I_USAGE="
   Usage: ${NAME} [OPTIONS]
 
   Description:
-    setup environment for running lint tools
+    Pre-commit manages tools but not environments. This will setup some of the environment dependencies using asdf and the .tool-version file in the project
 
   General usage:
 
