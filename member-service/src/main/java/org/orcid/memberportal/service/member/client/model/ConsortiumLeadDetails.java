@@ -1,7 +1,8 @@
 package org.orcid.memberportal.service.member.client.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ConsortiumLeadDetails extends MemberDetails {
 
@@ -15,4 +16,5 @@ public class ConsortiumLeadDetails extends MemberDetails {
     public void setConsortiumMembers(List<ConsortiumMember> consortiumMembers) {
         this.consortiumMembers = consortiumMembers;
     }
+
 }

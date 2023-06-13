@@ -1,8 +1,6 @@
 package io.github.jhipster.registry.config.apidoc;
 
 import io.github.jhipster.config.JHipsterConstants;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Primary;
@@ -11,14 +9,16 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Retrieves all registered microservices Swagger resources.
  */
 @Component
 @Primary
 @Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
-public class RegistrySwaggerResourcesProvider
-    implements SwaggerResourcesProvider {
+public class RegistrySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
     private final RouteLocator routeLocator;
 
@@ -36,12 +36,7 @@ public class RegistrySwaggerResourcesProvider
         //Add the registered microservices swagger docs as additional swagger resources
         List<Route> routes = routeLocator.getRoutes();
         routes.forEach(route -> {
-            resources.add(
-                swaggerResource(
-                    route.getId(),
-                    route.getFullPath().replace("**", "v2/api-docs")
-                )
-            );
+            resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v2/api-docs")));
         });
 
         return resources;

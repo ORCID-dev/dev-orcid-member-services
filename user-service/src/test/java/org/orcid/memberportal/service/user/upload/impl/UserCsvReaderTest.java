@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,14 +42,7 @@ class UserCsvReaderTest {
 
     @Test
     void testReadUsersUpload() throws IOException {
-        Mockito
-            .when(
-                userValidator.validate(
-                    Mockito.any(UserDTO.class),
-                    Mockito.any(User.class)
-                )
-            )
-            .thenReturn(getUserValidation(new ArrayList<>()));
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(getUserValidation(new ArrayList<>()));
 
         InputStream inputStream = getClass().getResourceAsStream("/users.csv");
         UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
@@ -77,14 +71,7 @@ class UserCsvReaderTest {
 
     @Test
     void testReadUsersUploadInvalidEmails() throws IOException, JSONException {
-        Mockito
-            .when(
-                userValidator.validate(
-                    Mockito.any(UserDTO.class),
-                    Mockito.any(User.class)
-                )
-            )
-            .thenReturn(getUserValidation(Arrays.asList("some-error")));
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(getUserValidation(Arrays.asList("some-error")));
 
         InputStream inputStream = getClass().getResourceAsStream("/users.csv");
         UserUpload upload = reader.readUsersUpload(inputStream, getUser("en"));
@@ -113,4 +100,5 @@ class UserCsvReaderTest {
         user.setMemberName("some member name");
         return user;
     }
+
 }

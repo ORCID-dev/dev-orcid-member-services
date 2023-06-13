@@ -1,6 +1,5 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import io.github.jhipster.config.JHipsterProperties;
 import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,26 +15,20 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import io.github.jhipster.config.JHipsterProperties;
+
 /**
  * Default base class for an {@link OAuth2TokenEndpointClient}. Individual
  * implementations for a particular OAuth2 provider can use this as a starting
  * point.
  */
-public abstract class OAuth2TokenEndpointClientAdapter
-    implements OAuth2TokenEndpointClient {
-
-    private final Logger log = LoggerFactory.getLogger(
-        OAuth2TokenEndpointClientAdapter.class
-    );
+public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
+    private final Logger log = LoggerFactory.getLogger(OAuth2TokenEndpointClientAdapter.class);
     protected final RestTemplate restTemplate;
     protected final JHipsterProperties jHipsterProperties;
     protected final OAuth2Properties oAuth2Properties;
 
-    public OAuth2TokenEndpointClientAdapter(
-        RestTemplate restTemplate,
-        JHipsterProperties jHipsterProperties,
-        OAuth2Properties oAuth2Properties
-    ) {
+    public OAuth2TokenEndpointClientAdapter(RestTemplate restTemplate, JHipsterProperties jHipsterProperties, OAuth2Properties oAuth2Properties) {
         this.restTemplate = restTemplate;
         this.jHipsterProperties = jHipsterProperties;
         this.oAuth2Properties = oAuth2Properties;
@@ -51,11 +44,7 @@ public abstract class OAuth2TokenEndpointClientAdapter
      * @return the access token.
      */
     @Override
-    public OAuth2AccessToken sendPasswordGrant(
-        String username,
-        String password,
-        String mfaCode
-    ) {
+    public OAuth2AccessToken sendPasswordGrant(String username, String password, String mfaCode) {
         HttpHeaders reqHeaders = new HttpHeaders();
         reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
@@ -64,25 +53,11 @@ public abstract class OAuth2TokenEndpointClientAdapter
         formParams.set("mfa_code", mfaCode);
         formParams.set("grant_type", "password");
         addAuthentication(reqHeaders, formParams);
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(
-            formParams,
-            reqHeaders
-        );
-        log.debug(
-            "contacting OAuth2 token endpoint to login user: {}",
-            username
-        );
-        ResponseEntity<OAuth2AccessToken> responseEntity =
-            restTemplate.postForEntity(
-                getTokenEndpoint(),
-                entity,
-                OAuth2AccessToken.class
-            );
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
+        log.debug("contacting OAuth2 token endpoint to login user: {}", username);
+        ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(getTokenEndpoint(), entity, OAuth2AccessToken.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            log.debug(
-                "failed to authenticate user with OAuth2 token endpoint, status: {}",
-                responseEntity.getStatusCodeValue()
-            );
+            log.debug("failed to authenticate user with OAuth2 token endpoint, status: {}", responseEntity.getStatusCodeValue());
             throw new HttpClientErrorException(responseEntity.getStatusCode());
         }
         OAuth2AccessToken accessToken = responseEntity.getBody();
@@ -104,24 +79,11 @@ public abstract class OAuth2TokenEndpointClientAdapter
         params.add("refresh_token", refreshTokenValue);
         HttpHeaders headers = new HttpHeaders();
         addAuthentication(headers, params);
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(
-            params,
-            headers
-        );
-        log.debug(
-            "contacting OAuth2 token endpoint to refresh OAuth2 JWT tokens"
-        );
-        ResponseEntity<OAuth2AccessToken> responseEntity =
-            restTemplate.postForEntity(
-                getTokenEndpoint(),
-                entity,
-                OAuth2AccessToken.class
-            );
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
+        log.debug("contacting OAuth2 token endpoint to refresh OAuth2 JWT tokens");
+        ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(getTokenEndpoint(), entity, OAuth2AccessToken.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            log.debug(
-                "failed to refresh tokens: {}",
-                responseEntity.getStatusCodeValue()
-            );
+            log.debug("failed to refresh tokens: {}", responseEntity.getStatusCodeValue());
             throw new HttpClientErrorException(responseEntity.getStatusCode());
         }
         OAuth2AccessToken accessToken = responseEntity.getBody();
@@ -129,31 +91,20 @@ public abstract class OAuth2TokenEndpointClientAdapter
         return accessToken;
     }
 
-    protected abstract void addAuthentication(
-        HttpHeaders reqHeaders,
-        MultiValueMap<String, String> formParams
-    );
+    protected abstract void addAuthentication(HttpHeaders reqHeaders, MultiValueMap<String, String> formParams);
 
     protected String getClientSecret() {
-        String clientSecret = oAuth2Properties
-            .getWebClientConfiguration()
-            .getSecret();
+        String clientSecret = oAuth2Properties.getWebClientConfiguration().getSecret();
         if (clientSecret == null) {
-            throw new InvalidClientException(
-                "no client-secret configured in application properties"
-            );
+            throw new InvalidClientException("no client-secret configured in application properties");
         }
         return clientSecret;
     }
 
     protected String getClientId() {
-        String clientId = oAuth2Properties
-            .getWebClientConfiguration()
-            .getClientId();
+        String clientId = oAuth2Properties.getWebClientConfiguration().getClientId();
         if (clientId == null) {
-            throw new InvalidClientException(
-                "no client-id configured in application properties"
-            );
+            throw new InvalidClientException("no client-id configured in application properties");
         }
         return clientId;
     }
@@ -164,15 +115,11 @@ public abstract class OAuth2TokenEndpointClientAdapter
      * @return the OAuth2 token endpoint URI.
      */
     protected String getTokenEndpoint() {
-        String tokenEndpointUrl = jHipsterProperties
-            .getSecurity()
-            .getClientAuthorization()
-            .getAccessTokenUri();
+        String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
         if (tokenEndpointUrl == null) {
-            throw new InvalidClientException(
-                "no token endpoint configured in application properties"
-            );
+            throw new InvalidClientException("no token endpoint configured in application properties");
         }
         return tokenEndpointUrl;
     }
+
 }

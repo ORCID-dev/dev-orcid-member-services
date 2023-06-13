@@ -10,4 +10,7 @@ public class RinggoldOrgValidator implements OrgValidator {
     public boolean validId(String id) {
         return id.chars().allMatch(x -> Character.isDigit(x));
     }
+
+
+
 }

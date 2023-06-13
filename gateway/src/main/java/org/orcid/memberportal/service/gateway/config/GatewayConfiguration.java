@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.gateway.config;
 
 import io.github.jhipster.config.JHipsterProperties;
+
 import org.orcid.memberportal.service.gateway.gateway.accesscontrol.AccessControlFilter;
 import org.orcid.memberportal.service.gateway.gateway.ratelimiting.RateLimitingFilter;
 import org.orcid.memberportal.service.gateway.gateway.responserewriting.SwaggerBasePathRewritingFilter;
@@ -25,10 +26,7 @@ public class GatewayConfiguration {
     public static class AccessControlFilterConfiguration {
 
         @Bean
-        public AccessControlFilter accessControlFilter(
-            RouteLocator routeLocator,
-            JHipsterProperties jHipsterProperties
-        ) {
+        public AccessControlFilter accessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties) {
             return new AccessControlFilter(routeLocator, jHipsterProperties);
         }
     }
@@ -45,9 +43,7 @@ public class GatewayConfiguration {
 
         private final JHipsterProperties jHipsterProperties;
 
-        public RateLimitingConfiguration(
-            JHipsterProperties jHipsterProperties
-        ) {
+        public RateLimitingConfiguration(JHipsterProperties jHipsterProperties) {
             this.jHipsterProperties = jHipsterProperties;
         }
 

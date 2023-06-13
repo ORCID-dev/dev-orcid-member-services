@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.assertion.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -111,4 +112,5 @@ public class StoredFile implements Serializable {
     public void setOriginalFilename(String originalFilename) {
         this.originalFilename = originalFilename;
     }
+
 }

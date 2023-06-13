@@ -1,9 +1,9 @@
 package org.orcid.memberportal.service.member.web.rest;
 
+import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.ReportService;
 import org.orcid.memberportal.service.member.services.UserService;
-import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
-import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,7 @@ public class ReportResource {
     @GetMapping("/reports/member")
     public ResponseEntity<ReportInfo> getMemberReport() {
         MemberServiceUser user = userService.getLoggedInUser();
-        LOG.info(
-            "Generating member report for user {} of {}",
-            user.getEmail(),
-            user.getMemberName()
-        );
+        LOG.info("Generating member report for user {} of {}", user.getEmail(), user.getMemberName());
         ReportInfo memberReportInfo = reportService.getMemberReportInfo();
         return ResponseEntity.ok(memberReportInfo);
     }
@@ -42,11 +38,7 @@ public class ReportResource {
     @GetMapping("/reports/integration")
     public ResponseEntity<ReportInfo> getIntegrationReport() {
         MemberServiceUser user = userService.getLoggedInUser();
-        LOG.info(
-            "Generating integration report for user {} of {}",
-            user.getEmail(),
-            user.getMemberName()
-        );
+        LOG.info("Generating integration report for user {} of {}", user.getEmail(), user.getMemberName());
         ReportInfo memberReportInfo = reportService.getIntegrationReportInfo();
         return ResponseEntity.ok(memberReportInfo);
     }
@@ -54,39 +46,26 @@ public class ReportResource {
     @GetMapping("/reports/consortia")
     public ResponseEntity<ReportInfo> getConsortiaReport() {
         MemberServiceUser user = userService.getLoggedInUser();
-        LOG.info(
-            "Generating consortium report for user {} of {}",
-            user.getEmail(),
-            user.getMemberName()
-        );
-        ReportInfo consortiumReportInfo =
-            reportService.getConsortiaReportInfo();
+        LOG.info("Generating consortium report for user {} of {}", user.getEmail(), user.getMemberName());
+        ReportInfo consortiumReportInfo = reportService.getConsortiaReportInfo();
         return ResponseEntity.ok(consortiumReportInfo);
     }
 
     @GetMapping("/reports/affiliation")
     public ResponseEntity<ReportInfo> getAffiliationReport() {
         MemberServiceUser user = userService.getLoggedInUser();
-        LOG.info(
-            "Generating affiliation report for user {} of {}",
-            user.getEmail(),
-            user.getMemberName()
-        );
-        ReportInfo affiliationReportInfo =
-            reportService.getAffiliationReportInfo();
+        LOG.info("Generating affiliation report for user {} of {}", user.getEmail(), user.getMemberName());
+        ReportInfo affiliationReportInfo = reportService.getAffiliationReportInfo();
         return ResponseEntity.ok(affiliationReportInfo);
     }
 
     @GetMapping("/reports/consortia-member-affiliations")
     public ResponseEntity<ReportInfo> getConsortiaMemberAffiliationsReport() {
         MemberServiceUser user = userService.getLoggedInUser();
-        LOG.info(
-            "Generating consortia member affiliations report for user {} of {}",
-            user.getEmail(),
-            user.getMemberName()
-        );
-        ReportInfo reportInfo =
-            reportService.getConsortiaMemberAffiliationsReportInfo();
+        LOG.info("Generating consortia member affiliations report for user {} of {}", user.getEmail(), user.getMemberName());
+        ReportInfo reportInfo = reportService.getConsortiaMemberAffiliationsReportInfo();
         return ResponseEntity.ok(reportInfo);
     }
+
+
 }

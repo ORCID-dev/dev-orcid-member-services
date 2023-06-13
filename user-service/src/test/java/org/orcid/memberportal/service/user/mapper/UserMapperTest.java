@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,26 +32,8 @@ public class UserMapperTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito
-            .when(
-                memberService.getMemberNameBySalesforce(
-                    Mockito.eq("salesforce1")
-                )
-            )
-            .thenReturn("member 1");
-        Mockito
-            .when(
-                authorityService.getAuthoritiesForUser(Mockito.any(User.class))
-            )
-            .thenReturn(
-                new HashSet<String>(
-                    Arrays.asList(
-                        AuthoritiesConstants.ADMIN,
-                        AuthoritiesConstants.USER,
-                        AuthoritiesConstants.ORG_OWNER
-                    )
-                )
-            );
+        Mockito.when(memberService.getMemberNameBySalesforce(Mockito.eq("salesforce1"))).thenReturn("member 1");
+        Mockito.when(authorityService.getAuthoritiesForUser(Mockito.any(User.class))).thenReturn(new HashSet<String>(Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER, AuthoritiesConstants.ORG_OWNER)));
     }
 
     @Test
@@ -116,4 +99,5 @@ public class UserMapperTest {
         user.setMainContact(true);
         return user;
     }
+
 }

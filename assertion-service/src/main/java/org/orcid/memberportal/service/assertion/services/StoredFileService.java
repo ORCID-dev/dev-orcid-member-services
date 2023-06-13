@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
@@ -21,9 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class StoredFileService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        StoredFileService.class
-    );
+    private static final Logger LOG = LoggerFactory.getLogger(StoredFileService.class);
 
     static final String MEMBER_ASSERTION_STATS_FILE_TYPE = "assertion-stats";
 
@@ -37,19 +36,13 @@ public class StoredFileService {
     @Autowired
     private ApplicationProperties applicationProperties;
 
-    public File storeMemberAssertionStatsFile(String content)
-        throws IOException {
+    public File storeMemberAssertionStatsFile(String content) throws IOException {
         Instant now = Instant.now();
         File outputFile = writeMemberAssertionStatsFile(content);
         StoredFile storedFile = new StoredFile();
         storedFile.setFileLocation(outputFile.getAbsolutePath());
         storedFile.setDateWritten(now);
-        storedFile.setRemovalDate(
-            now.plus(
-                applicationProperties.getStoredFileLifespan(),
-                ChronoUnit.DAYS
-            )
-        );
+        storedFile.setRemovalDate(now.plus(applicationProperties.getStoredFileLifespan(), ChronoUnit.DAYS));
         storedFile.setOwnerId(StoredFile.DEFAULT_SYSTEM_OWNER_ID);
         storedFile.setFileType(MEMBER_ASSERTION_STATS_FILE_TYPE);
         storedFile.setDateProcessed(now);
@@ -57,56 +50,32 @@ public class StoredFileService {
         return outputFile;
     }
 
-    public void storeAssertionsCsvFile(
-        InputStream inputStream,
-        String filename,
-        AssertionServiceUser user
-    ) throws IOException {
+    public void storeAssertionsCsvFile(InputStream inputStream, String filename, AssertionServiceUser user) throws IOException {
         File outputFile = writeCsvUploadFile(inputStream);
         StoredFile storedFile = new StoredFile();
         storedFile.setOriginalFilename(filename);
         storedFile.setFileLocation(outputFile.getAbsolutePath());
         storedFile.setDateWritten(Instant.now());
-        storedFile.setRemovalDate(
-            storedFile
-                .getDateWritten()
-                .plus(
-                    applicationProperties.getStoredFileLifespan(),
-                    ChronoUnit.DAYS
-                )
-        );
+        storedFile.setRemovalDate(storedFile.getDateWritten().plus(applicationProperties.getStoredFileLifespan(), ChronoUnit.DAYS));
         storedFile.setOwnerId(user.getId());
         storedFile.setFileType(ASSERTIONS_CSV_FILE_TYPE);
         storedFileRepository.save(storedFile);
     }
 
-    public StoredFile storeCsvReportFile(
-        String report,
-        String originalFilename,
-        AssertionServiceUser user
-    ) throws IOException {
+    public StoredFile storeCsvReportFile(String report, String originalFilename, AssertionServiceUser user) throws IOException {
         File outputFile = writeCsvReportFile(report);
         StoredFile storedFile = new StoredFile();
         storedFile.setOriginalFilename(originalFilename);
         storedFile.setFileLocation(outputFile.getAbsolutePath());
         storedFile.setDateWritten(Instant.now());
-        storedFile.setRemovalDate(
-            storedFile
-                .getDateWritten()
-                .plus(
-                    applicationProperties.getStoredFileLifespan(),
-                    ChronoUnit.DAYS
-                )
-        );
+        storedFile.setRemovalDate(storedFile.getDateWritten().plus(applicationProperties.getStoredFileLifespan(), ChronoUnit.DAYS));
         storedFile.setOwnerId(user.getId());
         storedFile.setFileType(CSV_REPORT_FILE_TYPE);
         return storedFileRepository.save(storedFile);
     }
 
     public List<StoredFile> getUnprocessedStoredFilesByType(String type) {
-        return storedFileRepository.findUnprocessedByType(
-            ASSERTIONS_CSV_FILE_TYPE
-        );
+        return storedFileRepository.findUnprocessedByType(ASSERTIONS_CSV_FILE_TYPE);
     }
 
     public void markAsProcessed(StoredFile storedFile) {
@@ -116,42 +85,20 @@ public class StoredFileService {
 
     private File writeCsvReportFile(String content) throws IOException {
         createDir(applicationProperties.getCsvReportsDirectory());
-        return writeStringToFile(
-            content,
-            CSV_REPORT_FILE_TYPE,
-            ".csv",
-            new File(applicationProperties.getCsvReportsDirectory())
-        );
+        return writeStringToFile(content, CSV_REPORT_FILE_TYPE, ".csv", new File(applicationProperties.getCsvReportsDirectory()));
     }
 
-    private File writeMemberAssertionStatsFile(String content)
-        throws IOException {
+    private File writeMemberAssertionStatsFile(String content) throws IOException {
         createDir(applicationProperties.getMemberAssertionStatsDirectory());
-        return writeStringToFile(
-            content,
-            MEMBER_ASSERTION_STATS_FILE_TYPE,
-            ".csv",
-            new File(applicationProperties.getMemberAssertionStatsDirectory())
-        );
+        return writeStringToFile(content, MEMBER_ASSERTION_STATS_FILE_TYPE, ".csv", new File(applicationProperties.getMemberAssertionStatsDirectory()));
     }
 
-    private File writeCsvUploadFile(InputStream inputStream)
-        throws IOException {
+    private File writeCsvUploadFile(InputStream inputStream) throws IOException {
         createDir(applicationProperties.getAssertionsCsvUploadDirectory());
-        return writeInputStreamToFile(
-            inputStream,
-            ASSERTIONS_CSV_FILE_TYPE,
-            ".csv",
-            new File(applicationProperties.getAssertionsCsvUploadDirectory())
-        );
+        return writeInputStreamToFile(inputStream, ASSERTIONS_CSV_FILE_TYPE, ".csv", new File(applicationProperties.getAssertionsCsvUploadDirectory()));
     }
 
-    private File writeStringToFile(
-        String content,
-        String fileType,
-        String extension,
-        File parent
-    ) throws IOException {
+    private File writeStringToFile(String content, String fileType, String extension, File parent) throws IOException {
         File outputFile = File.createTempFile(fileType, extension, parent);
         OutputStream outputStream = new FileOutputStream(outputFile);
         IOUtils.write(content, outputStream, "UTF-8");
@@ -159,12 +106,7 @@ public class StoredFileService {
         return outputFile;
     }
 
-    private File writeInputStreamToFile(
-        InputStream inputStream,
-        String fileType,
-        String extension,
-        File parent
-    ) throws IOException {
+    private File writeInputStreamToFile(InputStream inputStream, String fileType, String extension, File parent) throws IOException {
         File outputFile = File.createTempFile(fileType, extension, parent);
         OutputStream outputStream = new FileOutputStream(outputFile);
         IOUtils.copy(inputStream, outputStream);
@@ -178,9 +120,7 @@ public class StoredFileService {
         if (!dir.exists()) {
             boolean created = dir.mkdir();
             if (!created) {
-                throw new RuntimeException(
-                    "Failed to create directory " + path
-                );
+                throw new RuntimeException("Failed to create directory " + path);
             }
         }
     }
@@ -195,10 +135,7 @@ public class StoredFileService {
     }
 
     private void removeStoredFile(StoredFile f) {
-        LOG.info(
-            "Removing file {} which is marked for deletion",
-            f.getFileLocation()
-        );
+        LOG.info("Removing file {} which is marked for deletion", f.getFileLocation());
         File file = new File(f.getFileLocation());
         boolean deleted = file.delete();
         if (!deleted) {
@@ -210,4 +147,5 @@ public class StoredFileService {
             LOG.info("Record deleted");
         }
     }
+
 }

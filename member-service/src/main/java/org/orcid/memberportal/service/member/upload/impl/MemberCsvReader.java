@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Locale;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -26,9 +27,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberCsvReader implements MembersUploadReader {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        MemberCsvReader.class
-    );
+    private static final Logger LOG = LoggerFactory.getLogger(MemberCsvReader.class);
 
     @Autowired
     private MessageSource messageSource;
@@ -37,31 +36,18 @@ public class MemberCsvReader implements MembersUploadReader {
     private MemberValidator memberValidator;
 
     @Override
-    public MemberUpload readMemberUpload(
-        InputStream inputStream,
-        MemberServiceUser user
-    ) throws IOException {
+    public MemberUpload readMemberUpload(InputStream inputStream, MemberServiceUser user) throws IOException {
         MemberUpload upload = new MemberUpload();
 
-        try (
-            final Reader reader = new InputStreamReader(
-                new BOMInputStream(inputStream),
-                StandardCharsets.UTF_8
-            );
-            final CSVParser parser = new CSVParser(
-                reader,
-                CSVFormat.DEFAULT.withHeader()
-            )
-        ) {
+        try (final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
+                final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader())) {
+
             for (CSVRecord line : parser) {
                 try {
                     Member member = createMemberInstance(user);
                     member = parseLine(line, member);
 
-                    MemberValidation validation = memberValidator.validate(
-                        member,
-                        user
-                    );
+                    MemberValidation validation = memberValidator.validate(member, user);
                     if (!validation.isValid()) {
                         for (String error : validation.getErrors()) {
                             upload.addError(line.getRecordNumber(), error);
@@ -70,14 +56,8 @@ public class MemberCsvReader implements MembersUploadReader {
                         upload.addMember(member);
                     }
                 } catch (Exception e) {
-                    LOG.info(
-                        "CSV upload error found for record number {}",
-                        line.getRecordNumber()
-                    );
-                    upload.addError(
-                        line.getRecordNumber(),
-                        getError("unexpected", e.getMessage(), user)
-                    );
+                    LOG.info("CSV upload error found for record number {}", line.getRecordNumber());
+                    upload.addError(line.getRecordNumber(), getError("unexpected", e.getMessage(), user));
                 }
             }
         }
@@ -96,9 +76,7 @@ public class MemberCsvReader implements MembersUploadReader {
 
     private Member parseLine(CSVRecord record, Member member) {
         if (record.isSet("assertionServiceEnabled")) {
-            member.setAssertionServiceEnabled(
-                Boolean.parseBoolean(record.get("assertionServiceEnabled"))
-            );
+            member.setAssertionServiceEnabled(Boolean.parseBoolean(record.get("assertionServiceEnabled")));
         } else {
             member.setAssertionServiceEnabled(false);
         }
@@ -108,9 +86,7 @@ public class MemberCsvReader implements MembersUploadReader {
         }
 
         if (record.isSet("isConsortiumLead")) {
-            member.setIsConsortiumLead(
-                Boolean.parseBoolean(record.get("isConsortiumLead"))
-            );
+            member.setIsConsortiumLead(Boolean.parseBoolean(record.get("isConsortiumLead")));
         }
 
         if (record.isSet("salesforceId")) {
@@ -128,10 +104,7 @@ public class MemberCsvReader implements MembersUploadReader {
     }
 
     private String getError(String code, String arg, MemberServiceUser user) {
-        return messageSource.getMessage(
-            "member.validation.error." + code,
-            arg != null ? new Object[] { arg } : null,
-            Locale.forLanguageTag(user.getLangKey())
-        );
+        return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
     }
+
 }

@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -35,41 +37,26 @@ public class HealthResourceTest {
     public void setup() throws IOException {
         MockitoAnnotations.initMocks(this);
         Mockito.when(routeLocator.getRoutes()).thenReturn(getRoutes());
-        Mockito
-            .when(
-                healthService.checkGlobalHealth(
-                    Mockito.anyList(),
-                    Mockito.any(HttpServletRequest.class)
-                )
-            )
-            .thenReturn(getHealth());
+        Mockito.when(healthService.checkGlobalHealth(Mockito.anyList(), Mockito.any(HttpServletRequest.class))).thenReturn(getHealth());
     }
+
 
     @Test
     @WithMockUser(username = "test", roles = "ADMIN")
     public void testHealthCheck() throws Exception {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
-        ResponseEntity<CompositeHealthDTO> health = healthResource.healthCheck(
-            request
-        );
+        ResponseEntity<CompositeHealthDTO> health = healthResource.healthCheck(request);
         assertThat(health).isNotNull();
         assertThat(health.getStatusCodeValue()).isEqualTo(200);
         assertThat(health.getBody()).isNotNull();
         assertThat(health.getBody().getStatus()).isEqualTo(Status.UP);
         assertThat(health.getBody().getComponents().size()).isEqualTo(2);
-        assertThat(health.getBody().getComponents().get("service-1"))
-            .isEqualTo(Status.UP);
-        assertThat(health.getBody().getComponents().get("service-2"))
-            .isEqualTo(Status.UP);
+        assertThat(health.getBody().getComponents().get("service-1")).isEqualTo(Status.UP);
+        assertThat(health.getBody().getComponents().get("service-2")).isEqualTo(Status.UP);
 
         Mockito.verify(routeLocator).getRoutes();
-        Mockito
-            .verify(healthService)
-            .checkGlobalHealth(
-                Mockito.anyList(),
-                Mockito.any(HttpServletRequest.class)
-            );
+        Mockito.verify(healthService).checkGlobalHealth(Mockito.anyList(), Mockito.any(HttpServletRequest.class));
     }
 
     private List<Route> getRoutes() {

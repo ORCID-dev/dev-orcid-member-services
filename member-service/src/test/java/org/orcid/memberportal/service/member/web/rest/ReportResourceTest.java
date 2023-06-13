@@ -10,10 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.ReportService;
 import org.orcid.memberportal.service.member.services.UserService;
-import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
-import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 import org.springframework.http.ResponseEntity;
 
@@ -36,9 +36,7 @@ public class ReportResourceTest {
 
     @Test
     public void testGetMemberReport() {
-        Mockito
-            .when(mockReportService.getMemberReportInfo())
-            .thenReturn(getReportInfo());
+        Mockito.when(mockReportService.getMemberReportInfo()).thenReturn(getReportInfo());
         ResponseEntity<ReportInfo> response = reportResource.getMemberReport();
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
@@ -47,11 +45,8 @@ public class ReportResourceTest {
 
     @Test
     public void testGetIntegrationReport() {
-        Mockito
-            .when(mockReportService.getIntegrationReportInfo())
-            .thenReturn(getReportInfo());
-        ResponseEntity<ReportInfo> response =
-            reportResource.getIntegrationReport();
+        Mockito.when(mockReportService.getIntegrationReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getIntegrationReport();
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
         assertThat(response.getBody()).isNotNull();
@@ -59,11 +54,8 @@ public class ReportResourceTest {
 
     @Test
     public void testGetConsortiumReport() {
-        Mockito
-            .when(mockReportService.getConsortiaReportInfo())
-            .thenReturn(getReportInfo());
-        ResponseEntity<ReportInfo> response =
-            reportResource.getConsortiaReport();
+        Mockito.when(mockReportService.getConsortiaReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getConsortiaReport();
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
         assertThat(response.getBody()).isNotNull();
@@ -71,11 +63,8 @@ public class ReportResourceTest {
 
     @Test
     public void testGetConsortiaMemberAffiliationsReport() {
-        Mockito
-            .when(mockReportService.getConsortiaMemberAffiliationsReportInfo())
-            .thenReturn(getReportInfo());
-        ResponseEntity<ReportInfo> response =
-            reportResource.getConsortiaMemberAffiliationsReport();
+        Mockito.when(mockReportService.getConsortiaMemberAffiliationsReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getConsortiaMemberAffiliationsReport();
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
         assertThat(response.getBody()).isNotNull();
@@ -83,11 +72,8 @@ public class ReportResourceTest {
 
     @Test
     public void testGetAffiliationReport() {
-        Mockito
-            .when(mockReportService.getAffiliationReportInfo())
-            .thenReturn(getReportInfo());
-        ResponseEntity<ReportInfo> response =
-            reportResource.getAffiliationReport();
+        Mockito.when(mockReportService.getAffiliationReportInfo()).thenReturn(getReportInfo());
+        ResponseEntity<ReportInfo> response = reportResource.getAffiliationReport();
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.SC_OK);
         assertThat(response.getBody()).isNotNull();
@@ -95,15 +81,10 @@ public class ReportResourceTest {
 
     @Test
     public void testGetConsortiumReportIllegalAccess() {
-        Mockito
-            .when(mockReportService.getConsortiaReportInfo())
-            .thenThrow(new BadRequestAlertException("test", null, null));
-        Assertions.assertThrows(
-            BadRequestAlertException.class,
-            () -> {
-                reportResource.getConsortiaReport();
-            }
-        );
+        Mockito.when(mockReportService.getConsortiaReportInfo()).thenThrow(new BadRequestAlertException("test", null, null));
+        Assertions.assertThrows(BadRequestAlertException.class, () -> {
+            reportResource.getConsortiaReport();
+        });
     }
 
     private ReportInfo getReportInfo() {
@@ -119,4 +100,5 @@ public class ReportResourceTest {
         user.setMemberName("orcid.org");
         return user;
     }
+
 }

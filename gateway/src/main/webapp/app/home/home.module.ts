@@ -1,7 +1,7 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import { GatewaySharedModule } from 'app/shared'
+import { GatewaySharedModule } from 'app/shared';
 import {
   HOME_ROUTE,
   HomeComponent,
@@ -10,18 +10,13 @@ import {
   GenericLandingComponent,
   MemberInfoLandingComponent,
   MemberInfoEditComponent,
-  ContactUpdateComponent,
-} from './'
-import { TextFieldModule } from '@angular/cdk/text-field'
-import { QuillModule } from 'ngx-quill'
+  ContactUpdateComponent
+} from './';
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-  imports: [
-    GatewaySharedModule,
-    RouterModule.forChild([HOME_ROUTE]),
-    TextFieldModule,
-    QuillModule.forRoot(),
-  ],
+  imports: [GatewaySharedModule, RouterModule.forChild([HOME_ROUTE]), TextFieldModule, QuillModule.forRoot()],
   declarations: [
     HomeComponent,
     GenericLandingComponent,
@@ -29,9 +24,9 @@ import { QuillModule } from 'ngx-quill'
     MemberInfoEditComponent,
     ContactUpdateComponent,
     AddConsortiumMemberComponent,
-    RemoveConsortiumMemberComponent,
+    RemoveConsortiumMemberComponent
   ],
 
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class GatewayHomeModule {}

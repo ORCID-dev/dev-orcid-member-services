@@ -25,4 +25,5 @@ public class ParameterizedErrorVM implements Serializable {
     public Map<String, String> getParams() {
         return paramMap;
     }
+
 }

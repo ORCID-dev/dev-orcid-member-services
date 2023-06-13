@@ -2,15 +2,12 @@ package io.github.jhipster.registry.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.jhipster.registry.service.EurekaService;
-import io.github.jhipster.registry.service.HealthService;
-import io.github.jhipster.registry.service.dto.CompositeHealthDTO;
-import io.github.jhipster.registry.service.dto.SimpleHealthDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,6 +17,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import io.github.jhipster.registry.service.EurekaService;
+import io.github.jhipster.registry.service.HealthService;
+import io.github.jhipster.registry.service.dto.CompositeHealthDTO;
+import io.github.jhipster.registry.service.dto.SimpleHealthDTO;
 
 public class HealthResourceTest {
 
@@ -35,32 +37,20 @@ public class HealthResourceTest {
     @BeforeEach
     public void setup() throws IOException {
         MockitoAnnotations.initMocks(this);
-        Mockito
-            .when(eurekaService.getApplications())
-            .thenReturn(getApplications());
-        Mockito
-            .when(
-                healthService.checkHealth(
-                    Mockito.eq("/app-1/some/other/healthcheck/url")
-                )
-            )
-            .thenReturn(getHealth());
+        Mockito.when(eurekaService.getApplications()).thenReturn(getApplications());
+        Mockito.when(healthService.checkHealth(Mockito.eq("/app-1/some/other/healthcheck/url"))).thenReturn(getHealth());
     }
 
     @Test
     @WithMockUser(username = "test", roles = "ADMIN")
     public void testHealthCheck() throws Exception {
-        ResponseEntity<CompositeHealthDTO> health = healthResource.healthCheck(
-            "app-1",
-            "instance-2"
-        );
+        ResponseEntity<CompositeHealthDTO> health = healthResource.healthCheck("app-1", "instance-2");
         assertThat(health).isNotNull();
         assertThat(health.getStatusCodeValue()).isEqualTo(200);
         assertThat(health.getBody()).isNotNull();
         assertThat(health.getBody().getStatus()).isEqualTo(Status.UP);
         assertThat(health.getBody().getComponents().size()).isEqualTo(1);
-        assertThat(health.getBody().getComponents().get("app-1"))
-            .isEqualTo(Status.UP);
+        assertThat(health.getBody().getComponents().get("app-1")).isEqualTo(Status.UP);
     }
 
     private List<Map<String, Object>> getApplications() {
@@ -76,10 +66,7 @@ public class HealthResourceTest {
 
         Map<String, Object> app1Instance2 = new HashMap<>();
         app1Instance2.put("instanceId", "instance-2");
-        app1Instance2.put(
-            "healthCheckUrl",
-            "/app-1/some/other/healthcheck/url"
-        );
+        app1Instance2.put("healthCheckUrl", "/app-1/some/other/healthcheck/url");
         app1Instances.add(app1Instance2);
 
         app1.put("name", "app-1");
@@ -96,10 +83,7 @@ public class HealthResourceTest {
 
         Map<String, Object> app2Instance2 = new HashMap<>();
         app2Instance2.put("instanceId", "app-2-instance-2");
-        app2Instance2.put(
-            "healthCheckUrl",
-            "/app-2/some/other/healthcheck/url"
-        );
+        app2Instance2.put("healthCheckUrl", "/app-2/some/other/healthcheck/url");
         app2Instances.add(app2Instance2);
 
         app2.put("name", "app-2");

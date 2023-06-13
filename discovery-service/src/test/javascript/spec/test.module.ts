@@ -1,26 +1,20 @@
-import { DatePipe } from '@angular/common'
-import { ActivatedRoute, Router } from '@angular/router'
-import { NgModule } from '@angular/core'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import {
-  JhiDataUtils,
-  JhiDateUtils,
-  JhiEventManager,
-  JhiAlertService,
-  JhiParseLinks,
-} from 'ng-jhipster'
+import { DatePipe } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
-import { AccountService } from 'app/core/auth/account.service'
-import { LoginModalService } from 'app/core/login/login-modal.service'
-import { MockAccountService } from './helpers/mock-account.service'
-import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service'
-import { MockActiveModal } from './helpers/mock-active-modal.service'
-import { MockEventManager } from './helpers/mock-event-manager.service'
-import { SessionStorageService } from 'ngx-webstorage'
-import { StateStorageService } from 'app/core/auth/state-storage.service'
-import { MockStateStorageService } from './helpers/mock-state-storage.service'
-import { MockSessionStorageService } from './helpers/mock-session-storage.service'
+import { AccountService } from 'app/core/auth/account.service';
+import { LoginModalService } from 'app/core/login/login-modal.service';
+import { MockAccountService } from './helpers/mock-account.service';
+import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
+import { MockActiveModal } from './helpers/mock-active-modal.service';
+import { MockEventManager } from './helpers/mock-event-manager.service';
+import { SessionStorageService } from 'ngx-webstorage';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { MockStateStorageService } from './helpers/mock-state-storage.service';
+import { MockSessionStorageService } from './helpers/mock-session-storage.service';
 
 @NgModule({
   providers: [
@@ -30,45 +24,45 @@ import { MockSessionStorageService } from './helpers/mock-session-storage.servic
     JhiParseLinks,
     {
       provide: JhiEventManager,
-      useClass: MockEventManager,
+      useClass: MockEventManager
     },
     {
       provide: NgbActiveModal,
-      useClass: MockActiveModal,
+      useClass: MockActiveModal
     },
     {
       provide: ActivatedRoute,
-      useValue: new MockActivatedRoute({ id: 123 }),
+      useValue: new MockActivatedRoute({ id: 123 })
     },
     {
       provide: Router,
-      useClass: MockRouter,
+      useClass: MockRouter
     },
     {
       provide: AccountService,
-      useClass: MockAccountService,
+      useClass: MockAccountService
     },
     {
       provide: LoginModalService,
-      useValue: null,
+      useValue: null
     },
     {
       provide: JhiAlertService,
-      useValue: null,
+      useValue: null
     },
     {
       provide: NgbModal,
-      useValue: null,
+      useValue: null
     },
     {
       provide: SessionStorageService,
-      useClass: MockSessionStorageService,
+      useClass: MockSessionStorageService
     },
     {
       provide: StateStorageService,
-      useClass: MockStateStorageService,
-    },
+      useClass: MockStateStorageService
+    }
   ],
-  imports: [HttpClientTestingModule],
+  imports: [HttpClientTestingModule]
 })
 export class JHipsterRegistryTestModule {}

@@ -2,20 +2,12 @@ package org.orcid.memberportal.service.member.web.rest;
 
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
-import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.upload.MemberUpload;
@@ -38,6 +30,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing members.
@@ -95,14 +96,10 @@ public class MemberResource {
      */
     @PostMapping("/members")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<Member> createMember(
-        @Valid @RequestBody Member member
-    ) throws URISyntaxException, JSONException {
+    public ResponseEntity<Member> createMember(@Valid @RequestBody Member member) throws URISyntaxException, JSONException {
         LOG.debug("REST request to save Member : {}", member);
         Member created = memberService.createMember(member);
-        return ResponseEntity
-            .created(new URI("/api/member/" + created.getId()))
-            .body(created);
+        return ResponseEntity.created(new URI("/api/member/" + created.getId())).body(created);
     }
 
     /**
@@ -118,9 +115,7 @@ public class MemberResource {
      */
     @PostMapping("/members/validate")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<MemberValidation> validateMember(
-        @Valid @RequestBody Member member
-    ) throws URISyntaxException, JSONException {
+    public ResponseEntity<MemberValidation> validateMember(@Valid @RequestBody Member member) throws URISyntaxException, JSONException {
         MemberValidation validation = memberService.validateMember(member);
         return ResponseEntity.ok(validation);
     }
@@ -137,13 +132,9 @@ public class MemberResource {
      */
     @PostMapping("/members/upload")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<String> uploadMember(
-        @RequestParam("file") MultipartFile file
-    ) throws Throwable {
+    public ResponseEntity<String> uploadMember(@RequestParam("file") MultipartFile file) throws Throwable {
         LOG.debug("Uploading member CSV");
-        MemberUpload upload = memberService.uploadMemberCSV(
-            file.getInputStream()
-        );
+        MemberUpload upload = memberService.uploadMemberCSV(file.getInputStream());
         return ResponseEntity.ok().body(upload.getErrors().toString());
     }
 
@@ -163,23 +154,16 @@ public class MemberResource {
      */
     @PutMapping("/members")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<Member> updateMember(
-        @Valid @RequestBody Member member
-    ) throws URISyntaxException, JSONException {
+    public ResponseEntity<Member> updateMember(@Valid @RequestBody Member member) throws URISyntaxException, JSONException {
         LOG.debug("REST request to update Member : {}", member);
-        Optional<Member> existentMember = memberService.getMember(
-            member.getId()
-        );
+        Optional<Member> existentMember = memberService.getMember(member.getId());
         if (!existentMember.isPresent()) {
-            throw new BadRequestAlertException(
-                "Invalid id",
-                "member",
-                "idunavailable.string"
-            );
+            throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
         }
         member = memberService.updateMember(member);
         return ResponseEntity.ok().body(member);
     }
+
 
     /**
      * {@code POST  /members/:id/language/:language } : Updates an existing member's default language.
@@ -193,36 +177,27 @@ public class MemberResource {
      *         updated.
      */
     @PostMapping("/members/{salesforceId}/language/{language}")
-    public ResponseEntity<Void> updateMemberDefaultLanguage(
-        @PathVariable String salesforceId,
-        @PathVariable String language
-    ) {
-        LOG.debug(
-            "REST request to update member default language : {}",
-            salesforceId
-        );
+    public ResponseEntity<Void> updateMemberDefaultLanguage(@PathVariable String salesforceId, @PathVariable String language) {
+        LOG.debug("REST request to update member default language : {}", salesforceId);
         memberService.updateMemberDefaultLanguage(salesforceId, language);
         return ResponseEntity.ok().build();
     }
+
 
     /**
      * {@code PUT  /public-details} : get details of member to which current user belongs
      *
      *
-     * @return the {@link PublicMemberDetails}
+     * @return the {@link MemberUpdateData}
      */
     @PutMapping("/public-details")
-    public ResponseEntity<Boolean> updatePublicMemberDetails(
-        @Valid @RequestBody PublicMemberDetails publicMemberDetails
-    ) {
+    public ResponseEntity<Boolean> updatePublicMemberDetails(@Valid @RequestBody MemberUpdateData memberUpdateData) {
         LOG.info("REST request to update member public details");
-        if (StringUtils.isBlank(publicMemberDetails.getName())) {
+        if (StringUtils.isBlank(memberUpdateData.getName())) {
             LOG.info("Null name in request to update public details");
             return ResponseEntity.badRequest().build();
         }
-        boolean success = memberService.updatePublicMemberDetails(
-            publicMemberDetails
-        );
+        boolean success = memberService.updateMemberData(memberUpdateData);
         return ResponseEntity.ok(success);
     }
 
@@ -248,8 +223,7 @@ public class MemberResource {
     @GetMapping("/member-contacts")
     public ResponseEntity<MemberContacts> getMemberContacts() {
         LOG.debug("REST request to get member contacts");
-        MemberContacts memberContacts =
-            memberService.getCurrentMemberContacts();
+        MemberContacts memberContacts = memberService.getCurrentMemberContacts();
         return ResponseEntity.ok(memberContacts);
     }
 
@@ -278,10 +252,7 @@ public class MemberResource {
      */
     @GetMapping("/members")
     @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<List<Member>> getAllMembers(
-        @RequestParam(required = false, name = "filter") String filter,
-        Pageable pageable
-    ) {
+    public ResponseEntity<List<Member>> getAllMembers(@RequestParam(required = false, name = "filter") String filter, Pageable pageable) {
         LOG.debug("REST request to get a page of Member");
         Page<Member> page = null;
         if (StringUtils.isBlank(filter)) {
@@ -289,18 +260,15 @@ public class MemberResource {
         } else {
             String decodedFilter;
             try {
-                decodedFilter =
-                    URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
+                decodedFilter = URLDecoder.decode(filter, StandardCharsets.UTF_8.name());
+            }
+            catch (UnsupportedEncodingException e) {
                 /* try without decoding if this ever happens */
                 decodedFilter = filter;
             }
             page = memberService.getMembers(pageable, decodedFilter);
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
-            ServletUriComponentsBuilder.fromCurrentRequest(),
-            page
-        );
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -346,16 +314,9 @@ public class MemberResource {
      *         {@code 404 (Not Found)}.
      */
     @GetMapping("/members/authorized/{encryptedEmail}")
-    public ResponseEntity<Member> getAuthorizedMember(
-        @PathVariable String encryptedEmail
-    ) {
-        LOG.debug(
-            "REST request to get authorized Member details for encrypted email : {}",
-            encryptedEmail
-        );
-        Optional<Member> member = memberService.getAuthorizedMemberForUser(
-            encryptedEmail
-        );
+    public ResponseEntity<Member> getAuthorizedMember(@PathVariable String encryptedEmail) {
+        LOG.debug("REST request to get authorized Member details for encrypted email : {}", encryptedEmail);
+        Optional<Member> member = memberService.getAuthorizedMemberForUser(encryptedEmail);
         return ResponseUtil.wrapOrNotFound(member);
     }
 
@@ -375,9 +336,7 @@ public class MemberResource {
     }
 
     @PostMapping("/members/contact-update")
-    public ResponseEntity<MemberContactUpdateResponse> processMemberContactUpdate(
-        @RequestBody MemberContactUpdate memberContactUpdate
-    ) {
+    public ResponseEntity<MemberContactUpdateResponse> processMemberContactUpdate(@RequestBody MemberContactUpdate memberContactUpdate) {
         LOG.debug("REST request to create new member contact update");
         memberService.processMemberContact(memberContactUpdate);
         return ResponseEntity.ok(new MemberContactUpdateResponse(true));
@@ -385,9 +344,7 @@ public class MemberResource {
 
     @PreAuthorize("hasRole(\"ROLE_CONSORTIUM_LEAD\")")
     @PostMapping("/members/add-consortium-member")
-    public ResponseEntity<Void> requestNewConsortiumMember(
-        @RequestBody AddConsortiumMember addConsortiumMember
-    ) {
+    public ResponseEntity<Void> requestNewConsortiumMember(@RequestBody AddConsortiumMember addConsortiumMember) {
         LOG.debug("REST request to request add new consortium member");
         memberService.requestNewConsortiumMember(addConsortiumMember);
         return ResponseEntity.ok().build();
@@ -395,9 +352,7 @@ public class MemberResource {
 
     @PreAuthorize("hasRole(\"ROLE_CONSORTIUM_LEAD\")")
     @PostMapping("/members/remove-consortium-member")
-    public ResponseEntity<Void> requestRemoveConsortiumMember(
-        @RequestBody RemoveConsortiumMember removeConsortiumMember
-    ) {
+    public ResponseEntity<Void> requestRemoveConsortiumMember(@RequestBody RemoveConsortiumMember removeConsortiumMember) {
         LOG.debug("REST request to request remove consortium member");
         memberService.requestRemoveConsortiumMember(removeConsortiumMember);
         return ResponseEntity.ok().build();

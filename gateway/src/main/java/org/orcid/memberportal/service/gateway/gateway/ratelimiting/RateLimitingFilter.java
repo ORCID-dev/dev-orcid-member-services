@@ -1,12 +1,5 @@
 package org.orcid.memberportal.service.gateway.gateway.ratelimiting;
 
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
-import io.github.bucket4j.*;
-import io.github.bucket4j.grid.GridBucketState;
-import io.github.bucket4j.grid.ProxyManager;
-import io.github.bucket4j.grid.jcache.JCache;
-import io.github.jhipster.config.JHipsterProperties;
 import java.time.Duration;
 import java.util.function.Supplier;
 import javax.cache.CacheManager;
@@ -15,10 +8,20 @@ import javax.cache.configuration.CompleteConfiguration;
 import javax.cache.configuration.MutableConfiguration;
 import javax.cache.spi.CachingProvider;
 import javax.servlet.http.HttpServletRequest;
+
 import org.orcid.memberportal.service.gateway.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
+
+import io.github.bucket4j.*;
+import io.github.bucket4j.grid.GridBucketState;
+import io.github.bucket4j.grid.ProxyManager;
+import io.github.bucket4j.grid.jcache.JCache;
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Zuul filter for limiting the number of HTTP calls per client.
@@ -30,12 +33,9 @@ import org.springframework.http.HttpStatus;
  */
 public class RateLimitingFilter extends ZuulFilter {
 
-    private final Logger log = LoggerFactory.getLogger(
-        RateLimitingFilter.class
-    );
+    private final Logger log = LoggerFactory.getLogger(RateLimitingFilter.class);
 
-    public static final String GATEWAY_RATE_LIMITING_CACHE_NAME =
-        "gateway-rate-limiting";
+    public final static String GATEWAY_RATE_LIMITING_CACHE_NAME = "gateway-rate-limiting";
 
     private final JHipsterProperties jHipsterProperties;
 
@@ -48,14 +48,10 @@ public class RateLimitingFilter extends ZuulFilter {
 
         CachingProvider cachingProvider = Caching.getCachingProvider();
         CacheManager cacheManager = cachingProvider.getCacheManager();
-        CompleteConfiguration<String, GridBucketState> config =
-            new MutableConfiguration<String, GridBucketState>()
-                .setTypes(String.class, GridBucketState.class);
+        CompleteConfiguration<String, GridBucketState> config = new MutableConfiguration<String, GridBucketState>().setTypes(String.class, GridBucketState.class);
 
-        this.cache =
-            cacheManager.createCache(GATEWAY_RATE_LIMITING_CACHE_NAME, config);
-        this.buckets =
-            Bucket4j.extension(JCache.class).proxyManagerForCache(cache);
+        this.cache = cacheManager.createCache(GATEWAY_RATE_LIMITING_CACHE_NAME, config);
+        this.buckets = Bucket4j.extension(JCache.class).proxyManagerForCache(cache);
     }
 
     @Override
@@ -79,9 +75,7 @@ public class RateLimitingFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-        String bucketId = getId(
-            RequestContext.getCurrentContext().getRequest()
-        );
+        String bucketId = getId(RequestContext.getCurrentContext().getRequest());
         Bucket bucket = buckets.getProxy(bucketId, getConfigSupplier());
         if (bucket.tryConsume(1)) {
             // the limit is not exceeded
@@ -96,20 +90,10 @@ public class RateLimitingFilter extends ZuulFilter {
 
     private Supplier<BucketConfiguration> getConfigSupplier() {
         return () -> {
-            JHipsterProperties.Gateway.RateLimiting rateLimitingProperties =
-                jHipsterProperties.getGateway().getRateLimiting();
+            JHipsterProperties.Gateway.RateLimiting rateLimitingProperties = jHipsterProperties.getGateway().getRateLimiting();
 
-            return Bucket4j
-                .configurationBuilder()
-                .addLimit(
-                    Bandwidth.simple(
-                        rateLimitingProperties.getLimit(),
-                        Duration.ofSeconds(
-                            rateLimitingProperties.getDurationInSeconds()
-                        )
-                    )
-                )
-                .build();
+            return Bucket4j.configurationBuilder()
+                    .addLimit(Bandwidth.simple(rateLimitingProperties.getLimit(), Duration.ofSeconds(rateLimitingProperties.getDurationInSeconds()))).build();
         };
     }
 
@@ -130,8 +114,6 @@ public class RateLimitingFilter extends ZuulFilter {
      * address.
      */
     private String getId(HttpServletRequest httpServletRequest) {
-        return SecurityUtils
-            .getCurrentUserLogin()
-            .orElse(httpServletRequest.getRemoteAddr());
+        return SecurityUtils.getCurrentUserLogin().orElse(httpServletRequest.getRemoteAddr());
     }
 }

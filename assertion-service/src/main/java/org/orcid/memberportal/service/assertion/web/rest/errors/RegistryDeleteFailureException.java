@@ -7,4 +7,5 @@ public class RegistryDeleteFailureException extends Exception {
     public RegistryDeleteFailureException() {
         super();
     }
+
 }

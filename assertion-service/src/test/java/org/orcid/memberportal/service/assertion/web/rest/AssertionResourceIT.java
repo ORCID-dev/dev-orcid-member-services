@@ -5,11 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
+
 import javax.ws.rs.core.MediaType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -33,6 +32,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @SpringBootTest(classes = AssertionServiceApp.class)
 public class AssertionResourceIT {
@@ -77,184 +80,71 @@ public class AssertionResourceIT {
         objectMapper.registerModule(new JavaTimeModule());
         createAssertions(DEFAULT_SALESFORCE_ID, 30);
         createAssertions(OTHER_SALESFORCE_ID, 70);
-        this.restUserMockMvc =
-            MockMvcBuilders
-                .standaloneSetup(assertionResource)
-                .setCustomArgumentResolvers(pageableArgumentResolver)
-                .setControllerAdvice(exceptionTranslator)
-                .setMessageConverters(jacksonMessageConverter)
-                .build();
-        Mockito
-            .when(mockedUserService.getLoggedInUser())
-            .thenReturn(getLoggedInUser());
-        Mockito
-            .when(mockedUserService.getLoggedInUserSalesforceId())
-            .thenReturn(DEFAULT_SALESFORCE_ID);
-        Mockito
-            .when(
-                mockedMemberService.getMemberDefaultLanguage(
-                    Mockito.anyString()
-                )
-            )
-            .thenReturn("en");
-        ReflectionTestUtils.setField(
-            assertionService,
-            "assertionsUserService",
-            mockedUserService
-        );
-        ReflectionTestUtils.setField(
-            assertionResource,
-            "userService",
-            mockedUserService
-        );
-        ReflectionTestUtils.setField(
-            assertionResource,
-            "memberService",
-            mockedMemberService
-        );
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(assertionResource).setCustomArgumentResolvers(pageableArgumentResolver)
+                .setControllerAdvice(exceptionTranslator).setMessageConverters(jacksonMessageConverter).build();
+        Mockito.when(mockedUserService.getLoggedInUser()).thenReturn(getLoggedInUser());
+        Mockito.when(mockedUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        Mockito.when(mockedMemberService.getMemberDefaultLanguage(Mockito.anyString())).thenReturn("en");
+        ReflectionTestUtils.setField(assertionService, "assertionsUserService", mockedUserService);
+        ReflectionTestUtils.setField(assertionResource, "userService", mockedUserService);
+        ReflectionTestUtils.setField(assertionResource, "memberService", mockedMemberService);
     }
 
     @Test
-    @WithMockUser(
-        username = LOGGED_IN_EMAIL,
-        authorities = { "ROLE_ADMIN", "ROLE_USER" },
-        password = LOGGED_IN_PASSWORD
-    )
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void testGetAssertions() throws Exception {
         // test only the 30 assertions for default salesforce id come back
         MvcResult result = restUserMockMvc
-            .perform(
-                get("/api/assertions")
-                    .param("size", "50")
-                    .accept(TestUtil.APPLICATION_JSON_UTF8)
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            )
-            .andExpect(status().isOk())
-            .andReturn();
-        List<Assertion> assertions = objectMapper.readValue(
-            result.getResponse().getContentAsByteArray(),
-            new TypeReference<List<Assertion>>() {}
-        );
+                .perform(get("/api/assertions").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        List<Assertion> assertions = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Assertion>>() {
+        });
         assertThat(assertions.size()).isEqualTo(30);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/assertions")
-                        .param("size", "50")
-                        .param("filter", "department")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        assertions =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Assertion>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/assertions").param("size", "50").param("filter", "department").accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        assertions = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Assertion>>() {
+        });
         assertThat(assertions.size()).isEqualTo(30);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/assertions")
-                        .param("size", "50")
-                        .param("filter", "department 4")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        assertions =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Assertion>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/assertions").param("size", "50").param("filter", "department 4").accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        assertions = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Assertion>>() {
+        });
         assertThat(assertions.size()).isEqualTo(1);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/assertions")
-                        .param("size", "50")
-                        .param("filter", "org 12")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        assertions =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Assertion>>() {}
-            );
+        result = restUserMockMvc.perform(
+                get("/api/assertions").param("size", "50").param("filter", "org 12").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn();
+        assertions = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Assertion>>() {
+        });
         assertThat(assertions.size()).isEqualTo(1);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/assertions")
-                        .param("size", "50")
-                        .param("filter", "@orcid.org")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        assertions =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Assertion>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/assertions").param("size", "50").param("filter", "@orcid.org").accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        assertions = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Assertion>>() {
+        });
         assertThat(assertions.size()).isEqualTo(30);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/assertions")
-                        .param("size", "50")
-                        .param("filter", "1@orcid.org")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        assertions =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Assertion>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/assertions").param("size", "50").param("filter", "1@orcid.org").accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        assertions = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Assertion>>() {
+        });
         assertThat(assertions.size()).isEqualTo(3); // 1@orcid.org, 11@orcid.org, 21@orcid.org
+
     }
 
     @Test
-    @WithMockUser(
-        username = LOGGED_IN_EMAIL,
-        authorities = { "ROLE_ADMIN", "ROLE_USER" },
-        password = LOGGED_IN_PASSWORD
-    )
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void testSendNotifications() throws Exception {
-        restUserMockMvc
-            .perform(
-                post("/api/assertion/notification-request")
-                    .content("{ \"language\":\"en\" }")
-                    .contentType(MediaType.APPLICATION_JSON)
-            )
-            .andExpect(status().isOk());
-        List<Assertion> updatedAssertions =
-            assertionRepository.findBySalesforceId(DEFAULT_SALESFORCE_ID);
-        updatedAssertions.forEach(a ->
-            assertThat(a.getStatus())
-                .isEqualTo(AssertionStatus.NOTIFICATION_REQUESTED.name())
-        );
+        restUserMockMvc.perform(post("/api/assertion/notification-request").content("{ \"language\":\"en\" }").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        List<Assertion> updatedAssertions = assertionRepository.findBySalesforceId(DEFAULT_SALESFORCE_ID);
+        updatedAssertions.forEach(a -> assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_REQUESTED.name()));
     }
 
     private void createAssertions(String salesforceId, int quantity) {
         for (int i = 0; i < quantity; i++) {
-            assertionRepository.save(
-                getAssertion(String.valueOf(i), salesforceId)
-            );
+            assertionRepository.save(getAssertion(String.valueOf(i), salesforceId));
         }
     }
 
@@ -281,4 +171,5 @@ public class AssertionResourceIT {
         user.setSalesforceId(DEFAULT_SALESFORCE_ID);
         return user;
     }
+
 }

@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -44,17 +45,9 @@ public class AssertionsForEditCsvWriterTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(assertionsUserService.getLoggedInUserSalesforceId())
-            .thenReturn(DEFAULT_SALESFORCE_ID);
-        when(
-            assertionsRepository.findBySalesforceId(
-                Mockito.eq(DEFAULT_SALESFORCE_ID),
-                Mockito.any(Sort.class)
-            )
-        )
-            .thenReturn(getListOfAsserions());
-        when(orcidRecordService.findOneByEmail(Mockito.anyString()))
-            .thenReturn(getDummyOrcidRecord());
+        when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        when(assertionsRepository.findBySalesforceId(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
+        when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenReturn(getDummyOrcidRecord());
     }
 
     @Test
@@ -78,10 +71,7 @@ public class AssertionsForEditCsvWriterTest {
 
     private void checkValues(String[] values, int i) {
         assertEquals(i + "@test.com", values[0].trim());
-        assertEquals(
-            AffiliationSection.values()[i].toString(),
-            values[1].trim()
-        );
+        assertEquals(AffiliationSection.values()[i].toString(), values[1].trim());
         assertEquals("department-" + i, values[2].trim());
         assertEquals("role-" + i, values[3].trim());
         assertEquals("2010-12-1", values[4].trim());
@@ -111,10 +101,7 @@ public class AssertionsForEditCsvWriterTest {
         assertEquals("org-city", headers[8].trim());
         assertEquals("org-region", headers[9].trim());
         assertEquals("disambiguation-source", headers[10].trim());
-        assertEquals(
-            "disambiguated-organization-identifier",
-            headers[11].trim()
-        );
+        assertEquals("disambiguated-organization-identifier", headers[11].trim());
         assertEquals("external-id", headers[12].trim());
         assertEquals("external-id-type", headers[13].trim());
         assertEquals("external-id-url", headers[14].trim());
@@ -179,4 +166,5 @@ public class AssertionsForEditCsvWriterTest {
         record.setOrcid("orcid");
         return Optional.of(record);
     }
+
 }

@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.gateway.web.rest.vm;
 
 import java.util.List;
+
 import org.springframework.cloud.client.ServiceInstance;
 
 /**

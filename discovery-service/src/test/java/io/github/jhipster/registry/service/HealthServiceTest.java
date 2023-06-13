@@ -2,10 +2,10 @@ package io.github.jhipster.registry.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.jhipster.registry.client.HealthClient;
-import io.github.jhipster.registry.service.dto.SimpleHealthDTO;
 import java.io.IOException;
+
 import javax.xml.bind.JAXBException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.actuate.health.Status;
+
+import io.github.jhipster.registry.client.HealthClient;
+import io.github.jhipster.registry.service.dto.SimpleHealthDTO;
 
 public class HealthServiceTest {
 
@@ -31,9 +34,7 @@ public class HealthServiceTest {
     @Test
     void testCheckHealth() throws IOException {
         SimpleHealthDTO health = new SimpleHealthDTO(Status.UP);
-        Mockito
-            .when(healthClient.getHealth(Mockito.eq("url")))
-            .thenReturn(health);
+        Mockito.when(healthClient.getHealth(Mockito.eq("url"))).thenReturn(health);
 
         SimpleHealthDTO checkedHealth = healthService.checkHealth("url");
         assertThat(checkedHealth).isNotNull();
@@ -44,15 +45,11 @@ public class HealthServiceTest {
 
     @Test
     void testCheckHealthWithError() throws IOException {
-        Mockito
-            .when(healthClient.getHealth(Mockito.eq("url")))
-            .thenThrow(new IOException());
+        Mockito.when(healthClient.getHealth(Mockito.eq("url"))).thenThrow(new IOException());
 
-        Assertions.assertThrows(
-            IOException.class,
-            () -> {
-                healthService.checkHealth("url");
-            }
-        );
+        Assertions.assertThrows(IOException.class, () -> {
+            healthService.checkHealth("url");
+        });
     }
+
 }

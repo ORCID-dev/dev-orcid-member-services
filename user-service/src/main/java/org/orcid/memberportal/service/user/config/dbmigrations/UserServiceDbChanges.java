@@ -1,15 +1,17 @@
 package org.orcid.memberportal.service.user.config.dbmigrations;
 
-import com.github.mongobee.changeset.ChangeLog;
-import com.github.mongobee.changeset.ChangeSet;
 import java.time.Instant;
 import java.util.List;
+
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+
+import com.github.mongobee.changeset.ChangeLog;
+import com.github.mongobee.changeset.ChangeSet;
 
 @ChangeLog(order = "002")
 public class UserServiceDbChanges {
@@ -35,25 +37,15 @@ public class UserServiceDbChanges {
     @ChangeSet(order = "03", author = "George Nash", id = "03-updateAdminFlag")
     public void updateAdminFlag(MongoTemplate mongoTemplate) {
         Query query = new Query();
-        query.addCriteria(
-            Criteria.where("authorities").is(AuthoritiesConstants.ADMIN)
-        );
+        query.addCriteria(Criteria.where("authorities").is(AuthoritiesConstants.ADMIN));
         List<User> adminUsers = mongoTemplate.find(query, User.class);
-        adminUsers.forEach(
-            (
-                u -> {
-                    u.setAdmin(true);
-                    mongoTemplate.save(u);
-                }
-            )
-        );
+        adminUsers.forEach((u -> {
+            u.setAdmin(true);
+            mongoTemplate.save(u);
+        }));
     }
 
-    @ChangeSet(
-        order = "04",
-        author = "George Nash",
-        id = "04-removeAuthoritiesField"
-    )
+    @ChangeSet(order = "04", author = "George Nash", id = "04-removeAuthoritiesField")
     public void removeAuthorities(MongoTemplate mongoTemplate) {
         Query query = new Query();
         query.addCriteria(Criteria.where("authorities").exists(true));
@@ -62,12 +54,9 @@ public class UserServiceDbChanges {
         mongoTemplate.updateMulti(query, update, User.class);
     }
 
-    @ChangeSet(
-        order = "05",
-        author = "George Nash",
-        id = "05-removeAuthoritiesCollection"
-    )
+    @ChangeSet(order = "05", author = "George Nash", id = "05-removeAuthoritiesCollection")
     public void removeAuthoritiesCollection(MongoTemplate mongoTemplate) {
         mongoTemplate.dropCollection("jhi_authority");
     }
+
 }

@@ -1,24 +1,27 @@
 package org.orcid.memberportal.service.member.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import org.orcid.memberportal.service.member.config.ApplicationProperties;
 import org.orcid.memberportal.service.member.domain.Member;
-import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.pojo.ReportInfo;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class ReportService {
@@ -51,20 +54,15 @@ public class ReportService {
 
     static final String ENABLE_EXPORT_DATA_PARAM = "enable_export_data";
 
-    static final String MEMBER_REPORT_PATH =
-        "client_model.public_sf_members.account_id";
+    static final String MEMBER_REPORT_PATH = "client_model.public_sf_members.account_id";
 
-    static final String AFFILIATION_REPORT_PATH =
-        "org_id_centric.public_sf_members.account_id";
+    static final String AFFILIATION_REPORT_PATH = "org_id_centric.public_sf_members.account_id";
 
-    static final String INTEGRATION_REPORT_PATH =
-        "client_model.public_sf_members.account_id";
+    static final String INTEGRATION_REPORT_PATH = "client_model.public_sf_members.account_id";
 
-    static final String CONSORTIA_REPORT_PATH =
-        "client_model.public_sf_consortia.account_id";
+    static final String CONSORTIA_REPORT_PATH = "client_model.public_sf_consortia.account_id";
 
-    static final String CONSORTIA_FILTER_PATH =
-        "consortia_country_code_model.public_sf_consortia.account_id";
+    static final String CONSORTIA_FILTER_PATH = "consortia_country_code_model.public_sf_consortia.account_id";
 
     static final String CONSORTIA_DRILLTHROUGH_KEY = "34687";
 
@@ -74,21 +72,17 @@ public class ReportService {
 
     static final String DATASET_PARAM = "dataset";
 
-    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DATASET =
-        "org_id_centric";
+    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DATASET = "org_id_centric";
 
     static final String MODEL_PARAM = "model";
 
-    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_MODEL =
-        "public_sf_consortia";
+    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_MODEL = "public_sf_consortia";
 
     static final String FIELD_PARAM = "field";
 
-    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_FIELD =
-        "account_id";
+    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_FIELD = "account_id";
 
-    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY =
-        "38081";
+    static final String CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY = "38081";
 
     static final String OPERATOR = "is";
 
@@ -107,125 +101,67 @@ public class ReportService {
 
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsMemberDashboardUrl());
-        info.setJwt(
-            getJwt(
-                claims,
-                applicationProperties.getHolisticsMemberDashboardSecret()
-            )
-        );
+        info.setJwt(getJwt(claims, applicationProperties.getHolisticsMemberDashboardSecret()));
         return info;
     }
 
     public ReportInfo getIntegrationReportInfo() {
-        Map<String, Object> claims = getClaims(
-            getIntegrationReportPermissions()
-        );
+        Map<String, Object> claims = getClaims(getIntegrationReportPermissions());
+
 
         ReportInfo info = new ReportInfo();
-        info.setUrl(
-            applicationProperties.getHolisticsIntegrationDashboardUrl()
-        );
-        info.setJwt(
-            getJwt(
-                claims,
-                applicationProperties.getHolisticsIntegrationDashboardSecret()
-            )
-        );
+        info.setUrl(applicationProperties.getHolisticsIntegrationDashboardUrl());
+        info.setJwt(getJwt(claims, applicationProperties.getHolisticsIntegrationDashboardSecret()));
         return info;
     }
 
     public ReportInfo getConsortiaReportInfo() {
         checkConsortiaLeadAccess();
 
-        Map<String, Object> claims = getClaimsWithDrillthrough(
-            getConsortiaReportPermissions(),
-            CONSORTIA_DRILLTHROUGH_KEY,
-            FILTERS_PARAM,
-            getMemberNameFilter()
-        );
+        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaReportPermissions(), CONSORTIA_DRILLTHROUGH_KEY, FILTERS_PARAM, getMemberNameFilter());
+
 
         ReportInfo info = new ReportInfo();
         info.setUrl(applicationProperties.getHolisticsConsortiaDashboardUrl());
-        info.setJwt(
-            getJwt(
-                claims,
-                applicationProperties.getHolisticsConsortiaDashboardSecret()
-            )
-        );
+        info.setJwt(getJwt(claims, applicationProperties.getHolisticsConsortiaDashboardSecret()));
         return info;
     }
 
     public ReportInfo getAffiliationReportInfo() {
-        Map<String, Object> claims = getClaims(
-            getAffiliationReportPermissions()
-        );
+        Map<String, Object> claims = getClaims(getAffiliationReportPermissions());
         ReportInfo info = new ReportInfo();
-        info.setUrl(
-            applicationProperties.getHolisticsAffiliationDashboardUrl()
-        );
-        info.setJwt(
-            getJwt(
-                claims,
-                applicationProperties.getHolisticsAffiliationDashboardSecret()
-            )
-        );
+        info.setUrl(applicationProperties.getHolisticsAffiliationDashboardUrl());
+        info.setJwt(getJwt(claims, applicationProperties.getHolisticsAffiliationDashboardSecret()));
         return info;
     }
 
     public ReportInfo getConsortiaMemberAffiliationsReportInfo() {
         checkConsortiaLeadAccess();
 
-        Map<String, Object> claims = getClaimsWithDrillthrough(
-            getConsortiaMemberAffiliationsReportPermissions(),
-            CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY,
-            FILTER_PARAM,
-            new HashMap<>()
-        );
+        Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaMemberAffiliationsReportPermissions(), CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY,
+                FILTER_PARAM, new HashMap<>());
         try {
-            LOG.info(
-                "report claims are {}",
-                new ObjectMapper().writeValueAsString(claims)
-            );
+            LOG.info("report claims are {}", new ObjectMapper().writeValueAsString(claims));
         } catch (JsonProcessingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         ReportInfo info = new ReportInfo();
-        info.setUrl(
-            applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardUrl()
-        );
-        info.setJwt(
-            getJwt(
-                claims,
-                applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardSecret()
-            )
-        );
+        info.setUrl(applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardUrl());
+        info.setJwt(getJwt(claims, applicationProperties.getHolisticsConsortiaMemberAffiliationsDashboardSecret()));
         return info;
     }
 
     private void checkConsortiaLeadAccess() {
-        Optional<Member> member = memberService.getMember(
-            getLoggedInSalesforceId()
-        );
+        Optional<Member> member = memberService.getMember(getLoggedInSalesforceId());
         if (!Boolean.TRUE.equals(member.get().getIsConsortiumLead())) {
-            throw new BadRequestAlertException(
-                "Only consortia leads can view consortia reports",
-                null,
-                null
-            );
+            throw new BadRequestAlertException("Only consortia leads can view consortia reports", null, null);
         }
     }
 
     private String getJwt(Map<String, Object> claims, String secret) {
-        return Jwts
-            .builder()
-            .addClaims(claims)
-            .signWith(
-                Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)),
-                SignatureAlgorithm.HS256
-            )
-            .compact();
+        return Jwts.builder().addClaims(claims).signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256).compact();
     }
 
     private Map<String, Object> getClaims(Map<String, Object> permissions) {
@@ -244,12 +180,7 @@ public class ReportService {
         return claims;
     }
 
-    private Map<String, Object> getClaimsWithDrillthrough(
-        Map<String, Object> permissions,
-        String drillthroughKey,
-        String filterParam,
-        Map<String, Object> filter
-    ) {
+    private Map<String, Object> getClaimsWithDrillthrough(Map<String, Object> permissions, String drillthroughKey, String filterParam, Map<String, Object> filter) {
         Map<String, Object> claims = getClaims(permissions);
         Map<String, Object> drillthroughFilter = new HashMap<>();
         drillthroughFilter.put(filterParam, filter);
@@ -308,10 +239,7 @@ public class ReportService {
 
     private Map<String, Object> getConsortiaMemberAffiliationsReportPermissions() {
         Map<String, Object> config = getRowBasedConfigBase();
-        config.put(
-            PATH_PARAM,
-            getConsortiaMemberAffiliationsReportPathObject()
-        );
+        config.put(PATH_PARAM, getConsortiaMemberAffiliationsReportPathObject());
         config.put(OPTIONS_PARAM, null);
 
         Map<String, Object> wrapper = new HashMap<>();
@@ -343,4 +271,5 @@ public class ReportService {
         config.put(VALUES_PARAM, new String[] { getLoggedInSalesforceId() });
         return config;
     }
+
 }

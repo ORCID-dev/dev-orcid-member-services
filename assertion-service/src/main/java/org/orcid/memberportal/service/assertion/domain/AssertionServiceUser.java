@@ -51,4 +51,5 @@ public class AssertionServiceUser {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
+
 }

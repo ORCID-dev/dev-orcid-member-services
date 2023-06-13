@@ -1,8 +1,8 @@
 package io.github.jhipster.registry.web.rest.errors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FieldErrorVMTest {
 
@@ -29,4 +29,5 @@ public class FieldErrorVMTest {
         vm = new FieldErrorVM("dto", "field", "message");
         assertThat(vm.getMessage()).isEqualTo("message");
     }
+
 }

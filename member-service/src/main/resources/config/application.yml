@@ -48,22 +48,11 @@ management:
     web:
       base-path: /management
       exposure:
-        include:
-          [
-            "configprops",
-            "env",
-            "health",
-            "info",
-            "jhimetrics",
-            "logfile",
-            "loggers",
-            "prometheus",
-            "threaddump",
-          ]
+        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump']
   endpoint:
     health:
       show-details: when-authorized
-      roles: "ROLE_ADMIN"
+      roles: 'ROLE_ADMIN'
     jhimetrics:
       enabled: true
   info:
@@ -144,7 +133,7 @@ server:
 # Properties to be exposed on the /info management endpoint
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
-  display-ribbon-on-profiles: "dev"
+  display-ribbon-on-profiles: 'dev'
 
 # ===================================================================
 # JHipster specific properties
@@ -154,7 +143,7 @@ info:
 
 jhipster:
   clientApp:
-    name: "memberServiceApp"
+    name: 'memberServiceApp'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"
@@ -186,26 +175,26 @@ jhipster:
 # ===================================================================
 
 application:
-  orcidOrgClientId: APP-1ERTY7037V1I8FE5
-  orcidOrgSalesForceId: 001G000001AP83e
-  holisticsMemberDashboardUrl: ${holistics.member.url}
-  holisticsMemberDashboardSecret: ${holistics.member.secret}
-  holisticsAffiliationDashboardUrl: ${holistics.affiliation.url}
-  holisticsAffiliationDashboardSecret: ${holistics.affiliation.secret}
-  holisticsIntegrationDashboardUrl: ${holistics.integration.url}
-  holisticsIntegrationDashboardSecret: ${holistics.integration.secret}
-  holisticsConsortiaDashboardUrl: ${holistics.consortia.url}
-  holisticsConsortiaDashboardSecret: ${holistics.consortia.secret}
-  holisticsConsortiaMemberAffiliationsDashboardUrl: ${holistics.memberaffiliations.url}
-  holisticsConsortiaMemberAffiliationsDashboardSecret: ${holistics.memberaffiliations.secret}
-  salesforceClientEndpoint: ${salesforce.client.endpoint}
-  orcidApiClientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID}
-  orcidApiClientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}
-  orcidApiTokenEndpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
-  salesforceRequestTimeout: ${APPLICATION_SALESFORCE_REQUEST_TIMEOUT}
-  contactUpdateRecipient: ${APPLICATION_CONTACT_UPDATE_RECIPIENT}
-  mailDomain: ${APPLICATION_MAIL_DOMAIN}
-  mailApiKey: ${APPLICATION_MAIL_API_KEY}
-  mailApiUrl: ${APPLICATION_MAIL_API_URL}
-  mailFromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}
-  mailFromName: ${APPLICATION_MAIL_FROM_NAME}
+    orcidOrgClientId: APP-1ERTY7037V1I8FE5
+    orcidOrgSalesForceId: 001G000001AP83e
+    holisticsMemberDashboardUrl: ${holistics.member.url}
+    holisticsMemberDashboardSecret: ${holistics.member.secret}
+    holisticsAffiliationDashboardUrl: ${holistics.affiliation.url}
+    holisticsAffiliationDashboardSecret: ${holistics.affiliation.secret}
+    holisticsIntegrationDashboardUrl: ${holistics.integration.url}
+    holisticsIntegrationDashboardSecret: ${holistics.integration.secret}
+    holisticsConsortiaDashboardUrl: ${holistics.consortia.url}
+    holisticsConsortiaDashboardSecret: ${holistics.consortia.secret}
+    holisticsConsortiaMemberAffiliationsDashboardUrl: ${holistics.memberaffiliations.url}
+    holisticsConsortiaMemberAffiliationsDashboardSecret: ${holistics.memberaffiliations.secret}
+    salesforceClientEndpoint: ${salesforce.client.endpoint}
+    orcidApiClientId: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_ID}
+    orcidApiClientSecret: ${APPLICATION_TOKEN_EXCHANGE_CLIENT_SECRET}
+    orcidApiTokenEndpoint: ${APPLICATION_TOKEN_EXCHANGE_ENDPOINT}
+    salesforceRequestTimeout: ${APPLICATION_SALESFORCE_REQUEST_TIMEOUT}
+    contactUpdateRecipient: ${APPLICATION_CONTACT_UPDATE_RECIPIENT}
+    mailDomain: ${APPLICATION_MAIL_DOMAIN}
+    mailApiKey: ${APPLICATION_MAIL_API_KEY}
+    mailApiUrl: ${APPLICATION_MAIL_API_URL}
+    mailFromAddress: ${APPLICATION_MAIL_FROM_ADDRESS}
+    mailFromName: ${APPLICATION_MAIL_FROM_NAME}

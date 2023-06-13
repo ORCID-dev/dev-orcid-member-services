@@ -1,14 +1,12 @@
 package org.orcid.memberportal.service.assertion;
 
-import io.github.jhipster.config.JHipsterConstants;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
-import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.client.OAuth2InterceptedFeignConfiguration;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.config.DefaultProfileUtil;
+
+import io.github.jhipster.config.JHipsterConstants;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -20,20 +18,18 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.core.env.Environment;
 
-@ComponentScan(
-    excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = OAuth2InterceptedFeignConfiguration.class
-    )
-)
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
+
+@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class))
 @SpringBootApplication
 @EnableConfigurationProperties({ ApplicationProperties.class })
 @EnableDiscoveryClient
 public class AssertionServiceApp implements InitializingBean {
 
-    private static final Logger log = LoggerFactory.getLogger(
-        AssertionServiceApp.class
-    );
+    private static final Logger log = LoggerFactory.getLogger(AssertionServiceApp.class);
 
     private final Environment env;
 
@@ -53,30 +49,12 @@ public class AssertionServiceApp implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        Collection<String> activeProfiles = Arrays.asList(
-            env.getActiveProfiles()
-        );
-        if (
-            activeProfiles.contains(
-                JHipsterConstants.SPRING_PROFILE_DEVELOPMENT
-            ) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
-        ) {
-            log.error(
-                "You have misconfigured your application! It should not run " +
-                "with both the 'dev' and 'prod' profiles at the same time."
-            );
+        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+            log.error("You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time.");
         }
-        if (
-            activeProfiles.contains(
-                JHipsterConstants.SPRING_PROFILE_DEVELOPMENT
-            ) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)
-        ) {
-            log.error(
-                "You have misconfigured your application! It should not " +
-                "run with both the 'dev' and 'cloud' profiles at the same time."
-            );
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
+            log.error("You have misconfigured your application! It should not " + "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
     }
 
@@ -87,9 +65,7 @@ public class AssertionServiceApp implements InitializingBean {
      *            the command line arguments.
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(
-            AssertionServiceApp.class
-        );
+        SpringApplication app = new SpringApplication(AssertionServiceApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
@@ -109,35 +85,17 @@ public class AssertionServiceApp implements InitializingBean {
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            log.warn(
-                "The host name could not be determined, using `localhost` as fallback"
-            );
+            log.warn("The host name could not be determined, using `localhost` as fallback");
         }
-        log.info(
-            "\n----------------------------------------------------------\n\t" +
-            "Application '{}' is running! Access URLs:\n\t" +
-            "Local: \t\t{}://localhost:{}{}\n\t" +
-            "External: \t{}://{}:{}{}\n\t" +
-            "Profile(s): \t{}\n----------------------------------------------------------",
-            env.getProperty("spring.application.name"),
-            protocol,
-            serverPort,
-            contextPath,
-            protocol,
-            hostAddress,
-            serverPort,
-            contextPath,
-            env.getActiveProfiles()
-        );
+        log.info("\n----------------------------------------------------------\n\t" + "Application '{}' is running! Access URLs:\n\t"
+                + "Local: \t\t{}://localhost:{}{}\n\t" + "External: \t{}://{}:{}{}\n\t" + "Profile(s): \t{}\n----------------------------------------------------------",
+                env.getProperty("spring.application.name"), protocol, serverPort, contextPath, protocol, hostAddress, serverPort, contextPath, env.getActiveProfiles());
 
         String configServerStatus = env.getProperty("configserver.status");
         if (configServerStatus == null) {
             configServerStatus = "Not found or not setup for this application";
         }
-        log.info(
-            "\n----------------------------------------------------------\n\t" +
-            "Config Server: \t{}\n----------------------------------------------------------",
-            configServerStatus
-        );
+        log.info("\n----------------------------------------------------------\n\t" + "Config Server: \t{}\n----------------------------------------------------------",
+                configServerStatus);
     }
 }

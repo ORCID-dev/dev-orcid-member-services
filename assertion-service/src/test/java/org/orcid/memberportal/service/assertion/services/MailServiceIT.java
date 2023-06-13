@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.util.Locale;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -48,77 +49,20 @@ class MailServiceIT {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mailService =
-            new MailService(
-                getTestApplicationProperties(),
-                messageSource,
-                templateEngine,
-                mailgunClient
-            );
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.eq("email.memberAssertionStats.title"),
-                    Mockito.isNull(),
-                    Mockito.any(Locale.class)
-                )
-            )
-            .thenReturn("member stats");
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.eq("email.affiliationUploadSummary.title"),
-                    Mockito.isNull(),
-                    Mockito.any(Locale.class)
-                )
-            )
-            .thenReturn("summary");
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.eq("email.notificationsSummary.title"),
-                    Mockito.isNull(),
-                    Mockito.any(Locale.class)
-                )
-            )
-            .thenReturn("notifications summary");
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.eq("email.invitation.title"),
-                    Mockito.any(),
-                    Mockito.any(Locale.class)
-                )
-            )
-            .thenReturn("someone wants to add something to your record");
+        mailService = new MailService(getTestApplicationProperties(), messageSource, templateEngine, mailgunClient);
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.memberAssertionStats.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("member stats");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.affiliationUploadSummary.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("summary");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.notificationsSummary.title"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("notifications summary");
+        Mockito.when(messageSource.getMessage(Mockito.eq("email.invitation.title"), Mockito.any(), Mockito.any(Locale.class))).thenReturn("someone wants to add something to your record");
     }
 
     @Test
     void testSendCsvReportMail() throws MailException {
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMailWithAttachment(
-                Mockito.eq("memberstats@orcid.org"),
-                Mockito.eq("member stats"),
-                Mockito.eq("something"),
-                Mockito.any(File.class)
-            );
-        mailService.sendCsvReportMail(
-            getAttachment(),
-            getUser(),
-            "subject",
-            "content"
-        );
+        Mockito.doNothing().when(mailgunClient).sendMailWithAttachment(Mockito.eq("memberstats@orcid.org"), Mockito.eq("member stats"), Mockito.eq("something"),
+                Mockito.any(File.class));
+        mailService.sendCsvReportMail(getAttachment(), getUser(), "subject", "content");
 
-        Mockito
-            .verify(mailgunClient)
-            .sendMailWithAttachment(
-                recipientCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString(),
-                fileCaptor.capture()
-            );
+        Mockito.verify(mailgunClient).sendMailWithAttachment(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString(), fileCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo("subject");
         assertThat(fileCaptor.getValue()).isNotNull();
@@ -126,103 +70,40 @@ class MailServiceIT {
 
     @Test
     void testSendMemberAssertionStatsMail() throws MailException {
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMailWithAttachment(
-                Mockito.eq("memberstats@orcid.org"),
-                Mockito.eq("member stats"),
-                Mockito.eq("something"),
-                Mockito.any(File.class)
-            );
+        Mockito.doNothing().when(mailgunClient).sendMailWithAttachment(Mockito.eq("memberstats@orcid.org"), Mockito.eq("member stats"), Mockito.eq("something"),
+                Mockito.any(File.class));
         mailService.sendMemberAssertionStatsMail(getAttachment());
-        Mockito
-            .verify(mailgunClient)
-            .sendMailWithAttachment(
-                recipientCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString(),
-                fileCaptor.capture()
-            );
-        assertThat(recipientCaptor.getValue())
-            .isEqualTo("memberstats@orcid.org");
+        Mockito.verify(mailgunClient).sendMailWithAttachment(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString(), fileCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("memberstats@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo("member stats");
         assertThat(fileCaptor.getValue()).isNotNull();
     }
 
     @Test
     void testSendAssertionsUploadSummaryMail() throws MailException {
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.eq("summary@orcid.org"),
-                Mockito.eq("summary"),
-                Mockito.eq("something")
-            );
-        mailService.sendAssertionsUploadSummaryMail(
-            getUploadSummary(),
-            getUser()
-        );
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.eq("summary@orcid.org"), Mockito.eq("summary"), Mockito.eq("something"));
+        mailService.sendAssertionsUploadSummaryMail(getUploadSummary(), getUser());
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo("summary");
     }
 
     @Test
     void testSendNotificationsSummaryMail() throws MailException {
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.eq("summary@orcid.org"),
-                Mockito.eq("summary"),
-                Mockito.eq("something")
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.eq("summary@orcid.org"), Mockito.eq("summary"), Mockito.eq("something"));
         mailService.sendNotificationsSummary(getUser(), 10, 5);
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo("notifications summary");
     }
 
     @Test
     void testSendInvitationEmail() throws MailException {
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.eq("summary@orcid.org"),
-                Mockito.eq("summary"),
-                Mockito.eq("something")
-            );
-        mailService.sendInvitationEmail(
-            "summary@orcid.org",
-            "some org",
-            "some/base/address?state=some-state-value",
-            "en"
-        );
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.eq("summary@orcid.org"), Mockito.eq("summary"), Mockito.eq("something"));
+        mailService.sendInvitationEmail("summary@orcid.org", "some org", "some/base/address?state=some-state-value", "en");
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
         assertThat(recipientCaptor.getValue()).isEqualTo("summary@orcid.org");
-        assertThat(subjectCaptor.getValue())
-            .isEqualTo("someone wants to add something to your record");
+        assertThat(subjectCaptor.getValue()).isEqualTo("someone wants to add something to your record");
     }
 
     private AssertionServiceUser getUser() {
@@ -249,8 +130,7 @@ class MailServiceIT {
     }
 
     private File getAttachment() {
-        return new File(
-            getClass().getResource("/assertions-with-bad-email.csv").getFile()
-        );
+        return new File(getClass().getResource("/assertions-with-bad-email.csv").getFile());
     }
+
 }

@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.assertion.domain.validation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -16,11 +17,8 @@ public class OrcidUrlValidator extends UrlValidator {
 
     private static final String AUTHORITY_CHARS_REGEX = "\\p{Alnum}\\-\\.";
 
-    private static final String AUTHORITY_REGEX =
-        "^([" + AUTHORITY_CHARS_REGEX + "]*)(:\\d*)?(.*)?";
-    private static final Pattern AUTHORITY_PATTERN = Pattern.compile(
-        AUTHORITY_REGEX
-    );
+    private static final String AUTHORITY_REGEX = "^([" + AUTHORITY_CHARS_REGEX + "]*)(:\\d*)?(.*)?";
+    private static final Pattern AUTHORITY_PATTERN = Pattern.compile(AUTHORITY_REGEX);
 
     private static final int PARSE_AUTHORITY_HOST_IP = 1;
 
@@ -51,8 +49,7 @@ public class OrcidUrlValidator extends UrlValidator {
         OrcidDomainValidator domainValidator = new OrcidDomainValidator();
         if (!domainValidator.isValid(hostLocation)) {
             // try an IP address
-            InetAddressValidator inetAddressValidator =
-                InetAddressValidator.getInstance();
+            InetAddressValidator inetAddressValidator = InetAddressValidator.getInstance();
             if (!inetAddressValidator.isValid(hostLocation)) {
                 // isn't either one, so the URL is invalid
                 return false;
@@ -73,4 +70,5 @@ public class OrcidUrlValidator extends UrlValidator {
 
         return true;
     }
+
 }

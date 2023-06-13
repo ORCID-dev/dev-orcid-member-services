@@ -25,9 +25,7 @@ public class UserMapper {
         user.setImageUrl(userDTO.getImageUrl());
         user.setDeleted(Boolean.FALSE);
         user.setSalesforceId(userDTO.getSalesforceId());
-        user.setMemberName(
-            memberService.getMemberNameBySalesforce(userDTO.getSalesforceId())
-        );
+        user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
         user.setMainContact(userDTO.getMainContact());
         user.setLangKey(userDTO.getLangKey());
         user.setActivated(userDTO.isActivated());
@@ -57,9 +55,8 @@ public class UserMapper {
         userDTO.setId(user.getId());
         userDTO.setLoginAs(user.getLoginAs());
         userDTO.setIsAdmin(user.getAdmin());
-        userDTO.setMfaEnabled(
-            user.getMfaEnabled() != null ? user.getMfaEnabled() : false
-        );
+        userDTO.setMfaEnabled(user.getMfaEnabled() != null ? user.getMfaEnabled() : false);
         return userDTO;
     }
+
 }

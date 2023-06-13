@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
 import org.apache.http.HttpEntity;
@@ -68,248 +70,125 @@ public class OrcidAPIClientTest {
     private Unmarshaller unmarshaller;
 
     @BeforeEach
-    public void setUp()
-        throws JAXBException, ClientProtocolException, IOException {
+    public void setUp() throws JAXBException, ClientProtocolException, IOException {
         MockitoAnnotations.initMocks(this);
-        jaxbContext =
-            JAXBContext.newInstance(
-                Affiliation.class,
-                Distinction.class,
-                Employment.class,
-                Education.class,
-                InvitedPosition.class,
-                Membership.class,
-                Qualification.class,
-                Service.class,
-                OrcidError.class,
-                NotificationPermission.class
-            );
+        jaxbContext = JAXBContext.newInstance(Affiliation.class, Distinction.class, Employment.class, Education.class, InvitedPosition.class, Membership.class,
+                Qualification.class, Service.class, OrcidError.class, NotificationPermission.class);
         unmarshaller = jaxbContext.createUnmarshaller();
 
         TokenExchange tokenExchange = new TokenExchange();
         tokenExchange.setClientId("client-id");
         tokenExchange.setClientSecret("client-secret");
-        Mockito
-            .when(applicationProperties.getTokenExchange())
-            .thenReturn(tokenExchange);
+        Mockito.when(applicationProperties.getTokenExchange()).thenReturn(tokenExchange);
     }
 
     @Test
-    void testPostNotification()
-        throws JAXBException, ClientProtocolException, IOException {
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpUriRequest.class)))
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        HttpUriRequest request = invocation.getArgument(0);
-                        if (
-                            request.getURI().toString().endsWith("oauth/token")
-                        ) {
-                            // request for orcid internal token
-                            OrcidCloseableHttpResponse response =
-                                new OrcidCloseableHttpResponse();
-                            response.setStatusLine(
-                                new BasicStatusLine(
-                                    new ProtocolVersion("HTTP", 2, 0),
-                                    200,
-                                    "OK"
-                                )
-                            );
-                            String tokenResponse =
-                                "{\"access_token\":\"new-access-token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
-                            StringEntity entity = new StringEntity(
-                                tokenResponse,
-                                "UTF-8"
-                            );
-                            entity.setContentType(
-                                "application/json;charset=UTF-8"
-                            );
-                            response.setEntity(entity);
-                            return response;
-                        } else {
-                            OrcidCloseableHttpResponse response =
-                                new OrcidCloseableHttpResponse();
-                            response.setStatusLine(
-                                new BasicStatusLine(
-                                    new ProtocolVersion("HTTP", 2, 0),
-                                    201,
-                                    "CREATED"
-                                )
-                            );
-                            return response;
-                        }
-                    }
+    void testPostNotification() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                HttpUriRequest request = invocation.getArgument(0);
+                if (request.getURI().toString().endsWith("oauth/token")) {
+                    // request for orcid internal token
+                    OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                    response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                    String tokenResponse = "{\"access_token\":\"new-access-token\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                    StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                    entity.setContentType("application/json;charset=UTF-8");
+                    response.setEntity(entity);
+                    return response;
+                } else {
+                    OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                    response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 201, "CREATED"));
+                    return response;
                 }
-            );
+            }
+        });
 
-        Mockito
-            .when(applicationProperties.getOrcidAPIEndpoint())
-            .thenReturn("orcid/v3/");
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/v3/");
         NotificationPermission notification = getNotificationPermission();
         String putCode = client.postNotification(notification, "orcid");
 
         assertThat(putCode).isEqualTo("put-code");
 
         Mockito.verify(applicationProperties).getOrcidAPIEndpoint();
-        Mockito
-            .verify(httpClient, Mockito.times(2))
-            .execute(requestCaptor.capture());
+        Mockito.verify(httpClient, Mockito.times(2)).execute(requestCaptor.capture());
 
         HttpUriRequest request = requestCaptor.getAllValues().get(0);
         assertThat(request.getURI().toString().endsWith("oauth/token"));
 
         request = requestCaptor.getAllValues().get(1);
-        assertThat(request.getURI().toString())
-            .isEqualTo("orcid/v3/orcid/notification-permission");
+        assertThat(request.getURI().toString()).isEqualTo("orcid/v3/orcid/notification-permission");
 
-        HttpEntityEnclosingRequest requestWithBody =
-            (HttpEntityEnclosingRequest) request;
+        HttpEntityEnclosingRequest requestWithBody = (HttpEntityEnclosingRequest) request;
         HttpEntity entity = requestWithBody.getEntity();
 
         assertThat(entity.getContentType().getName()).isEqualTo("Content-Type");
         assertThat(entity.getContentType().getValue()).startsWith("text/xml");
 
-        NotificationPermission notificationPermission =
-            (NotificationPermission) unmarshaller.unmarshal(
-                entity.getContent()
-            );
-        assertThat(notificationPermission.getNotificationSubject())
-            .isEqualTo("subject");
-        assertThat(notificationPermission.getNotificationType())
-            .isEqualTo(NotificationType.PERMISSION);
-        assertThat(notificationPermission.getNotificationIntro())
-            .isEqualTo("intro");
+        NotificationPermission notificationPermission = (NotificationPermission) unmarshaller.unmarshal(entity.getContent());
+        assertThat(notificationPermission.getNotificationSubject()).isEqualTo("subject");
+        assertThat(notificationPermission.getNotificationType()).isEqualTo(NotificationType.PERMISSION);
+        assertThat(notificationPermission.getNotificationIntro()).isEqualTo("intro");
         assertThat(notificationPermission.getItems()).isNotNull();
         assertThat(notificationPermission.getItems().getItems()).isNotNull();
-        assertThat(notificationPermission.getItems().getItems().size())
-            .isEqualTo(2);
-        assertThat(
-            notificationPermission.getItems().getItems().get(0).getItemName()
-        )
-            .isEqualTo("name");
-        assertThat(
-            notificationPermission.getItems().getItems().get(0).getItemType()
-        )
-            .isEqualTo(ItemType.DISTINCTION);
-        assertThat(
-            notificationPermission.getItems().getItems().get(1).getItemName()
-        )
-            .isEqualTo("name 2");
-        assertThat(
-            notificationPermission.getItems().getItems().get(1).getItemType()
-        )
-            .isEqualTo(ItemType.EDUCATION);
+        assertThat(notificationPermission.getItems().getItems().size()).isEqualTo(2);
+        assertThat(notificationPermission.getItems().getItems().get(0).getItemName()).isEqualTo("name");
+        assertThat(notificationPermission.getItems().getItems().get(0).getItemType()).isEqualTo(ItemType.DISTINCTION);
+        assertThat(notificationPermission.getItems().getItems().get(1).getItemName()).isEqualTo("name 2");
+        assertThat(notificationPermission.getItems().getItems().get(1).getItemType()).isEqualTo(ItemType.EDUCATION);
     }
 
     @Test
-    void testPostNotification_tokenNotWorking()
-        throws JAXBException, ClientProtocolException, IOException {
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpUriRequest.class)))
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        // request for orcid internal token
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        String tokenResponse =
-                            "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
-                        StringEntity entity = new StringEntity(
-                            tokenResponse,
-                            "UTF-8"
-                        );
-                        entity.setContentType("application/json;charset=UTF-8");
-                        response.setEntity(entity);
-                        return response;
-                    }
-                }
-            )
-            .thenThrow(new IOException("first token doesn't work"))
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        String tokenResponse =
-                            "{\"access_token\":\"access-token-that-will-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
-                        StringEntity entity = new StringEntity(
-                            tokenResponse,
-                            "UTF-8"
-                        );
-                        entity.setContentType("application/json;charset=UTF-8");
-                        response.setEntity(entity);
-                        return response;
-                    }
-                }
-            )
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                201,
-                                "CREATED"
-                            )
-                        );
-                        return response;
-                    }
-                }
-            );
+    void testPostNotification_tokenNotWorking() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenThrow(new IOException("first token doesn't work")).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-will-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 201, "CREATED"));
+                return response;
+            }
+        });
 
-        Mockito
-            .when(applicationProperties.getOrcidAPIEndpoint())
-            .thenReturn("orcid/v3/");
+        Mockito.when(applicationProperties.getOrcidAPIEndpoint()).thenReturn("orcid/v3/");
         NotificationPermission notification = getNotificationPermission();
         String putCode = client.postNotification(notification, "orcid");
 
         assertThat(putCode).isEqualTo("put-code");
 
-        Mockito
-            .verify(applicationProperties, Mockito.times(2))
-            .getOrcidAPIEndpoint();
-        Mockito
-            .verify(httpClient, Mockito.times(4))
-            .execute(requestCaptor.capture());
+        Mockito.verify(applicationProperties, Mockito.times(2)).getOrcidAPIEndpoint();
+        Mockito.verify(httpClient, Mockito.times(4)).execute(requestCaptor.capture());
 
         HttpUriRequest request = requestCaptor.getAllValues().get(0);
         assertThat(request.getURI().toString().endsWith("oauth/token"));
-        HttpEntityEnclosingRequest requestWithBody =
-            (HttpEntityEnclosingRequest) request;
+        HttpEntityEnclosingRequest requestWithBody = (HttpEntityEnclosingRequest) request;
         HttpEntity entity = requestWithBody.getEntity();
 
         request = requestCaptor.getAllValues().get(1);
-        assertThat(request.getURI().toString())
-            .isEqualTo("orcid/v3/orcid/notification-permission");
+        assertThat(request.getURI().toString()).isEqualTo("orcid/v3/orcid/notification-permission");
 
         request = requestCaptor.getAllValues().get(2);
         assertThat(request.getURI().toString().endsWith("oauth/token"));
@@ -321,202 +200,90 @@ public class OrcidAPIClientTest {
         assertThat(entity.getContentType().getName()).isEqualTo("Content-Type");
         assertThat(entity.getContentType().getValue()).startsWith("text/xml");
 
-        NotificationPermission notificationPermission =
-            (NotificationPermission) unmarshaller.unmarshal(
-                entity.getContent()
-            );
-        assertThat(notificationPermission.getNotificationSubject())
-            .isEqualTo("subject");
-        assertThat(notificationPermission.getNotificationType())
-            .isEqualTo(NotificationType.PERMISSION);
-        assertThat(notificationPermission.getNotificationIntro())
-            .isEqualTo("intro");
+        NotificationPermission notificationPermission = (NotificationPermission) unmarshaller.unmarshal(entity.getContent());
+        assertThat(notificationPermission.getNotificationSubject()).isEqualTo("subject");
+        assertThat(notificationPermission.getNotificationType()).isEqualTo(NotificationType.PERMISSION);
+        assertThat(notificationPermission.getNotificationIntro()).isEqualTo("intro");
         assertThat(notificationPermission.getItems()).isNotNull();
         assertThat(notificationPermission.getItems().getItems()).isNotNull();
-        assertThat(notificationPermission.getItems().getItems().size())
-            .isEqualTo(2);
-        assertThat(
-            notificationPermission.getItems().getItems().get(0).getItemName()
-        )
-            .isEqualTo("name");
-        assertThat(
-            notificationPermission.getItems().getItems().get(0).getItemType()
-        )
-            .isEqualTo(ItemType.DISTINCTION);
-        assertThat(
-            notificationPermission.getItems().getItems().get(1).getItemName()
-        )
-            .isEqualTo("name 2");
-        assertThat(
-            notificationPermission.getItems().getItems().get(1).getItemType()
-        )
-            .isEqualTo(ItemType.EDUCATION);
+        assertThat(notificationPermission.getItems().getItems().size()).isEqualTo(2);
+        assertThat(notificationPermission.getItems().getItems().get(0).getItemName()).isEqualTo("name");
+        assertThat(notificationPermission.getItems().getItems().get(0).getItemType()).isEqualTo(ItemType.DISTINCTION);
+        assertThat(notificationPermission.getItems().getItems().get(1).getItemName()).isEqualTo("name 2");
+        assertThat(notificationPermission.getItems().getItems().get(1).getItemType()).isEqualTo(ItemType.EDUCATION);
     }
 
     @Test
-    void testGetOrcidIdForEmail()
-        throws JAXBException, ClientProtocolException, IOException {
-        Mockito
-            .when(applicationProperties.getInternalRegistryApiEndpoint())
-            .thenReturn("orcid/internal/");
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpUriRequest.class)))
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        // request for orcid internal token
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        String tokenResponse =
-                            "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
-                        StringEntity entity = new StringEntity(
-                            tokenResponse,
-                            "UTF-8"
-                        );
-                        entity.setContentType("application/json;charset=UTF-8");
-                        response.setEntity(entity);
-                        return response;
-                    }
-                }
-            )
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setEntity(
-                            new StringEntity(
-                                "{\"orcid\":\"1234-1234-1234-1234\",\"email\":\"a.email@orcid.org\",\"status\":\"FOUND\"}"
-                            )
-                        );
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        return response;
-                    }
-                }
-            );
+    void testGetOrcidIdForEmail() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getInternalRegistryApiEndpoint()).thenReturn("orcid/internal/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"orcid\":\"1234-1234-1234-1234\",\"email\":\"a.email@orcid.org\",\"status\":\"FOUND\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                return response;
+            }
+        });
 
         String orcidId = client.getOrcidIdForEmail("a.email@orcid.org");
         assertThat(orcidId).isEqualTo("1234-1234-1234-1234");
     }
 
     @Test
-    void testGetOrcidIdForEmail_firstTokenNotWorking()
-        throws JAXBException, ClientProtocolException, IOException {
-        Mockito
-            .when(applicationProperties.getInternalRegistryApiEndpoint())
-            .thenReturn("orcid/internal/");
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpUriRequest.class)))
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        // request for orcid internal token
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        String tokenResponse =
-                            "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
-                        StringEntity entity = new StringEntity(
-                            tokenResponse,
-                            "UTF-8"
-                        );
-                        entity.setContentType("application/json;charset=UTF-8");
-                        response.setEntity(entity);
-                        return response;
-                    }
-                }
-            )
-            .thenThrow(new IOException("first token doesn't work"))
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        // request for orcid internal token
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        String tokenResponse =
-                            "{\"access_token\":\"access-token-that-will-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
-                        StringEntity entity = new StringEntity(
-                            tokenResponse,
-                            "UTF-8"
-                        );
-                        entity.setContentType("application/json;charset=UTF-8");
-                        response.setEntity(entity);
-                        return response;
-                    }
-                }
-            )
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setEntity(
-                            new StringEntity(
-                                "{\"orcid\":\"1234-1234-1234-1234\",\"email\":\"a.email@orcid.org\",\"status\":\"FOUND\"}"
-                            )
-                        );
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        return response;
-                    }
-                }
-            );
+    void testGetOrcidIdForEmail_firstTokenNotWorking() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getInternalRegistryApiEndpoint()).thenReturn("orcid/internal/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenThrow(new IOException("first token doesn't work")).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-will-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"orcid\":\"1234-1234-1234-1234\",\"email\":\"a.email@orcid.org\",\"status\":\"FOUND\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                return response;
+            }
+        });
 
         String orcidId = client.getOrcidIdForEmail("a.email@orcid.org");
         assertThat(orcidId).isEqualTo("1234-1234-1234-1234");
 
-        Mockito
-            .verify(applicationProperties, Mockito.times(4))
-            .getInternalRegistryApiEndpoint();
-        Mockito
-            .verify(httpClient, Mockito.times(4))
-            .execute(requestCaptor.capture());
+        Mockito.verify(applicationProperties, Mockito.times(4)).getInternalRegistryApiEndpoint();
+        Mockito.verify(httpClient, Mockito.times(4)).execute(requestCaptor.capture());
 
         HttpUriRequest request = requestCaptor.getAllValues().get(0);
         assertThat(request.getURI().toString().endsWith("oauth/token"));
@@ -531,66 +298,31 @@ public class OrcidAPIClientTest {
         assertThat(request.getURI().toString()).endsWith("/email");
     }
 
+
     @Test
-    void testGetOrcidIdForEmail_orcidIdNotFound()
-        throws JAXBException, ClientProtocolException, IOException {
-        Mockito
-            .when(applicationProperties.getInternalRegistryApiEndpoint())
-            .thenReturn("orcid/internal/");
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpUriRequest.class)))
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        // request for orcid internal token
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        String tokenResponse =
-                            "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
-                        StringEntity entity = new StringEntity(
-                            tokenResponse,
-                            "UTF-8"
-                        );
-                        entity.setContentType("application/json;charset=UTF-8");
-                        response.setEntity(entity);
-                        return response;
-                    }
-                }
-            )
-            .thenAnswer(
-                new Answer<CloseableHttpResponse>() {
-                    @Override
-                    public CloseableHttpResponse answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        OrcidCloseableHttpResponse response =
-                            new OrcidCloseableHttpResponse();
-                        response.setEntity(
-                            new StringEntity(
-                                "{\"orcid\":\"\",\"email\":\"a.email@orcid.org\",\"status\":\"NOT_FOUND\"}"
-                            )
-                        );
-                        response.setStatusLine(
-                            new BasicStatusLine(
-                                new ProtocolVersion("HTTP", 2, 0),
-                                200,
-                                "OK"
-                            )
-                        );
-                        return response;
-                    }
-                }
-            );
+    void testGetOrcidIdForEmail_orcidIdNotFound() throws JAXBException, ClientProtocolException, IOException {
+        Mockito.when(applicationProperties.getInternalRegistryApiEndpoint()).thenReturn("orcid/internal/");
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                // request for orcid internal token
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                String tokenResponse = "{\"access_token\":\"access-token-that-wont-work\",\"token_type\":\"bearer\",\"refresh_token\":\"new-refresh-token\",\"expires_in\":3599,\"scope\":\"/orcid-internal /premium-notification\",\"orcid\":null}";
+                StringEntity entity = new StringEntity(tokenResponse, "UTF-8");
+                entity.setContentType("application/json;charset=UTF-8");
+                response.setEntity(entity);
+                return response;
+            }
+        }).thenAnswer(new Answer<CloseableHttpResponse>() {
+            @Override
+            public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
+                OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
+                response.setEntity(new StringEntity("{\"orcid\":\"\",\"email\":\"a.email@orcid.org\",\"status\":\"NOT_FOUND\"}"));
+                response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
+                return response;
+            }
+        });
 
         String orcidId = client.getOrcidIdForEmail("a.email@orcid.org");
         assertThat(orcidId).isNull();
@@ -626,11 +358,7 @@ public class OrcidAPIClientTest {
         }
 
         @Override
-        public void setStatusLine(
-            ProtocolVersion ver,
-            int code,
-            String reason
-        ) {
+        public void setStatusLine(ProtocolVersion ver, int code, String reason) {
             // TODO Auto-generated method stub
 
         }
@@ -642,8 +370,7 @@ public class OrcidAPIClientTest {
         }
 
         @Override
-        public void setReasonPhrase(String reason)
-            throws IllegalStateException {
+        public void setReasonPhrase(String reason) throws IllegalStateException {
             // TODO Auto-generated method stub
 
         }
@@ -785,5 +512,7 @@ public class OrcidAPIClientTest {
             // TODO Auto-generated method stub
 
         }
+
     }
+
 }

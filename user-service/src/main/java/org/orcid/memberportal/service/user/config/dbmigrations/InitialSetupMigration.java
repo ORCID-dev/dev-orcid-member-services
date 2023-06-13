@@ -2,9 +2,10 @@ package org.orcid.memberportal.service.user.config.dbmigrations;
 
 import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
-import java.time.Instant;
 import org.orcid.memberportal.service.user.domain.User;
 import org.springframework.data.mongodb.core.MongoTemplate;
+
+import java.time.Instant;
 
 /**
  * Creates the initial database setup.
@@ -17,9 +18,7 @@ public class InitialSetupMigration {
     public void addUsers(MongoTemplate mongoTemplate) {
         User adminUser = new User();
         adminUser.setId("admin@orcid.org");
-        adminUser.setPassword(
-            "$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC"
-        );
+        adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
         adminUser.setFirstName("admin");
         adminUser.setLastName("Administrator");
         adminUser.setEmail("admin@orcid.org");

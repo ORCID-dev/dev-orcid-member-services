@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.assertion.domain.enumeration;
 
 public enum AssertionStatus {
+
     USER_DENIED_ACCESS("User denied access"),
     PENDING("Pending"),
     IN_ORCID("In ORCID"),
@@ -16,6 +17,7 @@ public enum AssertionStatus {
     NOTIFICATION_FAILED("Notification failed"),
     PENDING_UPDATE("Pending update in ORCID");
 
+
     private final String value;
 
     private AssertionStatus(String value) {
@@ -25,4 +27,5 @@ public enum AssertionStatus {
     public String getValue() {
         return value;
     }
+
 }

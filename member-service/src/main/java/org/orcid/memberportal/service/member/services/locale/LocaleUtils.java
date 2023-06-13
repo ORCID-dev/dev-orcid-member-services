@@ -26,4 +26,5 @@ public class LocaleUtils {
         }
         return new Locale(langKey);
     }
+
 }

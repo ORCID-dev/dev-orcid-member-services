@@ -33,7 +33,10 @@
     "enableTranslation": true,
     "clientPackageManager": "npm",
     "nativeLanguage": "en",
-    "languages": ["en", "es"],
+    "languages": [
+      "en",
+      "es"
+    ],
     "blueprints": [],
     "skipClient": true,
     "skipUserManagement": true

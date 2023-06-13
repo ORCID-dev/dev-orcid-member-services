@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
-
     private final OAuth2Properties oAuth2Properties;
 
     public SecurityConfiguration(OAuth2Properties oAuth2Properties) {
@@ -31,51 +30,24 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf()
-            .disable()
-            .headers()
-            .frameOptions()
-            .disable()
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeRequests()
-            .antMatchers("/api/id-token")
-            .permitAll()
-            .antMatchers("/api/members/authorized/**")
-            .permitAll()
-            .antMatchers("/api/**")
-            .authenticated()
-            .antMatchers("/management/health")
-            .permitAll()
-            .antMatchers("/management/**")
-            .hasAuthority(AuthoritiesConstants.ADMIN);
+        http.csrf().disable().headers().frameOptions().disable().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests().antMatchers("/api/id-token").permitAll().antMatchers("/api/members/authorized/**").permitAll().antMatchers("/api/**").authenticated()
+                .antMatchers("/management/health").permitAll().antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
     }
 
     @Bean
-    public TokenStore tokenStore(
-        JwtAccessTokenConverter jwtAccessTokenConverter
-    ) {
+    public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
         return new JwtTokenStore(jwtAccessTokenConverter);
     }
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(
-        OAuth2SignatureVerifierClient signatureVerifierClient
-    ) {
-        return new OAuth2JwtAccessTokenConverter(
-            oAuth2Properties,
-            signatureVerifierClient
-        );
+    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
+        return new OAuth2JwtAccessTokenConverter(oAuth2Properties, signatureVerifierClient);
     }
 
     @Bean
     @Qualifier("loadBalancedRestTemplate")
-    public RestTemplate loadBalancedRestTemplate(
-        RestTemplateCustomizer customizer
-    ) {
+    public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
         RestTemplate restTemplate = new RestTemplate();
         customizer.customize(restTemplate);
         return restTemplate;

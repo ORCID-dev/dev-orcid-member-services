@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -38,17 +39,9 @@ class MemberCsvReaderTest {
 
     @Test
     void testReadMembersUpload() throws IOException {
-        Mockito
-            .when(
-                memberValidator.validate(
-                    Mockito.any(Member.class),
-                    Mockito.any(MemberServiceUser.class)
-                )
-            )
-            .thenReturn(getValidValidation());
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(MemberServiceUser.class))).thenReturn(getValidValidation());
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/members.csv");
+        InputStream inputStream = getClass().getResourceAsStream("/members.csv");
         MemberUpload upload = reader.readMemberUpload(inputStream, getUser());
 
         assertEquals(2, upload.getMembers().size());
@@ -87,4 +80,5 @@ class MemberCsvReaderTest {
         user.setLangKey("en");
         return user;
     }
+
 }

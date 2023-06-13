@@ -30,11 +30,7 @@ public class MemberAssertionStats {
     public String getStatusCountsString() {
         StringBuilder builder = new StringBuilder();
         for (String key : statusCounts.keySet()) {
-            builder
-                .append(key)
-                .append(" : ")
-                .append(statusCounts.get(key))
-                .append("\n");
+            builder.append(key).append(" : ").append(statusCounts.get(key)).append("\n");
         }
         return builder.toString();
     }
@@ -43,4 +39,5 @@ public class MemberAssertionStats {
         statusCounts.put(status, count);
         totalAssertions += count;
     }
+
 }

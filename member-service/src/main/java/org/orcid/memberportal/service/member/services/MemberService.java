@@ -6,7 +6,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 import javax.validation.Valid;
+
 import org.orcid.memberportal.service.member.client.SalesforceClient;
 import org.orcid.memberportal.service.member.client.model.*;
 import org.orcid.memberportal.service.member.domain.Member;
@@ -37,9 +39,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemberService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        MemberService.class
-    );
+    private static final Logger LOG = LoggerFactory.getLogger(MemberService.class);
 
     @Autowired
     private MemberRepository memberRepository;
@@ -72,11 +72,7 @@ public class MemberService {
         LOG.info("Reading member CSV upload");
         MemberUpload upload = null;
         try {
-            upload =
-                memberUploadReader.readMemberUpload(
-                    inputStream,
-                    userService.getLoggedInUser()
-                );
+            upload = memberUploadReader.readMemberUpload(inputStream, userService.getLoggedInUser());
         } catch (IOException e) {
             LOG.warn("Error reading member CSV upload");
             throw new RuntimeException(e);
@@ -93,9 +89,7 @@ public class MemberService {
     }
 
     public Member createOrUpdateMember(Member member) {
-        Optional<Member> optional = memberRepository.findBySalesforceId(
-            member.getSalesforceId()
-        );
+        Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
         if (!optional.isPresent()) {
             return createMember(member);
         } else {
@@ -105,30 +99,19 @@ public class MemberService {
     }
 
     public Boolean memberExists(String salesforceId) {
-        Optional<Member> existingMember = memberRepository.findBySalesforceId(
-            salesforceId
-        );
+        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
         return existingMember.isPresent();
     }
 
     public Boolean memberSuperadminEnabled(String salesforceId) {
-        Optional<Member> existingMember = memberRepository.findBySalesforceId(
-            salesforceId
-        );
+        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
         return existingMember.get().getSuperadminEnabled();
     }
 
     public Member createMember(Member member) {
-        MemberValidation validation = memberValidator.validate(
-            member,
-            userService.getLoggedInUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
         if (!validation.isValid()) {
-            throw new BadRequestAlertException(
-                "Member invalid",
-                "member",
-                "validation.string"
-            );
+            throw new BadRequestAlertException("Member invalid", "member", "validation.string");
         }
 
         Instant now = Instant.now();
@@ -140,66 +123,38 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-        MemberValidation validation = memberValidator.validate(
-            member,
-            userService.getLoggedInUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
         if (!validation.isValid()) {
-            throw new BadRequestAlertException(
-                "Member invalid",
-                "member",
-                "validation.string"
-            );
+            throw new BadRequestAlertException("Member invalid", "member", "validation.string");
         }
 
         Optional<Member> optional = memberRepository.findById(member.getId());
         if (!optional.isPresent()) {
-            throw new BadRequestAlertException(
-                "Invalid id",
-                "member",
-                "idunavailable.string"
-            );
+            throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
         }
 
         Member existingMember = optional.get();
         existingMember.setClientId(member.getClientId());
         existingMember.setClientName(member.getClientName());
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
-        existingMember.setLastModifiedBy(
-            SecurityUtils.getCurrentUserLogin().get()
-        );
+        existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
         existingMember.setLastModifiedDate(Instant.now());
-        existingMember.setAssertionServiceEnabled(
-            member.getAssertionServiceEnabled()
-        );
+        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
         existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
 
         // Check if name changed
         if (!existingMember.getClientName().equals(member.getClientName())) {
-            Optional<Member> optionalMember = memberRepository.findByClientName(
-                member.getClientName()
-            );
+            Optional<Member> optionalMember = memberRepository.findByClientName(member.getClientName());
             if (optionalMember.isPresent()) {
-                throw new BadRequestAlertException(
-                    "Invalid member name",
-                    "member",
-                    "memberNameUsed.string"
-                );
+                throw new BadRequestAlertException("Invalid member name", "member", "memberNameUsed.string");
             }
         }
 
         // Check if salesforceId changed
-        if (
-            !existingMember.getSalesforceId().equals(member.getSalesforceId())
-        ) {
-            Optional<Member> optionalSalesforceId =
-                memberRepository.findBySalesforceId(member.getSalesforceId());
+        if (!existingMember.getSalesforceId().equals(member.getSalesforceId())) {
+            Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
             if (optionalSalesforceId.isPresent()) {
-                throw new BadRequestAlertException(
-                    "Invalid salesForceId",
-                    "member",
-                    "salesForceIdUsed.string"
-                );
+                throw new BadRequestAlertException("Invalid salesForceId", "member", "salesForceIdUsed.string");
             }
 
             String oldSalesforceId = existingMember.getSalesforceId();
@@ -207,34 +162,19 @@ public class MemberService {
 
             try {
                 // update affiliations and users associated with the member
-                assertionService.updateAssertionsSalesforceId(
-                    oldSalesforceId,
-                    newSalesforceId
-                );
+                assertionService.updateAssertionsSalesforceId(oldSalesforceId, newSalesforceId);
             } catch (Exception e) {
                 LOG.error("Error updating assertion salesforce ids", e);
                 throw new RuntimeException(e);
             }
 
             try {
-                userService.updateUsersSalesforceId(
-                    oldSalesforceId,
-                    newSalesforceId
-                );
+                userService.updateUsersSalesforceId(oldSalesforceId, newSalesforceId);
             } catch (Exception e) {
                 LOG.error("Error updating users's salesforce id", e);
-                LOG.error(
-                    "Error updating users' salesforce id from {} to {}",
-                    oldSalesforceId,
-                    newSalesforceId
-                );
-                LOG.info(
-                    "Attempting to perform salesforce id rollback on affiliations"
-                );
-                assertionService.updateAssertionsSalesforceId(
-                    newSalesforceId,
-                    oldSalesforceId
-                );
+                LOG.error("Error updating users' salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
                 LOG.info("Affiliation salesforce id rollback successfull");
                 throw new RuntimeException(e);
             }
@@ -244,27 +184,13 @@ public class MemberService {
                 return memberRepository.save(existingMember);
             } catch (Exception e) {
                 LOG.error("Error updating member", e);
-                LOG.error(
-                    "Error updating member's salesforce id from {} to {}",
-                    oldSalesforceId,
-                    newSalesforceId
-                );
-                LOG.info(
-                    "Attempting to perform salesforce id rollback on affiliations"
-                );
-                assertionService.updateAssertionsSalesforceId(
-                    newSalesforceId,
-                    oldSalesforceId
-                );
+                LOG.error("Error updating member's salesforce id from {} to {}", oldSalesforceId, newSalesforceId);
+                LOG.info("Attempting to perform salesforce id rollback on affiliations");
+                assertionService.updateAssertionsSalesforceId(newSalesforceId, oldSalesforceId);
                 LOG.info("Affiliation salesforce id rollback successfull");
 
-                LOG.info(
-                    "Attempting to perform salesforce id rollback on users"
-                );
-                userService.updateUsersSalesforceId(
-                    newSalesforceId,
-                    oldSalesforceId
-                );
+                LOG.info("Attempting to perform salesforce id rollback on users");
+                userService.updateUsersSalesforceId(newSalesforceId, oldSalesforceId);
                 LOG.info("User salesforce id rollback successfull");
                 throw new RuntimeException(e);
             }
@@ -281,12 +207,8 @@ public class MemberService {
     }
 
     public Page<Member> getMembers(Pageable pageable, String filter) {
-        return memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
-            filter,
-            filter,
-            filter,
-            pageable
-        );
+        return memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(filter, filter, filter,
+            pageable);
     }
 
     public List<Member> getAllMembers() {
@@ -296,10 +218,7 @@ public class MemberService {
     public Optional<Member> getMember(String id) {
         Optional<Member> member = memberRepository.findById(id);
         if (!member.isPresent()) {
-            LOG.debug(
-                "Member settings not found for id {}, searching against salesforceId",
-                id
-            );
+            LOG.debug("Member settings not found for id {}, searching against salesforceId", id);
             member = memberRepository.findBySalesforceId(id);
         }
         return member;
@@ -308,22 +227,11 @@ public class MemberService {
     public void deleteMember(String id) {
         Optional<Member> optional = memberRepository.findById(id);
         if (!optional.isPresent()) {
-            throw new BadRequestAlertException(
-                "Invalid id",
-                "member",
-                "idunavailable.string"
-            );
+            throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
         }
-        List<MemberServiceUser> usersBelongingToMember =
-            userService.getUsersBySalesforceId(
-                optional.get().getSalesforceId()
-            );
-        if (
-            usersBelongingToMember != null && !usersBelongingToMember.isEmpty()
-        ) {
-            assertionService.deleteAssertionsForSalesforceIn(
-                optional.get().getSalesforceId()
-            );
+        List<MemberServiceUser> usersBelongingToMember = userService.getUsersBySalesforceId(optional.get().getSalesforceId());
+        if (usersBelongingToMember != null && !usersBelongingToMember.isEmpty()) {
+            assertionService.deleteAssertionsForSalesforceIn(optional.get().getSalesforceId());
 
             for (MemberServiceUser user : usersBelongingToMember) {
                 LOG.warn("Deleting user: " + user.toString());
@@ -333,26 +241,12 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    public void updateUsersOnConsortiumLeadChange(
-        Member member,
-        Member existentMember
-    ) {
+    public void updateUsersOnConsortiumLeadChange(Member member, Member existentMember) {
         if (existentMember == null) {
-            throw new BadRequestAlertException(
-                "Invalid id",
-                "member",
-                "idunavailable.string"
-            );
+            throw new BadRequestAlertException("Invalid id", "member", "idunavailable.string");
         }
-        if (
-            Boolean.compare(
-                existentMember.getIsConsortiumLead(),
-                member.getIsConsortiumLead()
-            ) !=
-            0
-        ) {
-            List<MemberServiceUser> usersBelongingToMember =
-                userService.getUsersBySalesforceId(member.getSalesforceId());
+        if (Boolean.compare(existentMember.getIsConsortiumLead(), member.getIsConsortiumLead()) != 0) {
+            List<MemberServiceUser> usersBelongingToMember = userService.getUsersBySalesforceId(member.getSalesforceId());
             for (MemberServiceUser user : usersBelongingToMember) {
                 Set<String> authorities = user.getAuthorities();
                 if (member.getIsConsortiumLead()) {
@@ -372,6 +266,7 @@ public class MemberService {
         String decryptState = encryptUtil.decrypt(state);
         String[] stateTokens = decryptState.split("&&");
         return getMember(stateTokens[0]);
+
     }
 
     public MemberDetails getCurrentMemberDetails() {
@@ -379,42 +274,30 @@ public class MemberService {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
 
         LOG.info("Current member sf id: {}", salesforceId);
-        Member member = memberRepository
-            .findBySalesforceId(salesforceId)
-            .orElseThrow();
+        Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
 
         LOG.info("Found member {}", member.getClientName());
         LOG.info("Member is consortium lead: {}", member.getIsConsortiumLead());
 
         try {
             if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
-                LOG.info(
-                    "getting consortium lead details for sfid {}",
-                    salesforceId
-                );
+                LOG.info("getting consortium lead details for sfid {}", salesforceId);
                 return salesforceClient.getConsortiumLeadDetails(salesforceId);
             } else {
                 LOG.info("getting member details for sfid {}", salesforceId);
                 return salesforceClient.getMemberDetails(salesforceId);
             }
         } catch (IOException e) {
-            LOG.error(
-                "Error fetching member details from salesforce client",
-                e
-            );
+            LOG.error("Error fetching member details from salesforce client", e);
             throw new RuntimeException(e);
         }
     }
 
-    public Boolean updatePublicMemberDetails(
-        @Valid PublicMemberDetails publicMemberDetails
-    ) {
+    public Boolean updateMemberData(@Valid MemberUpdateData memberUpdateData) {
         String salesforceId = userService.getLoggedInUser().getSalesforceId();
-        publicMemberDetails.setSalesforceId(salesforceId);
+        memberUpdateData.setSalesforceId(salesforceId);
         try {
-            return salesforceClient.updatePublicMemberDetails(
-                publicMemberDetails
-            );
+            return salesforceClient.updatePublicMemberDetails(memberUpdateData);
         } catch (IOException e) {
             LOG.error("Error updating member contacts", e);
             throw new RuntimeException(e);
@@ -426,10 +309,7 @@ public class MemberService {
         try {
             return salesforceClient.getMemberContacts(salesforceId);
         } catch (IOException e) {
-            LOG.error(
-                "Error fetching member contacts from salesforce client",
-                e
-            );
+            LOG.error("Error fetching member contacts from salesforce client", e);
             throw new RuntimeException(e);
         }
     }
@@ -439,21 +319,13 @@ public class MemberService {
         try {
             return salesforceClient.getMemberOrgIds(salesforceId);
         } catch (IOException e) {
-            LOG.error(
-                "Error fetching member org ids from salesforce client",
-                e
-            );
+            LOG.error("Error fetching member org ids from salesforce client", e);
             throw new RuntimeException(e);
         }
     }
 
-    public void updateMemberDefaultLanguage(
-        String salesforceId,
-        String language
-    ) {
-        Optional<Member> optional = memberRepository.findBySalesforceId(
-            salesforceId
-        );
+    public void updateMemberDefaultLanguage(String salesforceId, String language) {
+        Optional<Member> optional = memberRepository.findBySalesforceId(salesforceId);
         if (optional.isPresent()) {
             Member member = optional.get();
             member.setDefaultLanguage(language);
@@ -466,20 +338,16 @@ public class MemberService {
     public void processMemberContact(MemberContactUpdate memberContactUpdate) {
         MemberServiceUser user = userService.getLoggedInUser();
         memberContactUpdate.setRequestedByEmail(user.getEmail());
-        memberContactUpdate.setRequestedByName(
-            user.getFirstName() + " " + user.getLastName()
-        );
+        memberContactUpdate.setRequestedByName(user.getFirstName() + " " + user.getLastName());
         memberContactUpdate.setRequestedByMember(user.getMemberName());
 
         if (memberContactUpdate.getContactEmail() == null) {
             mailService.sendAddContactEmail(memberContactUpdate);
-        } else if (
-            memberContactUpdate.getContactNewEmail() == null &&
-            memberContactUpdate.getContactNewName() == null &&
-            memberContactUpdate.getContactNewPhone() == null &&
-            memberContactUpdate.getContactNewRoles() == null &&
-            memberContactUpdate.getContactNewJobTitle() == null
-        ) {
+        } else if (memberContactUpdate.getContactNewEmail() == null
+            && memberContactUpdate.getContactNewName() == null
+            && memberContactUpdate.getContactNewPhone() == null
+            && memberContactUpdate.getContactNewRoles() == null
+            && memberContactUpdate.getContactNewJobTitle() == null) {
             // no new data, must be remove operation
             mailService.sendRemoveContactEmail(memberContactUpdate);
         } else {
@@ -487,50 +355,35 @@ public class MemberService {
         }
     }
 
-    public void requestNewConsortiumMember(
-        AddConsortiumMember addConsortiumMember
-    ) {
+    public void requestNewConsortiumMember(AddConsortiumMember addConsortiumMember) {
         MemberServiceUser user = userService.getLoggedInUser();
 
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(
-            user.getSalesforceId()
-        );
+        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
-            throw new RuntimeException(
-                "Requesting member is not a consortium lead"
-            );
+            throw new RuntimeException("Requesting member is not a consortium lead");
         }
 
         addConsortiumMember.setRequestedByEmail(user.getEmail());
-        addConsortiumMember.setRequestedByName(
-            user.getFirstName() + " " + user.getLastName()
-        );
+        addConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
         addConsortiumMember.setConsortium(user.getMemberName());
 
         mailService.sendAddConsortiumMemberEmail(addConsortiumMember);
     }
 
-    public void requestRemoveConsortiumMember(
-        RemoveConsortiumMember removeConsortiumMember
-    ) {
+    public void requestRemoveConsortiumMember(RemoveConsortiumMember removeConsortiumMember) {
         MemberServiceUser user = userService.getLoggedInUser();
 
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(
-            user.getSalesforceId()
-        );
+        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
-            throw new RuntimeException(
-                "Requesting member is not a consortium lead"
-            );
+            throw new RuntimeException("Requesting member is not a consortium lead");
         }
 
         removeConsortiumMember.setRequestedByEmail(user.getEmail());
-        removeConsortiumMember.setRequestedByName(
-            user.getFirstName() + " " + user.getLastName()
-        );
+        removeConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
         removeConsortiumMember.setConsortium(user.getMemberName());
+
 
         mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
     }

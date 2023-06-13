@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.user.client;
 
 import java.lang.annotation.*;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.core.annotation.AliasFor;
@@ -10,6 +11,7 @@ import org.springframework.core.annotation.AliasFor;
 @Documented
 @FeignClient
 public @interface AuthorizedUserFeignClient {
+
     @AliasFor(annotation = FeignClient.class, attribute = "name")
     String name() default "";
 

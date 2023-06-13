@@ -3,6 +3,7 @@ package org.orcid.memberportal.service.user.repository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
 import org.orcid.memberportal.service.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +15,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
+
     Optional<User> findOneByActivationKey(String activationKey);
 
-    List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-        Instant dateTime
-    );
+    List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
     Optional<User> findOneByResetKey(String resetKey);
 
@@ -32,50 +32,28 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     List<User> findBySalesforceIdAndDeletedIsFalse(String salesforceId);
 
-    Page<User> findBySalesforceIdAndDeletedIsFalse(
-        Pageable pageable,
-        String salesforceId
-    );
+    Page<User> findBySalesforceIdAndDeletedIsFalse(Pageable pageable, String salesforceId);
 
     Page<User> findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
-        Pageable pageable,
-        String salesforceId1,
-        String memberName,
-        String salesforceId2,
-        String firstName,
-        String salesforceId3,
-        String lastName,
-        String salesforceId4,
-        String email
-    );
+            Pageable pageable, String salesforceId1, String memberName, String salesforceId2, String firstName,
+            String salesforceId3, String lastName, String salesforceId4, String email);
 
     Page<User> findByDeletedFalse(Pageable pageable);
 
-    Optional<User> findOneByMainContactIsTrueAndSalesforceId(
-        String salesforceId
-    );
+    Optional<User> findOneByMainContactIsTrueAndSalesforceId(String salesforceId);
 
-    List<User> findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(
-        String salesforceId
-    );
+    List<User> findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(String salesforceId);
 
     List<User> findAllByMainContactIsTrueAndDeletedIsFalse();
 
     List<User> findAllByActivatedIsFalseAndDeletedIsFalse();
 
-    Optional<User> findOneBySalesforceIdAndMainContactIsTrue(
-        String salesforceId
-    );
+    Optional<User> findOneBySalesforceIdAndMainContactIsTrue(String salesforceId);
 
     Long countByAdminIsTrue();
 
     Page<User> findByMemberName(Pageable pageable, String memberName);
 
     Page<User> findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
-        String memberName,
-        String firstName,
-        String lastName,
-        String email,
-        Pageable pageable
-    );
+            String memberName, String firstName, String lastName, String email, Pageable pageable);
 }

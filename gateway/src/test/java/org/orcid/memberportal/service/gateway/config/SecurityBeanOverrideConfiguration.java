@@ -30,9 +30,7 @@ public class SecurityBeanOverrideConfiguration {
 
     @Bean
     @Primary
-    public RestTemplate loadBalancedRestTemplate(
-        RestTemplateCustomizer customizer
-    ) {
+    public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
         return null;
     }
 }

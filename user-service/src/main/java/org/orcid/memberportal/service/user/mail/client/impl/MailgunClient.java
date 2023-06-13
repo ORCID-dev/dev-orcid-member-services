@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -33,14 +34,8 @@ public class MailgunClient implements MailClient {
     private HttpClient client;
 
     @Override
-    public void sendMail(String to, String subject, String html)
-        throws MailException {
-        LOGGER.info(
-            "Preparing email {} for sending to {} from {}",
-            subject,
-            to,
-            getFrom()
-        );
+    public void sendMail(String to, String subject, String html) throws MailException {
+        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
         List<NameValuePair> urlParameters = new ArrayList<>();
         urlParameters.add(new BasicNameValuePair("to", to));
         urlParameters.add(new BasicNameValuePair("from", getFrom()));
@@ -57,29 +52,16 @@ public class MailgunClient implements MailClient {
         try {
             post.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            throw new MailException(
-                "Error encoding url params for post body",
-                e
-            );
+            throw new MailException("Error encoding url params for post body", e);
         }
 
         try {
             LOGGER.info("Sending mail {} to {}", subject, to);
             HttpResponse response = client.execute(post);
             if (response.getStatusLine().getStatusCode() != 200) {
-                LOGGER.warn(
-                    "Received response {} from mailgun: {}",
-                    response.getStatusLine().getReasonPhrase()
-                );
-                try (
-                    InputStream inputStream = response.getEntity().getContent()
-                ) {
-                    LOGGER.warn(
-                        new String(
-                            inputStream.readAllBytes(),
-                            StandardCharsets.UTF_8
-                        )
-                    );
+                LOGGER.warn("Received response {} from mailgun: {}", response.getStatusLine().getReasonPhrase());
+                try (InputStream inputStream = response.getEntity().getContent()) {
+                    LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
                 }
             } else {
                 EntityUtils.consume(response.getEntity());
@@ -90,11 +72,8 @@ public class MailgunClient implements MailClient {
     }
 
     private String getFrom() {
-        return applicationProperties.getMailFromName() != null
-            ? applicationProperties.getMailFromName() +
-            " <" +
-            applicationProperties.getMailFromAddress() +
-            ">"
-            : applicationProperties.getMailFromAddress();
+        return applicationProperties.getMailFromName() != null ? applicationProperties.getMailFromName() + " <" + applicationProperties.getMailFromAddress() + ">"
+                : applicationProperties.getMailFromAddress();
     }
+
 }

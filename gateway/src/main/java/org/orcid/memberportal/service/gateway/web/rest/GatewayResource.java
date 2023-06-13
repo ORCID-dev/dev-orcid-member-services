@@ -2,13 +2,14 @@ package org.orcid.memberportal.service.gateway.web.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.orcid.memberportal.service.gateway.security.AuthoritiesConstants;
-import org.orcid.memberportal.service.gateway.web.rest.vm.RouteVM;
+
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.http.*;
 import org.springframework.security.access.annotation.Secured;
+import org.orcid.memberportal.service.gateway.security.AuthoritiesConstants;
+import org.orcid.memberportal.service.gateway.web.rest.vm.RouteVM;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,10 +23,7 @@ public class GatewayResource {
 
     private final DiscoveryClient discoveryClient;
 
-    public GatewayResource(
-        RouteLocator routeLocator,
-        DiscoveryClient discoveryClient
-    ) {
+    public GatewayResource(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
         this.routeLocator = routeLocator;
         this.discoveryClient = discoveryClient;
     }
@@ -45,9 +43,7 @@ public class GatewayResource {
             RouteVM routeVM = new RouteVM();
             routeVM.setPath(route.getFullPath());
             routeVM.setServiceId(route.getId());
-            routeVM.setServiceInstances(
-                discoveryClient.getInstances(route.getLocation())
-            );
+            routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
             routeVMs.add(routeVM);
         });
         return ResponseEntity.ok(routeVMs);

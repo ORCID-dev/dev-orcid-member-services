@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core'
-import { RouterModule } from '@angular/router'
-import { JHipsterRegistrySharedModule } from 'app/shared/shared.module'
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { JHipsterRegistrySharedModule } from 'app/shared/shared.module';
 
-import { sshRoute } from './ssh.route'
-import { SSHComponent } from './ssh.component'
+import { sshRoute } from './ssh.route';
+import { SSHComponent } from './ssh.component';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([sshRoute])],
-  declarations: [SSHComponent],
+  declarations: [SSHComponent]
 })
 export class SSHModule {}

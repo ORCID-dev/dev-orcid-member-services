@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.assertion.repository;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +12,8 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AssertionRepository
-    extends MongoRepository<Assertion, String>, AssertionRepositoryCustom {
+public interface AssertionRepository extends MongoRepository<Assertion, String>, AssertionRepositoryCustom {
+
     @Query("{ownerId: ?0}")
     Page<Assertion> findByOwnerId(String ownerId, Pageable pageable);
 
@@ -24,22 +25,9 @@ public interface AssertionRepository
     List<Assertion> findByStatus(String status, Pageable pageable);
 
     Page<Assertion> findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
-        Pageable pageable,
-        String salesforceId1,
-        String affiliationSection,
-        String salesforceId2,
-        String departmentName,
-        String salesforceId3,
-        String orcName,
-        String salesforceId4,
-        String disambiguatedOrgId,
-        String salesforceId5,
-        String email,
-        String salesforceId6,
-        String orcidId,
-        String salesforceId7,
-        String roleTitle
-    );
+            Pageable pageable, String salesforceId1, String affiliationSection, String salesforceId2, String departmentName, String salesforceId3, String orcName,
+            String salesforceId4, String disambiguatedOrgId, String salesforceId5, String email, String salesforceId6, String orcidId, String salesforceId7,
+            String roleTitle);
 
     @Query("{salesforceId: ?0}")
     List<Assertion> findBySalesforceId(String salesforceId, Sort sort);
@@ -48,10 +36,7 @@ public interface AssertionRepository
 
     List<Assertion> findByEmail(String email);
 
-    List<Assertion> findByEmailAndSalesforceId(
-        String email,
-        String salesforceId
-    );
+    List<Assertion> findByEmailAndSalesforceId(String email, String salesforceId);
 
     Optional<Assertion> findOneByEmailIgnoreCase(String email);
 
@@ -61,14 +46,9 @@ public interface AssertionRepository
 
     Long countByEmailAndSalesforceId(String email, String salesforceId);
 
-    List<Assertion> findByEmailAndSalesforceIdAndStatus(
-        String email,
-        String salesforceId,
-        String status
-    );
+    List<Assertion> findByEmailAndSalesforceIdAndStatus(String email, String salesforceId, String status);
 
-    @Query(
-        "{ addedToORCID: { $exists: false }, $or: [ { notificationSent: { $exists: true } }, { invitationSent: { $exists: true } } ] }"
-    )
+    @Query("{ addedToORCID: { $exists: false }, $or: [ { notificationSent: { $exists: true } }, { invitationSent: { $exists: true } } ] }")
     Page<Assertion> findNotificationResendCandidates(Pageable pageable);
+
 }

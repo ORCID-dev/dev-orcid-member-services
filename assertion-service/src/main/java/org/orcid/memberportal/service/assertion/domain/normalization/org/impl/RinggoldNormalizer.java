@@ -16,4 +16,5 @@ public class RinggoldNormalizer implements OrgNormalizer {
     public String getOrgSource() {
         return Constants.RINGGOLD_ORG_SOURCE;
     }
+
 }

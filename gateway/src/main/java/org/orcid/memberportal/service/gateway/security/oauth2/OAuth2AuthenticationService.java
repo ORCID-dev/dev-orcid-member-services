@@ -1,11 +1,12 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import io.github.jhipster.security.PersistentTokenCache;
 import java.util.Collection;
 import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.client.HttpClientErrorException;
 
+import io.github.jhipster.security.PersistentTokenCache;
+
 /**
  * Manages authentication cases for OAuth2 updating the cookies holding access
  * and refresh tokens accordingly.
@@ -25,9 +28,7 @@ import org.springframework.web.client.HttpClientErrorException;
  */
 public class OAuth2AuthenticationService {
 
-    private final Logger LOG = LoggerFactory.getLogger(
-        OAuth2AuthenticationService.class
-    );
+    private final Logger LOG = LoggerFactory.getLogger(OAuth2AuthenticationService.class);
 
     /**
      * Number of milliseconds to cache refresh token grants so we don't have to
@@ -54,16 +55,11 @@ public class OAuth2AuthenticationService {
 
     private TokenStore tokenStore;
 
-    public OAuth2AuthenticationService(
-        OAuth2TokenEndpointClient authorizationClient,
-        OAuth2CookieHelper cookieHelper,
-        TokenStore tokenStore
-    ) {
+    public OAuth2AuthenticationService(OAuth2TokenEndpointClient authorizationClient, OAuth2CookieHelper cookieHelper, TokenStore tokenStore) {
         this.authorizationClient = authorizationClient;
         this.cookieHelper = cookieHelper;
         this.tokenStore = tokenStore;
-        recentlyRefreshed =
-            new PersistentTokenCache<>(REFRESH_TOKEN_VALIDITY_MILLIS);
+        recentlyRefreshed = new PersistentTokenCache<>(REFRESH_TOKEN_VALIDITY_MILLIS);
     }
 
     /**
@@ -79,37 +75,20 @@ public class OAuth2AuthenticationService {
      *         {@code OK (200)}, if successful. If the UAA cannot authenticate
      *         the user, the status code returned by UAA will be returned.
      */
-    public ResponseEntity<LoginResult> authenticate(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        Map<String, String> params
-    ) {
+    public ResponseEntity<LoginResult> authenticate(HttpServletRequest request, HttpServletResponse response, Map<String, String> params) {
         try {
             String username = params.get("username");
             String password = params.get("password");
             String mfaCode = params.get("mfaCode");
             boolean rememberMe = Boolean.valueOf(params.get("rememberMe"));
-            OAuth2AccessToken accessToken =
-                authorizationClient.sendPasswordGrant(
-                    username,
-                    password,
-                    mfaCode
-                );
+            OAuth2AccessToken accessToken = authorizationClient.sendPasswordGrant(username, password, mfaCode);
 
             LoginResult loginResult = getLoginResult(accessToken);
 
             if (!loginResult.isMfaRequired()) {
-                LOG.info(
-                    "Successfully authenticated user {}",
-                    params.get("username")
-                );
+                LOG.info("Successfully authenticated user {}", params.get("username"));
                 OAuth2Cookies cookies = new OAuth2Cookies();
-                cookieHelper.createCookies(
-                    request,
-                    accessToken,
-                    rememberMe,
-                    cookies
-                );
+                cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
                 cookies.addCookiesTo(response);
             }
 
@@ -121,11 +100,8 @@ public class OAuth2AuthenticationService {
     }
 
     private LoginResult getLoginResult(OAuth2AccessToken accessToken) {
-        OAuth2Authentication authentication = tokenStore.readAuthentication(
-            accessToken
-        );
-        Collection<GrantedAuthority> authorities =
-            authentication.getAuthorities();
+        OAuth2Authentication authentication = tokenStore.readAuthentication(accessToken);
+        Collection<GrantedAuthority> authorities = authentication.getAuthorities();
         LoginResult loginResult = new LoginResult();
         authorities.forEach(a -> {
             if (a.getAuthority().equals("PRE_AUTH")) {
@@ -153,11 +129,7 @@ public class OAuth2AuthenticationService {
      * @return the new servlet request containing the updated cookies for
      *         relaying downstream.
      */
-    public HttpServletRequest refreshToken(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        Cookie refreshCookie
-    ) {
+    public HttpServletRequest refreshToken(HttpServletRequest request, HttpServletResponse response, Cookie refreshCookie) {
         // check if non-remember-me session has expired
         if (cookieHelper.isSessionExpired(refreshCookie)) {
             LOG.info("session has expired due to inactivity");
@@ -169,34 +141,20 @@ public class OAuth2AuthenticationService {
             // check if we have a result from another thread already
             if (cookies.getAccessTokenCookie() == null) { // no, we are first!
                 // send a refresh_token grant to UAA, getting new tokens
-                String refreshCookieValue =
-                    OAuth2CookieHelper.getRefreshTokenValue(refreshCookie);
-                OAuth2AccessToken accessToken =
-                    authorizationClient.sendRefreshGrant(refreshCookieValue);
-                boolean rememberMe = OAuth2CookieHelper.isRememberMe(
-                    refreshCookie
-                );
-                cookieHelper.createCookies(
-                    request,
-                    accessToken,
-                    rememberMe,
-                    cookies
-                );
+                String refreshCookieValue = OAuth2CookieHelper.getRefreshTokenValue(refreshCookie);
+                OAuth2AccessToken accessToken = authorizationClient.sendRefreshGrant(refreshCookieValue);
+                boolean rememberMe = OAuth2CookieHelper.isRememberMe(refreshCookie);
+                cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
                 // add cookies to response to update browser
                 cookies.addCookiesTo(response);
             } else {
                 LOG.debug("reusing cached refresh_token grant");
             }
             // replace cookies in original request with new ones
-            CookieCollection requestCookies = new CookieCollection(
-                request.getCookies()
-            );
+            CookieCollection requestCookies = new CookieCollection(request.getCookies());
             requestCookies.add(cookies.getAccessTokenCookie());
             requestCookies.add(cookies.getRefreshTokenCookie());
-            return new CookiesHttpServletRequestWrapper(
-                request,
-                requestCookies.toArray()
-            );
+            return new CookiesHttpServletRequestWrapper(request, requestCookies.toArray());
         }
     }
 
@@ -229,10 +187,7 @@ public class OAuth2AuthenticationService {
      * @param httpServletResponse
      *            the response used to clear them.
      */
-    public void logout(
-        HttpServletRequest httpServletRequest,
-        HttpServletResponse httpServletResponse
-    ) {
+    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         cookieHelper.clearCookies(httpServletRequest, httpServletResponse);
     }
 
@@ -245,15 +200,8 @@ public class OAuth2AuthenticationService {
      *            the incoming request.
      * @return the request to replace it with which has the tokens stripped.
      */
-    public HttpServletRequest stripTokens(
-        HttpServletRequest httpServletRequest
-    ) {
-        Cookie[] cookies = cookieHelper.stripCookies(
-            httpServletRequest.getCookies()
-        );
-        return new CookiesHttpServletRequestWrapper(
-            httpServletRequest,
-            cookies
-        );
+    public HttpServletRequest stripTokens(HttpServletRequest httpServletRequest) {
+        Cookie[] cookies = cookieHelper.stripCookies(httpServletRequest.getCookies());
+        return new CookiesHttpServletRequestWrapper(httpServletRequest, cookies);
     }
 }

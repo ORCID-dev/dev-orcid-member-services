@@ -1,10 +1,11 @@
 package io.github.jhipster.registry.web.rest.errors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ErrorVMTest {
 
@@ -84,24 +85,12 @@ public class ErrorVMTest {
         vm2null.add(null, null, null);
         vm3null.add(null, null, null);
 
-        assertThat(vm1.getFieldErrors().get(0).getMessage())
-            .as(message)
-            .isNull();
-        assertThat(vm2.getFieldErrors().get(0).getMessage())
-            .as(message)
-            .isNull();
-        assertThat(vm3.getFieldErrors().get(0).getMessage())
-            .as(message)
-            .isNull();
-        assertThat(vm1null.getFieldErrors().get(0).getMessage())
-            .as(message)
-            .isNull();
-        assertThat(vm2null.getFieldErrors().get(0).getMessage())
-            .as(message)
-            .isNull();
-        assertThat(vm3null.getFieldErrors().get(0).getMessage())
-            .as(message)
-            .isNull();
+        assertThat(vm1.getFieldErrors().get(0).getMessage()).as(message).isNull();
+        assertThat(vm2.getFieldErrors().get(0).getMessage()).as(message).isNull();
+        assertThat(vm3.getFieldErrors().get(0).getMessage()).as(message).isNull();
+        assertThat(vm1null.getFieldErrors().get(0).getMessage()).as(message).isNull();
+        assertThat(vm2null.getFieldErrors().get(0).getMessage()).as(message).isNull();
+        assertThat(vm3null.getFieldErrors().get(0).getMessage()).as(message).isNull();
 
         vm1.add("testObjectName", "testField", "testMsg");
         vm2.add("testObjectName", "testField", "testMsg");
@@ -110,17 +99,12 @@ public class ErrorVMTest {
         vm2null.add("testObjectName", "testField", "testMsg");
         vm3null.add("testObjectName", "testField", "testMsg");
 
-        assertThat(vm1.getFieldErrors().get(1).getMessage())
-            .isEqualTo("testMsg");
-        assertThat(vm2.getFieldErrors().get(1).getMessage())
-            .isEqualTo("testMsg");
-        assertThat(vm3.getFieldErrors().get(1).getMessage())
-            .isEqualTo("testMsg");
-        assertThat(vm1null.getFieldErrors().get(1).getMessage())
-            .isEqualTo("testMsg");
-        assertThat(vm2null.getFieldErrors().get(1).getMessage())
-            .isEqualTo("testMsg");
-        assertThat(vm3null.getFieldErrors().get(1).getMessage())
-            .isEqualTo("testMsg");
+        assertThat(vm1.getFieldErrors().get(1).getMessage()).isEqualTo("testMsg");
+        assertThat(vm2.getFieldErrors().get(1).getMessage()).isEqualTo("testMsg");
+        assertThat(vm3.getFieldErrors().get(1).getMessage()).isEqualTo("testMsg");
+        assertThat(vm1null.getFieldErrors().get(1).getMessage()).isEqualTo("testMsg");
+        assertThat(vm2null.getFieldErrors().get(1).getMessage()).isEqualTo("testMsg");
+        assertThat(vm3null.getFieldErrors().get(1).getMessage()).isEqualTo("testMsg");
     }
+
 }

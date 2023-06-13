@@ -21,18 +21,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class OAuth2AuthenticationConfiguration
-    extends ResourceServerConfigurerAdapter {
-
+public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerAdapter {
     private final OAuth2Properties oAuth2Properties;
     private final OAuth2TokenEndpointClient tokenEndpointClient;
     private final TokenStore tokenStore;
 
-    public OAuth2AuthenticationConfiguration(
-        OAuth2Properties oAuth2Properties,
-        OAuth2TokenEndpointClient tokenEndpointClient,
-        TokenStore tokenStore
-    ) {
+    public OAuth2AuthenticationConfiguration(OAuth2Properties oAuth2Properties, OAuth2TokenEndpointClient tokenEndpointClient, TokenStore tokenStore) {
         this.oAuth2Properties = oAuth2Properties;
         this.tokenEndpointClient = tokenEndpointClient;
         this.tokenStore = tokenStore;
@@ -40,14 +34,7 @@ public class OAuth2AuthenticationConfiguration
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-            .antMatchers("/auth/login")
-            .permitAll()
-            .antMatchers("/auth/logout")
-            .authenticated()
-            .and()
-            .apply(refreshTokenSecurityConfigurerAdapter());
+        http.authorizeRequests().antMatchers("/auth/login").permitAll().antMatchers("/auth/logout").authenticated().and().apply(refreshTokenSecurityConfigurerAdapter());
     }
 
     /**
@@ -55,10 +42,7 @@ public class OAuth2AuthenticationConfiguration
      * refreshes OAuth2 tokens.
      */
     private RefreshTokenFilterConfigurer refreshTokenSecurityConfigurerAdapter() {
-        return new RefreshTokenFilterConfigurer(
-            uaaAuthenticationService(),
-            tokenStore
-        );
+        return new RefreshTokenFilterConfigurer(uaaAuthenticationService(), tokenStore);
     }
 
     @Bean
@@ -68,11 +52,7 @@ public class OAuth2AuthenticationConfiguration
 
     @Bean
     public OAuth2AuthenticationService uaaAuthenticationService() {
-        return new OAuth2AuthenticationService(
-            tokenEndpointClient,
-            cookieHelper(),
-            tokenStore
-        );
+        return new OAuth2AuthenticationService(tokenEndpointClient, cookieHelper(), tokenStore);
     }
 
     /**
@@ -80,8 +60,7 @@ public class OAuth2AuthenticationConfiguration
      * {@link TokenExtractor}.
      */
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources)
-        throws Exception {
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.tokenExtractor(tokenExtractor());
     }
 
@@ -95,4 +74,5 @@ public class OAuth2AuthenticationConfiguration
     public TokenExtractor tokenExtractor() {
         return new CookieTokenExtractor();
     }
+
 }

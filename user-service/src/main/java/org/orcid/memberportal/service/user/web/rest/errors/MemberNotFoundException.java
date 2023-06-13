@@ -19,6 +19,7 @@ public class MemberNotFoundException extends RuntimeException {
 
     public MemberNotFoundException(String message, String... params) {
         super(message);
+
         this.message = message;
         if (params != null && params.length > 0) {
             for (int i = 0; i < params.length; i++) {
@@ -27,10 +28,7 @@ public class MemberNotFoundException extends RuntimeException {
         }
     }
 
-    public MemberNotFoundException(
-        String message,
-        Map<String, String> paramMap
-    ) {
+    public MemberNotFoundException(String message, Map<String, String> paramMap) {
         super(message);
         this.message = message;
         this.paramMap.putAll(paramMap);

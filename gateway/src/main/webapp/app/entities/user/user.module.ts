@@ -1,9 +1,9 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { RouterModule } from '@angular/router'
-import { JhiLanguageService } from 'ng-jhipster'
-import { JhiLanguageHelper } from 'app/core'
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { JhiLanguageService } from 'ng-jhipster';
+import { JhiLanguageHelper } from 'app/core';
 
-import { GatewaySharedModule } from 'app/shared'
+import { GatewaySharedModule } from 'app/shared';
 import {
   MSUserComponent,
   MSUserDetailComponent,
@@ -13,12 +13,12 @@ import {
   MSUserImportPopupComponent,
   MSUserImportDialogComponent,
   msUserRoute,
-  msUserPopupRoute,
-} from './'
+  msUserPopupRoute
+} from './';
 
-import { MSUserOwnershipChangeDirective } from './user-ownership-change.directive'
+import { MSUserOwnershipChangeDirective } from './user-ownership-change.directive';
 
-const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute]
+const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute];
 
 @NgModule({
   imports: [GatewaySharedModule, RouterModule.forChild(ENTITY_STATES)],
@@ -30,7 +30,7 @@ const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute]
     MSUserDeletePopupComponent,
     MSUserOwnershipChangeDirective,
     MSUserImportDialogComponent,
-    MSUserImportPopupComponent,
+    MSUserImportPopupComponent
   ],
   entryComponents: [
     MSUserComponent,
@@ -38,20 +38,17 @@ const ENTITY_STATES = [...msUserRoute, ...msUserPopupRoute]
     MSUserDeleteDialogComponent,
     MSUserDeletePopupComponent,
     MSUserImportDialogComponent,
-    MSUserImportPopupComponent,
+    MSUserImportPopupComponent
   ],
   providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MSUserServiceMSUserModule {
-  constructor(
-    private languageService: JhiLanguageService,
-    private languageHelper: JhiLanguageHelper
-  ) {
+  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
     this.languageHelper.language.subscribe((languageKey: string) => {
       if (languageKey !== undefined) {
-        this.languageService.changeLanguage(languageKey)
+        this.languageService.changeLanguage(languageKey);
       }
-    })
+    });
   }
 }

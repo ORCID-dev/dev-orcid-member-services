@@ -1,11 +1,11 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
+import javax.servlet.http.Cookie;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.servlet.http.Cookie;
 
 /**
  * A {@link Collection} of {@link Cookie}s that allows modification - unlike a
@@ -15,7 +15,6 @@ import javax.servlet.http.Cookie;
  * we cannot simply put it into a {@code HashSet}.
  */
 public class CookieCollection implements Collection<Cookie> {
-
     private final Map<String, Cookie> cookieMap;
 
     public CookieCollection() {
@@ -123,15 +122,10 @@ public class CookieCollection implements Collection<Cookie> {
     @Override
     public boolean retainAll(Collection<?> collection) {
         boolean result = false;
-        Iterator<Map.Entry<String, Cookie>> it = cookieMap
-            .entrySet()
-            .iterator();
+        Iterator<Map.Entry<String, Cookie>> it = cookieMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Cookie> e = it.next();
-            if (
-                !collection.contains(e.getKey()) &&
-                !collection.contains(e.getValue())
-            ) {
+            if (!collection.contains(e.getKey()) && !collection.contains(e.getValue())) {
                 it.remove();
                 result = true;
             }

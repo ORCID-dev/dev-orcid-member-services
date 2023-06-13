@@ -1,21 +1,21 @@
 package org.orcid.memberportal.service.gateway.security.oauth2;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.orcid.memberportal.service.gateway.security.oauth2.CookieCollection;
 
+import javax.servlet.http.Cookie;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.http.Cookie;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.orcid.memberportal.service.gateway.security.oauth2.CookieCollection;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test the {@link CookieCollection}.
  */
 public class CookieCollectionTest {
-
     public static final String COOKIE_NAME = "chocolate";
     public static final String COOKIE_VALUE = "yummy";
     public static final String BROWNIE_NAME = "brownie";
@@ -92,11 +92,7 @@ public class CookieCollectionTest {
 
     @Test
     public void addAgain() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         Cookie white = new Cookie(COOKIE_NAME, "white");
         boolean modified = cookies.add(white);
         assertThat(modified).isTrue();
@@ -108,11 +104,7 @@ public class CookieCollectionTest {
 
     @Test
     public void get() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         Cookie c = cookies.get(COOKIE_NAME);
         assertThat(c).isNotNull();
         assertThat(c).isEqualTo(cookie);
@@ -120,11 +112,7 @@ public class CookieCollectionTest {
 
     @Test
     public void remove() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         cookies.remove(cookie);
         assertThat(cookies).hasSize(2);
         assertThat(cookies.contains(cookie)).isFalse();
@@ -138,18 +126,9 @@ public class CookieCollectionTest {
         List<Cookie> content = Arrays.asList(cookie, brownieCookie);
         CookieCollection cookies = new CookieCollection(content);
         assertThat(cookies.containsAll(content)).isTrue();
-        assertThat(cookies.containsAll(Collections.singletonList(cookie)))
-            .isTrue();
-        assertThat(
-            cookies.containsAll(
-                Arrays.asList(cookie, brownieCookie, cupsCookie)
-            )
-        )
-            .isFalse();
-        assertThat(
-            cookies.containsAll(Arrays.asList(COOKIE_NAME, BROWNIE_NAME))
-        )
-            .isTrue();
+        assertThat(cookies.containsAll(Collections.singletonList(cookie))).isTrue();
+        assertThat(cookies.containsAll(Arrays.asList(cookie, brownieCookie, cupsCookie))).isFalse();
+        assertThat(cookies.containsAll(Arrays.asList(COOKIE_NAME, BROWNIE_NAME))).isTrue();
     }
 
     @Test
@@ -167,11 +146,7 @@ public class CookieCollectionTest {
 
     @Test
     public void addAllEmpty() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         boolean modified = cookies.addAll(Collections.EMPTY_LIST);
         assertThat(modified).isFalse();
         assertThat(cookies).contains(cookie, brownieCookie, cupsCookie);
@@ -179,14 +154,8 @@ public class CookieCollectionTest {
 
     @Test
     public void removeAll() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
-        boolean modified = cookies.removeAll(
-            Arrays.asList(brownieCookie, cupsCookie)
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
+        boolean modified = cookies.removeAll(Arrays.asList(brownieCookie, cupsCookie));
         assertThat(modified).isTrue();
         assertThat(cookies).hasSize(1);
         assertThat(cookies).doesNotContain(brownieCookie, cupsCookie);
@@ -194,11 +163,7 @@ public class CookieCollectionTest {
 
     @Test
     public void removeAllEmpty() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         boolean modified = cookies.removeAll(Collections.EMPTY_LIST);
         assertThat(modified).isFalse();
         assertThat(cookies).contains(cookie, brownieCookie, cupsCookie);
@@ -206,14 +171,8 @@ public class CookieCollectionTest {
 
     @Test
     public void removeAllByName() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
-        boolean modified = cookies.removeAll(
-            Arrays.asList(COOKIE_NAME, BROWNIE_NAME)
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
+        boolean modified = cookies.removeAll(Arrays.asList(COOKIE_NAME, BROWNIE_NAME));
         assertThat(modified).isTrue();
         assertThat(cookies).hasSize(1);
         assertThat(cookies).doesNotContain(brownieCookie, cookie);
@@ -221,11 +180,7 @@ public class CookieCollectionTest {
 
     @Test
     public void retainAll() {
-        CookieCollection cookies = new CookieCollection(
-            cookie,
-            brownieCookie,
-            cupsCookie
-        );
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         List<Cookie> content = Arrays.asList(cookie, brownieCookie);
         boolean modified = cookies.retainAll(content);
         assertThat(modified).isTrue();

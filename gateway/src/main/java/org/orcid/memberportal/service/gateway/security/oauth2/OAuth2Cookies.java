@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
  * Holds the access token and refresh token cookies.
  */
 class OAuth2Cookies {
-
     private Cookie accessTokenCookie;
     private Cookie refreshTokenCookie;
 
@@ -19,10 +18,7 @@ class OAuth2Cookies {
         return refreshTokenCookie;
     }
 
-    public void setCookies(
-        Cookie accessTokenCookie,
-        Cookie refreshTokenCookie
-    ) {
+    public void setCookies(Cookie accessTokenCookie, Cookie refreshTokenCookie) {
         this.accessTokenCookie = accessTokenCookie;
         this.refreshTokenCookie = refreshTokenCookie;
     }

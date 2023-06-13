@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core'
-import { RouterModule } from '@angular/router'
-import { JHipsterRegistrySharedModule } from 'app/shared/shared.module'
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { JHipsterRegistrySharedModule } from 'app/shared/shared.module';
 
-import { LogsComponent } from './logs.component'
+import { LogsComponent } from './logs.component';
 
-import { logsRoute } from './logs.route'
+import { logsRoute } from './logs.route';
 
 @NgModule({
   imports: [JHipsterRegistrySharedModule, RouterModule.forChild([logsRoute])],
-  declarations: [LogsComponent],
+  declarations: [LogsComponent]
 })
 export class LogsModule {}

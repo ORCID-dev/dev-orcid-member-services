@@ -1,8 +1,8 @@
 package io.github.jhipster.registry.web.rest;
 
-import io.github.jhipster.registry.web.rest.vm.UserVM;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.User;
+
+import io.github.jhipster.registry.web.rest.vm.UserVM;
 
 /**
  * REST controller for managing the current user's account.
@@ -43,9 +45,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
     public ResponseEntity<UserVM> getAccount() {
-        Authentication authentication = SecurityContextHolder
-            .getContext()
-            .getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             String login;
             if (authentication.getPrincipal() instanceof User) {
@@ -55,25 +55,15 @@ public class AccountResource {
             } else if (authentication.getPrincipal() instanceof String) {
                 login = (String) authentication.getPrincipal();
             } else if (authentication instanceof OAuth2AuthenticationToken) {
-                login =
-                    ((OAuth2AuthenticationToken) authentication).getPrincipal()
-                        .getName();
-                log.debug(
-                    "The username `{}` has been found using OpenID Connect",
-                    login
-                );
+                login = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
+                log.debug("The username `{}` has been found using OpenID Connect", login);
             } else {
                 log.debug("The username could not be found");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            UserVM userVM = new UserVM(
-                login,
-                authentication
-                    .getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toSet())
-            );
+            UserVM userVM = new UserVM(login,
+                authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
             return new ResponseEntity<>(userVM, HttpStatus.OK);
         } catch (NullPointerException | ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

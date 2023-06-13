@@ -1,7 +1,9 @@
 package org.orcid.memberportal.service.gateway.web.rest;
 
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.orcid.memberportal.service.gateway.service.HealthService;
 import org.orcid.memberportal.service.gateway.service.dto.CompositeHealthDTO;
 import org.slf4j.Logger;
@@ -37,23 +39,14 @@ public class HealthResource {
      * @return health check details
      * @throws IOException
      */
-    @GetMapping(
-        path = "/health/global",
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<CompositeHealthDTO> healthCheck(
-        HttpServletRequest request
-    ) throws IOException {
+    @GetMapping(path = "/health/global", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompositeHealthDTO> healthCheck(HttpServletRequest request) throws IOException {
         LOG.debug("Global health check request");
-        CompositeHealthDTO globalHealth = healthService.checkGlobalHealth(
-            routeLocator.getRoutes(),
-            request
-        );
+        CompositeHealthDTO globalHealth = healthService.checkGlobalHealth(routeLocator.getRoutes(), request);
         if (Status.UP.equals(globalHealth.getStatus())) {
             return ResponseEntity.ok(globalHealth);
         }
-        return ResponseEntity
-            .status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(globalHealth);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(globalHealth);
     }
+
 }

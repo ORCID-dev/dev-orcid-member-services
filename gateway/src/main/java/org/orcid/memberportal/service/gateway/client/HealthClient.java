@@ -1,9 +1,10 @@
 package org.orcid.memberportal.service.gateway.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
 import javax.ws.rs.core.Response.Status;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -12,6 +13,8 @@ import org.orcid.memberportal.service.gateway.service.dto.SimpleHealthDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class HealthClient {
@@ -30,31 +33,16 @@ public class HealthClient {
 
         try {
             response = httpClient.execute(httpGet);
-            if (
-                response.getStatusLine().getStatusCode() !=
-                Status.OK.getStatusCode()
-            ) {
-                LOG.warn(
-                    "Received non-200 response trying to get health from url {}",
-                    url
-                );
+            if (response.getStatusLine().getStatusCode() != Status.OK.getStatusCode()) {
+                LOG.warn("Received non-200 response trying to get health from url {}", url);
                 if (response.getEntity() != null) {
-                    String responseString = new String(
-                        response.getEntity().getContent().readAllBytes(),
-                        StandardCharsets.UTF_8
-                    );
+                    String responseString = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
                     LOG.warn("Response received:");
                     LOG.warn(responseString);
                 }
-                return new SimpleHealthDTO(
-                    org.springframework.boot.actuate.health.Status.UNKNOWN
-                );
+                return new SimpleHealthDTO(org.springframework.boot.actuate.health.Status.UNKNOWN);
             } else {
-                return new ObjectMapper()
-                    .readValue(
-                        response.getEntity().getContent(),
-                        SimpleHealthDTO.class
-                    );
+                return new ObjectMapper().readValue(response.getEntity().getContent(), SimpleHealthDTO.class);
             }
         } finally {
             if (response != null) {
@@ -64,4 +52,5 @@ public class HealthClient {
             }
         }
     }
+
 }

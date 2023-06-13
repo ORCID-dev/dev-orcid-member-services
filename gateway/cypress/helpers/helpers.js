@@ -1,14 +1,9 @@
 let newUser = () => {
-  let date = new Date()
-    .toISOString()
-    .substring(0, 19)
-    .replace(/:/g, '-')
-    .replace(/\./g, '-')
-    .toLowerCase()
+  let date = new Date().toISOString().substring(0, 19).replace(/:/g, "-").replace(/\./g, "-").toLowerCase()
   let testString = '  !@#$%^&*()-=_  ' + randomString() + ' ' + date + '  '
   return {
     email: 'qa' + '+mp_cy_' + date + '@orcid.org',
-    testString,
+    testString
   }
 }
 

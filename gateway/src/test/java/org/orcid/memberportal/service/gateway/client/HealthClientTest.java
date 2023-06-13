@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Locale;
+
 import javax.xml.bind.JAXBException;
+
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
 import org.apache.http.HttpEntity;
@@ -42,20 +44,13 @@ public class HealthClientTest {
     }
 
     @Test
-    void testGetHelp()
-        throws JAXBException, ClientProtocolException, IOException {
+    void testGetHelp() throws JAXBException, ClientProtocolException, IOException {
         OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
-        response.setStatusLine(
-            new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK")
-        );
+        response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK"));
         BasicHttpEntity orcidIdEntity = new BasicHttpEntity();
-        orcidIdEntity.setContent(
-            new ByteArrayInputStream("{\"status\":\"UP\"}".getBytes())
-        );
+        orcidIdEntity.setContent(new ByteArrayInputStream("{\"status\":\"UP\"}".getBytes()));
         response.setEntity(orcidIdEntity);
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpUriRequest.class)))
-            .thenReturn(response);
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
 
         SimpleHealthDTO health = client.getHealth("some-url");
         assertThat(health).isNotNull();
@@ -63,19 +58,10 @@ public class HealthClientTest {
     }
 
     @Test
-    void testGetHelpErrorResponse()
-        throws JAXBException, ClientProtocolException, IOException {
+    void testGetHelpErrorResponse() throws JAXBException, ClientProtocolException, IOException {
         OrcidCloseableHttpResponse response = new OrcidCloseableHttpResponse();
-        response.setStatusLine(
-            new BasicStatusLine(
-                new ProtocolVersion("HTTP", 2, 0),
-                500,
-                "Internal Server Error"
-            )
-        );
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpUriRequest.class)))
-            .thenReturn(response);
+        response.setStatusLine(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 500, "Internal Server Error"));
+        Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
 
         SimpleHealthDTO health = client.getHealth("some-url");
         assertThat(health).isNotNull();
@@ -95,11 +81,7 @@ public class HealthClientTest {
         }
 
         @Override
-        public void setStatusLine(
-            ProtocolVersion ver,
-            int code,
-            String reason
-        ) {
+        public void setStatusLine(ProtocolVersion ver, int code, String reason) {
             // TODO Auto-generated method stub
 
         }
@@ -111,8 +93,7 @@ public class HealthClientTest {
         }
 
         @Override
-        public void setReasonPhrase(String reason)
-            throws IllegalStateException {
+        public void setReasonPhrase(String reason) throws IllegalStateException {
             // TODO Auto-generated method stub
 
         }
@@ -254,5 +235,7 @@ public class HealthClientTest {
             // TODO Auto-generated method stub
 
         }
+
     }
+
 }

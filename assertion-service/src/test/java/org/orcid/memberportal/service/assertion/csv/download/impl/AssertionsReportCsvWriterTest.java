@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -56,30 +57,18 @@ public class AssertionsReportCsvWriterTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(assertionsUserService.getLoggedInUserSalesforceId())
-            .thenReturn(DEFAULT_SALESFORCE_ID);
-        when(
-            assertionsRepository.findBySalesforceId(
-                Mockito.eq(DEFAULT_SALESFORCE_ID),
-                Mockito.any(Sort.class)
-            )
-        )
-            .thenReturn(getListOfAsserions());
+        when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        when(assertionsRepository.findBySalesforceId(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
         when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
-        when(assertionsUserService.getLoggedInUserId())
-            .thenReturn(getUser().getId());
-        Mockito
-            .when(orcidRecordService.findOneByEmail(Mockito.anyString()))
-            .thenAnswer(
-                new Answer<Optional<OrcidRecord>>() {
-                    @Override
-                    public Optional<OrcidRecord> answer(
-                        InvocationOnMock invocation
-                    ) throws Throwable {
-                        return getDummyOrcidRecord(invocation.getArgument(0));
-                    }
-                }
-            );
+        when(assertionsUserService.getLoggedInUserId()).thenReturn(getUser().getId());
+        Mockito.when(orcidRecordService.findOneByEmail(Mockito.anyString())).thenAnswer(new Answer<Optional<OrcidRecord>>() {
+
+            @Override
+            public Optional<OrcidRecord> answer(InvocationOnMock invocation) throws Throwable {
+                return getDummyOrcidRecord(invocation.getArgument(0));
+            }
+
+        });
     }
 
     private AssertionServiceUser getUser() {
@@ -92,9 +81,7 @@ public class AssertionsReportCsvWriterTest {
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = reportWriter.writeCsv(
-            assertionsUserService.getLoggedInUserSalesforceId()
-        );
+        String test = reportWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
         assertNotNull(test);
         assertTrue(test.length() > 0);
 
@@ -119,10 +106,7 @@ public class AssertionsReportCsvWriterTest {
         assertEquals(String.valueOf(i), values[3].trim());
         assertNotNull(values[4].trim());
         assertNotNull(values[5].trim());
-        assertEquals(
-            AffiliationSection.values()[i].toString(),
-            values[6].trim()
-        );
+        assertEquals(AffiliationSection.values()[i].toString(), values[6].trim());
         assertEquals("department-" + i, values[7].trim());
         assertEquals("role-" + i, values[8].trim());
         assertEquals("2010-12-1", values[9].trim());
@@ -154,14 +138,12 @@ public class AssertionsReportCsvWriterTest {
         assertEquals("org-country", headers[12].trim());
         assertEquals("org-city", headers[13].trim());
         assertEquals("org-region", headers[14].trim());
-        assertEquals(
-            "disambiguated-organization-identifier",
-            headers[15].trim()
-        );
+        assertEquals("disambiguated-organization-identifier", headers[15].trim());
         assertEquals("disambiguation-source", headers[16].trim());
         assertEquals("external-id", headers[17].trim());
         assertEquals("external-id-type", headers[18].trim());
         assertEquals("external-id-url", headers[19].trim());
+
     }
 
     private List<Assertion> getListOfAsserions() {
@@ -222,4 +204,5 @@ public class AssertionsReportCsvWriterTest {
         record.setOrcid("orcid-" + email);
         return Optional.of(record);
     }
+
 }

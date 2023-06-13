@@ -13,23 +13,14 @@ public class CloudConfigInfoContributor implements InfoContributor {
 
     private final ConfigClientProperties configClientProperties;
 
-    public CloudConfigInfoContributor(
-        ConfigServerConfig configServerConfig,
-        ConfigClientProperties configClientProperties
-    ) {
+    public CloudConfigInfoContributor(ConfigServerConfig configServerConfig, ConfigClientProperties configClientProperties) {
         this.configServerConfig = configServerConfig;
         this.configClientProperties = configClientProperties;
     }
 
     @Override
     public void contribute(Info.Builder builder) {
-        builder.withDetail(
-            "cloud-config-label",
-            configClientProperties.getLabel()
-        );
-        builder.withDetail(
-            "cloud-config-server-configuration-sources",
-            configServerConfig.getComposite()
-        );
+        builder.withDetail("cloud-config-label", configClientProperties.getLabel());
+        builder.withDetail("cloud-config-server-configuration-sources", configServerConfig.getComposite());
     }
 }

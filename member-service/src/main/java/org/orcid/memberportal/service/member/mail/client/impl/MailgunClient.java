@@ -1,9 +1,5 @@
 package org.orcid.memberportal.service.member.mail.client.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -11,12 +7,18 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+
 import org.apache.http.util.EntityUtils;
 import org.orcid.memberportal.service.member.mail.MailException;
 import org.orcid.memberportal.service.member.mail.client.MailClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class MailgunClient implements MailClient {
@@ -34,34 +36,16 @@ public class MailgunClient implements MailClient {
     private String fromAddress;
 
     @Override
-    public void sendMail(String to, String cc, String subject, String html)
-        throws MailException {
-        LOGGER.info(
-            "Preparing email {} for sending to {} from {}",
-            subject,
-            to,
-            getFrom()
-        );
+    public void sendMail(String to, String cc, String subject, String html) throws MailException {
+        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setCharset(StandardCharsets.UTF_8);
         builder.addTextBody("to", to);
         builder.addTextBody("cc", cc);
         builder.addTextBody("from", getFrom());
-        builder.addPart(
-            "subject",
-            new StringBody(
-                subject,
-                ContentType.create("text/plain", StandardCharsets.UTF_8)
-            )
-        );
-        builder.addPart(
-            "html",
-            new StringBody(
-                html,
-                ContentType.create("text/html", StandardCharsets.UTF_8)
-            )
-        );
+        builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
+        builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
 
         if (testMode) {
             builder.addTextBody("o:testmode", "yes");
@@ -74,49 +58,21 @@ public class MailgunClient implements MailClient {
     }
 
     @Override
-    public void sendMailWithAttachment(
-        String to,
-        String cc,
-        String subject,
-        String html,
-        File file
-    ) throws MailException {
-        LOGGER.info(
-            "Preparing email {} for sending to {} from {}",
-            subject,
-            to,
-            getFrom()
-        );
+    public void sendMailWithAttachment(String to, String cc, String subject, String html, File file) throws MailException {
+        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, getFrom());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setCharset(StandardCharsets.UTF_8);
         builder.addTextBody("to", to);
         builder.addTextBody("cc", cc);
         builder.addTextBody("from", getFrom());
-        builder.addPart(
-            "subject",
-            new StringBody(
-                subject,
-                ContentType.create("text/plain", StandardCharsets.UTF_8)
-            )
-        );
-        builder.addPart(
-            "html",
-            new StringBody(
-                html,
-                ContentType.create("text/html", StandardCharsets.UTF_8)
-            )
-        );
+        builder.addPart("subject", new StringBody(subject, ContentType.create("text/plain", StandardCharsets.UTF_8)));
+        builder.addPart("html", new StringBody(html, ContentType.create("text/html", StandardCharsets.UTF_8)));
         builder.addPart("attachment", new FileBody(file));
 
         if (testMode) {
             builder.addTextBody("o:testmode", "yes");
-            LOGGER.info(
-                "Test mode email {} with attachment {} to {}",
-                subject,
-                file.getName(),
-                to
-            );
+            LOGGER.info("Test mode email {} with attachment {} to {}", subject, file.getName(), to);
             LOGGER.info(html);
         } else {
             LOGGER.info("Sending mail {} to {}", subject, to);
@@ -131,19 +87,9 @@ public class MailgunClient implements MailClient {
         try {
             HttpResponse response = httpClient.execute(post);
             if (response.getStatusLine().getStatusCode() != 200) {
-                LOGGER.warn(
-                    "Received response {} from mailgun",
-                    response.getStatusLine().getReasonPhrase()
-                );
-                try (
-                    InputStream inputStream = response.getEntity().getContent()
-                ) {
-                    LOGGER.warn(
-                        new String(
-                            inputStream.readAllBytes(),
-                            StandardCharsets.UTF_8
-                        )
-                    );
+                LOGGER.warn("Received response {} from mailgun", response.getStatusLine().getReasonPhrase());
+                try (InputStream inputStream = response.getEntity().getContent()) {
+                    LOGGER.warn(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
                 }
             } else {
                 EntityUtils.consume(response.getEntity());
@@ -154,9 +100,7 @@ public class MailgunClient implements MailClient {
     }
 
     private String getFrom() {
-        return fromName != null
-            ? fromName + " <" + fromAddress + ">"
-            : fromAddress;
+        return fromName != null ? fromName + " <" + fromAddress + ">" : fromAddress;
     }
 
     public void setTestMode(boolean testMode) {
@@ -178,4 +122,5 @@ public class MailgunClient implements MailClient {
     public void setHttpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
+
 }

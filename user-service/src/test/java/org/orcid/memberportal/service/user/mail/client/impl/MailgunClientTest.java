@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.util.List;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.client.ClientProtocolException;
@@ -41,41 +42,20 @@ public class MailgunClientTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito
-            .when(applicationProperties.getMailFromAddress())
-            .thenReturn("mp@orcid.org");
-        Mockito
-            .when(applicationProperties.getMailFromName())
-            .thenReturn("member portal");
-        Mockito
-            .when(applicationProperties.getMailApiUrl())
-            .thenReturn("https://orcid.org");
+        Mockito.when(applicationProperties.getMailFromAddress()).thenReturn("mp@orcid.org");
+        Mockito.when(applicationProperties.getMailFromName()).thenReturn("member portal");
+        Mockito.when(applicationProperties.getMailApiUrl()).thenReturn("https://orcid.org");
     }
 
     @Test
-    public void testSendMail()
-        throws MailException, ClientProtocolException, IOException {
-        Mockito
-            .when(httpClient.execute(Mockito.any(HttpPost.class)))
-            .thenReturn(
-                new BasicHttpResponse(
-                    new BasicStatusLine(
-                        new ProtocolVersion("HTTP", 2, 0),
-                        200,
-                        "OK"
-                    )
-                )
-            );
-        mailgunClient.sendMail(
-            "recipient@orcid.org",
-            "test email",
-            "<p>test email</p>"
-        );
+    public void testSendMail() throws MailException, ClientProtocolException, IOException {
+        Mockito.when(httpClient.execute(Mockito.any(HttpPost.class)))
+                .thenReturn(new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("HTTP", 2, 0), 200, "OK")));
+        mailgunClient.sendMail("recipient@orcid.org", "test email", "<p>test email</p>");
         Mockito.verify(httpClient).execute(postCaptor.capture());
         HttpPost post = postCaptor.getValue();
         UrlEncodedFormEntity entity = (UrlEncodedFormEntity) post.getEntity();
-        assertThat(entity.getContentType().getValue())
-            .isEqualTo("application/x-www-form-urlencoded; charset=UTF-8");
+        assertThat(entity.getContentType().getValue()).isEqualTo("application/x-www-form-urlencoded; charset=UTF-8");
 
         List<NameValuePair> params = URLEncodedUtils.parse(post.getEntity());
         for (NameValuePair pair : params) {
@@ -91,4 +71,5 @@ public class MailgunClientTest {
             }
         }
     }
+
 }

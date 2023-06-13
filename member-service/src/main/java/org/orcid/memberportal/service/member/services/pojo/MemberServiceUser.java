@@ -194,4 +194,5 @@ public class MemberServiceUser {
     public void setMemberName(String memberName) {
         this.memberName = memberName;
     }
+
 }

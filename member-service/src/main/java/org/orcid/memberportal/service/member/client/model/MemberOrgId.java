@@ -25,4 +25,5 @@ public class MemberOrgId {
     public void setValue(String value) {
         this.value = value;
     }
+
 }

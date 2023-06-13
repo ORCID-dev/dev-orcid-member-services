@@ -1,16 +1,19 @@
 package org.orcid.memberportal.service.assertion.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Document(collection = "orcid_record")
 public class OrcidRecord {
@@ -94,9 +97,7 @@ public class OrcidRecord {
         return revokeNotificationSentDate;
     }
 
-    public void setRevokeNotificationSentDate(
-        Instant revokeNotificationSentDate
-    ) {
+    public void setRevokeNotificationSentDate(Instant revokeNotificationSentDate) {
         this.revokeNotificationSentDate = revokeNotificationSentDate;
     }
 
@@ -104,9 +105,7 @@ public class OrcidRecord {
         return reminderNotificationSentDate;
     }
 
-    public void setReminderNotificationSentDate(
-        Instant reminderNotificationSentDate
-    ) {
+    public void setReminderNotificationSentDate(Instant reminderNotificationSentDate) {
         this.reminderNotificationSentDate = reminderNotificationSentDate;
     }
 
@@ -188,71 +187,68 @@ public class OrcidRecord {
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((tokens == null) ? 0 : tokens.hashCode());
-        result =
-            prime *
-            result +
-            ((lastNotified == null) ? 0 : lastNotified.hashCode());
-        result =
-            prime * result + ((modified == null) ? 0 : modified.hashCode());
+        result = prime * result + ((lastNotified == null) ? 0 : lastNotified.hashCode());
+        result = prime * result + ((modified == null) ? 0 : modified.hashCode());
         result = prime * result + ((orcid == null) ? 0 : orcid.hashCode());
-        result =
-            prime *
-            result +
-            (
-                (reminderNotificationSentDate == null)
-                    ? 0
-                    : reminderNotificationSentDate.hashCode()
-            );
-        result =
-            prime *
-            result +
-            (
-                (revokeNotificationSentDate == null)
-                    ? 0
-                    : revokeNotificationSentDate.hashCode()
-            );
+        result = prime * result + ((reminderNotificationSentDate == null) ? 0 : reminderNotificationSentDate.hashCode());
+        result = prime * result + ((revokeNotificationSentDate == null) ? 0 : revokeNotificationSentDate.hashCode());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
         OrcidRecord other = (OrcidRecord) obj;
         if (created == null) {
-            if (other.created != null) return false;
-        } else if (!created.equals(other.created)) return false;
+            if (other.created != null)
+                return false;
+        } else if (!created.equals(other.created))
+            return false;
         if (email == null) {
-            if (other.email != null) return false;
-        } else if (!email.equals(other.email)) return false;
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
         if (id == null) {
-            if (other.id != null) return false;
-        } else if (!id.equals(other.id)) return false;
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
         if (tokens == null) {
-            if (other.tokens != null) return false;
-        } else if (!tokens.equals(other.tokens)) return false;
+            if (other.tokens != null)
+                return false;
+        } else if (!tokens.equals(other.tokens))
+            return false;
         if (lastNotified == null) {
-            if (other.lastNotified != null) return false;
-        } else if (!lastNotified.equals(other.lastNotified)) return false;
+            if (other.lastNotified != null)
+                return false;
+        } else if (!lastNotified.equals(other.lastNotified))
+            return false;
         if (modified == null) {
-            if (other.modified != null) return false;
-        } else if (!modified.equals(other.modified)) return false;
+            if (other.modified != null)
+                return false;
+        } else if (!modified.equals(other.modified))
+            return false;
         if (orcid == null) {
-            if (other.orcid != null) return false;
-        } else if (!orcid.equals(other.orcid)) return false;
+            if (other.orcid != null)
+                return false;
+        } else if (!orcid.equals(other.orcid))
+            return false;
         if (reminderNotificationSentDate == null) {
-            if (other.reminderNotificationSentDate != null) return false;
-        } else if (
-            !reminderNotificationSentDate.equals(
-                other.reminderNotificationSentDate
-            )
-        ) return false;
+            if (other.reminderNotificationSentDate != null)
+                return false;
+        } else if (!reminderNotificationSentDate.equals(other.reminderNotificationSentDate))
+            return false;
         if (revokeNotificationSentDate == null) {
-            if (other.revokeNotificationSentDate != null) return false;
-        } else if (
-            !revokeNotificationSentDate.equals(other.revokeNotificationSentDate)
-        ) return false;
+            if (other.revokeNotificationSentDate != null)
+                return false;
+        } else if (!revokeNotificationSentDate.equals(other.revokeNotificationSentDate))
+            return false;
         return true;
     }
 }

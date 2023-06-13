@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.orcid.memberportal.service.user.domain.User;
@@ -39,32 +40,18 @@ public class UserValidator {
         return validation;
     }
 
-    private void validateSalesforceId(
-        UserDTO user,
-        User currentUser,
-        List<String> errors
-    ) {
+    private void validateSalesforceId(UserDTO user, User currentUser, List<String> errors) {
         String salesforceId = user.getSalesforceId();
         if (StringUtils.isBlank(salesforceId)) {
             errors.add(getError("missingSalesforceId", currentUser));
         } else if (!userService.memberExists(salesforceId)) {
-            errors.add(
-                getError("invalidSalesforceId", salesforceId, currentUser)
-            );
-        } else if (
-            user.getIsAdmin() == true &&
-            user.getSalesforceId() != null &&
-            !userService.memberSuperadminEnabled(user.getSalesforceId())
-        ) {
+            errors.add(getError("invalidSalesforceId", salesforceId, currentUser));
+        } else if (user.getIsAdmin() == true && user.getSalesforceId() != null && !userService.memberSuperadminEnabled(user.getSalesforceId())) {
             errors.add(getError("superAdminNotAllowed", currentUser));
         }
     }
 
-    private void validateEmail(
-        UserDTO user,
-        User currentUser,
-        List<String> errors
-    ) {
+    private void validateEmail(UserDTO user, User currentUser, List<String> errors) {
         String email = user.getEmail();
         if (StringUtils.isBlank(email)) {
             errors.add(getError("missingEmail", currentUser));
@@ -78,9 +65,7 @@ public class UserValidator {
     }
 
     private Boolean userExists(String email) {
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(
-            email
-        );
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(email);
         return existingUser.isPresent();
     }
 
@@ -89,10 +74,7 @@ public class UserValidator {
     }
 
     private String getError(String code, String arg, User user) {
-        return messageSource.getMessage(
-            "user.validation.error." + code,
-            arg != null ? new Object[] { arg } : null,
-            Locale.forLanguageTag(user.getLangKey())
-        );
+        return messageSource.getMessage("user.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
     }
+
 }

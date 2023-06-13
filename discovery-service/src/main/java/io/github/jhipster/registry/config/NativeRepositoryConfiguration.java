@@ -15,10 +15,8 @@ import org.springframework.context.annotation.Profile;
 class NativeRepositoryConfiguration {
 
     @Bean
-    public NativeEnvironmentRepository nativeEnvironmentRepository(
-        NativeEnvironmentRepositoryFactory factory,
-        NativeEnvironmentProperties environmentProperties
-    ) {
+    public NativeEnvironmentRepository nativeEnvironmentRepository(NativeEnvironmentRepositoryFactory factory,
+                                                                   NativeEnvironmentProperties environmentProperties) {
         return factory.build(environmentProperties);
     }
 }

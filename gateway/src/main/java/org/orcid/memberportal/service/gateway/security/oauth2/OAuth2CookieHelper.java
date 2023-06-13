@@ -6,9 +6,11 @@ import static org.apache.http.conn.util.InetAddressUtils.isIPv6Address;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.http.conn.util.PublicSuffixMatcher;
 import org.apache.http.conn.util.PublicSuffixMatcherLoader;
 import org.orcid.memberportal.service.gateway.config.oauth2.OAuth2Properties;
@@ -28,17 +30,14 @@ import org.springframework.util.StringUtils;
  * Helps with OAuth2 cookie handling.
  */
 public class OAuth2CookieHelper {
-
     /**
      * Name of the access token cookie.
      */
-    public static final String ACCESS_TOKEN_COOKIE =
-        OAuth2AccessToken.ACCESS_TOKEN;
+    public static final String ACCESS_TOKEN_COOKIE = OAuth2AccessToken.ACCESS_TOKEN;
     /**
      * Name of the refresh token cookie in case of remember me.
      */
-    public static final String REFRESH_TOKEN_COOKIE =
-        OAuth2AccessToken.REFRESH_TOKEN;
+    public static final String REFRESH_TOKEN_COOKIE = OAuth2AccessToken.REFRESH_TOKEN;
     /**
      * Name of the session-only refresh token in case the user did not check
      * remember me.
@@ -47,11 +46,7 @@ public class OAuth2CookieHelper {
     /**
      * The names of the Cookies we set.
      */
-    private static final List<String> COOKIE_NAMES = Arrays.asList(
-        ACCESS_TOKEN_COOKIE,
-        REFRESH_TOKEN_COOKIE,
-        SESSION_TOKEN_COOKIE
-    );
+    private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE, SESSION_TOKEN_COOKIE);
     /**
      * Number of seconds to expire refresh token cookies before the enclosed
      * token expires. This makes sure we don't run into race conditions where
@@ -64,9 +59,7 @@ public class OAuth2CookieHelper {
      */
     PublicSuffixMatcher suffixMatcher;
 
-    private final Logger log = LoggerFactory.getLogger(
-        OAuth2CookieHelper.class
-    );
+    private final Logger log = LoggerFactory.getLogger(OAuth2CookieHelper.class);
 
     private OAuth2Properties oAuth2Properties;
 
@@ -103,10 +96,7 @@ public class OAuth2CookieHelper {
      *            the case-sensitive name of the cookie to get.
      * @return the resulting {@link Cookie}; or {@code null}, if not found.
      */
-    private static Cookie getCookie(
-        HttpServletRequest request,
-        String cookieName
-    ) {
+    private static Cookie getCookie(HttpServletRequest request, String cookieName) {
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if (cookie.getName().equals(cookieName)) {
@@ -132,35 +122,17 @@ public class OAuth2CookieHelper {
      * @param result
      *            will get the resulting cookies set.
      */
-    public void createCookies(
-        HttpServletRequest request,
-        OAuth2AccessToken accessToken,
-        boolean rememberMe,
-        OAuth2Cookies result
-    ) {
+    public void createCookies(HttpServletRequest request, OAuth2AccessToken accessToken, boolean rememberMe, OAuth2Cookies result) {
         String domain = getCookieDomain(request);
         log.debug("creating cookies for domain {}", domain);
-        Cookie accessTokenCookie = new Cookie(
-            ACCESS_TOKEN_COOKIE,
-            accessToken.getValue()
-        );
+        Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN_COOKIE, accessToken.getValue());
         setCookieProperties(accessTokenCookie, request.isSecure(), domain);
-        log.debug(
-            "created access token cookie '{}'",
-            accessTokenCookie.getName()
-        );
+        log.debug("created access token cookie '{}'", accessTokenCookie.getName());
 
         OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
-        Cookie refreshTokenCookie = createRefreshTokenCookie(
-            refreshToken,
-            rememberMe
-        );
+        Cookie refreshTokenCookie = createRefreshTokenCookie(refreshToken, rememberMe);
         setCookieProperties(refreshTokenCookie, request.isSecure(), domain);
-        log.debug(
-            "created refresh token cookie '{}', age: {}",
-            refreshTokenCookie.getName(),
-            refreshTokenCookie.getMaxAge()
-        );
+        log.debug("created refresh token cookie '{}', age: {}", refreshTokenCookie.getName(), refreshTokenCookie.getMaxAge());
 
         result.setCookies(accessTokenCookie, refreshTokenCookie);
     }
@@ -173,21 +145,14 @@ public class OAuth2CookieHelper {
      * by a pipe '|'. This gives us the chance to expire session cookies
      * regardless of the token duration.
      */
-    private Cookie createRefreshTokenCookie(
-        OAuth2RefreshToken refreshToken,
-        boolean rememberMe
-    ) {
+    private Cookie createRefreshTokenCookie(OAuth2RefreshToken refreshToken, boolean rememberMe) {
         int maxAge = -1;
         String name = SESSION_TOKEN_COOKIE;
         String value = refreshToken.getValue();
         if (rememberMe) {
             name = REFRESH_TOKEN_COOKIE;
             // get expiration in seconds from the token's "exp" claim
-            Integer exp = getClaim(
-                refreshToken.getValue(),
-                AccessTokenConverter.EXP,
-                Integer.class
-            );
+            Integer exp = getClaim(refreshToken.getValue(), AccessTokenConverter.EXP, Integer.class);
             if (exp != null) {
                 int now = (int) (System.currentTimeMillis() / 1000L);
                 maxAge = exp - now;
@@ -245,28 +210,22 @@ public class OAuth2CookieHelper {
      */
     public boolean isSessionExpired(Cookie refreshCookie) {
         if (isRememberMe(refreshCookie)) { // no session expiration for
-            // "remember me"
+                                           // "remember me"
             return false;
         }
         // read non-remember-me session length in secs
-        int validity = oAuth2Properties
-            .getWebClientConfiguration()
-            .getSessionTimeoutInSeconds();
+        int validity = oAuth2Properties.getWebClientConfiguration().getSessionTimeoutInSeconds();
         if (validity < 0) { // no session expiration configured
             return false;
         }
         Integer iat = getClaim(refreshCookie.getValue(), "iat", Integer.class);
         if (iat == null) { // token creating timestamp in secs is missing,
-            // session does not expire
+                           // session does not expire
             return false;
         }
         int now = (int) (System.currentTimeMillis() / 1000L);
         int sessionDuration = now - iat;
-        log.debug(
-            "session duration {} secs, will timeout at {}",
-            sessionDuration,
-            validity
-        );
+        log.debug("session duration {} secs, will timeout at {}", sessionDuration, validity);
         return sessionDuration > validity; // session has expired
     }
 
@@ -285,11 +244,7 @@ public class OAuth2CookieHelper {
      *             type.
      */
     @SuppressWarnings("unchecked")
-    private <T> T getClaim(
-        String refreshToken,
-        String claimName,
-        Class<T> clazz
-    ) {
+    private <T> T getClaim(String refreshToken, String claimName, Class<T> clazz) {
         Jwt jwt = JwtHelper.decode(refreshToken);
         String claims = jwt.getClaims();
         Map<String, Object> claimsMap = jsonParser.parseMap(claims);
@@ -298,9 +253,7 @@ public class OAuth2CookieHelper {
             return null;
         }
         if (!clazz.isAssignableFrom(claimValue.getClass())) {
-            throw new InvalidTokenException(
-                "claim is not of expected type: " + claimName
-            );
+            throw new InvalidTokenException("claim is not of expected type: " + claimName);
         }
         return (T) claimValue;
     }
@@ -316,15 +269,11 @@ public class OAuth2CookieHelper {
      *            the domain for which the cookie is valid. If {@code null},
      *            then will fall back to default.
      */
-    private void setCookieProperties(
-        Cookie cookie,
-        boolean isSecure,
-        String domain
-    ) {
+    private void setCookieProperties(Cookie cookie, boolean isSecure, String domain) {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setSecure(isSecure); // if the request comes per HTTPS set the
-        // secure option on the cookie
+                                    // secure option on the cookie
         if (domain != null) {
             cookie.setDomain(domain);
         }
@@ -338,27 +287,14 @@ public class OAuth2CookieHelper {
      * @param httpServletResponse
      *            the response used to clear them.
      */
-    public void clearCookies(
-        HttpServletRequest httpServletRequest,
-        HttpServletResponse httpServletResponse
-    ) {
+    public void clearCookies(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String domain = getCookieDomain(httpServletRequest);
         for (String cookieName : COOKIE_NAMES) {
-            clearCookie(
-                httpServletRequest,
-                httpServletResponse,
-                domain,
-                cookieName
-            );
+            clearCookie(httpServletRequest, httpServletResponse, domain, cookieName);
         }
     }
 
-    private void clearCookie(
-        HttpServletRequest httpServletRequest,
-        HttpServletResponse httpServletResponse,
-        String domain,
-        String cookieName
-    ) {
+    private void clearCookie(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String domain, String cookieName) {
         Cookie cookie = new Cookie(cookieName, "");
         setCookieProperties(cookie, httpServletRequest.isSecure(), domain);
         cookie.setMaxAge(0);
@@ -384,9 +320,7 @@ public class OAuth2CookieHelper {
      *         for localhost.
      */
     private String getCookieDomain(HttpServletRequest request) {
-        String domain = oAuth2Properties
-            .getWebClientConfiguration()
-            .getCookieDomain();
+        String domain = oAuth2Properties.getWebClientConfiguration().getCookieDomain();
         if (domain != null) {
             return domain;
         }

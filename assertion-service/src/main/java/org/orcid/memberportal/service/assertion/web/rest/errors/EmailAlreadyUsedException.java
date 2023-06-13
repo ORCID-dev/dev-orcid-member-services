@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EmailAlreadyUsedException extends RuntimeException {
-
     private static final long serialVersionUID = 1L;
 
     private static final String PARAM = "params";
@@ -19,6 +18,7 @@ public class EmailAlreadyUsedException extends RuntimeException {
 
     public EmailAlreadyUsedException(String message, String... params) {
         super(message);
+
         this.message = message;
         if (params != null && params.length > 0) {
             for (int i = 0; i < params.length; i++) {
@@ -27,10 +27,7 @@ public class EmailAlreadyUsedException extends RuntimeException {
         }
     }
 
-    public EmailAlreadyUsedException(
-        String message,
-        Map<String, String> paramMap
-    ) {
+    public EmailAlreadyUsedException(String message, Map<String, String> paramMap) {
         super(message);
         this.message = message;
         this.paramMap.putAll(paramMap);

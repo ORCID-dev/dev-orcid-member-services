@@ -2,7 +2,9 @@ package org.orcid.memberportal.service.member.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
+
 import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -94,8 +96,7 @@ public class Member implements Serializable {
     }
 
     public void setParentSalesforceId(String parentSalesforceId) {
-        this.parentSalesforceId =
-            parentSalesforceId != null ? parentSalesforceId.trim() : null;
+        this.parentSalesforceId = parentSalesforceId != null ? parentSalesforceId.trim() : null;
     }
 
     public Boolean isAssertionServiceEnabled() {
@@ -127,8 +128,7 @@ public class Member implements Serializable {
     }
 
     public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy =
-            lastModifiedBy != null ? lastModifiedBy.trim() : lastModifiedBy;
+        this.lastModifiedBy = lastModifiedBy != null ? lastModifiedBy.trim() : lastModifiedBy;
     }
 
     public Instant getLastModifiedDate() {
@@ -195,156 +195,116 @@ public class Member implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result =
-            prime *
-            result +
-            (
-                (assertionServiceEnabled == null)
-                    ? 0
-                    : assertionServiceEnabled.hashCode()
-            );
-        result =
-            prime * result + ((clientId == null) ? 0 : clientId.hashCode());
-        result =
-            prime * result + ((clientName == null) ? 0 : clientName.hashCode());
-        result =
-            prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
-        result =
-            prime *
-            result +
-            ((createdDate == null) ? 0 : createdDate.hashCode());
+        result = prime * result + ((assertionServiceEnabled == null) ? 0 : assertionServiceEnabled.hashCode());
+        result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+        result = prime * result + ((clientName == null) ? 0 : clientName.hashCode());
+        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+        result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result =
-            prime *
-            result +
-            ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
-        result =
-            prime *
-            result +
-            ((superadminEnabled == null) ? 0 : superadminEnabled.hashCode());
-        result =
-            prime *
-            result +
-            ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
-        result =
-            prime *
-            result +
-            ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
-        result =
-            prime *
-            result +
-            ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
-        result =
-            prime *
-            result +
-            ((salesforceId == null) ? 0 : salesforceId.hashCode());
+        result = prime * result + ((isConsortiumLead == null) ? 0 : isConsortiumLead.hashCode());
+        result = prime * result + ((superadminEnabled == null) ? 0 : superadminEnabled.hashCode());
+        result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
+        result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
+        result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
+        result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
-        result =
-            prime *
-            result +
-            ((defaultLanguage == null) ? 0 : defaultLanguage.hashCode());
+        result = prime * result + ((defaultLanguage == null) ? 0 : defaultLanguage.hashCode());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
         Member other = (Member) obj;
         if (assertionServiceEnabled == null) {
-            if (other.assertionServiceEnabled != null) return false;
-        } else if (
-            !assertionServiceEnabled.equals(other.assertionServiceEnabled)
-        ) return false;
+            if (other.assertionServiceEnabled != null)
+                return false;
+        } else if (!assertionServiceEnabled.equals(other.assertionServiceEnabled))
+            return false;
         if (clientId == null) {
-            if (other.clientId != null) return false;
-        } else if (!clientId.equals(other.clientId)) return false;
+            if (other.clientId != null)
+                return false;
+        } else if (!clientId.equals(other.clientId))
+            return false;
         if (clientName == null) {
-            if (other.clientName != null) return false;
-        } else if (!clientName.equals(other.clientName)) return false;
+            if (other.clientName != null)
+                return false;
+        } else if (!clientName.equals(other.clientName))
+            return false;
         if (createdBy == null) {
-            if (other.createdBy != null) return false;
-        } else if (!createdBy.equals(other.createdBy)) return false;
+            if (other.createdBy != null)
+                return false;
+        } else if (!createdBy.equals(other.createdBy))
+            return false;
         if (createdDate == null) {
-            if (other.createdDate != null) return false;
-        } else if (!createdDate.equals(other.createdDate)) return false;
+            if (other.createdDate != null)
+                return false;
+        } else if (!createdDate.equals(other.createdDate))
+            return false;
         if (id == null) {
-            if (other.id != null) return false;
-        } else if (!id.equals(other.id)) return false;
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
         if (isConsortiumLead == null) {
-            if (other.isConsortiumLead != null) return false;
-        } else if (
-            !isConsortiumLead.equals(other.isConsortiumLead)
-        ) return false;
+            if (other.isConsortiumLead != null)
+                return false;
+        } else if (!isConsortiumLead.equals(other.isConsortiumLead))
+            return false;
         if (superadminEnabled == null) {
-            if (other.superadminEnabled != null) return false;
-        } else if (
-            !superadminEnabled.equals(other.superadminEnabled)
-        ) return false;
+            if (other.superadminEnabled != null)
+                return false;
+        } else if (!superadminEnabled.equals(other.superadminEnabled))
+            return false;
         if (lastModifiedBy == null) {
-            if (other.lastModifiedBy != null) return false;
-        } else if (!lastModifiedBy.equals(other.lastModifiedBy)) return false;
+            if (other.lastModifiedBy != null)
+                return false;
+        } else if (!lastModifiedBy.equals(other.lastModifiedBy))
+            return false;
         if (lastModifiedDate == null) {
-            if (other.lastModifiedDate != null) return false;
-        } else if (
-            !lastModifiedDate.equals(other.lastModifiedDate)
-        ) return false;
+            if (other.lastModifiedDate != null)
+                return false;
+        } else if (!lastModifiedDate.equals(other.lastModifiedDate))
+            return false;
         if (parentSalesforceId == null) {
-            if (other.parentSalesforceId != null) return false;
-        } else if (
-            !parentSalesforceId.equals(other.parentSalesforceId)
-        ) return false;
+            if (other.parentSalesforceId != null)
+                return false;
+        } else if (!parentSalesforceId.equals(other.parentSalesforceId))
+            return false;
         if (salesforceId == null) {
-            if (other.salesforceId != null) return false;
-        } else if (!salesforceId.equals(other.salesforceId)) return false;
+            if (other.salesforceId != null)
+                return false;
+        } else if (!salesforceId.equals(other.salesforceId))
+            return false;
         if (type == null) {
-            if (other.type != null) return false;
-        } else if (!type.equals(other.type)) return false;
+            if (other.type != null)
+                return false;
+        } else if (!type.equals(other.type))
+            return false;
         if (status == null) {
-            if (other.status != null) return false;
-        } else if (!status.equals(other.status)) return false;
+            if (other.status != null)
+                return false;
+        } else if (!status.equals(other.status))
+            return false;
         if (defaultLanguage == null) {
-            if (other.defaultLanguage != null) return false;
-        } else if (!defaultLanguage.equals(other.defaultLanguage)) return false;
+            if (other.defaultLanguage != null)
+                return false;
+        } else if (!defaultLanguage.equals(other.defaultLanguage))
+            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return (
-            "Member [id=" +
-            id +
-            ", clientId=" +
-            clientId +
-            ", salesforceId=" +
-            salesforceId +
-            ", parentSalesforceId=" +
-            parentSalesforceId +
-            ", clientName=" +
-            clientName +
-            ", isConsortiumLead=" +
-            isConsortiumLead +
-            ", assertionServiceEnabled=" +
-            assertionServiceEnabled +
-            ", superadminEnabled=" +
-            superadminEnabled +
-            ", createdBy=" +
-            createdBy +
-            ", createdDate=" +
-            createdDate +
-            ", lastModifiedBy=" +
-            lastModifiedBy +
-            ", lastModifiedDate=" +
-            lastModifiedDate +
-            ", type=" +
-            type +
-            ", status=" +
-            status +
-            ", defaultLanguage=" +
-            defaultLanguage +
-            "]"
-        );
+        return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
+                + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled="
+                + superadminEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate="
+                + lastModifiedDate + ", type=" + type  + ", status=" + status + ", defaultLanguage=" + defaultLanguage + "]";
     }
 }

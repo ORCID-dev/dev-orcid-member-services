@@ -15,4 +15,5 @@ public class AssertionDeletion {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
 }

@@ -1,8 +1,5 @@
 package org.orcid.memberportal.service.member.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -20,6 +17,10 @@ import org.orcid.memberportal.service.member.web.rest.vm.RemoveConsortiumMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import java.io.File;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = MemberServiceApp.class)
 class MailServiceIT {
@@ -47,12 +48,7 @@ class MailServiceIT {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mailService =
-            new MailService(
-                getTestApplicationProperties(),
-                templateEngine,
-                mailgunClient
-            );
+        mailService = new MailService(getTestApplicationProperties(), templateEngine, mailgunClient);
     }
 
     @Test
@@ -61,28 +57,11 @@ class MailServiceIT {
         contactUpdate.setContactNewEmail("a.user@email.com");
         contactUpdate.setRequestedByEmail("requesting-user@email.com");
 
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString()
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendAddContactEmail(contactUpdate);
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                ccCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
-        assertThat(recipientCaptor.getValue())
-            .isEqualTo("contactUpdate@orcid.org");
-        assertThat(subjectCaptor.getValue())
-            .isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
@@ -92,28 +71,11 @@ class MailServiceIT {
         contactUpdate.setContactEmail("a.user@email.com");
         contactUpdate.setRequestedByEmail("requesting-user@email.com");
 
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString()
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendRemoveContactEmail(contactUpdate);
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                ccCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
-        assertThat(recipientCaptor.getValue())
-            .isEqualTo("contactUpdate@orcid.org");
-        assertThat(subjectCaptor.getValue())
-            .isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
@@ -124,28 +86,11 @@ class MailServiceIT {
         contactUpdate.setContactNewEmail("a.new.user@email.com");
         contactUpdate.setRequestedByEmail("requesting-user@email.com");
 
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString()
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendUpdateContactEmail(contactUpdate);
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                ccCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
-        assertThat(recipientCaptor.getValue())
-            .isEqualTo("contactUpdate@orcid.org");
-        assertThat(subjectCaptor.getValue())
-            .isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.CONTACT_UPDATE_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
@@ -154,61 +99,26 @@ class MailServiceIT {
         AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
         addConsortiumMember.setRequestedByEmail("requesting-user@email.com");
 
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString()
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendAddConsortiumMemberEmail(addConsortiumMember);
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                ccCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
-        assertThat(recipientCaptor.getValue())
-            .isEqualTo("contactUpdate@orcid.org");
-        assertThat(subjectCaptor.getValue())
-            .isEqualTo(MailService.ADD_ORG_SUBJECT);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.ADD_ORG_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
     @Test
     void testSendRemoveConsortiumMemberEmail() throws MailException {
-        RemoveConsortiumMember removeConsortiumMember =
-            new RemoveConsortiumMember();
+        RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
         removeConsortiumMember.setRequestedByEmail("requesting-user@email.com");
         removeConsortiumMember.setTerminationMonth("12");
         removeConsortiumMember.setTerminationYear("2024");
 
-        Mockito
-            .doNothing()
-            .when(mailgunClient)
-            .sendMail(
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString(),
-                Mockito.anyString()
-            );
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
-        Mockito
-            .verify(mailgunClient)
-            .sendMail(
-                recipientCaptor.capture(),
-                ccCaptor.capture(),
-                subjectCaptor.capture(),
-                Mockito.anyString()
-            );
-        assertThat(recipientCaptor.getValue())
-            .isEqualTo("contactUpdate@orcid.org");
-        assertThat(subjectCaptor.getValue())
-            .isEqualTo(MailService.REMOVE_ORG_SUBJECT);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), Mockito.anyString());
+        assertThat(recipientCaptor.getValue()).isEqualTo("contactUpdate@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.REMOVE_ORG_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
     }
 
@@ -218,4 +128,5 @@ class MailServiceIT {
         properties.setMailTestMode(true);
         return properties;
     }
+
 }

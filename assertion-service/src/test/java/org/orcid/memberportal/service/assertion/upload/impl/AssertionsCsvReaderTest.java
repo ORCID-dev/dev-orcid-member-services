@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
+
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,45 +48,28 @@ class AssertionsCsvReaderTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        Mockito
-            .when(ringgoldValidator.validId(Mockito.anyString()))
-            .thenReturn(true);
-        Mockito
-            .when(gridValidator.validId(Mockito.anyString()))
-            .thenReturn(true);
-        Mockito
-            .when(rorValidator.validId(Mockito.anyString()))
-            .thenReturn(true);
+        Mockito.when(ringgoldValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(gridValidator.validId(Mockito.anyString())).thenReturn(true);
+        Mockito.when(rorValidator.validId(Mockito.anyString())).thenReturn(true);
     }
 
     @Test
     void testReadAssertionsUploadWithExternalIds() throws IOException {
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-external-ids.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-external-ids.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
         assertEquals(1, upload.getAssertions().size());
         assertEquals("ORCID", upload.getAssertions().get(0).getOrgName());
         assertEquals("ext-id", upload.getAssertions().get(0).getExternalId());
 
         // check http:// protocol has been added to url
-        assertEquals(
-            "http://bbc.co.uk",
-            upload.getAssertions().get(0).getUrl()
-        );
+        assertEquals("http://bbc.co.uk", upload.getAssertions().get(0).getUrl());
         assertEquals(1, upload.getUsers().size());
     }
 
     @Test
     void testReadAssertionsUploadWithoutExternalIds() throws IOException {
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-without-external-ids.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-without-external-ids.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
         assertEquals(3, upload.getAssertions().size());
         assertEquals("TEST", upload.getAssertions().get(0).getOrgName());
         assertEquals("TEST-2", upload.getAssertions().get(1).getOrgName());
@@ -94,63 +78,30 @@ class AssertionsCsvReaderTest {
     }
 
     @Test
-    void testReadAssertionsUploadWithStartDateAfterEndDate()
-        throws IOException {
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.anyString(),
-                    Mockito.any(),
-                    Mockito.eq(Locale.ENGLISH)
-                )
-            )
-            .thenReturn("some-value");
+    void testReadAssertionsUploadWithStartDateAfterEndDate() throws IOException {
+        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream(
-                "/assertions-with-start-date-after-end-date.csv"
-            );
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-start-date-after-end-date.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
         assertEquals(6, upload.getAssertions().size());
         assertEquals("TEST", upload.getAssertions().get(0).getOrgName());
         assertEquals("TEST-2", upload.getAssertions().get(1).getOrgName());
         assertEquals("TEST-3", upload.getAssertions().get(2).getOrgName());
 
         assertEquals(4, upload.getErrors().size());
-        assertTrue(
-            upload.getErrors().get(0).getMessage().contains("some-value")
-        );
-        assertTrue(
-            upload.getErrors().get(1).getMessage().contains("some-value")
-        );
-        assertTrue(
-            upload.getErrors().get(2).getMessage().contains("some-value")
-        );
-        assertTrue(
-            upload.getErrors().get(3).getMessage().contains("some-value")
-        );
+        assertTrue(upload.getErrors().get(0).getMessage().contains("some-value"));
+        assertTrue(upload.getErrors().get(1).getMessage().contains("some-value"));
+        assertTrue(upload.getErrors().get(2).getMessage().contains("some-value"));
+        assertTrue(upload.getErrors().get(3).getMessage().contains("some-value"));
 
-        Mockito
-            .verify(messageSource, Mockito.times(4))
-            .getMessage(
-                Mockito.eq("assertion.csv.upload.error.startDateAfterEndDate"),
-                Mockito.isNull(),
-                Mockito.eq(Locale.ENGLISH)
-            );
+        Mockito.verify(messageSource, Mockito.times(4)).getMessage(Mockito.eq("assertion.csv.upload.error.startDateAfterEndDate"), Mockito.isNull(),
+                Mockito.eq(Locale.ENGLISH));
     }
 
     @Test
-    void testReadAssertionsUploadWithoutUrl()
-        throws IOException, JSONException {
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-without-url.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+    void testReadAssertionsUploadWithoutUrl() throws IOException, JSONException {
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-without-url.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
         assertEquals(3, upload.getAssertions().size());
         assertEquals("TEST", upload.getAssertions().get(0).getOrgName());
         assertEquals("TEST-2", upload.getAssertions().get(1).getOrgName());
@@ -159,86 +110,36 @@ class AssertionsCsvReaderTest {
     }
 
     @Test
-    void testReadAssertionsUploadWithBadUrl()
-        throws IOException, JSONException {
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.anyString(),
-                    Mockito.any(),
-                    Mockito.eq(Locale.FRENCH)
-                )
-            )
-            .thenReturn("some-value");
+    void testReadAssertionsUploadWithBadUrl() throws IOException, JSONException {
+        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.eq(Locale.FRENCH))).thenReturn("some-value");
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-bad-url.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("fr")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-bad-url.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("fr"));
         assertEquals(1, upload.getErrors().size());
-        assertTrue(
-            upload.getErrors().get(0).getMessage().contains("some-value")
-        );
+        assertTrue(upload.getErrors().get(0).getMessage().contains("some-value"));
 
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                Mockito.eq("assertion.csv.upload.error.invalidUrl"),
-                Mockito.isNull(),
-                Mockito.eq(Locale.FRENCH)
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("assertion.csv.upload.error.invalidUrl"), Mockito.isNull(), Mockito.eq(Locale.FRENCH));
     }
 
     @Test
-    void testReadAssertionsUploadWithBadEmail()
-        throws IOException, JSONException {
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.anyString(),
-                    Mockito.any(),
-                    Mockito.eq(Locale.ENGLISH)
-                )
-            )
-            .thenReturn("some-value");
+    void testReadAssertionsUploadWithBadEmail() throws IOException, JSONException {
+        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-bad-email.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-bad-email.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
         assertEquals(1, upload.getErrors().size());
-        assertTrue(
-            upload.getErrors().get(0).getMessage().contains("some-value")
-        );
+        assertTrue(upload.getErrors().get(0).getMessage().contains("some-value"));
 
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                Mockito.eq("assertion.csv.upload.error.invalidEmail"),
-                Mockito.isNull(),
-                Mockito.eq(Locale.ENGLISH)
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("assertion.csv.upload.error.invalidEmail"), Mockito.isNull(), Mockito.eq(Locale.ENGLISH));
     }
 
     @Test
     void testReadAssertionsUploadWithDbIds() throws IOException {
-        Mockito
-            .when(mockAssertionService.assertionExists(Mockito.anyString()))
-            .thenReturn(true);
-        Mockito
-            .when(mockAssertionService.findById(Mockito.anyString()))
-            .thenReturn(getDummyAssertionWithEmail());
+        Mockito.when(mockAssertionService.assertionExists(Mockito.anyString())).thenReturn(true);
+        Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-db-id-column.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
         assertEquals(3, upload.getAssertions().size());
         assertEquals("ORCID", upload.getAssertions().get(0).getOrgName());
         assertEquals("ext-id", upload.getAssertions().get(0).getExternalId());
@@ -246,38 +147,24 @@ class AssertionsCsvReaderTest {
 
         assertEquals("ORCID", upload.getAssertions().get(1).getOrgName());
         assertEquals("ext-id", upload.getAssertions().get(1).getExternalId());
-        assertEquals(
-            "another-database-id",
-            upload.getAssertions().get(1).getId()
-        );
+        assertEquals("another-database-id", upload.getAssertions().get(1).getId());
 
         assertEquals("ORCID-2", upload.getAssertions().get(2).getOrgName());
         assertEquals("ext-id-2", upload.getAssertions().get(2).getExternalId());
         assertNull(upload.getAssertions().get(2).getId());
 
         // check http:// protocol has been added to url
-        assertEquals(
-            "http://bbc.co.uk",
-            upload.getAssertions().get(0).getUrl()
-        );
+        assertEquals("http://bbc.co.uk", upload.getAssertions().get(0).getUrl());
         assertEquals(1, upload.getUsers().size());
     }
 
     @Test
     void testReadAssertionsUploadWithAddedWhitespace() throws IOException {
-        Mockito
-            .when(mockAssertionService.assertionExists(Mockito.anyString()))
-            .thenReturn(true);
-        Mockito
-            .when(mockAssertionService.findById(Mockito.anyString()))
-            .thenReturn(getDummyAssertionWithEmail());
+        Mockito.when(mockAssertionService.assertionExists(Mockito.anyString())).thenReturn(true);
+        Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-whitespace.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-whitespace.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
         assertEquals(3, upload.getAssertions().size());
         assertEquals("ORCID", upload.getAssertions().get(0).getOrgName());
         assertEquals("ext-id", upload.getAssertions().get(0).getExternalId());
@@ -285,49 +172,25 @@ class AssertionsCsvReaderTest {
 
         assertEquals("ORCID", upload.getAssertions().get(1).getOrgName());
         assertEquals("ext-id", upload.getAssertions().get(1).getExternalId());
-        assertEquals(
-            "another-database-id",
-            upload.getAssertions().get(1).getId()
-        );
+        assertEquals("another-database-id", upload.getAssertions().get(1).getId());
 
         assertEquals("ORCID-2", upload.getAssertions().get(2).getOrgName());
         assertEquals("ext-id-2", upload.getAssertions().get(2).getExternalId());
         assertNull(upload.getAssertions().get(2).getId());
 
         // check http:// protocol has been added to url
-        assertEquals(
-            "http://bbc.co.uk",
-            upload.getAssertions().get(0).getUrl()
-        );
+        assertEquals("http://bbc.co.uk", upload.getAssertions().get(0).getUrl());
         assertEquals(1, upload.getUsers().size());
     }
 
     @Test
     void testReadAssertionsUploadWithError() throws IOException {
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("a-database-id")
-                )
-            )
-            .thenReturn(false);
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("another-database-id")
-                )
-            )
-            .thenReturn(true);
-        Mockito
-            .when(mockAssertionService.findById(Mockito.anyString()))
-            .thenReturn(getDummyAssertionWithEmail());
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(false);
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
+        Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-db-id-column.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
 
         assertEquals(1, upload.getErrors().size()); // id doesn't exist
 
@@ -336,54 +199,26 @@ class AssertionsCsvReaderTest {
         // check fields of valid assertions
         assertEquals("ORCID", upload.getAssertions().get(1).getOrgName());
         assertEquals("ext-id", upload.getAssertions().get(1).getExternalId());
-        assertEquals(
-            "another-database-id",
-            upload.getAssertions().get(1).getId()
-        );
+        assertEquals("another-database-id", upload.getAssertions().get(1).getId());
 
         assertEquals("ORCID-2", upload.getAssertions().get(2).getOrgName());
         assertEquals("ext-id-2", upload.getAssertions().get(2).getExternalId());
         assertNull(upload.getAssertions().get(2).getId());
 
         // check http:// protocol has been added to url
-        assertEquals(
-            "http://bbc.co.uk",
-            upload.getAssertions().get(1).getUrl()
-        );
+        assertEquals("http://bbc.co.uk", upload.getAssertions().get(1).getUrl());
         assertEquals(1, upload.getUsers().size());
     }
 
     @Test
     void testReadAssertionsUploadWithDeleteRow() throws IOException {
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("a-database-id")
-                )
-            )
-            .thenReturn(true);
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("another-database-id")
-                )
-            )
-            .thenReturn(true);
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(Mockito.eq("id-to-delete"))
-            )
-            .thenReturn(true);
-        Mockito
-            .when(mockAssertionService.findById(Mockito.anyString()))
-            .thenReturn(getDummyAssertionWithEmail());
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(true);
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("id-to-delete"))).thenReturn(true);
+        Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-delete-row.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-delete-row.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
 
         assertEquals(0, upload.getErrors().size()); // id doesn't exist
 
@@ -399,94 +234,38 @@ class AssertionsCsvReaderTest {
     }
 
     @Test
-    void testReadAssertionsUploadWithUpdatedEmail()
-        throws IOException, JSONException {
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.anyString(),
-                    Mockito.any(),
-                    Mockito.eq(Locale.ENGLISH)
-                )
-            )
-            .thenReturn("some-value");
+    void testReadAssertionsUploadWithUpdatedEmail() throws IOException, JSONException {
+        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.eq(Locale.ENGLISH))).thenReturn("some-value");
 
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("a-database-id")
-                )
-            )
-            .thenReturn(true);
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("another-database-id")
-                )
-            )
-            .thenReturn(true);
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(true);
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
 
         Assertion existingAssertionWithDifferentEmail = new Assertion();
         existingAssertionWithDifferentEmail.setEmail("different@email.com");
         existingAssertionWithDifferentEmail.setId("another-database-id");
 
-        Mockito
-            .when(mockAssertionService.findById(Mockito.eq("a-database-id")))
-            .thenReturn(getDummyAssertionWithEmail());
-        Mockito
-            .when(
-                mockAssertionService.findById(Mockito.eq("another-database-id"))
-            )
-            .thenReturn(existingAssertionWithDifferentEmail);
+        Mockito.when(mockAssertionService.findById(Mockito.eq("a-database-id"))).thenReturn(getDummyAssertionWithEmail());
+        Mockito.when(mockAssertionService.findById(Mockito.eq("another-database-id"))).thenReturn(existingAssertionWithDifferentEmail);
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-db-id-column.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-db-id-column.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
 
         assertEquals(1, upload.getErrors().size()); // email can't be changed
-        assertTrue(
-            upload.getErrors().get(0).getMessage().contains("some-value")
-        );
+        assertTrue(upload.getErrors().get(0).getMessage().contains("some-value"));
         assertEquals(3, upload.getAssertions().size()); // including erroneous
 
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                Mockito.eq("assertion.csv.upload.error.emailCannotBeChanged"),
-                Mockito.isNull(),
-                Mockito.eq(Locale.ENGLISH)
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(Mockito.eq("assertion.csv.upload.error.emailCannotBeChanged"), Mockito.isNull(),
+                Mockito.eq(Locale.ENGLISH));
     }
 
     @Test
     void testReadAssertionsWithInterestingDates() throws IOException {
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("a-database-id")
-                )
-            )
-            .thenReturn(true);
-        Mockito
-            .when(
-                mockAssertionService.assertionExists(
-                    Mockito.eq("another-database-id")
-                )
-            )
-            .thenReturn(true);
-        Mockito
-            .when(mockAssertionService.findById(Mockito.anyString()))
-            .thenReturn(getDummyAssertionWithEmail());
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("a-database-id"))).thenReturn(true);
+        Mockito.when(mockAssertionService.assertionExists(Mockito.eq("another-database-id"))).thenReturn(true);
+        Mockito.when(mockAssertionService.findById(Mockito.anyString())).thenReturn(getDummyAssertionWithEmail());
 
-        InputStream inputStream = getClass()
-            .getResourceAsStream("/assertions-with-interesting-dates.csv");
-        AssertionsUpload upload = reader.readAssertionsUpload(
-            inputStream,
-            getUser("en")
-        );
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-interesting-dates.csv");
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
 
         assertEquals(0, upload.getErrors().size());
         assertEquals(3, upload.getAssertions().size()); // including erroneous
@@ -528,4 +307,5 @@ class AssertionsCsvReaderTest {
         user.setSalesforceId("something");
         return user;
     }
+
 }

@@ -1,13 +1,16 @@
 package org.orcid.memberportal.service.gateway.config.apidoc;
 
-import io.github.jhipster.config.JHipsterConstants;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.jhipster.config.JHipsterConstants;
+
+import org.springframework.context.annotation.*;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
-import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
@@ -17,8 +20,7 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 @Component
 @Primary
 @Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
-public class GatewaySwaggerResourcesProvider
-    implements SwaggerResourcesProvider {
+public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
     private final RouteLocator routeLocator;
 
@@ -38,12 +40,7 @@ public class GatewaySwaggerResourcesProvider
         // resources
         List<Route> routes = routeLocator.getRoutes();
         routes.forEach(route -> {
-            resources.add(
-                swaggerResource(
-                    route.getId(),
-                    route.getFullPath().replace("**", "v2/api-docs")
-                )
-            );
+            resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v2/api-docs")));
         });
 
         return resources;

@@ -1,20 +1,21 @@
 package io.github.jhipster.registry.web.rest.vm;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EurekaVMTest {
 
     private EurekaVM eureka;
 
     @BeforeEach
-    public void setup() {
+    public void setup(){
         eureka = new EurekaVM();
     }
 
@@ -64,7 +65,7 @@ public class EurekaVMTest {
         assertThat(eureka.getStatus()).isEqualTo(newStatus);
     }
 
-    private List<Map<String, Object>> initFakeApplicationsList() {
+    private List<Map<String, Object>> initFakeApplicationsList(){
         List<Map<String, Object>> list = new ArrayList<>();
 
         Map<String, Object> map = new HashMap<>();
@@ -78,11 +79,12 @@ public class EurekaVMTest {
         return list;
     }
 
-    private Map<String, Object> initFakeStatus() {
+    private Map<String, Object> initFakeStatus(){
         Map<String, Object> map = new HashMap<>();
         map.put("Status1", new Object());
         map.put("Status2", new Object());
         map.put("Status3", new Object());
         return map;
     }
+
 }

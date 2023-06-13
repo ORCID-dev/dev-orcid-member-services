@@ -1,16 +1,8 @@
 package io.github.jhipster.registry.security.uaa;
 
-import static io.github.jhipster.registry.config.UaaConfiguration.CLIENT_REGISTRATION_ID;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-
 import io.github.jhipster.registry.JHipsterRegistryApp;
 import io.github.jhipster.registry.config.UaaTestSecurityConfiguration;
 import io.github.jhipster.registry.security.AuthoritiesConstants;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -33,9 +25,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 
-@SpringBootTest(
-    classes = { JHipsterRegistryApp.class, UaaTestSecurityConfiguration.class }
-)
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collections;
+
+import static io.github.jhipster.registry.config.UaaConfiguration.CLIENT_REGISTRATION_ID;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+
+@SpringBootTest(classes = {JHipsterRegistryApp.class, UaaTestSecurityConfiguration.class})
 @TestPropertySource(properties = "eureka.client.fetch-registry: false")
 @ActiveProfiles("uaa")
 public class UaaAuthorizationHeaderUtilIT {
@@ -59,10 +58,7 @@ public class UaaAuthorizationHeaderUtilIT {
         authentication = createAuthentication();
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        authorizedClientService.removeAuthorizedClient(
-            CLIENT_REGISTRATION_ID,
-            authentication.getName()
-        );
+        authorizedClientService.removeAuthorizedClient(CLIENT_REGISTRATION_ID, authentication.getName());
     }
 
     @Test
@@ -72,15 +68,10 @@ public class UaaAuthorizationHeaderUtilIT {
             OAuth2AccessToken.TokenType.BEARER,
             "existingTokenValue",
             Instant.now().minus(Duration.ofHours(1)),
-            Instant.now().plus(Duration.ofHours(1))
-        );
-        authorizedClientService.saveAuthorizedClient(
-            createAuthorizedClient(accessToken),
-            authentication
-        );
+            Instant.now().plus(Duration.ofHours(1)));
+        authorizedClientService.saveAuthorizedClient(createAuthorizedClient(accessToken), authentication);
 
-        String authorizationHeader =
-            authorizationHeaderUtil.getAuthorizationHeader();
+        String authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
 
         assertThat(authorizationHeader).isNotEmpty();
         assertThat(authorizationHeader).isEqualTo("Bearer existingTokenValue");
@@ -89,14 +80,9 @@ public class UaaAuthorizationHeaderUtilIT {
     @Test
     public void testAuthorizationHeaderWithNotExistingAuthorizedClient() {
         doReturn(ResponseEntity.ok(createAccessTokenResponse("tokenValue")))
-            .when(restTemplate)
-            .exchange(
-                any(RequestEntity.class),
-                ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any()
-            );
+            .when(restTemplate).exchange(any(RequestEntity.class), ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any());
 
-        String authorizationHeader =
-            authorizationHeaderUtil.getAuthorizationHeader();
+        String authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
 
         assertThat(authorizationHeader).isNotEmpty();
         assertThat(authorizationHeader).isEqualTo("Bearer tokenValue");
@@ -108,56 +94,32 @@ public class UaaAuthorizationHeaderUtilIT {
             OAuth2AccessToken.TokenType.BEARER,
             "existingTokenValue",
             Instant.now().minus(Duration.ofHours(1)),
-            Instant.now().minus(Duration.ofMinutes(2))
-        );
-        authorizedClientService.saveAuthorizedClient(
-            createAuthorizedClient(accessToken),
-            authentication
-        );
+            Instant.now().minus(Duration.ofMinutes(2)));
+        authorizedClientService.saveAuthorizedClient(createAuthorizedClient(accessToken), authentication);
 
-        doReturn(
-            ResponseEntity.ok(createAccessTokenResponse("refreshTokenValue"))
-        )
-            .when(restTemplate)
-            .exchange(
-                any(RequestEntity.class),
-                ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any()
-            );
+        doReturn(ResponseEntity.ok(createAccessTokenResponse("refreshTokenValue")))
+            .when(restTemplate).exchange(any(RequestEntity.class), ArgumentMatchers.<Class<OAuth2AccessTokenResponse>>any());
 
-        String authorizationHeader =
-            authorizationHeaderUtil.getAuthorizationHeader();
+        String authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
 
         assertThat(authorizationHeader).isNotEmpty();
         assertThat(authorizationHeader).isEqualTo("Bearer refreshTokenValue");
     }
 
-    private OAuth2AuthorizedClient createAuthorizedClient(
-        OAuth2AccessToken accessToken
-    ) {
-        ClientRegistration clientRegistration =
-            clientRegistrationRepository.findByRegistrationId(
-                CLIENT_REGISTRATION_ID
-            );
-        return new OAuth2AuthorizedClient(
-            clientRegistration,
-            authentication.getName(),
-            accessToken
-        );
+    private OAuth2AuthorizedClient createAuthorizedClient(OAuth2AccessToken accessToken) {
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(CLIENT_REGISTRATION_ID);
+        return new OAuth2AuthorizedClient(clientRegistration, authentication.getName(), accessToken);
     }
 
     private Authentication createAuthentication() {
         return new UsernamePasswordAuthenticationToken(
             "test-user",
             "test-password",
-            Collections.singletonList(
-                new SimpleGrantedAuthority(AuthoritiesConstants.USER)
-            )
+            Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
         );
     }
 
-    private OAuth2AccessTokenResponse createAccessTokenResponse(
-        String tokenValue
-    ) {
+    private OAuth2AccessTokenResponse createAccessTokenResponse(String tokenValue) {
         return OAuth2AccessTokenResponse
             .withToken(tokenValue)
             .tokenType(OAuth2AccessToken.TokenType.BEARER)

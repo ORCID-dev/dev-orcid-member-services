@@ -9,15 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "uaa", ignoreUnknownFields = false)
 public class UaaProperties {
-
     private KeyStore keyStore = new KeyStore();
 
     public KeyStore getKeyStore() {
         return keyStore;
     }
 
-    private WebClientConfiguration webClientConfiguration =
-        new WebClientConfiguration();
+    private WebClientConfiguration webClientConfiguration = new WebClientConfiguration();
 
     public WebClientConfiguration getWebClientConfiguration() {
         return webClientConfiguration;
@@ -27,7 +25,6 @@ public class UaaProperties {
      * Keystore configuration for signing and verifying JWT tokens.
      */
     public static class KeyStore {
-
         // name of the keystore in the classpath
         private String name;
         // password used to access the key
@@ -61,14 +58,12 @@ public class UaaProperties {
     }
 
     public static class WebClientConfiguration {
-
         // validity of the short-lived access token in secs (min: 60), don't
         // make it too long
         private int accessTokenValidityInSeconds = 5 * 60;
         // validity of the refresh token in secs (defines the duration of
         // "remember me")
-        private int refreshTokenValidityInSecondsForRememberMe =
-            7 * 24 * 60 * 60;
+        private int refreshTokenValidityInSecondsForRememberMe = 7 * 24 * 60 * 60;
         private String clientId = "web_app";
         private String secret = "changeit";
 
@@ -76,9 +71,7 @@ public class UaaProperties {
             return accessTokenValidityInSeconds;
         }
 
-        public void setAccessTokenValidityInSeconds(
-            int accessTokenValidityInSeconds
-        ) {
+        public void setAccessTokenValidityInSeconds(int accessTokenValidityInSeconds) {
             this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
         }
 
@@ -86,11 +79,8 @@ public class UaaProperties {
             return refreshTokenValidityInSecondsForRememberMe;
         }
 
-        public void setRefreshTokenValidityInSecondsForRememberMe(
-            int refreshTokenValidityInSecondsForRememberMe
-        ) {
-            this.refreshTokenValidityInSecondsForRememberMe =
-                refreshTokenValidityInSecondsForRememberMe;
+        public void setRefreshTokenValidityInSecondsForRememberMe(int refreshTokenValidityInSecondsForRememberMe) {
+            this.refreshTokenValidityInSecondsForRememberMe = refreshTokenValidityInSecondsForRememberMe;
         }
 
         public String getClientId() {

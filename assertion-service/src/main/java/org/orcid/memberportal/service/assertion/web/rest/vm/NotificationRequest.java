@@ -11,4 +11,5 @@ public class NotificationRequest {
     public void setLanguage(String language) {
         this.language = language;
     }
+
 }

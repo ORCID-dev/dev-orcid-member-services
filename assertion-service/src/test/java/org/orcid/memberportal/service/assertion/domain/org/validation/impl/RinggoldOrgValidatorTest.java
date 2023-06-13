@@ -23,4 +23,5 @@ public class RinggoldOrgValidatorTest {
         assertThat(validator.validId("12345")).isTrue();
         assertThat(validator.validId("abcde")).isFalse();
     }
+
 }

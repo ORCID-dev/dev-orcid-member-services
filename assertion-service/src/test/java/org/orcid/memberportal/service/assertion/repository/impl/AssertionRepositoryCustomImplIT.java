@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.orcid.memberportal.service.assertion.AssertionServiceApp;
@@ -34,8 +35,7 @@ public class AssertionRepositoryCustomImplIT {
 
     @BeforeEach
     public void setUp() {
-        assertionRepositoryCustom =
-            new AssertionRepositoryCustomImpl(mongoTemplate);
+        assertionRepositoryCustom = new AssertionRepositoryCustomImpl(mongoTemplate);
         assertionRepository.deleteAll();
 
         List<Assertion> toCreate = getAssertionsToCreateInOrcid();
@@ -49,27 +49,16 @@ public class AssertionRepositoryCustomImplIT {
 
     @Test
     public void testFindAllToCreateInOrcidRegistry() {
-        Pageable pageable = PageRequest.of(
-            0,
-            AssertionService.REGISTRY_SYNC_BATCH_SIZE,
-            new Sort(Direction.ASC, "created")
-        );
-        List<Assertion> toCreate =
-            assertionRepositoryCustom.findAllToCreateInOrcidRegistry(pageable);
+        Pageable pageable = PageRequest.of(0, AssertionService.REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
+        List<Assertion> toCreate = assertionRepositoryCustom.findAllToCreateInOrcidRegistry(pageable);
         assertThat(toCreate.size()).isEqualTo(10);
-        toCreate.forEach(a -> assertThat(a.getRoleTitle()).startsWith("create")
-        );
+        toCreate.forEach(a -> assertThat(a.getRoleTitle()).startsWith("create"));
     }
 
     @Test
     public void testFindAllToUpdateInOrcidRegistry() {
-        Pageable pageable = PageRequest.of(
-            0,
-            AssertionService.REGISTRY_SYNC_BATCH_SIZE,
-            new Sort(Direction.ASC, "created")
-        );
-        List<Assertion> toUpdate =
-            assertionRepositoryCustom.findAllToUpdateInOrcidRegistry(pageable);
+        Pageable pageable = PageRequest.of(0, AssertionService.REGISTRY_SYNC_BATCH_SIZE, new Sort(Direction.ASC, "created"));
+        List<Assertion> toUpdate = assertionRepositoryCustom.findAllToUpdateInOrcidRegistry(pageable);
         assertThat(toUpdate.size()).isEqualTo(10);
         toUpdate.forEach(a -> {
             Assertion reloaded = assertionRepository.findById(a.getId()).get();
@@ -139,4 +128,5 @@ public class AssertionRepositoryCustomImplIT {
         assertion.setEmail("email@orcid.org");
         return assertion;
     }
+
 }

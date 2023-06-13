@@ -25,11 +25,7 @@ public class ErrorVM implements Serializable {
         this.description = description;
     }
 
-    public ErrorVM(
-        String message,
-        String description,
-        List<FieldErrorVM> fieldErrors
-    ) {
+    public ErrorVM(String message, String description, List<FieldErrorVM> fieldErrors) {
         this.message = message;
         this.description = description;
         this.fieldErrors = fieldErrors;

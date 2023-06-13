@@ -20,4 +20,5 @@ public class ActivationReminder {
     public Instant getSentDate() {
         return sentDate;
     }
+
 }

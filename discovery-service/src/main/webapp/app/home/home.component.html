@@ -1,14 +1,10 @@
 <div [ngSwitch]="isAuthenticated()">
     <h1 class="text-center">Member Portal Discovery Service</h1>
-    <h1 class="text-center">
-        <small>{{ version }}</small>
-    </h1>
+    <h1 class="text-center"><small>{{version}}</small></h1>
     <div class="row">
         <div class="col-md-12 text-center">
             <div *ngSwitchCase="true">
-                <jhi-refresh-selector
-                    class="float-right refresh-left-side"
-                ></jhi-refresh-selector>
+                <jhi-refresh-selector class="float-right refresh-left-side"></jhi-refresh-selector>
             </div>
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span>You are not authenticated.</span>
@@ -25,26 +21,26 @@
                 <div class="card-block">
                     <table class="table">
                         <tbody>
-                            <tr>
-                                <td>Environment</td>
-                                <td>{{ status.environment }}</td>
-                            </tr>
-                            <tr>
-                                <td>Data Center</td>
-                                <td>{{ status.datacenter }}</td>
-                            </tr>
-                            <tr>
-                                <td>Current Time</td>
-                                <td>{{ status.currentTime }}</td>
-                            </tr>
-                            <tr>
-                                <td>System Uptime</td>
-                                <td>{{ status.upTime }}</td>
-                            </tr>
-                            <tr>
-                                <td>Below Renew Threshold</td>
-                                <td>{{ status.isBelowRenewThreshold }}</td>
-                            </tr>
+                        <tr>
+                            <td>Environment</td>
+                            <td>{{status.environment}}</td>
+                        </tr>
+                        <tr>
+                            <td>Data Center</td>
+                            <td>{{status.datacenter}}</td>
+                        </tr>
+                        <tr>
+                            <td>Current Time</td>
+                            <td>{{status.currentTime}}</td>
+                        </tr>
+                        <tr>
+                            <td>System Uptime</td>
+                            <td>{{status.upTime}}</td>
+                        </tr>
+                        <tr>
+                            <td>Below Renew Threshold</td>
+                            <td>{{status.isBelowRenewThreshold}}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -59,27 +55,22 @@
                     <!--{vm.apps.applications}}-->
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th>App</th>
-                                <th>Instance ID</th>
-                                <th>Status</th>
-                            </tr>
+                        <tr>
+                            <th>App</th>
+                            <th>Instance ID</th>
+                            <th>Status</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let instance of appInstances">
-                                <td>{{ instance.name }}</td>
-                                <td class="break">{{ instance.instanceId }}</td>
-                                <td class="text-center">
-                                    <span
-                                        class="badge badge-pill font-weight-normal"
-                                        [ngClass]="
-                                            getBadgeClass(instance.status)
-                                        "
-                                    >
-                                        {{ instance.status }}
-                                    </span>
-                                </td>
-                            </tr>
+                        <tr *ngFor="let instance of appInstances">
+                            <td>{{instance.name}}</td>
+                            <td class="break">{{instance.instanceId}}</td>
+                            <td class="text-center">
+                            <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(instance.status)">
+                                {{instance.status}}
+                            </span>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -95,51 +86,30 @@
                 <div class="card-block">
                     <table class="table">
                         <tbody>
-                            <tr>
-                                <td>Total Available Memory</td>
-                                <td>
-                                    {{
-                                        status.generalStats[
-                                            "total-avail-memory"
-                                        ]
-                                    }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Current Memory Usage</td>
-                                <td>
-                                    {{
-                                        status.generalStats[
-                                            "current-memory-usage"
-                                        ]
-                                    }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Number of CPU</td>
-                                <td>
-                                    {{ status.generalStats["num-of-cpus"] }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Instance Ip Address</td>
-                                <td>{{ status.instanceInfo.ipAddr }}</td>
-                            </tr>
-                            <tr>
-                                <td>Instance Status</td>
-                                <td>
-                                    <span
-                                        class="badge badge-pill font-weight-normal"
-                                        [ngClass]="
-                                            getBadgeClass(
-                                                status.instanceInfo.status
-                                            )
-                                        "
-                                    >
-                                        {{ status.instanceInfo.status }}
-                                    </span>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>Total Available Memory</td>
+                            <td>{{status.generalStats['total-avail-memory']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Current Memory Usage</td>
+                            <td>{{status.generalStats['current-memory-usage']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of CPU</td>
+                            <td>{{status.generalStats['num-of-cpus']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Instance Ip Address</td>
+                            <td>{{status.instanceInfo.ipAddr}}</td>
+                        </tr>
+                        <tr>
+                            <td>Instance Status</td>
+                            <td>
+                                <span class="badge badge-pill font-weight-normal" [ngClass]="getBadgeClass(status.instanceInfo.status)">
+                                    {{status.instanceInfo.status}}
+                                </span>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -153,31 +123,15 @@
                 <div class="card-block">
                     <table id="healthCheck" class="table">
                         <tbody>
-                            <tr
-                                *ngFor="
-                                    let componentHealth of health.components
-                                        | keys
-                                "
-                            >
-                                <td>
-                                    <span class="text-capitalize">{{
-                                        componentHealth.key
-                                    }}</span>
-                                </td>
-                                <td class="text-center"></td>
-                                <td class="text-center">
-                                    <span
-                                        class="badge"
-                                        [ngClass]="
-                                            getBadgeClass(
-                                                componentHealth.value.status
-                                            )
-                                        "
-                                    >
-                                        {{ componentHealth.value.status }}
-                                    </span>
-                                </td>
-                            </tr>
+                        <tr *ngFor="let componentHealth of health.components | keys">
+                            <td><span class="text-capitalize">{{ componentHealth.key }}</span></td>
+                            <td class="text-center">
+                            <td class="text-center">
+                                <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)">
+                                    {{ componentHealth.value.status }}
+                                </span>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

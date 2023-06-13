@@ -3,7 +3,7 @@ package org.orcid.memberportal.service.member.client.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JsonRootName(value = "member")
+@JsonRootName(value="member")
 public class MemberDetails {
 
     @JsonProperty("Id")
@@ -44,6 +44,12 @@ public class MemberDetails {
 
     @JsonProperty("Last_membership_end_date__c")
     private String membershipEndDateString;
+
+    @JsonProperty("Trademark_License__c")
+    private String trademarkLicense;
+
+    @JsonProperty("BillingAddress")
+    private BillingAddress billingAddress;
 
     public String getId() {
         return id;
@@ -113,9 +119,7 @@ public class MemberDetails {
         return publicDisplayDescriptionHtml;
     }
 
-    public void setPublicDisplayDescriptionHtml(
-        String publicDisplayDescriptionHtml
-    ) {
+    public void setPublicDisplayDescriptionHtml(String publicDisplayDescriptionHtml) {
         this.publicDisplayDescriptionHtml = publicDisplayDescriptionHtml;
     }
 
@@ -149,5 +153,21 @@ public class MemberDetails {
 
     public void setMembershipEndDateString(String membershipEndDateString) {
         this.membershipEndDateString = membershipEndDateString;
+    }
+
+    public String getTrademarkLicense() {
+        return trademarkLicense;
+    }
+
+    public void setTrademarkLicense(String trademarkLicense) {
+        this.trademarkLicense = trademarkLicense;
+    }
+
+    public BillingAddress getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(BillingAddress billingAddress) {
+        this.billingAddress = billingAddress;
     }
 }

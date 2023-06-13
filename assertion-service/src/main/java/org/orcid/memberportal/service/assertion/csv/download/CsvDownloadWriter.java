@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.assertion.csv.download;
 
 import java.io.IOException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.csv.CsvWriter;
 import org.orcid.memberportal.service.assertion.repository.AssertionRepository;
@@ -27,4 +28,5 @@ public abstract class CsvDownloadWriter extends CsvWriter {
             return StringUtils.EMPTY;
         }
     }
+
 }

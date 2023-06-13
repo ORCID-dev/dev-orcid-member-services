@@ -1,18 +1,10 @@
 package io.github.jhipster.registry.config;
 
-import static java.util.stream.Collectors.toList;
-
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.registry.security.AuthoritiesConstants;
 import io.github.jhipster.registry.security.oauth2.AudienceValidator;
 import io.github.jhipster.registry.security.oauth2.AuthorizationHeaderFilter;
 import io.github.jhipster.registry.security.oauth2.AuthorizationHeaderUtil;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -40,6 +32,15 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Profile(Constants.PROFILE_OAUTH2)
@@ -49,12 +50,8 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JHipsterProperties jHipsterProperties;
 
-    public OAuth2SecurityConfiguration(
-        @Value(
-            "${spring.security.oauth2.client.provider.oidc.issuer-uri}"
-        ) String issuerUri,
-        JHipsterProperties jHipsterProperties
-    ) {
+    public OAuth2SecurityConfiguration(@Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}") String issuerUri,
+                                       JHipsterProperties jHipsterProperties) {
         this.issuerUri = issuerUri;
         this.jHipsterProperties = jHipsterProperties;
     }
@@ -62,25 +59,16 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(
         SecurityProperties properties,
-        ObjectProvider<PasswordEncoder> passwordEncoder
-    ) {
+        ObjectProvider<PasswordEncoder> passwordEncoder) {
         SecurityProperties.User user = properties.getUser();
         List<String> roles = user.getRoles();
-        return new InMemoryUserDetailsManager(
-            User
-                .withUsername(user.getName())
-                .password(
-                    getOrDeducePassword(user, passwordEncoder.getIfAvailable())
-                )
-                .roles(StringUtils.toStringArray(roles))
-                .build()
-        );
+        return new InMemoryUserDetailsManager(User.withUsername(user.getName())
+            .password(getOrDeducePassword(user, passwordEncoder.getIfAvailable()))
+            .roles(StringUtils.toStringArray(roles)).build());
     }
 
-    private String getOrDeducePassword(
-        SecurityProperties.User user,
-        PasswordEncoder encoder
-    ) {
+    private String getOrDeducePassword(SecurityProperties.User user,
+                                       PasswordEncoder encoder) {
         if (encoder != null) {
             return user.getPassword();
         }
@@ -89,8 +77,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web
-            .ignoring()
+        web.ignoring()
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/swagger-ui/**")
             .antMatchers("/content/**");
@@ -132,7 +119,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     @SuppressWarnings("unchecked")
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {
-        return authorities -> {
+        return (authorities) -> {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
@@ -140,29 +127,20 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // Check for OidcUserAuthority because Spring Security 5.2 returns
                 // each scope as a GrantedAuthority, which we don't care about.
                 if (authority instanceof OidcUserAuthority) {
-                    OidcUserAuthority oidcUserAuthority =
-                        (OidcUserAuthority) authority;
+                    OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
                     userInfo = oidcUserAuthority.getUserInfo();
                 }
                 if (userInfo == null) {
-                    mappedAuthorities.add(
-                        new SimpleGrantedAuthority(AuthoritiesConstants.USER)
-                    );
+                    mappedAuthorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
                 } else {
                     Map<String, Object> claims = userInfo.getClaims();
-                    Collection<String> groups =
-                        (Collection<String>) claims.getOrDefault(
-                            "groups",
-                            claims.getOrDefault("roles", new ArrayList<>())
-                        );
+                    Collection<String> groups = (Collection<String>) claims.getOrDefault("groups",
+                        claims.getOrDefault("roles", new ArrayList<>()));
 
-                    mappedAuthorities.addAll(
-                        groups
-                            .stream()
-                            .filter(group -> group.startsWith("ROLE_"))
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(toList())
-                    );
+                    mappedAuthorities.addAll(groups.stream()
+                        .filter(group -> group.startsWith("ROLE_"))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(toList()));
                 }
             });
 
@@ -172,16 +150,11 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder =
-            (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuerUri);
+        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(
-            jHipsterProperties.getSecurity().getOauth2().getAudience()
-        );
-        OAuth2TokenValidator<Jwt> withIssuer =
-            JwtValidators.createDefaultWithIssuer(issuerUri);
-        OAuth2TokenValidator<Jwt> withAudience =
-            new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
         jwtDecoder.setJwtValidator(withAudience);
 
@@ -189,9 +162,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthorizationHeaderFilter authHeaderFilter(
-        AuthorizationHeaderUtil headerUtil
-    ) {
+    public AuthorizationHeaderFilter authHeaderFilter(AuthorizationHeaderUtil headerUtil) {
         return new AuthorizationHeaderFilter(headerUtil);
     }
 }

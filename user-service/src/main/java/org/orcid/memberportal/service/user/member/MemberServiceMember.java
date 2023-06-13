@@ -76,4 +76,5 @@ public class MemberServiceMember {
     public Boolean getSuperadminEnabled() {
         return superadminEnabled;
     }
+
 }

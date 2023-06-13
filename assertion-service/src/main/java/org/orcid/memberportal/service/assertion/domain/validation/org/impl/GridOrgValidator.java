@@ -11,12 +11,7 @@ public class GridOrgValidator implements OrgValidator {
 
     @Override
     public boolean validId(String id) {
-        return (
-            id.length() > (GRID_PREFIX.length() + 1) &&
-            StringUtils.equals(
-                id.substring(0, GRID_PREFIX.length()),
-                GRID_PREFIX
-            )
-        );
+        return id.length() > (GRID_PREFIX.length() + 1) && StringUtils.equals(id.substring(0, GRID_PREFIX.length()), GRID_PREFIX);
     }
+
 }

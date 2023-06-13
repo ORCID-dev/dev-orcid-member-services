@@ -1,7 +1,8 @@
-@import "bootstrap-variables";
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import 'bootstrap-variables';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'spacing';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -211,14 +212,14 @@ ui bootstrap tweaks
   margin-bottom: 0.5rem;
 }
 
-input.form-control[type="checkbox"] {
+input.form-control[type='checkbox'] {
   width: initial;
   float: left;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
-input.form-control[type="file"] {
+input.form-control[type='file'] {
   border: none;
 }
 
@@ -331,7 +332,7 @@ ORCID global styles
 }
 .progress-line:before {
   background-color: #1f7a14;
-  content: "";
+  content: '';
   -webkit-animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
@@ -429,12 +430,20 @@ div.success {
   letter-spacing: 0.5px;
 }
 
+.wide-text-25 {
+  letter-spacing: 0.25px;
+}
+
 .font-size-12 {
   font-size: 0.75rem;
 }
 
 .font-size-14 {
   font-size: 0.875rem;
+}
+
+.font-size-16 {
+  font-size: 1rem;
 }
 
 .font-size-18 {
@@ -474,4 +483,24 @@ div.success {
 
 .input-field-default-border {
   border: 1px solid #ced4da !important;
+}
+
+.outline-danger {
+  outline: 2px solid red;
+}
+
+.form-field-text-color-default {
+  color: #495057;
+}
+
+.text-decoration-underline {
+  text-decoration: underline;
+}
+
+.line-height-normal {
+  line-height: normal;
+}
+
+.line-height-150 {
+  line-height: 150%;
 }

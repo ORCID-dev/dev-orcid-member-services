@@ -21,4 +21,5 @@ public class ReportInfo {
     public void setJwt(String jwt) {
         this.jwt = jwt;
     }
+
 }

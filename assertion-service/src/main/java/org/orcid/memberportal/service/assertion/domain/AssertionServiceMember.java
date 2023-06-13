@@ -87,4 +87,5 @@ public class AssertionServiceMember {
     public void setDefaultLanguage(String defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
     }
+
 }

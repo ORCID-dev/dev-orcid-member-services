@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.util.Locale;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -45,25 +46,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class AssertionsCsvReader implements AssertionsUploadReader {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        AssertionsCsvReader.class
-    );
+    private static final Logger LOG = LoggerFactory.getLogger(AssertionsCsvReader.class);
 
     private final DateTimeFormatter[] formatters = {
-        new DateTimeFormatterBuilder()
-            .appendPattern("yyyy")
-            .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
-            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-            .toFormatter(),
-        new DateTimeFormatterBuilder()
-            .appendPattern("yyyy-MM")
-            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
-            .toFormatter(),
-        new DateTimeFormatterBuilder()
-            .appendPattern("yyyy-MM-dd")
-            .parseStrict()
-            .toFormatter(),
-    };
+            new DateTimeFormatterBuilder().appendPattern("yyyy").parseDefaulting(ChronoField.MONTH_OF_YEAR, 1).parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
+            new DateTimeFormatterBuilder().appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter(),
+            new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseStrict().toFormatter() };
 
     String[] urlValschemes = { "http", "https", "ftp" }; // DEFAULT schemes =
     // "http", "https",
@@ -89,53 +77,29 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
     private RorOrgValidator rorValidator;
 
     @Override
-    public AssertionsUpload readAssertionsUpload(
-        InputStream inputStream,
-        AssertionServiceUser user
-    ) throws IOException {
+    public AssertionsUpload readAssertionsUpload(InputStream inputStream, AssertionServiceUser user) throws IOException {
         AssertionsUpload upload = new AssertionsUpload();
 
-        try (
-            final Reader reader = new InputStreamReader(
-                new BOMInputStream(inputStream),
-                StandardCharsets.UTF_8
-            );
-            final CSVParser parser = new CSVParser(
-                reader,
-                CSVFormat.EXCEL.withHeader()
-            )
-        ) {
+        try (final Reader reader = new InputStreamReader(new BOMInputStream(inputStream), StandardCharsets.UTF_8);
+                final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader())) {
+
             for (CSVRecord record : parser) {
                 try {
                     Assertion assertion = parseLine(record, upload, user);
-                    if (
-                        assertion.getEmail() != null &&
-                        !upload.getUsers().contains(assertion.getEmail())
-                    ) {
+                    if (assertion.getEmail() != null && !upload.getUsers().contains(assertion.getEmail())) {
                         upload.addUser(assertion.getEmail());
                     }
                     upload.addAssertion(assertion);
                 } catch (Exception e) {
-                    LOG.info(
-                        "CSV upload error found for record number {}",
-                        record.getRecordNumber(),
-                        e
-                    );
-                    upload.addError(
-                        record.getRecordNumber(),
-                        getError("unexpected", e.getMessage(), user)
-                    );
+                    LOG.info("CSV upload error found for record number {}", record.getRecordNumber(), e);
+                    upload.addError(record.getRecordNumber(), getError("unexpected", e.getMessage(), user));
                 }
             }
         }
         return upload;
     }
 
-    private Assertion parseLine(
-        CSVRecord line,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion parseLine(CSVRecord line, AssertionsUpload upload, AssertionServiceUser user) {
         Assertion a = new Assertion();
         a = processId(line, a, upload, user);
 
@@ -159,35 +123,23 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processDates(
-        CSVRecord line,
-        AssertionsUpload upload,
-        Assertion a,
-        AssertionServiceUser user
-    ) {
+    private Assertion processDates(CSVRecord line, AssertionsUpload upload, Assertion a, AssertionServiceUser user) {
         a = processStartDate(line, a, upload, user);
         a = processEndDate(line, a, upload, user);
         checkStartDateBeforeEndDate(line, a, upload, user);
         return a;
     }
 
-    private Assertion processUrl(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion processUrl(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
         String url = getOptionalNullableValue(line, "url");
         if (url != null && !StringUtils.isBlank(url)) {
             url = url.trim();
             try {
                 url = encodeUrl(url);
-            } catch (MalformedURLException | URISyntaxException e) {}
+            } catch (MalformedURLException | URISyntaxException e) {
+            }
             if (!urlValidator.isValid(url)) {
-                upload.addError(
-                    line.getRecordNumber(),
-                    getError("invalidUrl", user)
-                );
+                upload.addError(line.getRecordNumber(), getError("invalidUrl", user));
             } else {
                 a.setUrl(url);
             }
@@ -202,59 +154,31 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processDisambiguatedOrgId(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
-        String orgId = getOptionalNullableValue(
-            line,
-            "disambiguated-organization-identifier"
-        );
+    private Assertion processDisambiguatedOrgId(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
+        String orgId = getOptionalNullableValue(line, "disambiguated-organization-identifier");
         if (orgId == null) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("missingDisambiguatedOrgId", user)
-            );
+            upload.addError(line.getRecordNumber(), getError("missingDisambiguatedOrgId", user));
             return a;
         } else {
             orgId = AssertionUtils.stripGridURL(orgId);
 
-            String orgSource = getOptionalNullableValue(
-                line,
-                "disambiguation-source"
-            );
+            String orgSource = getOptionalNullableValue(line, "disambiguation-source");
             if (validateDisambiguatedOrganizationId(orgId, orgSource)) {
                 a.setDisambiguatedOrgId(orgId);
             } else {
-                upload.addError(
-                    line.getRecordNumber(),
-                    getError("invalidDisambiguatedOrgId", user)
-                );
+                upload.addError(line.getRecordNumber(), getError("invalidDisambiguatedOrgId", user));
                 return a;
             }
         }
         return a;
     }
 
-    private Assertion processDisambiguationSource(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion processDisambiguationSource(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
         if (getOptionalNullableValue(line, "disambiguation-source") == null) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("missingDisambiguatedSource", user)
-            );
+            upload.addError(line.getRecordNumber(), getError("missingDisambiguatedSource", user));
             return a;
         } else {
-            a.setDisambiguationSource(
-                getMandatoryNullableValue(line, "disambiguation-source")
-                    .toUpperCase()
-            );
+            a.setDisambiguationSource(getMandatoryNullableValue(line, "disambiguation-source").toUpperCase());
         }
         return a;
     }
@@ -264,18 +188,10 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processOrgCity(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion processOrgCity(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
         String orgCity = getOptionalNullableValue(line, "org-city");
         if (orgCity == null) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("missingOrgCity", user)
-            );
+            upload.addError(line.getRecordNumber(), getError("missingOrgCity", user));
             return a;
         } else {
             a.setOrgCity(orgCity);
@@ -283,46 +199,27 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processOrgCountry(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion processOrgCountry(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
         String orgCountry = getOptionalNullableValue(line, "org-country");
         if (orgCountry == null) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("missingOrgCountry", user)
-            );
+            upload.addError(line.getRecordNumber(), getError("missingOrgCountry", user));
             return a;
         } else {
             try {
                 Iso3166Country.valueOf(orgCountry);
                 a.setOrgCountry(orgCountry);
             } catch (Exception e) {
-                upload.addError(
-                    line.getRecordNumber(),
-                    getError("invalidOrgCountry", orgCountry, user)
-                );
+                upload.addError(line.getRecordNumber(), getError("invalidOrgCountry", orgCountry, user));
                 return a;
             }
         }
         return a;
     }
 
-    private Assertion processOrgName(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion processOrgName(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
         String orgName = getOptionalNullableValue(line, "org-name");
         if (orgName == null) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("missingOrgName", user)
-            );
+            upload.addError(line.getRecordNumber(), getError("missingOrgName", user));
             return a;
         } else {
             a.setOrgName(orgName);
@@ -330,18 +227,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processEndDate(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
-        AssertionsUpload.AssertionsUploadDate endDate = getDate(
-            line,
-            upload,
-            "end-date",
-            user
-        );
+    private Assertion processEndDate(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
+        AssertionsUpload.AssertionsUploadDate endDate = getDate(line, upload, "end-date", user);
         if (endDate != null) {
             a.setEndDay(endDate.getDay());
             a.setEndMonth(endDate.getMonth());
@@ -350,18 +237,8 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processStartDate(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
-        AssertionsUpload.AssertionsUploadDate startDate = getDate(
-            line,
-            upload,
-            "start-date",
-            user
-        );
+    private Assertion processStartDate(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
+        AssertionsUpload.AssertionsUploadDate startDate = getDate(line, upload, "start-date", user);
         if (startDate != null) {
             a.setStartDay(startDate.getDay());
             a.setStartMonth(startDate.getMonth());
@@ -370,12 +247,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private AssertionsUpload.AssertionsUploadDate getDate(
-        CSVRecord line,
-        AssertionsUpload upload,
-        String elementName,
-        AssertionServiceUser user
-    ) {
+    private AssertionsUpload.AssertionsUploadDate getDate(CSVRecord line, AssertionsUpload upload, String elementName, AssertionServiceUser user) {
         String year = null;
         String month = null;
         String day = null;
@@ -386,16 +258,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             String[] dateParts = date.split("-|/|\\s");
             String yearToValidate = dateParts[0];
             String dayToValidate = dateParts.length > 2 ? dateParts[2] : "0";
-            if (
-                validDate(
-                    date,
-                    yearToValidate,
-                    dayToValidate,
-                    line,
-                    upload,
-                    user
-                )
-            ) {
+            if (validDate(date, yearToValidate, dayToValidate, line, upload, user)) {
                 year = dateParts[0];
                 if (dateParts.length > 1) {
                     month = dateParts[1];
@@ -404,11 +267,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
                 if (dateParts.length > 2) {
                     day = dateParts[2];
                 }
-                return new AssertionsUpload.AssertionsUploadDate(
-                    year,
-                    month,
-                    day
-                );
+                return new AssertionsUpload.AssertionsUploadDate(year, month, day);
             }
         }
         return null;
@@ -424,54 +283,28 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processAffiliationSection(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
-        String affiliationSectionValue = getOptionalNullableValue(
-            line,
-            "affiliation-section"
-        );
-        if (
-            affiliationSectionValue == null || affiliationSectionValue.isEmpty()
-        ) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("missingAffiliationSection", user)
-            );
+    private Assertion processAffiliationSection(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
+        String affiliationSectionValue = getOptionalNullableValue(line, "affiliation-section");
+        if (affiliationSectionValue == null || affiliationSectionValue.isEmpty()) {
+            upload.addError(line.getRecordNumber(), getError("missingAffiliationSection", user));
             return a;
         } else {
             AffiliationSection affiliationSection;
-            if (
-                "INVITED-POSITION".equals(affiliationSectionValue.toUpperCase())
-            ) {
+            if ("INVITED-POSITION".equals(affiliationSectionValue.toUpperCase())) {
                 affiliationSection = AffiliationSection.INVITED_POSITION;
             } else {
-                affiliationSection =
-                    AffiliationSection.valueOf(
-                        affiliationSectionValue.toUpperCase()
-                    );
+                affiliationSection = AffiliationSection.valueOf(affiliationSectionValue.toUpperCase());
             }
             a.setAffiliationSection(affiliationSection);
         }
         return a;
     }
 
-    private Assertion processId(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion processId(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
         String id = getOptionalNullableValue(line, "id");
         if (id != null) {
             if (!assertionsService.assertionExists(id)) {
-                upload.addError(
-                    line.getRecordNumber(),
-                    getError("idDoesNotExist", user)
-                );
+                upload.addError(line.getRecordNumber(), getError("idDoesNotExist", user));
                 return a;
             } else {
                 a.setId(id);
@@ -480,34 +313,20 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return a;
     }
 
-    private Assertion processEmail(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    private Assertion processEmail(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
         String id = getOptionalNullableValue(line, "id");
         String email = getOptionalNullableValue(line, "email");
         if (email == null) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("missingEmail", user)
-            );
+            upload.addError(line.getRecordNumber(), getError("missingEmail", user));
             return a;
         } else if (!emailValidator.isValid(email)) {
-            upload.addError(
-                line.getRecordNumber(),
-                getError("invalidEmail", user)
-            );
+            upload.addError(line.getRecordNumber(), getError("invalidEmail", user));
         } else {
             // attempt to change email?
             if (id != null && assertionsService.assertionExists(id)) {
                 Assertion existingAssertion = assertionsService.findById(id);
                 if (!email.equals(existingAssertion.getEmail())) {
-                    upload.addError(
-                        line.getRecordNumber(),
-                        getError("emailCannotBeChanged", user)
-                    );
+                    upload.addError(line.getRecordNumber(), getError("emailCannotBeChanged", user));
                 }
             }
             a.setEmail(email);
@@ -519,32 +338,14 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         if (getOptionalNullableValue(line, "id") == null) {
             return false;
         }
-        return (
-            empty(line, "email") &&
-            empty(line, "affiliation-section") &&
-            empty(line, "department-name") &&
-            empty(line, "role-title") &&
-            empty(line, "start-date") &&
-            empty(line, "end-date") &&
-            empty(line, "org-name") &&
-            empty(line, "org-country") &&
-            empty(line, "org-city") &&
-            empty(line, "org-region") &&
-            empty(line, "disambiguation-source") &&
-            empty(line, "disambiguated-organization-identifier") &&
-            empty(line, "external-id") &&
-            empty(line, "external-id-type") &&
-            empty(line, "external-id-url") &&
-            empty(line, "url")
-        );
+        return empty(line, "email") && empty(line, "affiliation-section") && empty(line, "department-name") && empty(line, "role-title") && empty(line, "start-date")
+                && empty(line, "end-date") && empty(line, "org-name") && empty(line, "org-country") && empty(line, "org-city") && empty(line, "org-region")
+                && empty(line, "disambiguation-source") && empty(line, "disambiguated-organization-identifier") && empty(line, "external-id")
+                && empty(line, "external-id-type") && empty(line, "external-id-url") && empty(line, "url");
     }
 
     private boolean empty(CSVRecord line, String columnName) {
-        return (
-            !line.isSet(columnName) ||
-            getOptionalNullableValue(line, columnName) == null ||
-            getOptionalNullableValue(line, columnName).isEmpty()
-        );
+        return !line.isSet(columnName) || getOptionalNullableValue(line, columnName) == null || getOptionalNullableValue(line, columnName).isEmpty();
     }
 
     private String getMandatoryNullableValue(CSVRecord line, String name) {
@@ -565,31 +366,18 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         }
     }
 
-    private boolean validateDisambiguatedOrganizationId(
-        String orgId,
-        String orgSource
-    ) {
-        if (
-            StringUtils.equalsIgnoreCase(orgSource, Constants.GRID_ORG_SOURCE)
-        ) {
+    private boolean validateDisambiguatedOrganizationId(String orgId, String orgSource) {
+        if (StringUtils.equalsIgnoreCase(orgSource, Constants.GRID_ORG_SOURCE)) {
             return gridValidator.validId(orgId);
-        } else if (
-            StringUtils.equalsIgnoreCase(
-                orgSource,
-                Constants.RINGGOLD_ORG_SOURCE
-            )
-        ) {
+        } else if (StringUtils.equalsIgnoreCase(orgSource, Constants.RINGGOLD_ORG_SOURCE)) {
             return ringgoldValidator.validId(orgId);
-        } else if (
-            StringUtils.equalsIgnoreCase(orgSource, Constants.ROR_ORG_SOURCE)
-        ) {
+        } else if (StringUtils.equalsIgnoreCase(orgSource, Constants.ROR_ORG_SOURCE)) {
             return rorValidator.validId(orgId);
         }
         return false;
     }
 
-    private String encodeUrl(String urlString)
-        throws MalformedURLException, URISyntaxException {
+    private String encodeUrl(String urlString) throws MalformedURLException, URISyntaxException {
         URL url = null;
         try {
             url = new URL(urlString);
@@ -597,67 +385,35 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             // try adding protocol, which could be missing
             url = new URL("http://" + urlString);
         }
-        URI encoded = new URI(
-            url.getProtocol(),
-            url.getHost(),
-            url.getPath(),
-            null
-        );
+        URI encoded = new URI(url.getProtocol(), url.getHost(), url.getPath(), null);
         return encoded.toASCIIString();
     }
 
-    protected boolean validDate(
-        String date,
-        String year,
-        String day,
-        CSVRecord line,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
+    protected boolean validDate(String date, String year, String day, CSVRecord line, AssertionsUpload upload, AssertionServiceUser user) {
         for (DateTimeFormatter formatter : formatters) {
             try {
                 LocalDate localDate = LocalDate.parse(date, formatter);
-                if (
-                    isEmpty(year) ||
-                    localDate.getYear() == Integer.parseInt(year)
-                ) {
+                if (isEmpty(year) || localDate.getYear() == Integer.parseInt(year)) {
                     if (Integer.parseInt(day) > 0) {
-                        if (
-                            Integer.parseInt(day) == localDate.getDayOfMonth()
-                        ) {
+                        if (Integer.parseInt(day) == localDate.getDayOfMonth()) {
                             return true;
                         } else {
-                            upload.addError(
-                                line.getRecordNumber(),
-                                getError("invalidDate", user)
-                            );
+                            upload.addError(line.getRecordNumber(), getError("invalidDate", user));
                             return false;
                         }
                     } else {
                         return true;
                     }
                 }
-            } catch (DateTimeParseException e) {}
+            } catch (DateTimeParseException e) {
+            }
         }
-        upload.addError(
-            line.getRecordNumber(),
-            getError("invalidDateFormat", user)
-        );
+        upload.addError(line.getRecordNumber(), getError("invalidDateFormat", user));
         return false;
     }
 
-    private void checkStartDateBeforeEndDate(
-        CSVRecord line,
-        Assertion a,
-        AssertionsUpload upload,
-        AssertionServiceUser user
-    ) {
-        AssertionsUploadDate startDate = getDate(
-            line,
-            upload,
-            "start-date",
-            user
-        );
+    private void checkStartDateBeforeEndDate(CSVRecord line, Assertion a, AssertionsUpload upload, AssertionServiceUser user) {
+        AssertionsUploadDate startDate = getDate(line, upload, "start-date", user);
         AssertionsUploadDate endDate = getDate(line, upload, "end-date", user);
 
         if (startDate != null && endDate != null) {
@@ -669,25 +425,24 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
             // initialise dates, which could be of different formats
             for (DateTimeFormatter formatter : formatters) {
                 try {
-                    localStartDate =
-                        LocalDate.parse(startDateString, formatter);
-                } catch (DateTimeParseException e) {}
+                    localStartDate = LocalDate.parse(startDateString, formatter);
+                } catch (DateTimeParseException e) {
+                }
                 try {
                     localEndDate = LocalDate.parse(endDateString, formatter);
-                } catch (DateTimeParseException e) {}
+                } catch (DateTimeParseException e) {
+                }
             }
 
             if (localStartDate.isAfter(localEndDate)) {
-                upload.addError(
-                    line.getRecordNumber(),
-                    getError("startDateAfterEndDate", user)
-                );
+                upload.addError(line.getRecordNumber(), getError("startDateAfterEndDate", user));
             }
         }
     }
 
     public static boolean isEmpty(String string) {
-        if (string == null || string.trim().isEmpty()) return true;
+        if (string == null || string.trim().isEmpty())
+            return true;
         return false;
     }
 
@@ -695,15 +450,7 @@ public class AssertionsCsvReader implements AssertionsUploadReader {
         return getError(code, null, user);
     }
 
-    private String getError(
-        String code,
-        String arg,
-        AssertionServiceUser user
-    ) {
-        return messageSource.getMessage(
-            "assertion.csv.upload.error." + code,
-            arg != null ? new Object[] { arg } : null,
-            Locale.forLanguageTag(user.getLangKey())
-        );
+    private String getError(String code, String arg, AssertionServiceUser user) {
+        return messageSource.getMessage("assertion.csv.upload.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(user.getLangKey()));
     }
 }

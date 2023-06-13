@@ -1,20 +1,23 @@
 package org.orcid.memberportal.service.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.user.config.Constants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A user.
@@ -241,9 +244,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return activationReminders;
     }
 
-    public void setActivationReminders(
-        List<ActivationReminder> activationReminders
-    ) {
+    public void setActivationReminders(List<ActivationReminder> activationReminders) {
         this.activationReminders = activationReminders;
     }
 
@@ -292,38 +293,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return (
-            32 +
-            (id != null ? id.hashCode() : 1) +
-            (email != null ? email.hashCode() : 2)
-        );
+        return 32 + (id != null ? id.hashCode() : 1) + (email != null ? email.hashCode() : 2);
     }
 
     @Override
     public String toString() {
-        return (
-            "User{firstName='" +
-            firstName +
-            '\'' +
-            ", lastName='" +
-            lastName +
-            '\'' +
-            ", email='" +
-            email +
-            '\'' +
-            ", imageUrl='" +
-            imageUrl +
-            '\'' +
-            ", activated='" +
-            activated +
-            '\'' +
-            ", langKey='" +
-            langKey +
-            '\'' +
-            ", activationKey='" +
-            activationKey +
-            '\'' +
-            "}"
-        );
+        return "User{firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\'' + ", activated='"
+                + activated + '\'' + ", langKey='" + langKey + '\'' + ", activationKey='" + activationKey + '\'' + "}";
     }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -63,259 +64,115 @@ class UserResourceTest {
 
         Authentication authentication = Mockito.mock(Authentication.class);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito
-            .when(securityContext.getAuthentication())
-            .thenReturn(authentication);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        Mockito
-            .when(authentication.getPrincipal())
-            .thenReturn("some@email.com");
-        Mockito
-            .when(
-                userRepository.findOneByEmailIgnoreCase(
-                    Mockito.eq("some@email.com")
-                )
-            )
-            .thenReturn(getCurrentUser());
+        Mockito.when(authentication.getPrincipal()).thenReturn("some@email.com");
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("some@email.com"))).thenReturn(getCurrentUser());
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        RequestContextHolder.setRequestAttributes(
-            new ServletRequestAttributes(request)
-        );
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
 
     @Test
     void testUpdateSalesforceId() {
-        Mockito
-            .when(
-                userService.updateUsersSalesforceId(
-                    Mockito.eq("salesforce-id"),
-                    Mockito.eq("new-salesforce-id")
-                )
-            )
-            .thenReturn(true);
-        ResponseEntity<Void> response = userResource.updateUsersSalesforceId(
-            "salesforce-id",
-            "new-salesforce-id"
-        );
+        Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(true);
+        ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
         assertTrue(response.getStatusCode().is2xxSuccessful());
     }
 
     @Test
     void testUpdateSalesforceIdWithError() {
-        Mockito
-            .when(
-                userService.updateUsersSalesforceId(
-                    Mockito.eq("salesforce-id"),
-                    Mockito.eq("new-salesforce-id")
-                )
-            )
-            .thenReturn(false);
-        ResponseEntity<Void> response = userResource.updateUsersSalesforceId(
-            "salesforce-id",
-            "new-salesforce-id"
-        );
+        Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(false);
+        ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
         assertTrue(response.getStatusCode().is5xxServerError());
     }
 
     @Test
     public void testResendActivation() {
-        Mockito
-            .doNothing()
-            .when(userService)
-            .resendActivationEmail(Mockito.anyString());
+        Mockito.doNothing().when(userService).resendActivationEmail(Mockito.anyString());
         userResource.resendActivation("key");
-        Mockito
-            .verify(userService, Mockito.times(1))
-            .resendActivationEmail(Mockito.eq("key"));
+        Mockito.verify(userService, Mockito.times(1)).resendActivationEmail(Mockito.eq("key"));
     }
 
     @Test
     public void testUploadUsers() throws Throwable {
-        Mockito
-            .when(
-                userService.uploadUserCSV(
-                    Mockito.any(InputStream.class),
-                    Mockito.any(User.class)
-                )
-            )
-            .thenReturn(getUserUpload());
+        Mockito.when(userService.uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class))).thenReturn(getUserUpload());
         MultipartFile file = Mockito.mock(MultipartFile.class);
         InputStream inputStream = Mockito.mock(InputStream.class);
         Mockito.when(file.getInputStream()).thenReturn(inputStream);
 
         userResource.uploadUsers(file);
 
-        Mockito
-            .verify(userService, Mockito.times(1))
-            .uploadUserCSV(
-                Mockito.any(InputStream.class),
-                Mockito.any(User.class)
-            );
+        Mockito.verify(userService, Mockito.times(1)).uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class));
     }
 
     @Test
     public void testValidateUser_validUser() throws Throwable {
-        Mockito
-            .when(
-                userValidator.validate(
-                    Mockito.any(UserDTO.class),
-                    Mockito.any(User.class)
-                )
-            )
-            .thenReturn(getUserValidation(new ArrayList<String>()));
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(getUserValidation(new ArrayList<String>()));
 
-        ResponseEntity<UserValidation> response = userResource.validateUser(
-            new UserDTO()
-        );
+        ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
         assertEquals(200, response.getStatusCodeValue());
 
-        Mockito
-            .verify(userValidator, Mockito.times(1))
-            .validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
+        Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
     }
 
     @Test
     public void testValidateUser_invalidUser() throws Throwable {
-        Mockito
-            .when(
-                userValidator.validate(
-                    Mockito.any(UserDTO.class),
-                    Mockito.any(User.class)
-                )
-            )
-            .thenReturn(getUserValidation(Arrays.asList("some error")));
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(getUserValidation(Arrays.asList("some error")));
 
-        ResponseEntity<UserValidation> response = userResource.validateUser(
-            new UserDTO()
-        );
+        ResponseEntity<UserValidation> response = userResource.validateUser(new UserDTO());
         assertEquals(200, response.getStatusCodeValue());
 
-        Mockito
-            .verify(userValidator, Mockito.times(1))
-            .validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
+        Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
     }
 
     @Test
     public void testGetAllUsers() {
-        Mockito
-            .when(userService.getAllManagedUsers(Mockito.any(Pageable.class)))
-            .thenReturn(
-                new PageImpl<>(
-                    Arrays.asList(getUser(), getUser(), getUser(), getUser())
-                )
-            );
-        Mockito
-            .when(
-                userService.getAllManagedUsers(
-                    Mockito.any(Pageable.class),
-                    Mockito.anyString()
-                )
-            )
-            .thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser())));
+        Mockito.when(userService.getAllManagedUsers(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser(), getUser(), getUser())));
+        Mockito.when(userService.getAllManagedUsers(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser())));
 
-        ResponseEntity<List<UserDTO>> response = userResource.getAllUsers(
-            new HttpHeaders(),
-            "",
-            UriComponentsBuilder.newInstance(),
-            Mockito.mock(Pageable.class)
-        );
+        ResponseEntity<List<UserDTO>> response = userResource.getAllUsers(new HttpHeaders(), "", UriComponentsBuilder.newInstance(), Mockito.mock(Pageable.class));
         assertNotNull(response);
         List<UserDTO> users = response.getBody();
         assertEquals(4, users.size());
-        Mockito
-            .verify(userService, Mockito.times(1))
-            .getAllManagedUsers(Mockito.any(Pageable.class));
+        Mockito.verify(userService, Mockito.times(1)).getAllManagedUsers(Mockito.any(Pageable.class));
 
-        response =
-            userResource.getAllUsers(
-                new HttpHeaders(),
-                "some-filter",
-                UriComponentsBuilder.newInstance(),
-                Mockito.mock(Pageable.class)
-            );
+        response = userResource.getAllUsers(new HttpHeaders(), "some-filter", UriComponentsBuilder.newInstance(), Mockito.mock(Pageable.class));
         assertNotNull(response);
         users = response.getBody();
         assertEquals(2, users.size());
-        Mockito
-            .verify(userService, Mockito.times(1))
-            .getAllManagedUsers(
-                Mockito.any(Pageable.class),
-                Mockito.anyString()
-            );
+        Mockito.verify(userService, Mockito.times(1)).getAllManagedUsers(Mockito.any(Pageable.class), Mockito.anyString());
     }
 
     @Test
     public void testUpdateUser() {
         UserValidation userValidation = new UserValidation();
         userValidation.setValid(true);
-        Mockito
-            .when(
-                userValidator.validate(
-                    Mockito.any(UserDTO.class),
-                    Mockito.any(User.class)
-                )
-            )
-            .thenReturn(userValidation);
-        Mockito
-            .when(userService.updateUser(Mockito.any(UserDTO.class)))
-            .thenReturn(Optional.of(new UserDTO()));
+        Mockito.when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any(User.class))).thenReturn(userValidation);
+        Mockito.when(userService.updateUser(Mockito.any(UserDTO.class))).thenReturn(Optional.of(new UserDTO()));
 
-        ResponseEntity<UserDTO> response = userResource.updateUser(
-            new UserDTO()
-        );
+        ResponseEntity<UserDTO> response = userResource.updateUser(new UserDTO());
         assertTrue(response.getStatusCode().is2xxSuccessful());
 
-        Mockito
-            .verify(userValidator, Mockito.times(1))
-            .validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
-        Mockito
-            .verify(userService, Mockito.times(1))
-            .updateUser(Mockito.any(UserDTO.class));
+        Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.any(User.class));
+        Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserDTO.class));
     }
 
     @Test
     public void testGetUsersBySalesforceId() {
-        Mockito
-            .when(
-                userService.getAllUsersBySalesforceId(
-                    Mockito.any(Pageable.class),
-                    Mockito.anyString()
-                )
-            )
-            .thenReturn(
-                new PageImpl<>(Arrays.asList(getUser(), getUser(), getUser()))
-            );
+        Mockito.when(userService.getAllUsersBySalesforceId(Mockito.any(Pageable.class), Mockito.anyString()))
+                .thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser(), getUser())));
 
         // same method but with filter, return page of only one user
-        Mockito
-            .when(
-                userService.getAllUsersBySalesforceId(
-                    Mockito.any(Pageable.class),
-                    Mockito.anyString(),
-                    Mockito.anyString()
-                )
-            )
-            .thenReturn(new PageImpl<>(Arrays.asList(getUser())));
+        Mockito.when(userService.getAllUsersBySalesforceId(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(new PageImpl<>(Arrays.asList(getUser())));
 
-        ResponseEntity<List<UserDTO>> response =
-            userResource.getUsersBySalesforceId(
-                "some-salesforceId",
-                new HttpHeaders(),
-                UriComponentsBuilder.newInstance(),
-                "",
-                Mockito.mock(Pageable.class)
-            );
+        ResponseEntity<List<UserDTO>> response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "",
+                Mockito.mock(Pageable.class));
         assertEquals(3, response.getBody().size());
 
-        response =
-            userResource.getUsersBySalesforceId(
-                "some-salesforceId",
-                new HttpHeaders(),
-                UriComponentsBuilder.newInstance(),
-                "some filter",
-                Mockito.mock(Pageable.class)
-            );
+        response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "some filter",
+                Mockito.mock(Pageable.class));
         assertEquals(1, response.getBody().size());
     }
 
@@ -342,4 +199,5 @@ class UserResourceTest {
         UserUpload upload = new UserUpload();
         return upload;
     }
+
 }

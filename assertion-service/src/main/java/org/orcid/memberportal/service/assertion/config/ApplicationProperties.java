@@ -10,7 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
-
     private String jwtSignatureUrl;
 
     private String landingPageUrl;
@@ -143,9 +142,7 @@ public class ApplicationProperties {
         return memberAssertionStatsRecipient;
     }
 
-    public void setMemberAssertionStatsRecipient(
-        String memberAssertionStatsRecipient
-    ) {
+    public void setMemberAssertionStatsRecipient(String memberAssertionStatsRecipient) {
         this.memberAssertionStatsRecipient = memberAssertionStatsRecipient;
     }
 
@@ -161,9 +158,7 @@ public class ApplicationProperties {
         return memberAssertionStatsDirectory;
     }
 
-    public void setMemberAssertionStatsDirectory(
-        String memberAssertionStatsDirectory
-    ) {
+    public void setMemberAssertionStatsDirectory(String memberAssertionStatsDirectory) {
         this.memberAssertionStatsDirectory = memberAssertionStatsDirectory;
     }
 
@@ -179,20 +174,15 @@ public class ApplicationProperties {
         return generateMemberAssertionStatsCron;
     }
 
-    public void setGenerateMemberAssertionStatsCron(
-        String generateMemberAssertionStatsCron
-    ) {
-        this.generateMemberAssertionStatsCron =
-            generateMemberAssertionStatsCron;
+    public void setGenerateMemberAssertionStatsCron(String generateMemberAssertionStatsCron) {
+        this.generateMemberAssertionStatsCron = generateMemberAssertionStatsCron;
     }
 
     public String getAssertionsCsvUploadDirectory() {
         return assertionsCsvUploadDirectory;
     }
 
-    public void setAssertionsCsvUploadDirectory(
-        String assertionsCsvUploadDirectory
-    ) {
+    public void setAssertionsCsvUploadDirectory(String assertionsCsvUploadDirectory) {
         this.assertionsCsvUploadDirectory = assertionsCsvUploadDirectory;
     }
 
@@ -200,9 +190,7 @@ public class ApplicationProperties {
         return processAssertionUploadsDelay;
     }
 
-    public void setProcessAssertionUploadsDelay(
-        String processAssertionUploadsDelay
-    ) {
+    public void setProcessAssertionUploadsDelay(String processAssertionUploadsDelay) {
         this.processAssertionUploadsDelay = processAssertionUploadsDelay;
     }
 
@@ -234,9 +222,7 @@ public class ApplicationProperties {
         return internalRegistryApiEndpoint;
     }
 
-    public void setInternalRegistryApiEndpoint(
-        String internalRegistryApiEndpoint
-    ) {
+    public void setInternalRegistryApiEndpoint(String internalRegistryApiEndpoint) {
         this.internalRegistryApiEndpoint = internalRegistryApiEndpoint;
     }
 
@@ -244,11 +230,8 @@ public class ApplicationProperties {
         return sendPermissionLinkNotificationsDelay;
     }
 
-    public void setSendPermissionLinkNotificationsDelay(
-        String sendPermissionLinkNotificationsDelay
-    ) {
-        this.sendPermissionLinkNotificationsDelay =
-            sendPermissionLinkNotificationsDelay;
+    public void setSendPermissionLinkNotificationsDelay(String sendPermissionLinkNotificationsDelay) {
+        this.sendPermissionLinkNotificationsDelay = sendPermissionLinkNotificationsDelay;
     }
 
     public int[] getResendNotificationDays() {
@@ -267,8 +250,9 @@ public class ApplicationProperties {
         this.resendNotificationsCron = resendNotificationsCron;
     }
 
-    public static class TokenExchange {
 
+
+    public static class TokenExchange {
         private String endpoint;
         private String grantType;
         private String subjectTokenType;
@@ -323,5 +307,8 @@ public class ApplicationProperties {
         public void setClientSecret(String clientSecret) {
             this.clientSecret = clientSecret;
         }
+
     }
+
+
 }

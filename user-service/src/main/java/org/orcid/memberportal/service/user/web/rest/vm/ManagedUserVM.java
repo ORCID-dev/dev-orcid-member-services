@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.user.web.rest.vm;
 
 import javax.validation.constraints.Size;
+
 import org.orcid.memberportal.service.user.dto.UserDTO;
 
 /**

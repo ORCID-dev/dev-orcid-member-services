@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
@@ -45,31 +46,18 @@ class MailgunClientTest {
     }
 
     @Test
-    void testSendMailWithAttachment()
-        throws MailException, ClientProtocolException, IOException {
-        Mockito
-            .when(client.execute(Mockito.any(HttpUriRequest.class)))
-            .thenReturn(getTestHttpResponse());
+    void testSendMailWithAttachment() throws MailException, ClientProtocolException, IOException {
+        Mockito.when(client.execute(Mockito.any(HttpUriRequest.class))).thenReturn(getTestHttpResponse());
 
-        mailgunClient.sendMailWithAttachment(
-            "user@orcid.org",
-            "test email with attachment",
-            "<p>some html</p>",
-            getAttachment()
-        );
+        mailgunClient.sendMailWithAttachment("user@orcid.org", "test email with attachment", "<p>some html</p>", getAttachment());
 
         Mockito.verify(client).execute(postCaptor.capture());
         HttpPost capturedPost = postCaptor.getValue();
         HttpEntity capturedEntity = capturedPost.getEntity();
-        assertThat(capturedEntity.getContentType().getName())
-            .isEqualTo("Content-Type");
-        assertThat(capturedEntity.getContentType().getValue())
-            .startsWith("multipart/form-data");
+        assertThat(capturedEntity.getContentType().getName()).isEqualTo("Content-Type");
+        assertThat(capturedEntity.getContentType().getValue()).startsWith("multipart/form-data");
 
-        String data = new String(
-            capturedEntity.getContent().readAllBytes(),
-            "utf-8"
-        );
+        String data = new String(capturedEntity.getContent().readAllBytes(), "utf-8");
         assertThat(data).contains("name=\"to\"");
         assertThat(data).contains("user@orcid.org");
         assertThat(data).contains("name=\"from\"");
@@ -82,37 +70,23 @@ class MailgunClientTest {
         assertThat(data).contains("filename=\"assertions-with-bad-email.csv\"");
 
         // check first line of attached file present in email
-        assertThat(data)
-            .contains(
-                "email,affiliation-section,department-name,role-title,url,start-date,end-date,org-name,org-country,org-city,org-region,disambiguated-organization-identifier,disambiguation-source"
-            );
+        assertThat(data).contains(
+                "email,affiliation-section,department-name,role-title,url,start-date,end-date,org-name,org-country,org-city,org-region,disambiguated-organization-identifier,disambiguation-source");
     }
 
     @Test
-    void testSendMail()
-        throws MailException, ClientProtocolException, IOException {
-        Mockito
-            .when(client.execute(Mockito.any(HttpUriRequest.class)))
-            .thenReturn(getTestHttpResponse());
+    void testSendMail() throws MailException, ClientProtocolException, IOException {
+        Mockito.when(client.execute(Mockito.any(HttpUriRequest.class))).thenReturn(getTestHttpResponse());
 
-        mailgunClient.sendMail(
-            "user@orcid.org",
-            "test email with attachment",
-            "<p>some html</p>"
-        );
+        mailgunClient.sendMail("user@orcid.org", "test email with attachment", "<p>some html</p>");
 
         Mockito.verify(client).execute(postCaptor.capture());
         HttpPost capturedPost = postCaptor.getValue();
         HttpEntity capturedEntity = capturedPost.getEntity();
-        assertThat(capturedEntity.getContentType().getName())
-            .isEqualTo("Content-Type");
-        assertThat(capturedEntity.getContentType().getValue())
-            .startsWith("multipart/form-data");
+        assertThat(capturedEntity.getContentType().getName()).isEqualTo("Content-Type");
+        assertThat(capturedEntity.getContentType().getValue()).startsWith("multipart/form-data");
 
-        String data = new String(
-            capturedEntity.getContent().readAllBytes(),
-            "utf-8"
-        );
+        String data = new String(capturedEntity.getContent().readAllBytes(), "utf-8");
         assertThat(data).contains("name=\"to\"");
         assertThat(data).contains("user@orcid.org");
         assertThat(data).contains("name=\"from\"");
@@ -124,15 +98,12 @@ class MailgunClientTest {
     }
 
     private HttpResponse getTestHttpResponse() {
-        HttpResponse response = new BasicHttpResponse(
-            new BasicStatusLine(new ProtocolVersion("https", 1, 2), 200, "OK")
-        );
+        HttpResponse response = new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("https", 1, 2), 200, "OK"));
         return response;
     }
 
     private File getAttachment() {
-        return new File(
-            getClass().getResource("/assertions-with-bad-email.csv").getFile()
-        );
+        return new File(getClass().getResource("/assertions-with-bad-email.csv").getFile());
     }
+
 }

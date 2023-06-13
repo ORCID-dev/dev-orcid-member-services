@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -48,15 +49,12 @@ public class UserServiceIT {
         User user = getUser();
         user.setActivated(true);
         userRepository.save(user);
-        Optional<User> maybeUser = userService.requestPasswordReset(
-            "invalid.login@orcid.org"
-        );
+        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@orcid.org");
         assertThat(maybeUser).isNotPresent();
 
         maybeUser = userService.requestPasswordReset(user.getEmail());
         assertThat(maybeUser).isPresent();
-        assertThat(maybeUser.orElse(null).getEmail())
-            .isEqualTo(user.getEmail());
+        assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
         assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();
         assertThat(maybeUser.orElse(null).getResetKey()).isNotNull();
 
@@ -69,9 +67,7 @@ public class UserServiceIT {
         user.setActivated(false);
         userRepository.save(user);
 
-        Optional<User> maybeUser = userService.requestPasswordReset(
-            user.getEmail()
-        );
+        Optional<User> maybeUser = userService.requestPasswordReset(user.getEmail());
         assertThat(maybeUser).isNotPresent();
         removeUser(user);
     }
@@ -86,15 +82,9 @@ public class UserServiceIT {
         user.setResetKey(resetKey);
         userRepository.save(user);
 
-        Assertions.assertThrows(
-            ExpiredKeyException.class,
-            () -> {
-                userService.completePasswordReset(
-                    "johndoe2",
-                    user.getResetKey()
-                );
-            }
-        );
+        Assertions.assertThrows(ExpiredKeyException.class, () -> {
+            userService.completePasswordReset("johndoe2", user.getResetKey());
+        });
         removeUser(user);
     }
 
@@ -106,12 +96,9 @@ public class UserServiceIT {
         user.setResetKey(null);
         userRepository.save(user);
 
-        Assertions.assertThrows(
-            InvalidKeyException.class,
-            () -> {
-                userService.completePasswordReset("johndoe2", "wrongkey");
-            }
-        );
+        Assertions.assertThrows(InvalidKeyException.class, () -> {
+            userService.completePasswordReset("johndoe2", "wrongkey");
+        });
         removeUser(user);
     }
 
@@ -142,8 +129,7 @@ public class UserServiceIT {
     }
 
     @Test
-    public void assertThatUserCanResetPassword()
-        throws ExpiredKeyException, InvalidKeyException {
+    public void assertThatUserCanResetPassword() throws ExpiredKeyException, InvalidKeyException {
         User user = getUser();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -165,16 +151,10 @@ public class UserServiceIT {
         User dbUser = userRepository.save(user);
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save(user);
-        List<User> users =
-            userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-                now.minus(3, ChronoUnit.DAYS)
-            );
+        List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isNotEmpty();
         userService.removeNotActivatedUsers();
-        users =
-            userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-                now.minus(3, ChronoUnit.DAYS)
-            );
+        users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
         removeUser(user);
     }
@@ -187,10 +167,7 @@ public class UserServiceIT {
         User dbUser = userRepository.save(user);
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save(user);
-        List<User> users =
-            userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-                now.minus(3, ChronoUnit.DAYS)
-            );
+        List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
         userService.removeNotActivatedUsers();
         Optional<User> maybeDbUser = userRepository.findById(dbUser.getId());
@@ -213,4 +190,5 @@ public class UserServiceIT {
     private void removeUser(User user) {
         userRepository.delete(user);
     }
+
 }

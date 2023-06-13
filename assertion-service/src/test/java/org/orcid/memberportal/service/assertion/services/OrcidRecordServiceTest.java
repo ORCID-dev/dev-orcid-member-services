@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,8 +61,7 @@ class OrcidRecordServiceTest {
     public void setUp() throws JSONException {
         MockitoAnnotations.initMocks(this);
         when(assertionsUserService.getLoggedInUser()).thenReturn(getUser());
-        when(assertionsUserService.getLoggedInUserId())
-            .thenReturn(getUser().getId());
+        when(assertionsUserService.getLoggedInUserId()).thenReturn(getUser().getId());
     }
 
     private AssertionServiceUser getUser() {
@@ -74,37 +74,21 @@ class OrcidRecordServiceTest {
 
     @Test
     void testCreateOrcidRecord() {
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.anyString()))
-            .thenReturn(Optional.empty());
-        Mockito
-            .when(orcidRecordRepository.save(Mockito.any(OrcidRecord.class)))
-            .thenAnswer(
-                new Answer<OrcidRecord>() {
-                    @Override
-                    public OrcidRecord answer(InvocationOnMock invocation)
-                        throws Throwable {
-                        return (OrcidRecord) invocation.getArgument(0);
-                    }
-                }
-            );
-        Mockito
-            .when(orcidRecordRepository.insert(Mockito.any(OrcidRecord.class)))
-            .thenAnswer(
-                new Answer<OrcidRecord>() {
-                    @Override
-                    public OrcidRecord answer(InvocationOnMock invocation)
-                        throws Throwable {
-                        return (OrcidRecord) invocation.getArgument(0);
-                    }
-                }
-            );
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(orcidRecordRepository.save(Mockito.any(OrcidRecord.class))).thenAnswer(new Answer<OrcidRecord>() {
+            @Override
+            public OrcidRecord answer(InvocationOnMock invocation) throws Throwable {
+                return (OrcidRecord) invocation.getArgument(0);
+            }
+        });
+        Mockito.when(orcidRecordRepository.insert(Mockito.any(OrcidRecord.class))).thenAnswer(new Answer<OrcidRecord>() {
+            @Override
+            public OrcidRecord answer(InvocationOnMock invocation) throws Throwable {
+                return (OrcidRecord) invocation.getArgument(0);
+            }
+        });
 
-        OrcidRecord created = orcidRecordService.createOrcidRecord(
-            EMAIL_ONE,
-            Instant.now(),
-            DEFAULT_SALESFORCE_ID
-        );
+        OrcidRecord created = orcidRecordService.createOrcidRecord(EMAIL_ONE, Instant.now(), DEFAULT_SALESFORCE_ID);
         assertNotNull(created.getCreated());
         assertNotNull(created.getModified());
         assertEquals(EMAIL_ONE, created.getEmail());
@@ -114,41 +98,26 @@ class OrcidRecordServiceTest {
 
         assertEquals(DEFAULT_SALESFORCE_ID, token.getSalesforceId());
         assertEquals(null, token.getTokenId());
+
     }
 
     @Test
     void testCreateOrcidRecordWhenEmailExists() {
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.anyString()))
-            .thenReturn(Optional.of(getOrcidRecordWithIdToken(EMAIL_ONE)));
-        Assertions.assertThrows(
-            BadRequestAlertException.class,
-            () -> {
-                orcidRecordService.createOrcidRecord(
-                    EMAIL_ONE,
-                    Instant.now(),
-                    DEFAULT_SALESFORCE_ID
-                );
-            }
-        );
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(getOrcidRecordWithIdToken(EMAIL_ONE)));
+        Assertions.assertThrows(BadRequestAlertException.class, () -> {
+            orcidRecordService.createOrcidRecord(EMAIL_ONE, Instant.now(), DEFAULT_SALESFORCE_ID);
+        });
     }
 
     @Test
     void testUpdateOrcidRecord() {
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.anyString()))
-            .thenReturn(Optional.of(getOrcidRecordWithIdToken(EMAIL_ONE)));
-        Mockito
-            .when(orcidRecordRepository.save(Mockito.any(OrcidRecord.class)))
-            .thenAnswer(
-                new Answer<OrcidRecord>() {
-                    @Override
-                    public OrcidRecord answer(InvocationOnMock invocation)
-                        throws Throwable {
-                        return (OrcidRecord) invocation.getArgument(0);
-                    }
-                }
-            );
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.anyString())).thenReturn(Optional.of(getOrcidRecordWithIdToken(EMAIL_ONE)));
+        Mockito.when(orcidRecordRepository.save(Mockito.any(OrcidRecord.class))).thenAnswer(new Answer<OrcidRecord>() {
+            @Override
+            public OrcidRecord answer(InvocationOnMock invocation) throws Throwable {
+                return (OrcidRecord) invocation.getArgument(0);
+            }
+        });
 
         OrcidRecord recordOne = getOrcidRecordWithIdToken(EMAIL_ONE);
         recordOne.setId("xyz");
@@ -171,42 +140,26 @@ class OrcidRecordServiceTest {
 
     @Test
     void testRevokeIdToken() {
-        OrcidRecord recordWithMoreThanOneToken = getOrcidRecordWithIdToken(
-            "email"
-        );
-        recordWithMoreThanOneToken
-            .getTokens()
-            .add(new OrcidToken("some other org", "not important"));
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.eq("email")))
-            .thenReturn(Optional.of(recordWithMoreThanOneToken));
+        OrcidRecord recordWithMoreThanOneToken = getOrcidRecordWithIdToken("email");
+        recordWithMoreThanOneToken.getTokens().add(new OrcidToken("some other org", "not important"));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(recordWithMoreThanOneToken));
 
         orcidRecordService.revokeIdToken("email", DEFAULT_SALESFORCE_ID);
 
         Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
         OrcidRecord saved = recordCaptor.getValue();
         assertEquals(2, saved.getTokens().size());
-        assertEquals(
-            DEFAULT_SALESFORCE_ID,
-            saved.getTokens().get(0).getSalesforceId()
-        );
+        assertEquals(DEFAULT_SALESFORCE_ID, saved.getTokens().get(0).getSalesforceId());
         assertNotNull(saved.getTokens().get(0).getRevokedDate());
     }
 
     @Test
     void testDeleteOrcidRecordTokenByEmailAndSalesforceIdWhereNoOtherTokens() {
         OrcidRecord record = getOrcidRecordWithIdToken("email");
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.eq("email")))
-            .thenReturn(Optional.of(record));
-        orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId(
-            "email",
-            DEFAULT_SALESFORCE_ID
-        );
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
+        orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId("email", DEFAULT_SALESFORCE_ID);
         Mockito.verify(orcidRecordRepository).save(recordCaptor.capture()); // for removing tokens
-        Mockito
-            .verify(orcidRecordRepository)
-            .delete(Mockito.any(OrcidRecord.class)); // for removing record
+        Mockito.verify(orcidRecordRepository).delete(Mockito.any(OrcidRecord.class)); // for removing record
 
         OrcidRecord captured = recordCaptor.getValue();
         assertEquals(0, captured.getTokens().size());
@@ -215,20 +168,11 @@ class OrcidRecordServiceTest {
     @Test
     void testDeleteOrcidRecordTokenByEmailAndSalesforceIdWhereOtherTokensExist() {
         OrcidRecord record = getOrcidRecordWithIdToken("email");
-        record
-            .getTokens()
-            .add(new OrcidToken("something else", "some token id"));
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.eq("email")))
-            .thenReturn(Optional.of(record));
-        orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId(
-            "email",
-            DEFAULT_SALESFORCE_ID
-        );
+        record.getTokens().add(new OrcidToken("something else", "some token id"));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
+        orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId("email", DEFAULT_SALESFORCE_ID);
         Mockito.verify(orcidRecordRepository).save(recordCaptor.capture()); // for removing tokens
-        Mockito
-            .verify(orcidRecordRepository, Mockito.never())
-            .delete(Mockito.any(OrcidRecord.class)); // for removing record
+        Mockito.verify(orcidRecordRepository, Mockito.never()).delete(Mockito.any(OrcidRecord.class)); // for removing record
 
         OrcidRecord captured = recordCaptor.getValue();
         assertEquals(1, captured.getTokens().size());
@@ -237,16 +181,9 @@ class OrcidRecordServiceTest {
     @Test
     void testStoreIdToken() {
         OrcidRecord record = getOrcidRecordWithIdToken("email");
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.eq("email")))
-            .thenReturn(Optional.of(record));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
 
-        orcidRecordService.storeIdToken(
-            "email",
-            "id-token",
-            "orcid",
-            DEFAULT_SALESFORCE_ID
-        );
+        orcidRecordService.storeIdToken("email", "id-token", "orcid", DEFAULT_SALESFORCE_ID);
 
         Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
         OrcidRecord captured = recordCaptor.getValue();
@@ -257,16 +194,9 @@ class OrcidRecordServiceTest {
     void testStoreIdTokenWherePreviousTokenRevoked() {
         OrcidRecord record = getOrcidRecordWithRevokedToken("email");
 
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.eq("email")))
-            .thenReturn(Optional.of(record));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
 
-        orcidRecordService.storeIdToken(
-            "email",
-            "new token",
-            "orcid",
-            DEFAULT_SALESFORCE_ID
-        );
+        orcidRecordService.storeIdToken("email", "new token", "orcid", DEFAULT_SALESFORCE_ID);
 
         Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
         OrcidRecord captured = recordCaptor.getValue();
@@ -281,16 +211,9 @@ class OrcidRecordServiceTest {
         record.getTokens().add(new OrcidToken(DEFAULT_SALESFORCE_ID, "errr"));
         record.getTokens().add(new OrcidToken(DEFAULT_SALESFORCE_ID, "hmmm"));
 
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.eq("email")))
-            .thenReturn(Optional.of(record));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("email"))).thenReturn(Optional.of(record));
 
-        orcidRecordService.storeIdToken(
-            "email",
-            "new token",
-            "orcid",
-            DEFAULT_SALESFORCE_ID
-        );
+        orcidRecordService.storeIdToken("email", "new token", "orcid", DEFAULT_SALESFORCE_ID);
 
         Mockito.verify(orcidRecordRepository).save(recordCaptor.capture());
         OrcidRecord captured = recordCaptor.getValue();
@@ -300,39 +223,16 @@ class OrcidRecordServiceTest {
 
     @Test
     void testUserHasGrantedOrDeniedPermission() {
-        OrcidRecord responded = getOrcidRecordWithToken(
-            "responded",
-            new OrcidToken(DEFAULT_SALESFORCE_ID, "token")
-        );
-        Mockito
-            .when(orcidRecordRepository.findOneByEmail(Mockito.eq("responded")))
-            .thenReturn(Optional.of(responded));
+        OrcidRecord responded = getOrcidRecordWithToken("responded", new OrcidToken(DEFAULT_SALESFORCE_ID, "token"));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("responded"))).thenReturn(Optional.of(responded));
 
-        OrcidRecord notResponded = getOrcidRecordWithToken(
-            "not responded",
-            new OrcidToken(DEFAULT_SALESFORCE_ID, null)
-        );
-        Mockito
-            .when(
-                orcidRecordRepository.findOneByEmail(
-                    Mockito.eq("not responded")
-                )
-            )
-            .thenReturn(Optional.of(notResponded));
+        OrcidRecord notResponded = getOrcidRecordWithToken("not responded", new OrcidToken(DEFAULT_SALESFORCE_ID, null));
+        Mockito.when(orcidRecordRepository.findOneByEmail(Mockito.eq("not responded"))).thenReturn(Optional.of(notResponded));
 
-        assertTrue(
-            orcidRecordService.userHasGrantedOrDeniedPermission(
-                "responded",
-                DEFAULT_SALESFORCE_ID
-            )
-        );
-        assertFalse(
-            orcidRecordService.userHasGrantedOrDeniedPermission(
-                "not responded",
-                DEFAULT_SALESFORCE_ID
-            )
-        );
+        assertTrue(orcidRecordService.userHasGrantedOrDeniedPermission("responded", DEFAULT_SALESFORCE_ID));
+        assertFalse(orcidRecordService.userHasGrantedOrDeniedPermission("not responded", DEFAULT_SALESFORCE_ID));
     }
+
 
     /*
      * @Test void testUpdateNonExistentOrcidRecord() {
@@ -368,10 +268,7 @@ class OrcidRecordServiceTest {
         record.setCreated(Instant.now());
         record.setEmail(email);
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(
-            DEFAULT_SALESFORCE_ID,
-            "revoked token"
-        );
+        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "revoked token");
         newToken.setRevokedDate(Instant.now());
         tokens.add(newToken);
         record.setTokens(tokens);
@@ -380,10 +277,7 @@ class OrcidRecordServiceTest {
         return record;
     }
 
-    private OrcidRecord getOrcidRecordWithToken(
-        String email,
-        OrcidToken token
-    ) {
+    private OrcidRecord getOrcidRecordWithToken(String email, OrcidToken token) {
         OrcidRecord record = new OrcidRecord();
         record.setCreated(Instant.now());
         record.setEmail(email);
@@ -392,4 +286,5 @@ class OrcidRecordServiceTest {
         record.setTokens(tokens);
         return record;
     }
+
 }

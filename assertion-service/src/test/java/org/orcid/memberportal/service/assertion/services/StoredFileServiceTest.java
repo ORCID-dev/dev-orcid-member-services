@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.temporal.ChronoUnit;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,46 +49,28 @@ class StoredFileServiceTest {
 
         storedFilesDir = File.createTempFile("test-dir", "");
         if (!storedFilesDir.delete()) {
-            throw new RuntimeException(
-                "Test couldn't delete file " + storedFilesDir.getAbsolutePath()
-            );
+            throw new RuntimeException("Test couldn't delete file " + storedFilesDir.getAbsolutePath());
         }
         if (!storedFilesDir.mkdir()) {
-            throw new RuntimeException(
-                "Test couldn't create dir " + storedFilesDir.getAbsolutePath()
-            );
+            throw new RuntimeException("Test couldn't create dir " + storedFilesDir.getAbsolutePath());
         }
 
         memberAssertionStatsDir = new File(storedFilesDir, "stats");
         if (!memberAssertionStatsDir.mkdir()) {
-            throw new RuntimeException(
-                "Test couldn't create dir " +
-                memberAssertionStatsDir.getAbsolutePath()
-            );
+            throw new RuntimeException("Test couldn't create dir " + memberAssertionStatsDir.getAbsolutePath());
         }
 
         assertionUploadsDir = new File(storedFilesDir, "uploads");
         if (!assertionUploadsDir.mkdir()) {
-            throw new RuntimeException(
-                "Test couldn't create dir " +
-                assertionUploadsDir.getAbsolutePath()
-            );
+            throw new RuntimeException("Test couldn't create dir " + assertionUploadsDir.getAbsolutePath());
         }
 
         properties = new ApplicationProperties();
-        properties.setMemberAssertionStatsDirectory(
-            memberAssertionStatsDir.getAbsolutePath()
-        );
-        properties.setAssertionsCsvUploadDirectory(
-            assertionUploadsDir.getAbsolutePath()
-        );
+        properties.setMemberAssertionStatsDirectory(memberAssertionStatsDir.getAbsolutePath());
+        properties.setAssertionsCsvUploadDirectory(assertionUploadsDir.getAbsolutePath());
         properties.setStoredFileLifespan(7);
 
-        ReflectionTestUtils.setField(
-            storedFileService,
-            "applicationProperties",
-            properties
-        );
+        ReflectionTestUtils.setField(storedFileService, "applicationProperties", properties);
     }
 
     @AfterEach
@@ -97,62 +80,41 @@ class StoredFileServiceTest {
 
     @Test
     void testStoreMemberAssertionStatsFile() throws IOException {
-        File file = storedFileService.storeMemberAssertionStatsFile(
-            "some content"
-        );
-        assertThat(file.getParent())
-            .isEqualTo(memberAssertionStatsDir.getAbsolutePath());
+        File file = storedFileService.storeMemberAssertionStatsFile("some content");
+        assertThat(file.getParent()).isEqualTo(memberAssertionStatsDir.getAbsolutePath());
         Mockito.verify(storedFileRepository).save(storedFileCaptor.capture());
         StoredFile saved = storedFileCaptor.getValue();
         assertThat(saved.getFileLocation()).isNotNull();
-        assertThat(saved.getFileLocation())
-            .startsWith(memberAssertionStatsDir.getAbsolutePath());
+        assertThat(saved.getFileLocation()).startsWith(memberAssertionStatsDir.getAbsolutePath());
         assertThat(saved.getFileLocation()).endsWith(".csv");
         assertThat(saved.getFileType()).isNotNull();
-        assertThat(saved.getFileType())
-            .isEqualTo(StoredFileService.MEMBER_ASSERTION_STATS_FILE_TYPE);
+        assertThat(saved.getFileType()).isEqualTo(StoredFileService.MEMBER_ASSERTION_STATS_FILE_TYPE);
         assertThat(saved.getDateWritten()).isNotNull();
         assertThat(saved.getRemovalDate()).isNotNull();
-        assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS))
-            .isEqualTo(saved.getDateWritten());
+        assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS)).isEqualTo(saved.getDateWritten());
     }
 
     @Test
     void testStoreAssertionsCsvFile() throws IOException {
-        InputStream inputStream = new ByteArrayInputStream(
-            "some content".getBytes()
-        );
-        storedFileService.storeAssertionsCsvFile(
-            inputStream,
-            "filename",
-            getUser()
-        );
+        InputStream inputStream = new ByteArrayInputStream("some content".getBytes());
+        storedFileService.storeAssertionsCsvFile(inputStream, "filename", getUser());
         Mockito.verify(storedFileRepository).save(storedFileCaptor.capture());
         StoredFile saved = storedFileCaptor.getValue();
         assertThat(saved.getFileLocation()).isNotNull();
-        assertThat(saved.getFileLocation())
-            .startsWith(storedFilesDir.getAbsolutePath());
+        assertThat(saved.getFileLocation()).startsWith(storedFilesDir.getAbsolutePath());
         assertThat(saved.getFileLocation()).endsWith(".csv");
         assertThat(saved.getFileType()).isNotNull();
-        assertThat(saved.getFileType())
-            .isEqualTo(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
+        assertThat(saved.getFileType()).isEqualTo(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
         assertThat(saved.getDateWritten()).isNotNull();
         assertThat(saved.getRemovalDate()).isNotNull();
-        assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS))
-            .isEqualTo(saved.getDateWritten());
+        assertThat(saved.getRemovalDate().minus(7, ChronoUnit.DAYS)).isEqualTo(saved.getDateWritten());
         assertThat(saved.getOriginalFilename()).isEqualTo("filename");
     }
 
     @Test
     void testGetUnprocessedStoredFilesByType() {
-        storedFileService.getUnprocessedStoredFilesByType(
-            StoredFileService.ASSERTIONS_CSV_FILE_TYPE
-        );
-        Mockito
-            .verify(storedFileRepository)
-            .findUnprocessedByType(
-                Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE)
-            );
+        storedFileService.getUnprocessedStoredFilesByType(StoredFileService.ASSERTIONS_CSV_FILE_TYPE);
+        Mockito.verify(storedFileRepository).findUnprocessedByType(Mockito.eq(StoredFileService.ASSERTIONS_CSV_FILE_TYPE));
     }
 
     @Test
@@ -169,4 +131,5 @@ class StoredFileServiceTest {
         user.setId("some id");
         return user;
     }
+
 }

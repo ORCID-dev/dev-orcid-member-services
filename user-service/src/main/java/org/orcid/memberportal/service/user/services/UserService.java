@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import net.glxn.qrgen.QRCode;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.aerogear.security.otp.Totp;
@@ -51,15 +51,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import net.glxn.qrgen.QRCode;
+
 /**
  * Service class for managing users.
  */
 @Service
 public class UserService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        UserService.class
-    );
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     static final int BACKUP_CODE_LENGTH = 10;
 
@@ -67,8 +67,7 @@ public class UserService {
 
     public static final int RESET_KEY_LIFESPAN_IN_SECONDS = 86400;
 
-    private static final String MFA_QR_CODE_ACCOUNT_NAME =
-        "ORCID Member Portal";
+    private static final String MFA_QR_CODE_ACCOUNT_NAME = "ORCID Member Portal";
 
     /**
      * ordered list for days activation email is resent to users who haven't
@@ -103,22 +102,10 @@ public class UserService {
         return updateUsersSalesforceId(from, to, true);
     }
 
-    private boolean updateUsersSalesforceId(
-        String from,
-        String to,
-        boolean rollback
-    ) {
+    private boolean updateUsersSalesforceId(String from, String to, boolean rollback) {
         try {
-            Pageable pageable = PageRequest.of(
-                0,
-                BATCH_SIZE,
-                new Sort(Direction.ASC, "created")
-            );
-            Page<User> page =
-                userRepository.findBySalesforceIdAndDeletedIsFalse(
-                    pageable,
-                    from
-                );
+            Pageable pageable = PageRequest.of(0, BATCH_SIZE, new Sort(Direction.ASC, "created"));
+            Page<User> page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
             while (!page.isEmpty()) {
                 page.forEach(u -> {
                     u.setSalesforceId(to);
@@ -127,42 +114,20 @@ public class UserService {
                 });
 
                 // repeat until no more left in db with old sf id
-                page =
-                    userRepository.findBySalesforceIdAndDeletedIsFalse(
-                        pageable,
-                        from
-                    );
+                page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
             }
         } catch (Exception e) {
-            LOG.error(
-                "Error bulk updating users from salesforce '" +
-                from +
-                "' to salesforce '" +
-                to +
-                "'",
-                e
-            );
+            LOG.error("Error bulk updating users from salesforce '" + from + "' to salesforce '" + to + "'", e);
             if (rollback) {
-                LOG.info(
-                    "Attempting to RESET user salesforce ids from '{}' to '{}'",
-                    new Object[] { to, from }
-                );
+                LOG.info("Attempting to RESET user salesforce ids from '{}' to '{}'", new Object[] { to, from });
                 boolean success = updateUsersSalesforceId(to, from, false);
                 if (success) {
-                    LOG.info(
-                        "Succeeded in RESETTING user salesforce ids from '{}' to '{}'",
-                        new Object[] { to, from }
-                    );
+                    LOG.info("Succeeded in RESETTING user salesforce ids from '{}' to '{}'", new Object[] { to, from });
                     return false;
                 } else {
-                    LOG.error(
-                        "Failed to reset users from '{}' to '{}'",
-                        new Object[] { to, from }
-                    );
-                    LOG.error(
-                        "Operation to update users salesforce ids from '{}' to '{}' has failed but there may be users with new sf id of '{}' in the database!",
-                        new Object[] { from, to, to }
-                    );
+                    LOG.error("Failed to reset users from '{}' to '{}'", new Object[] { to, from });
+                    LOG.error("Operation to update users salesforce ids from '{}' to '{}' has failed but there may be users with new sf id of '{}' in the database!",
+                            new Object[] { from, to, to });
                     return false;
                 }
             }
@@ -170,8 +135,7 @@ public class UserService {
         return true;
     }
 
-    public void completePasswordReset(String newPassword, String key)
-        throws ExpiredKeyException, InvalidKeyException {
+    public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
         if (!validResetKey(key)) {
             throw new InvalidKeyException();
@@ -197,15 +161,7 @@ public class UserService {
 
     public boolean expiredResetKey(String key) {
         Optional<User> resetUser = userRepository.findOneByResetKey(key);
-        return (
-            resetUser.isPresent() &&
-            !resetUser
-                .get()
-                .getResetDate()
-                .isAfter(
-                    Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS)
-                )
-        );
+        return resetUser.isPresent() && !resetUser.get().getResetDate().isAfter(Instant.now().minusSeconds(RESET_KEY_LIFESPAN_IN_SECONDS));
     }
 
     public void resendActivationEmail(String previousKey) {
@@ -214,34 +170,27 @@ public class UserService {
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-        return userRepository
-            .findOneByEmailIgnoreCase(mail)
-            .filter(User::getActivated)
-            .map(user -> {
-                user.setResetKey(RandomUtil.generateResetKey());
-                user.setResetDate(Instant.now());
-                userRepository.save(user);
-                return user;
-            });
+        return userRepository.findOneByEmailIgnoreCase(mail).filter(User::getActivated).map(user -> {
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(Instant.now());
+            userRepository.save(user);
+            return user;
+        });
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        userRepository
-            .findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase())
-            .ifPresent(existingUser -> {
-                boolean removed = removeNonActivatedUser(existingUser);
-                if (!removed) {
-                    throw new LoginAlreadyUsedException();
-                }
-            });
-        userRepository
-            .findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase())
-            .ifPresent(existingUser -> {
-                boolean removed = removeNonActivatedUser(existingUser);
-                if (!removed) {
-                    throw new EmailAlreadyUsedException();
-                }
-            });
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new LoginAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         // new user gets initially a generated password
@@ -296,13 +245,7 @@ public class UserService {
      * @param imageUrl
      *            image URL of user.
      */
-    public void updateAccount(
-        String firstName,
-        String lastName,
-        String email,
-        String langKey,
-        String imageUrl
-    ) {
+    public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
         User user = getCurrentUser();
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -320,55 +263,38 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(
-            userDTO.getEmail()
-        );
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (!existingUser.isPresent()) {
             throw new EmailNotFoundException();
         }
 
         checkUpdateConstraints(existingUser, userDTO);
         User user = existingUser.get();
-        boolean previouslyOwner = user.getMainContact() != null
-            ? user.getMainContact()
-            : false;
-        boolean owner = userDTO.getMainContact() != null
-            ? userDTO.getMainContact()
-            : false;
+        boolean previouslyOwner = user.getMainContact() != null ? user.getMainContact() : false;
+        boolean owner = userDTO.getMainContact() != null ? userDTO.getMainContact() : false;
 
         if (owner && !previouslyOwner) {
-            List<User> owners =
-                userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(
-                    userDTO.getSalesforceId()
-                );
+            List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
             for (User prevOwner : owners) {
                 if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
                     removeOwnershipFromUser(prevOwner.getEmail());
                 }
             }
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+
         }
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setImageUrl(userDTO.getImageUrl());
         user.setMainContact(userDTO.getMainContact());
         user.setSalesforceId(userDTO.getSalesforceId());
-        user.setMemberName(
-            memberService.getMemberNameBySalesforce(userDTO.getSalesforceId())
-        );
+        user.setMemberName(memberService.getMemberNameBySalesforce(userDTO.getSalesforceId()));
         user.setLoginAs(userDTO.getLoginAs());
-        user.setLangKey(
-            userDTO.getLangKey() != null
-                ? userDTO.getLangKey()
-                : user.getLangKey()
-        );
+        user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
 
-        if (
-            user.getSalesforceId() != null &&
-            userDTO.getSalesforceId() != null &&
-            !user.getSalesforceId().equals(userDTO.getSalesforceId())
-        ) {
+
+        if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
             user.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
             user.setLastModifiedDate(Instant.now());
@@ -376,44 +302,28 @@ public class UserService {
         userRepository.save(user);
 
         if (owner && !previouslyOwner) {
-            String member = memberService.getMemberNameBySalesforce(
-                user.getSalesforceId()
-            );
+            String member = memberService.getMemberNameBySalesforce(user.getSalesforceId());
             mailService.sendOrganizationOwnerChangedMail(user, member);
         }
 
         return Optional.of(userMapper.toUserDTO(user));
     }
 
-    private void checkUpdateConstraints(
-        Optional<User> existingUser,
-        UserDTO userDTO
-    ) {
-        if (
-            existingUser.isPresent() &&
-            (!existingUser.get().getId().equals(userDTO.getId()))
-        ) {
+    private void checkUpdateConstraints(Optional<User> existingUser, UserDTO userDTO) {
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        existingUser =
-            userRepository.findOneByEmailIgnoreCase(
-                userDTO.getEmail().toLowerCase()
-            );
-        if (
-            existingUser.isPresent() &&
-            (!existingUser.get().getId().equals(userDTO.getId()))
-        ) {
+        existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
     }
 
     public void deleteUser(String login) {
-        userRepository
-            .findOneByEmailIgnoreCase(login)
-            .ifPresent(user -> {
-                userRepository.delete(user);
-                LOG.debug("Deleted User: {}", user);
-            });
+        userRepository.findOneByEmailIgnoreCase(login).ifPresent(user -> {
+            userRepository.delete(user);
+            LOG.debug("Deleted User: {}", user);
+        });
     }
 
     public void clearUser(String id) {
@@ -438,55 +348,35 @@ public class UserService {
         }
     }
 
-    public void changePassword(
-        String currentClearTextPassword,
-        String newPassword
-    ) {
-        SecurityUtils
-            .getCurrentUserLogin()
-            .flatMap(userRepository::findOneByEmailIgnoreCase)
-            .ifPresent(user -> {
-                String currentEncryptedPassword = user.getPassword();
-                if (
-                    !passwordEncoder.matches(
-                        currentClearTextPassword,
-                        currentEncryptedPassword
-                    )
-                ) {
-                    throw new InvalidPasswordException();
-                }
-                String encryptedPassword = passwordEncoder.encode(newPassword);
-                user.setPassword(encryptedPassword);
-                userRepository.save(user);
-                LOG.debug("Changed password for User: {}", user);
-            });
+    public void changePassword(String currentClearTextPassword, String newPassword) {
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByEmailIgnoreCase).ifPresent(user -> {
+            String currentEncryptedPassword = user.getPassword();
+            if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                throw new InvalidPasswordException();
+            }
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encryptedPassword);
+            userRepository.save(user);
+            LOG.debug("Changed password for User: {}", user);
+        });
     }
 
     public Optional<User> sendActivationEmail(String mail) {
-        return userRepository
-            .findOneByEmailIgnoreCase(mail)
-            .map(user -> {
-                sendActivationEmail(user);
-                return user;
-            });
+        return userRepository.findOneByEmailIgnoreCase(mail).map(user -> {
+            sendActivationEmail(user);
+            return user;
+        });
     }
 
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository
-            .findByDeletedFalse(pageable)
-            .map(u -> userMapper.toUserDTO(u));
+        return userRepository.findByDeletedFalse(pageable).map(u -> userMapper.toUserDTO(u));
     }
 
     public Page<UserDTO> getAllManagedUsers(Pageable pageable, String filter) {
         return userRepository
-            .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
-                filter,
-                filter,
-                filter,
-                filter,
-                pageable
-            )
-            .map(u -> userMapper.toUserDTO(u));
+                .findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(
+                        filter, filter, filter, filter, pageable)
+                .map(u -> userMapper.toUserDTO(u));
     }
 
     public Optional<User> getUserByLogin(String email) {
@@ -500,11 +390,7 @@ public class UserService {
     public void removeOwnershipFromUser(String id) {
         Optional<User> existing = getUserByLogin(id);
         if (!existing.isPresent()) {
-            throw new BadRequestAlertException(
-                "User not present " + id,
-                "user",
-                null
-            );
+            throw new BadRequestAlertException("User not present " + id, "user", null);
         }
 
         User user = existing.get();
@@ -519,14 +405,10 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
-        userRepository
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-                Instant.now().minus(3, ChronoUnit.DAYS)
-            )
-            .forEach(user -> {
-                LOG.debug("Deleting not activated user {}", user.getEmail());
-                userRepository.delete(user);
-            });
+        userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS)).forEach(user -> {
+            LOG.debug("Deleting not activated user {}", user.getEmail());
+            userRepository.delete(user);
+        });
     }
 
     /**
@@ -534,51 +416,31 @@ public class UserService {
      */
     @Scheduled(initialDelay = 300000l, fixedDelay = 300000l)
     public void updateMemberNames() {
-        Page<User> page = userRepository.findByMemberName(
-            PageRequest.of(0, 10),
-            null
-        );
-        page
-            .getContent()
-            .stream()
-            .filter(u -> !StringUtils.isBlank(u.getSalesforceId()))
-            .forEach(u -> {
-                LOG.info(
-                    "Populating member name field for user {}",
-                    u.getEmail()
-                );
-                u.setMemberName(
-                    memberService.getMemberNameBySalesforce(u.getSalesforceId())
-                );
-                userRepository.save(u);
-            });
+        Page<User> page = userRepository.findByMemberName(PageRequest.of(0, 10), null);
+        page.getContent().stream().filter(u -> !StringUtils.isBlank(u.getSalesforceId())).forEach(u -> {
+            LOG.info("Populating member name field for user {}", u.getEmail());
+            u.setMemberName(memberService.getMemberNameBySalesforce(u.getSalesforceId()));
+            userRepository.save(u);
+        });
     }
 
     public UserUpload uploadUserCSV(InputStream inputStream, User currentUser) {
         UserUpload usersUpload = null;
         try {
-            usersUpload =
-                usersUploadReader.readUsersUpload(inputStream, currentUser);
+            usersUpload = usersUploadReader.readUsersUpload(inputStream, currentUser);
         } catch (IOException e) {
             LOG.warn("Error reading user upload", e);
             throw new RuntimeException(e);
         }
 
-        usersUpload
-            .getUserDTOs()
-            .forEach(userDTO -> {
-                String salesforceId = userDTO.getSalesforceId();
-                Optional<User> existing = getUserByLogin(userDTO.getEmail());
-                if (
-                    !existing.isPresent() &&
-                    !userRepository
-                        .findOneBySalesforceIdAndMainContactIsTrue(salesforceId)
-                        .isPresent()
-                ) {
-                    userDTO.setMainContact(true);
-                    createUser(userDTO);
-                }
-            });
+        usersUpload.getUserDTOs().forEach(userDTO -> {
+            String salesforceId = userDTO.getSalesforceId();
+            Optional<User> existing = getUserByLogin(userDTO.getEmail());
+            if (!existing.isPresent() && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
+                userDTO.setMainContact(true);
+                createUser(userDTO);
+            }
+        });
         return usersUpload;
     }
 
@@ -587,67 +449,33 @@ public class UserService {
     }
 
     public Boolean memberSuperadminEnabled(String salesforceId) {
-        return memberService.memberExistsWithSalesforceIdAndSuperadminEnabled(
-            salesforceId
-        );
+        return memberService.memberExistsWithSalesforceIdAndSuperadminEnabled(salesforceId);
     }
 
     public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
-        List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(
-            salesforceId
-        );
-        return users
-            .stream()
-            .map(u -> userMapper.toUserDTO(u))
-            .collect(Collectors.toList());
+        List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(salesforceId);
+        return users.stream().map(u -> userMapper.toUserDTO(u)).collect(Collectors.toList());
     }
 
-    public Page<UserDTO> getAllUsersBySalesforceId(
-        Pageable pageable,
-        String salesforceId
-    ) {
-        return userRepository
-            .findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId)
-            .map(u -> userMapper.toUserDTO(u));
+    public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
+        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(u -> userMapper.toUserDTO(u));
     }
 
-    public Page<UserDTO> getAllUsersBySalesforceId(
-        Pageable pageable,
-        String salesforceId,
-        String filter
-    ) {
+    public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId, String filter) {
         return userRepository
-            .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
-                pageable,
-                salesforceId,
-                filter,
-                salesforceId,
-                filter,
-                salesforceId,
-                filter,
-                salesforceId,
-                filter
-            )
-            .map(u -> userMapper.toUserDTO(u));
+                .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
+                        pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter)
+                .map(u -> userMapper.toUserDTO(u));
     }
 
     public void sendActivationReminders() {
-        List<User> users =
-            userRepository.findAllByActivatedIsFalseAndDeletedIsFalse();
+        List<User> users = userRepository.findAllByActivatedIsFalseAndDeletedIsFalse();
         users.forEach(u -> {
             List<ActivationReminder> remindersSent = u.getActivationReminders();
             for (int daysElapsed : ACTIVATION_REMINDER_DAYS) {
-                LocalDateTime userCreated = LocalDateTime.ofInstant(
-                    u.getCreatedDate(),
-                    ZoneId.systemDefault()
-                );
+                LocalDateTime userCreated = LocalDateTime.ofInstant(u.getCreatedDate(), ZoneId.systemDefault());
                 if (reminderDue(userCreated, daysElapsed)) {
-                    if (
-                        !reminderSentForNumDaysElapsed(
-                            remindersSent,
-                            daysElapsed
-                        )
-                    ) {
+                    if (!reminderSentForNumDaysElapsed(remindersSent, daysElapsed)) {
                         sendActivationEmail(u);
                         logReminderSent(daysElapsed, u);
                     }
@@ -660,23 +488,15 @@ public class UserService {
         if (u.getActivationReminders() == null) {
             u.setActivationReminders(new ArrayList<>());
         }
-        u
-            .getActivationReminders()
-            .add(new ActivationReminder(daysElapsed, Instant.now()));
+        u.getActivationReminders().add(new ActivationReminder(daysElapsed, Instant.now()));
         userRepository.save(u);
     }
 
     private boolean reminderDue(LocalDateTime userCreated, int daysElapsed) {
-        return (
-            userCreated.until(LocalDateTime.now(), ChronoUnit.DAYS) >=
-            daysElapsed
-        );
+        return userCreated.until(LocalDateTime.now(), ChronoUnit.DAYS) >= daysElapsed;
     }
 
-    private boolean reminderSentForNumDaysElapsed(
-        List<ActivationReminder> remindersSent,
-        int daysElapsed
-    ) {
+    private boolean reminderSentForNumDaysElapsed(List<ActivationReminder> remindersSent, int daysElapsed) {
         if (remindersSent != null) {
             for (ActivationReminder reminder : remindersSent) {
                 if (reminder.getDaysElapsed() == daysElapsed) {
@@ -696,10 +516,7 @@ public class UserService {
     }
 
     public boolean hasOwnerForSalesforceId(String salesforceId) {
-        List<User> owners =
-            userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(
-                salesforceId
-            );
+        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
         if (owners.isEmpty()) {
             return false;
         }
@@ -713,35 +530,22 @@ public class UserService {
      * @return
      */
     public User getCurrentUser() {
-        String login = SecurityUtils
-            .getCurrentUserLogin()
-            .orElseThrow(() ->
-                new AccountResourceException("Current user login not found")
-            );
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> user = userRepository.findOneByEmailIgnoreCase(login);
 
         if (StringUtils.isEmpty(user.get().getLoginAs())) {
             return user.get();
         }
 
-        return userRepository
-            .findOneByEmailIgnoreCase(user.get().getLoginAs())
-            .get();
+        return userRepository.findOneByEmailIgnoreCase(user.get().getLoginAs()).get();
     }
 
     public MfaSetup getMfaSetup() {
         String secret = Base32.random();
-        String qrCode = String.format(
-            "otpauth://totp/%s?secret=%s&issuer=%s",
-            SecurityUtils.getCurrentUserLogin().get(),
-            secret,
-            MFA_QR_CODE_ACCOUNT_NAME
-        );
+        String qrCode = String.format("otpauth://totp/%s?secret=%s&issuer=%s", SecurityUtils.getCurrentUserLogin().get(), secret, MFA_QR_CODE_ACCOUNT_NAME);
         MfaSetup mfaSetup = new MfaSetup();
         mfaSetup.setSecret(secret);
-        mfaSetup.setQrCode(
-            QRCode.from(qrCode).withSize(250, 250).stream().toByteArray()
-        );
+        mfaSetup.setQrCode(QRCode.from(qrCode).withSize(250, 250).stream().toByteArray());
         return mfaSetup;
     }
 
@@ -775,11 +579,7 @@ public class UserService {
 
     private boolean validMfaBackupCode(User user, String code) {
         boolean validBackupCode = false;
-        List<String> filteredBackupCodes = user
-            .getMfaBackupCodes()
-            .stream()
-            .filter(c -> !passwordEncoder.matches(code, c))
-            .collect(Collectors.toList());
+        List<String> filteredBackupCodes = user.getMfaBackupCodes().stream().filter(c -> !passwordEncoder.matches(code, c)).collect(Collectors.toList());
         if (filteredBackupCodes.size() == user.getMfaBackupCodes().size() - 1) {
             // match found and removed
             validBackupCode = true;
@@ -820,18 +620,13 @@ public class UserService {
     }
 
     private List<String> hashBackupCodes(List<String> backupCodes) {
-        return backupCodes
-            .stream()
-            .map(passwordEncoder::encode)
-            .collect(Collectors.toList());
+        return backupCodes.stream().map(passwordEncoder::encode).collect(Collectors.toList());
     }
 
     private List<String> generateBackupCodes() {
         List<String> backupCodes = new ArrayList<>();
         for (int i = 0; i < BACKUP_CODE_BATCH_SIZE; i++) {
-            backupCodes.add(
-                RandomStringUtils.random(BACKUP_CODE_LENGTH, true, true)
-            );
+            backupCodes.add(RandomStringUtils.random(BACKUP_CODE_LENGTH, true, true));
         }
         return backupCodes;
     }
@@ -844,4 +639,5 @@ public class UserService {
             return false;
         }
     }
+
 }

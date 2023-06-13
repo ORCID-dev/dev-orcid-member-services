@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
@@ -21,9 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrcidRecordService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        OrcidRecordService.class
-    );
+    private static final Logger LOG = LoggerFactory.getLogger(OrcidRecordService.class);
 
     @Autowired
     private OrcidRecordRepository orcidRecordRepository;
@@ -41,18 +40,10 @@ public class OrcidRecordService {
         return orcidRecordRepository.findOneByEmail(email);
     }
 
-    public OrcidRecord createOrcidRecord(
-        String email,
-        Instant now,
-        String salesForceId
-    ) {
+    public OrcidRecord createOrcidRecord(String email, Instant now, String salesForceId) {
         Optional<OrcidRecord> optional = findOneByEmail(email);
         if (optional.isPresent()) {
-            throw new BadRequestAlertException(
-                "An Orcid Record with the email: " + email + " already exists.",
-                "orcidRecord",
-                "orcidRecordEmailUsed"
-            );
+            throw new BadRequestAlertException("An Orcid Record with the email: " + email + " already exists.", "orcidRecord", "orcidRecordEmailUsed");
         }
 
         OrcidRecord or = new OrcidRecord();
@@ -80,26 +71,12 @@ public class OrcidRecordService {
         orcidRecordRepository.delete(orcidRecord);
     }
 
-    public void storeIdToken(
-        String emailInStatus,
-        String idToken,
-        String orcidIdInJWT,
-        String salesforceId
-    ) {
-        OrcidRecord orcidRecord = orcidRecordRepository
-            .findOneByEmail(emailInStatus)
-            .orElseThrow(() ->
-                new IllegalArgumentException(
-                    "Unable to find userInfo for email: " + emailInStatus
-                )
-            );
+    public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT, String salesforceId) {
+        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
+                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
 
         OrcidToken newToken = new OrcidToken(salesforceId, idToken);
-        List<OrcidToken> tokens = orcidRecord
-            .getTokens()
-            .stream()
-            .filter(t -> !salesforceId.equals(t.getSalesforceId()))
-            .collect(Collectors.toList());
+        List<OrcidToken> tokens = orcidRecord.getTokens().stream().filter(t -> !salesforceId.equals(t.getSalesforceId())).collect(Collectors.toList());
         tokens.add(newToken);
         orcidRecord.setTokens(tokens);
         orcidRecord.setModified(Instant.now());
@@ -108,17 +85,9 @@ public class OrcidRecordService {
         orcidRecordRepository.save(orcidRecord);
     }
 
-    public void storeUserDeniedAccess(
-        String emailInStatus,
-        String salesforceId
-    ) {
-        OrcidRecord orcidRecord = orcidRecordRepository
-            .findOneByEmail(emailInStatus)
-            .orElseThrow(() ->
-                new IllegalArgumentException(
-                    "Unable to find userInfo for email: " + emailInStatus
-                )
-            );
+    public void storeUserDeniedAccess(String emailInStatus, String salesforceId) {
+        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
+                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
         OrcidToken deniedToken = new OrcidToken(salesforceId, null);
@@ -145,27 +114,17 @@ public class OrcidRecordService {
     }
 
     public String generateLinkForEmail(String email) {
-        String salesforceId =
-            assertionsUserService.getLoggedInUserSalesforceId();
+        String salesforceId = assertionsUserService.getLoggedInUserSalesforceId();
         return generateLinkForEmailAndSalesforceId(email, salesforceId);
     }
 
-    public String generateLinkForEmailAndSalesforceId(
-        String email,
-        String salesforceId
-    ) {
+    public String generateLinkForEmailAndSalesforceId(String email, String salesforceId) {
         String landingPageUrl = applicationProperties.getLandingPageUrl();
-        Optional<OrcidRecord> record = orcidRecordRepository.findOneByEmail(
-            email
-        );
+        Optional<OrcidRecord> record = orcidRecordRepository.findOneByEmail(email);
         if (!record.isPresent()) {
             createOrcidRecord(email, Instant.now(), salesforceId);
         }
-        return (
-            landingPageUrl +
-            "?state=" +
-            encryptUtil.encrypt(salesforceId + "&&" + email)
-        );
+        return landingPageUrl + "?state=" + encryptUtil.encrypt(salesforceId + "&&" + email);
     }
 
     public OrcidRecord updateOrcidRecord(OrcidRecord orcidRecord) {
@@ -173,18 +132,9 @@ public class OrcidRecordService {
     }
 
     public void revokeIdToken(String email, String salesForceId) {
-        LOG.info(
-            "Revoking id token for email {}, salesforce id {}",
-            email,
-            salesForceId
-        );
-        OrcidRecord orcidRecord = orcidRecordRepository
-            .findOneByEmail(email)
-            .orElseThrow(() ->
-                new IllegalArgumentException(
-                    "Unable to find userInfo for email: " + email
-                )
-            );
+        LOG.info("Revoking id token for email {}, salesforce id {}", email, salesForceId);
+        OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + email));
 
         Instant now = Instant.now();
         List<OrcidToken> tokens = orcidRecord.getTokens();
@@ -208,22 +158,14 @@ public class OrcidRecordService {
         }
     }
 
-    public void deleteOrcidRecordTokenByEmailAndSalesforceId(
-        String email,
-        String salesforceId
-    ) {
+    public void deleteOrcidRecordTokenByEmailAndSalesforceId(String email, String salesforceId) {
         Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
         if (orcidRecordOptional.isPresent()) {
             OrcidRecord orcidRecord = orcidRecordOptional.get();
             if (orcidRecord.getTokens() != null) {
                 List<OrcidToken> updated = new ArrayList<>();
                 for (OrcidToken token : orcidRecord.getTokens()) {
-                    if (
-                        !StringUtils.equals(
-                            token.getSalesforceId(),
-                            salesforceId
-                        )
-                    ) {
+                    if (!StringUtils.equals(token.getSalesforceId(), salesforceId)) {
                         updated.add(token);
                     }
                 }
@@ -231,26 +173,19 @@ public class OrcidRecordService {
             }
             orcidRecordRepository.save(orcidRecord);
 
-            if (
-                orcidRecord.getTokens() == null ||
-                orcidRecord.getTokens().isEmpty()
-            ) {
+            if (orcidRecord.getTokens() == null || orcidRecord.getTokens().isEmpty()) {
                 deleteOrcidRecordByEmail(email);
             }
         }
     }
 
-    public boolean userHasGrantedOrDeniedPermission(
-        String email,
-        String salesforceId
-    ) {
+    public boolean userHasGrantedOrDeniedPermission(String email, String salesforceId) {
         Optional<OrcidRecord> orcidRecordOptional = findOneByEmail(email);
         if (orcidRecordOptional.isEmpty()) {
             return false;
         }
 
-        return !StringUtils.isBlank(
-            orcidRecordOptional.get().getToken(salesforceId, true)
-        );
+        return !StringUtils.isBlank(orcidRecordOptional.get().getToken(salesforceId, true));
     }
+
 }

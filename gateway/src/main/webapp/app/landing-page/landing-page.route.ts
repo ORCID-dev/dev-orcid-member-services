@@ -1,12 +1,12 @@
-import { Route } from '@angular/router'
+import { Route } from '@angular/router';
 
-import { LandingPageComponent } from './'
+import { LandingPageComponent } from './';
 
 export const LANDING_PAGE_ROUTE: Route = {
   path: 'landing-page',
   component: LandingPageComponent,
   data: {
     authorities: [],
-    pageTitle: 'landingPage.title.string',
-  },
-}
+    pageTitle: 'landingPage.title.string'
+  }
+};

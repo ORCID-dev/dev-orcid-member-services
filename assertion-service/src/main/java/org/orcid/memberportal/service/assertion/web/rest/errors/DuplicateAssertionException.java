@@ -7,4 +7,5 @@ public class DuplicateAssertionException extends RuntimeException {
     public DuplicateAssertionException(String message) {
         super(message);
     }
+
 }

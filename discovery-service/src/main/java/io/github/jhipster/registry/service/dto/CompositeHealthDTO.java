@@ -2,6 +2,7 @@ package io.github.jhipster.registry.service.dto;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.boot.actuate.health.Status;
 
 /**
@@ -38,4 +39,5 @@ public final class CompositeHealthDTO {
     public void setComponents(Map<String, Object> components) {
         this.components = components;
     }
+
 }

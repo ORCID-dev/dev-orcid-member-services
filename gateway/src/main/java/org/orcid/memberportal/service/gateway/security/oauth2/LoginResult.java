@@ -23,4 +23,5 @@ public class LoginResult {
     public void setOauth2AccessToken(OAuth2AccessToken oauth2AccessToken) {
         this.oauth2AccessToken = oauth2AccessToken;
     }
+
 }

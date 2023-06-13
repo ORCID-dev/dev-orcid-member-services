@@ -2,6 +2,7 @@ package io.github.jhipster.registry.utils;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+
 import java.io.Serializable;
 
 public abstract class TestUtils {

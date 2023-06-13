@@ -1,8 +1,10 @@
 package org.orcid.memberportal.service.gateway.config;
 
 import io.github.jhipster.config.JHipsterConstants;
-import java.util.*;
+
 import org.springframework.boot.SpringApplication;
+
+import java.util.*;
 
 /**
  * Utility class to load a Spring profile to be used as default when there is no
@@ -12,10 +14,10 @@ import org.springframework.boot.SpringApplication;
  */
 public final class DefaultProfileUtil {
 
-    private static final String SPRING_PROFILE_DEFAULT =
-        "spring.profiles.default";
+    private static final String SPRING_PROFILE_DEFAULT = "spring.profiles.default";
 
-    private DefaultProfileUtil() {}
+    private DefaultProfileUtil() {
+    }
 
     /**
      * Set a default to use when no profile is configured.
@@ -30,10 +32,7 @@ public final class DefaultProfileUtil {
          * cannot be set in the application.yml file. See
          * https://github.com/spring-projects/spring-boot/issues/1219
          */
-        defProperties.put(
-            SPRING_PROFILE_DEFAULT,
-            JHipsterConstants.SPRING_PROFILE_DEVELOPMENT
-        );
+        defProperties.put(SPRING_PROFILE_DEFAULT, JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
         app.setDefaultProperties(defProperties);
     }
 }

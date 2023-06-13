@@ -15,4 +15,5 @@ public class VersionDTO {
     public void setVersion(String version) {
         this.version = version;
     }
+
 }

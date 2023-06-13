@@ -1,9 +1,11 @@
 package org.orcid.memberportal.service.member.client;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+
 import org.orcid.memberportal.service.member.client.model.ConsortiumMember;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MemberDetailsResponseEntity {
 
@@ -28,4 +30,5 @@ public class MemberDetailsResponseEntity {
     public void setConsortiumMembers(List<ConsortiumMember> consortiumMembers) {
         this.consortiumMembers = consortiumMembers;
     }
+
 }

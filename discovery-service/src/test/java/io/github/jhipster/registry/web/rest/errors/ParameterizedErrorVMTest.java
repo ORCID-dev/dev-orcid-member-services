@@ -1,11 +1,12 @@
 package io.github.jhipster.registry.web.rest.errors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.github.jhipster.registry.utils.TestUtils;
+import org.junit.jupiter.api.Test;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParameterizedErrorVMTest {
 
@@ -33,9 +34,7 @@ public class ParameterizedErrorVMTest {
 
     @Test
     public void isSerializable() {
-        assertThat(
-            TestUtils.isSerializable(new ParameterizedErrorVM(null, null))
-        )
-            .isTrue();
+        assertThat(TestUtils.isSerializable(new ParameterizedErrorVM(null, null))).isTrue();
     }
+
 }

@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.member.client;
 
 import java.io.IOException;
 import java.util.Locale;
+
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
 import org.apache.http.HttpEntity;
@@ -11,7 +12,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpParams;
 
-public class MockCloseableHttpResponse implements CloseableHttpResponse {
+public class MockCloseableHttpResponse implements CloseableHttpResponse  {
 
     private HttpEntity entity;
 
@@ -178,4 +179,5 @@ public class MockCloseableHttpResponse implements CloseableHttpResponse {
         // TODO Auto-generated method stub
 
     }
+
 }

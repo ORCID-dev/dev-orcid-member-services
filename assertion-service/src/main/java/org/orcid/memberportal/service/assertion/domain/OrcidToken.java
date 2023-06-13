@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.assertion.domain;
 
 import java.time.Instant;
+
 import org.springframework.data.mongodb.core.mapping.Field;
 
 public class OrcidToken {
@@ -45,4 +46,5 @@ public class OrcidToken {
     public void setRevokedDate(Instant revokedDate) {
         this.revokedDate = revokedDate;
     }
+
 }

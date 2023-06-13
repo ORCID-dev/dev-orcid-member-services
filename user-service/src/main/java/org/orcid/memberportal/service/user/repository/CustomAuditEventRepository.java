@@ -1,7 +1,5 @@
 package org.orcid.memberportal.service.user.repository;
 
-import java.time.Instant;
-import java.util.*;
 import org.orcid.memberportal.service.user.config.Constants;
 import org.orcid.memberportal.service.user.config.audit.AuditEventConverter;
 import org.orcid.memberportal.service.user.domain.PersistentAuditEvent;
@@ -12,6 +10,9 @@ import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.*;
 
 /**
  * An implementation of Spring Boot's {@link AuditEventRepository}.
@@ -32,39 +33,29 @@ public class CustomAuditEventRepository implements AuditEventRepository {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public CustomAuditEventRepository(
-        PersistenceAuditEventRepository persistenceAuditEventRepository,
-        AuditEventConverter auditEventConverter
-    ) {
+    public CustomAuditEventRepository(PersistenceAuditEventRepository persistenceAuditEventRepository, AuditEventConverter auditEventConverter) {
+
         this.persistenceAuditEventRepository = persistenceAuditEventRepository;
         this.auditEventConverter = auditEventConverter;
     }
 
     @Override
     public List<AuditEvent> find(String principal, Instant after, String type) {
-        Iterable<PersistentAuditEvent> persistentAuditEvents =
-            persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfterAndAuditEventType(
-                principal,
-                after,
-                type
-            );
+        Iterable<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfterAndAuditEventType(principal, after,
+                type);
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void add(AuditEvent event) {
-        if (
-            !AUTHORIZATION_FAILURE.equals(event.getType()) &&
-            !Constants.ANONYMOUS_USER.equals(event.getPrincipal())
-        ) {
-            PersistentAuditEvent persistentAuditEvent =
-                new PersistentAuditEvent();
+        if (!AUTHORIZATION_FAILURE.equals(event.getType()) && !Constants.ANONYMOUS_USER.equals(event.getPrincipal())) {
+
+            PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
             persistentAuditEvent.setPrincipal(event.getPrincipal());
             persistentAuditEvent.setAuditEventType(event.getType());
             persistentAuditEvent.setAuditEventDate(event.getTimestamp());
-            Map<String, String> eventData =
-                auditEventConverter.convertDataToStrings(event.getData());
+            Map<String, String> eventData = auditEventConverter.convertDataToStrings(event.getData());
             persistentAuditEvent.setData(truncate(eventData));
             persistenceAuditEventRepository.save(persistentAuditEvent);
         }
@@ -82,14 +73,9 @@ public class CustomAuditEventRepository implements AuditEventRepository {
                 if (value != null) {
                     int length = value.length();
                     if (length > EVENT_DATA_COLUMN_MAX_LENGTH) {
-                        value =
-                            value.substring(0, EVENT_DATA_COLUMN_MAX_LENGTH);
-                        log.warn(
-                            "Event data for {} too long ({}) has been truncated to {}. Consider increasing column width.",
-                            entry.getKey(),
-                            length,
-                            EVENT_DATA_COLUMN_MAX_LENGTH
-                        );
+                        value = value.substring(0, EVENT_DATA_COLUMN_MAX_LENGTH);
+                        log.warn("Event data for {} too long ({}) has been truncated to {}. Consider increasing column width.", entry.getKey(), length,
+                                EVENT_DATA_COLUMN_MAX_LENGTH);
                     }
                 }
                 results.put(entry.getKey(), value);

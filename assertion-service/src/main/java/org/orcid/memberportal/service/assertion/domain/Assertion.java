@@ -3,8 +3,10 @@ package org.orcid.memberportal.service.assertion.domain;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Locale;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.springframework.data.annotation.Id;
@@ -15,7 +17,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "assertion")
 public class Assertion implements Serializable {
-
     private static final long serialVersionUID = 1845971448687999429L;
 
     @Id
@@ -484,198 +485,213 @@ public class Assertion implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result =
-            prime *
-            result +
-            ((addedToORCID == null) ? 0 : addedToORCID.hashCode());
-        result =
-            prime *
-            result +
-            ((affiliationSection == null) ? 0 : affiliationSection.hashCode());
+        result = prime * result + ((addedToORCID == null) ? 0 : addedToORCID.hashCode());
+        result = prime * result + ((affiliationSection == null) ? 0 : affiliationSection.hashCode());
         result = prime * result + ((created == null) ? 0 : created.hashCode());
-        result =
-            prime *
-            result +
-            ((departmentName == null) ? 0 : departmentName.hashCode());
-        result =
-            prime *
-            result +
-            ((disambiguatedOrgId == null) ? 0 : disambiguatedOrgId.hashCode());
-        result =
-            prime *
-            result +
-            (
-                (disambiguationSource == null)
-                    ? 0
-                    : disambiguationSource.hashCode()
-            );
+        result = prime * result + ((departmentName == null) ? 0 : departmentName.hashCode());
+        result = prime * result + ((disambiguatedOrgId == null) ? 0 : disambiguatedOrgId.hashCode());
+        result = prime * result + ((disambiguationSource == null) ? 0 : disambiguationSource.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((endDay == null) ? 0 : endDay.hashCode());
-        result =
-            prime * result + ((endMonth == null) ? 0 : endMonth.hashCode());
+        result = prime * result + ((endMonth == null) ? 0 : endMonth.hashCode());
         result = prime * result + ((endYear == null) ? 0 : endYear.hashCode());
-        result =
-            prime * result + ((externalId == null) ? 0 : externalId.hashCode());
-        result =
-            prime *
-            result +
-            ((externalIdType == null) ? 0 : externalIdType.hashCode());
-        result =
-            prime *
-            result +
-            ((externalIdUrl == null) ? 0 : externalIdUrl.hashCode());
+        result = prime * result + ((externalId == null) ? 0 : externalId.hashCode());
+        result = prime * result + ((externalIdType == null) ? 0 : externalIdType.hashCode());
+        result = prime * result + ((externalIdUrl == null) ? 0 : externalIdUrl.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result =
-            prime * result + ((modified == null) ? 0 : modified.hashCode());
-        result =
-            prime *
-            result +
-            ((lastSyncAttempt == null) ? 0 : lastSyncAttempt.hashCode());
-        result =
-            prime * result + ((orcidError == null) ? 0 : orcidError.hashCode());
+        result = prime * result + ((modified == null) ? 0 : modified.hashCode());
+        result = prime * result + ((lastSyncAttempt == null) ? 0 : lastSyncAttempt.hashCode());
+        result = prime * result + ((orcidError == null) ? 0 : orcidError.hashCode());
         result = prime * result + ((orgCity == null) ? 0 : orgCity.hashCode());
-        result =
-            prime * result + ((orgCountry == null) ? 0 : orgCountry.hashCode());
+        result = prime * result + ((orgCountry == null) ? 0 : orgCountry.hashCode());
         result = prime * result + ((orgName == null) ? 0 : orgName.hashCode());
-        result =
-            prime * result + ((orgRegion == null) ? 0 : orgRegion.hashCode());
+        result = prime * result + ((orgRegion == null) ? 0 : orgRegion.hashCode());
         result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
         result = prime * result + ((putCode == null) ? 0 : putCode.hashCode());
-        result =
-            prime * result + ((roleTitle == null) ? 0 : roleTitle.hashCode());
-        result =
-            prime *
-            result +
-            ((salesforceId == null) ? 0 : salesforceId.hashCode());
-        result =
-            prime * result + ((startDay == null) ? 0 : startDay.hashCode());
-        result =
-            prime * result + ((startMonth == null) ? 0 : startMonth.hashCode());
-        result =
-            prime * result + ((startYear == null) ? 0 : startYear.hashCode());
+        result = prime * result + ((roleTitle == null) ? 0 : roleTitle.hashCode());
+        result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
+        result = prime * result + ((startDay == null) ? 0 : startDay.hashCode());
+        result = prime * result + ((startMonth == null) ? 0 : startMonth.hashCode());
+        result = prime * result + ((startYear == null) ? 0 : startYear.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + ((url == null) ? 0 : url.hashCode());
-        result =
-            prime *
-            result +
-            ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
+        result = prime * result + ((updatedInORCID == null) ? 0 : updatedInORCID.hashCode());
         result = prime * result + ((orcidId == null) ? 0 : orcidId.hashCode());
-        result =
-            prime *
-            result +
-            ((notificationSent == null) ? 0 : notificationSent.hashCode());
+        result = prime * result + ((notificationSent == null) ? 0 : notificationSent.hashCode());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
         Assertion other = (Assertion) obj;
         if (addedToORCID == null) {
-            if (other.addedToORCID != null) return false;
-        } else if (!addedToORCID.equals(other.addedToORCID)) return false;
-        if (affiliationSection != other.affiliationSection) return false;
+            if (other.addedToORCID != null)
+                return false;
+        } else if (!addedToORCID.equals(other.addedToORCID))
+            return false;
+        if (affiliationSection != other.affiliationSection)
+            return false;
         if (created == null) {
-            if (other.created != null) return false;
-        } else if (!created.equals(other.created)) return false;
+            if (other.created != null)
+                return false;
+        } else if (!created.equals(other.created))
+            return false;
         if (departmentName == null) {
-            if (other.departmentName != null) return false;
-        } else if (!departmentName.equals(other.departmentName)) return false;
+            if (other.departmentName != null)
+                return false;
+        } else if (!departmentName.equals(other.departmentName))
+            return false;
         if (disambiguatedOrgId == null) {
-            if (other.disambiguatedOrgId != null) return false;
-        } else if (
-            !disambiguatedOrgId.equals(other.disambiguatedOrgId)
-        ) return false;
+            if (other.disambiguatedOrgId != null)
+                return false;
+        } else if (!disambiguatedOrgId.equals(other.disambiguatedOrgId))
+            return false;
         if (disambiguationSource == null) {
-            if (other.disambiguationSource != null) return false;
-        } else if (
-            !disambiguationSource.equals(other.disambiguationSource)
-        ) return false;
+            if (other.disambiguationSource != null)
+                return false;
+        } else if (!disambiguationSource.equals(other.disambiguationSource))
+            return false;
         if (email == null) {
-            if (other.email != null) return false;
-        } else if (!email.equals(other.email)) return false;
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
         if (endDay == null) {
-            if (other.endDay != null) return false;
-        } else if (!endDay.equals(other.endDay)) return false;
+            if (other.endDay != null)
+                return false;
+        } else if (!endDay.equals(other.endDay))
+            return false;
         if (endMonth == null) {
-            if (other.endMonth != null) return false;
-        } else if (!endMonth.equals(other.endMonth)) return false;
+            if (other.endMonth != null)
+                return false;
+        } else if (!endMonth.equals(other.endMonth))
+            return false;
         if (endYear == null) {
-            if (other.endYear != null) return false;
-        } else if (!endYear.equals(other.endYear)) return false;
+            if (other.endYear != null)
+                return false;
+        } else if (!endYear.equals(other.endYear))
+            return false;
         if (externalId == null) {
-            if (other.externalId != null) return false;
-        } else if (!externalId.equals(other.externalId)) return false;
+            if (other.externalId != null)
+                return false;
+        } else if (!externalId.equals(other.externalId))
+            return false;
         if (externalIdType == null) {
-            if (other.externalIdType != null) return false;
-        } else if (!externalIdType.equals(other.externalIdType)) return false;
+            if (other.externalIdType != null)
+                return false;
+        } else if (!externalIdType.equals(other.externalIdType))
+            return false;
         if (externalIdUrl == null) {
-            if (other.externalIdUrl != null) return false;
-        } else if (!externalIdUrl.equals(other.externalIdUrl)) return false;
+            if (other.externalIdUrl != null)
+                return false;
+        } else if (!externalIdUrl.equals(other.externalIdUrl))
+            return false;
         if (id == null) {
-            if (other.id != null) return false;
-        } else if (!id.equals(other.id)) return false;
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
         if (modified == null) {
-            if (other.modified != null) return false;
-        } else if (!modified.equals(other.modified)) return false;
+            if (other.modified != null)
+                return false;
+        } else if (!modified.equals(other.modified))
+            return false;
         if (lastSyncAttempt == null) {
-            if (other.lastSyncAttempt != null) return false;
-        } else if (!lastSyncAttempt.equals(other.lastSyncAttempt)) return false;
+            if (other.lastSyncAttempt != null)
+                return false;
+        } else if (!lastSyncAttempt.equals(other.lastSyncAttempt))
+            return false;
         if (orcidError == null) {
-            if (other.orcidError != null) return false;
-        } else if (!orcidError.equals(other.orcidError)) return false;
+            if (other.orcidError != null)
+                return false;
+        } else if (!orcidError.equals(other.orcidError))
+            return false;
         if (orgCity == null) {
-            if (other.orgCity != null) return false;
-        } else if (!orgCity.equals(other.orgCity)) return false;
+            if (other.orgCity != null)
+                return false;
+        } else if (!orgCity.equals(other.orgCity))
+            return false;
         if (orgCountry == null) {
-            if (other.orgCountry != null) return false;
-        } else if (!orgCountry.equals(other.orgCountry)) return false;
+            if (other.orgCountry != null)
+                return false;
+        } else if (!orgCountry.equals(other.orgCountry))
+            return false;
         if (orgName == null) {
-            if (other.orgName != null) return false;
-        } else if (!orgName.equals(other.orgName)) return false;
+            if (other.orgName != null)
+                return false;
+        } else if (!orgName.equals(other.orgName))
+            return false;
         if (orgRegion == null) {
-            if (other.orgRegion != null) return false;
-        } else if (!orgRegion.equals(other.orgRegion)) return false;
+            if (other.orgRegion != null)
+                return false;
+        } else if (!orgRegion.equals(other.orgRegion))
+            return false;
         if (ownerId == null) {
-            if (other.ownerId != null) return false;
-        } else if (!ownerId.equals(other.ownerId)) return false;
+            if (other.ownerId != null)
+                return false;
+        } else if (!ownerId.equals(other.ownerId))
+            return false;
         if (putCode == null) {
-            if (other.putCode != null) return false;
-        } else if (!putCode.equals(other.putCode)) return false;
+            if (other.putCode != null)
+                return false;
+        } else if (!putCode.equals(other.putCode))
+            return false;
         if (roleTitle == null) {
-            if (other.roleTitle != null) return false;
-        } else if (!roleTitle.equals(other.roleTitle)) return false;
+            if (other.roleTitle != null)
+                return false;
+        } else if (!roleTitle.equals(other.roleTitle))
+            return false;
         if (salesforceId == null) {
-            if (other.salesforceId != null) return false;
-        } else if (!salesforceId.equals(other.salesforceId)) return false;
+            if (other.salesforceId != null)
+                return false;
+        } else if (!salesforceId.equals(other.salesforceId))
+            return false;
         if (startDay == null) {
-            if (other.startDay != null) return false;
-        } else if (!startDay.equals(other.startDay)) return false;
+            if (other.startDay != null)
+                return false;
+        } else if (!startDay.equals(other.startDay))
+            return false;
         if (startMonth == null) {
-            if (other.startMonth != null) return false;
-        } else if (!startMonth.equals(other.startMonth)) return false;
+            if (other.startMonth != null)
+                return false;
+        } else if (!startMonth.equals(other.startMonth))
+            return false;
         if (startYear == null) {
-            if (other.startYear != null) return false;
-        } else if (!startYear.equals(other.startYear)) return false;
+            if (other.startYear != null)
+                return false;
+        } else if (!startYear.equals(other.startYear))
+            return false;
         if (status == null) {
-            if (other.status != null) return false;
-        } else if (!status.equals(other.status)) return false;
+            if (other.status != null)
+                return false;
+        } else if (!status.equals(other.status))
+            return false;
         if (url == null) {
-            if (other.url != null) return false;
-        } else if (!url.equals(other.url)) return false;
+            if (other.url != null)
+                return false;
+        } else if (!url.equals(other.url))
+            return false;
         if (updatedInORCID == null) {
-            if (other.updatedInORCID != null) return false;
-        } else if (!updatedInORCID.equals(other.updatedInORCID)) return false;
+            if (other.updatedInORCID != null)
+                return false;
+        } else if (!updatedInORCID.equals(other.updatedInORCID))
+            return false;
         if (orcidId == null) {
-            if (other.orcidId != null) return false;
-        } else if (!orcidId.equals(other.orcidId)) return false;
+            if (other.orcidId != null)
+                return false;
+        } else if (!orcidId.equals(other.orcidId))
+            return false;
         if (notificationSent == null) {
-            if (other.notificationSent != null) return false;
-        } else if (
-            !notificationSent.equals(other.notificationSent)
-        ) return false;
+            if (other.notificationSent != null)
+                return false;
+        } else if (!notificationSent.equals(other.notificationSent))
+            return false;
         return true;
     }
 }

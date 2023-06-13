@@ -1,7 +1,6 @@
 package org.orcid.memberportal.service.assertion.web.rest.errors;
 
 public class ORCIDAPIException extends RuntimeException {
-
     private static final long serialVersionUID = -3074497601567372837L;
     private final Integer statusCode;
     private final String error;
@@ -18,4 +17,5 @@ public class ORCIDAPIException extends RuntimeException {
     public String getError() {
         return error;
     }
+
 }

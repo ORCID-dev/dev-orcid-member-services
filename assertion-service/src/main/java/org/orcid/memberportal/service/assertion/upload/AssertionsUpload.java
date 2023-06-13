@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.orcid.memberportal.service.assertion.domain.Assertion;
 
 public class AssertionsUpload {
@@ -76,5 +77,7 @@ public class AssertionsUpload {
             }
             return builder.toString();
         }
+
     }
+
 }

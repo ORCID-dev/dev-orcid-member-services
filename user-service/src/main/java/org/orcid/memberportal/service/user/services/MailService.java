@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.user.services;
 
 import java.io.IOException;
 import java.util.Locale;
+
 import org.apache.http.client.ClientProtocolException;
 import org.orcid.memberportal.service.user.config.ApplicationProperties;
 import org.orcid.memberportal.service.user.domain.User;
@@ -45,12 +46,7 @@ public class MailService {
 
     private MailgunClient mailgunClient;
 
-    public MailService(
-        ApplicationProperties applicationProperties,
-        MessageSource messageSource,
-        SpringTemplateEngine templateEngine,
-        MailgunClient mailgunClient
-    ) {
+    public MailService(ApplicationProperties applicationProperties, MessageSource messageSource, SpringTemplateEngine templateEngine, MailgunClient mailgunClient) {
         this.applicationProperties = applicationProperties;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
@@ -59,40 +55,20 @@ public class MailService {
 
     public void sendActivationEmail(User user) {
         LOGGER.debug("Sending activation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(
-            user,
-            "mail/activationEmail",
-            "email.activation.title"
-        );
+        sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
     public void sendPasswordResetMail(User user) {
         LOGGER.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(
-            user,
-            "mail/passwordResetEmail",
-            "email.reset.title"
-        );
+        sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
 
     public void sendOrganizationOwnerChangedMail(User user, String member) {
-        LOGGER.debug(
-            "Sending organization owner changed email to '{}'",
-            user.getEmail()
-        );
-        sendEmailFromTemplateMemberInfo(
-            user,
-            member,
-            "mail/organizationOwnerChanged",
-            "email.organization.title"
-        );
+        LOGGER.debug("Sending organization owner changed email to '{}'", user.getEmail());
+        sendEmailFromTemplateMemberInfo(user, member, "mail/organizationOwnerChanged", "email.organization.title");
     }
 
-    private void sendEmailFromTemplate(
-        User user,
-        String templateName,
-        String titleKey
-    ) {
+    private void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         LOGGER.debug("Preparing email using template {}", templateName);
         Locale locale = getLocale(user.getLangKey());
         Context context = new Context(locale);
@@ -107,12 +83,7 @@ public class MailService {
         }
     }
 
-    private void sendEmailFromTemplateMemberInfo(
-        User user,
-        String member,
-        String templateName,
-        String titleKey
-    ) {
+    private void sendEmailFromTemplateMemberInfo(User user, String member, String templateName, String titleKey) {
         LOGGER.debug("Preparing email using template {}", templateName);
         Locale locale = getLocale(user.getLangKey());
         Context context = new Context(locale);
@@ -142,19 +113,16 @@ public class MailService {
     private Locale getLocale(String langKey) {
         LOGGER.debug("Creating locale using language key {}", langKey);
         Locale locale = LocaleUtils.getLocale(langKey);
-        LOGGER.debug(
-            "Locale created, locale has language {} ({})",
-            new Object[] { locale.getLanguage(), locale.getDisplayLanguage() }
-        );
+        LOGGER.debug("Locale created, locale has language {} ({})", new Object[] { locale.getLanguage(), locale.getDisplayLanguage() });
         return locale;
     }
 
-    private void sendEmail(String to, String subject, String content)
-        throws ClientProtocolException, IOException {
+    private void sendEmail(String to, String subject, String content) throws ClientProtocolException, IOException {
         try {
             mailgunClient.sendMail(to, subject, content);
         } catch (MailException e) {
             LOGGER.warn("Error sending email to {}", to, content, e);
         }
     }
+
 }

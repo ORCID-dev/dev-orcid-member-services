@@ -3,6 +3,7 @@ package org.orcid.memberportal.service.assertion.csv.download.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.orcid.memberportal.service.assertion.config.ApplicationProperties;
 import org.orcid.memberportal.service.assertion.csv.download.CsvDownloadWriter;
 import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
@@ -33,20 +34,13 @@ public class PermissionLinksCsvWriter extends CsvDownloadWriter {
     private List<List<String>> getRows(String salesforceId) {
         List<List<String>> rows = new ArrayList<>();
         String landingPageUrl = applicationProperties.getLandingPageUrl();
-        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(
-            salesforceId
-        );
+        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(salesforceId);
 
         for (OrcidRecord record : records) {
             String email = record.getEmail();
-            long count = assertionsRepository.countByEmailAndSalesforceId(
-                email,
-                salesforceId
-            );
+            long count = assertionsRepository.countByEmailAndSalesforceId(email, salesforceId);
             if (count > 0) {
-                String encrypted = encryptUtil.encrypt(
-                    salesforceId + "&&" + email
-                );
+                String encrypted = encryptUtil.encrypt(salesforceId + "&&" + email);
                 String link = landingPageUrl + "?state=" + encrypted;
 
                 List<String> row = new ArrayList<>();
@@ -57,4 +51,5 @@ public class PermissionLinksCsvWriter extends CsvDownloadWriter {
         }
         return rows;
     }
+
 }

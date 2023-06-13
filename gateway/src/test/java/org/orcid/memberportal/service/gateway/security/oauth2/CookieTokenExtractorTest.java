@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
  * tokens from Cookies and Headers.
  */
 public class CookieTokenExtractorTest {
-
     private CookieTokenExtractor cookieTokenExtractor;
 
     @BeforeEach
@@ -24,48 +23,24 @@ public class CookieTokenExtractorTest {
 
     @Test
     public void testExtractTokenCookie() {
-        MockHttpServletRequest request =
-            OAuth2AuthenticationServiceTest.createMockHttpServletRequest();
+        MockHttpServletRequest request = OAuth2AuthenticationServiceTest.createMockHttpServletRequest();
         Authentication authentication = cookieTokenExtractor.extract(request);
-        Assertions.assertEquals(
-            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
-            authentication.getPrincipal().toString()
-        );
+        Assertions.assertEquals(OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
     }
 
     @Test
     public void testExtractTokenHeader() {
-        MockHttpServletRequest request = new MockHttpServletRequest(
-            HttpMethod.GET.name(),
-            "http://www.test.com"
-        );
-        request.addHeader(
-            "Authorization",
-            OAuth2AccessToken.BEARER_TYPE +
-            " " +
-            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE
-        );
+        MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "http://www.test.com");
+        request.addHeader("Authorization", OAuth2AccessToken.BEARER_TYPE + " " + OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE);
         Authentication authentication = cookieTokenExtractor.extract(request);
-        Assertions.assertEquals(
-            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
-            authentication.getPrincipal().toString()
-        );
+        Assertions.assertEquals(OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
     }
 
     @Test
     public void testExtractTokenParam() {
-        MockHttpServletRequest request = new MockHttpServletRequest(
-            HttpMethod.GET.name(),
-            "http://www.test.com"
-        );
-        request.addParameter(
-            OAuth2AccessToken.ACCESS_TOKEN,
-            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE
-        );
+        MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "http://www.test.com");
+        request.addParameter(OAuth2AccessToken.ACCESS_TOKEN, OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE);
         Authentication authentication = cookieTokenExtractor.extract(request);
-        Assertions.assertEquals(
-            OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE,
-            authentication.getPrincipal().toString()
-        );
+        Assertions.assertEquals(OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
     }
 }

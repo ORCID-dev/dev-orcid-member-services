@@ -1,8 +1,8 @@
 package io.github.jhipster.registry.web.rest.vm;
 
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 /**
  * View Model object for representing a user, with his authorities.
@@ -15,9 +15,11 @@ public class UserVM {
 
     private Set<String> authorities;
 
-    public UserVM() {}
+    public UserVM() {
+    }
 
     public UserVM(String login, Set<String> authorities) {
+
         this.login = login;
         this.authorities = authorities;
     }
@@ -32,14 +34,9 @@ public class UserVM {
 
     @Override
     public String toString() {
-        return (
-            "UserVM{" +
-            "login='" +
-            login +
-            '\'' +
-            ", authorities=" +
-            authorities +
-            "}"
-        );
+        return "UserVM{" +
+            "login='" + login + '\'' +
+            ", authorities=" + authorities +
+            "}";
     }
 }

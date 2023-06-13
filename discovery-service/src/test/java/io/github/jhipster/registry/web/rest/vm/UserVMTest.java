@@ -1,17 +1,19 @@
 package io.github.jhipster.registry.web.rest.vm;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.github.jhipster.registry.utils.TestUtils;
-import java.util.HashSet;
-import java.util.Set;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class UserVMTest {
+
 
     private static Validator validator;
 
@@ -27,11 +29,7 @@ public class UserVMTest {
         assertThat(validator.validate(vm)).isNotEmpty();
         vm = new UserVM("", null);
         assertThat(validator.validate(vm)).isNotEmpty();
-        vm =
-            new UserVM(
-                "badLoginTooLongbadLoginTooLongbadLoginTooLongbadLoginTooLong",
-                null
-            );
+        vm = new UserVM("badLoginTooLongbadLoginTooLongbadLoginTooLongbadLoginTooLong", null);
         assertThat(validator.validate(vm)).isNotEmpty();
         vm = new UserVM("goodLogin", null);
         assertThat(validator.validate(vm)).isEmpty();
@@ -73,4 +71,5 @@ public class UserVMTest {
         json = vm.toString().replace(UserVM.class.getSimpleName(), "");
         assertThat(TestUtils.isValid(json)).isTrue();
     }
+
 }

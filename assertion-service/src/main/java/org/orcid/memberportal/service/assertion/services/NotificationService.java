@@ -9,7 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.xml.bind.JAXBException;
+
 import org.orcid.jaxb.model.v3.release.notification.NotificationType;
 import org.orcid.jaxb.model.v3.release.notification.permission.AuthorizationUrl;
 import org.orcid.jaxb.model.v3.release.notification.permission.Item;
@@ -38,9 +40,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        NotificationService.class
-    );
+    private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
     private static final int BATCH_SIZE = 100;
 
@@ -75,14 +75,9 @@ public class NotificationService {
         return findActiveRequestBySalesforceId(salesforceId) != null;
     }
 
-    public void createSendNotificationsRequest(
-        String userEmail,
-        String salesforceId
-    ) {
+    public void createSendNotificationsRequest(String userEmail, String salesforceId) {
         if (findActiveRequestBySalesforceId(salesforceId) != null) {
-            throw new RuntimeException(
-                "Send notifications request already active for " + salesforceId
-            );
+            throw new RuntimeException("Send notifications request already active for " + salesforceId);
         }
 
         SendNotificationsRequest request = new SendNotificationsRequest();
@@ -93,8 +88,7 @@ public class NotificationService {
     }
 
     public void sendPermissionLinkNotifications() {
-        List<SendNotificationsRequest> requests =
-            sendNotificationsRequestRepository.findActiveRequests();
+        List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequests();
         requests.forEach(r -> {
             processRequest(r);
             markRequestCompleted(r);
@@ -102,59 +96,30 @@ public class NotificationService {
     }
 
     private void markRequestCompleted(SendNotificationsRequest request) {
-        LOG.info(
-            "Marking SendNotificationsRequest from user {} (salesforce ID {}) as complete",
-            request.getEmail(),
-            request.getSalesforceId()
-        );
+        LOG.info("Marking SendNotificationsRequest from user {} (salesforce ID {}) as complete", request.getEmail(), request.getSalesforceId());
         request.setDateCompleted(Instant.now());
-        mailService.sendNotificationsSummary(
-            userService.getUserById(request.getEmail()),
-            request.getNotificationsSent(),
-            request.getEmailsSent()
-        );
+        mailService.sendNotificationsSummary(userService.getUserById(request.getEmail()), request.getNotificationsSent(), request.getEmailsSent());
         sendNotificationsRequestRepository.save(request);
     }
 
     private void processRequest(SendNotificationsRequest request) {
-        Iterator<String> emailsWithNotificationsRequested =
-            assertionRepository.findDistinctEmailsWithNotificationRequested(
-                request.getSalesforceId()
-            );
+        Iterator<String> emailsWithNotificationsRequested = assertionRepository.findDistinctEmailsWithNotificationRequested(request.getSalesforceId());
         String orgName = memberService.getMemberName(request.getSalesforceId());
-        String language = memberService.getMemberDefaultLanguage(
-            request.getSalesforceId()
-        );
-        emailsWithNotificationsRequested.forEachRemaining(e ->
-            findAssertionsAndAttemptSend(e, orgName, language, request)
-        );
+        String language = memberService.getMemberDefaultLanguage(request.getSalesforceId());
+        emailsWithNotificationsRequested.forEachRemaining(e -> findAssertionsAndAttemptSend(e, orgName, language, request));
     }
 
     public void resendNotifications() {
-        Pageable pageable = PageRequest.of(
-            0,
-            BATCH_SIZE,
-            new Sort(Direction.ASC, "created")
-        );
-        Page<Assertion> assertions =
-            assertionRepository.findNotificationResendCandidates(pageable);
+        Pageable pageable = PageRequest.of(0, BATCH_SIZE, new Sort(Direction.ASC, "created"));
+        Page<Assertion> assertions = assertionRepository.findNotificationResendCandidates(pageable);
         Map<String, String> usersAndSalesforceIds = new HashMap<>();
 
         // build map of applicable email - salesforceIds
         while (assertions != null && !assertions.isEmpty()) {
             assertions.forEach(a -> {
-                if (
-                    !orcidRecordService.userHasGrantedOrDeniedPermission(
-                        a.getEmail(),
-                        a.getSalesforceId()
-                    )
-                ) {
-                    Instant firstSent = a.getNotificationSent() != null
-                        ? a.getNotificationSent()
-                        : a.getInvitationSent();
-                    Instant lastSent = a.getNotificationLastSent() != null
-                        ? a.getNotificationLastSent()
-                        : a.getInvitationLastSent();
+                if (!orcidRecordService.userHasGrantedOrDeniedPermission(a.getEmail(), a.getSalesforceId())) {
+                    Instant firstSent = a.getNotificationSent() != null ? a.getNotificationSent() : a.getInvitationSent();
+                    Instant lastSent = a.getNotificationLastSent() != null ? a.getNotificationLastSent() : a.getInvitationLastSent();
 
                     if (lastSent == null) {
                         // legacy data
@@ -163,88 +128,48 @@ public class NotificationService {
 
                     for (int days : applicationProperties.getResendNotificationDays()) {
                         Instant now = Instant.now();
-                        Instant notificationDue = firstSent.plus(
-                            days,
-                            ChronoUnit.DAYS
-                        );
+                        Instant notificationDue = firstSent.plus(days, ChronoUnit.DAYS);
 
-                        if (
-                            now.isAfter(notificationDue) &&
-                            notificationDue.isAfter(lastSent)
-                        ) {
-                            usersAndSalesforceIds.put(
-                                a.getEmail() + ":" + a.getSalesforceId(),
-                                null
-                            );
+                        if (now.isAfter(notificationDue) && notificationDue.isAfter(lastSent)) {
+                            usersAndSalesforceIds.put(a.getEmail() + ":" + a.getSalesforceId(), null);
                         }
                     }
                 }
             });
             pageable = pageable.next();
-            assertions =
-                assertionRepository.findNotificationResendCandidates(pageable);
+            assertions = assertionRepository.findNotificationResendCandidates(pageable);
         }
 
         resendNotifications(usersAndSalesforceIds);
     }
 
-    private void resendNotifications(
-        Map<String, String> usersAndSalesforceIds
-    ) {
+    private void resendNotifications(Map<String, String> usersAndSalesforceIds) {
         for (String key : usersAndSalesforceIds.keySet()) {
             String[] keyParts = key.split(":");
             String email = keyParts[0];
             String salesforceId = keyParts[1];
 
-            LOG.info(
-                "Attempting to resend notification / invitation to {} for salesforce id {}",
-                email,
-                salesforceId
-            );
+            LOG.info("Attempting to resend notification / invitation to {} for salesforce id {}", email, salesforceId);
             findAssertionsAndAttemptSend(email, salesforceId);
         }
     }
 
-    private void findAssertionsAndAttemptSend(
-        String email,
-        String salesforceId
-    ) {
+    private void findAssertionsAndAttemptSend(String email, String salesforceId) {
         String orgName = memberService.getMemberName(salesforceId);
         String language = memberService.getMemberDefaultLanguage(salesforceId);
 
-        List<Assertion> allAssertionsForEmailAndMember =
-            assertionRepository.findByEmailAndSalesforceId(email, salesforceId);
+        List<Assertion> allAssertionsForEmailAndMember = assertionRepository.findByEmailAndSalesforceId(email, salesforceId);
         try {
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
-                LOG.info(
-                    "No ORCID id found for {}. Sending email invitation instead.",
-                    email
-                );
-                sendEmailInvitation(
-                    email,
-                    orgName,
-                    salesforceId,
-                    allAssertionsForEmailAndMember,
-                    language
-                );
+                LOG.info("No ORCID id found for {}. Sending email invitation instead.", email);
+                sendEmailInvitation(email, orgName, salesforceId, allAssertionsForEmailAndMember, language);
             } else {
                 LOG.info("ORCID id found for {}. Sending notification.", email);
-                sendNotification(
-                    email,
-                    orgName,
-                    salesforceId,
-                    allAssertionsForEmailAndMember,
-                    orcidId,
-                    language
-                );
+                sendNotification(email, orgName, salesforceId, allAssertionsForEmailAndMember, orcidId, language);
             }
         } catch (Exception e) {
-            LOG.warn(
-                "Error sending notification to {} on behalf of {}",
-                email,
-                salesforceId
-            );
+            LOG.warn("Error sending notification to {} on behalf of {}", email, salesforceId);
             LOG.warn("Could not send notification", e);
             allAssertionsForEmailAndMember.forEach(a -> {
                 a.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
@@ -253,53 +178,22 @@ public class NotificationService {
         }
     }
 
-    private void findAssertionsAndAttemptSend(
-        String email,
-        String orgName,
-        String language,
-        SendNotificationsRequest request
-    ) {
-        List<Assertion> allAssertionsForEmailAndMember =
-            assertionRepository.findByEmailAndSalesforceIdAndStatus(
-                email,
-                request.getSalesforceId(),
-                AssertionStatus.NOTIFICATION_REQUESTED.name()
-            );
+    private void findAssertionsAndAttemptSend(String email, String orgName, String language, SendNotificationsRequest request) {
+        List<Assertion> allAssertionsForEmailAndMember = assertionRepository.findByEmailAndSalesforceIdAndStatus(email, request.getSalesforceId(),
+                AssertionStatus.NOTIFICATION_REQUESTED.name());
         try {
             String orcidId = orcidApiClient.getOrcidIdForEmail(email);
             if (orcidId == null) {
-                LOG.info(
-                    "No ORCID id found for {}. Sending email invitation instead.",
-                    email
-                );
-                sendEmailInvitation(
-                    email,
-                    orgName,
-                    request.getSalesforceId(),
-                    allAssertionsForEmailAndMember,
-                    language
-                );
+                LOG.info("No ORCID id found for {}. Sending email invitation instead.", email);
+                sendEmailInvitation(email, orgName, request.getSalesforceId(), allAssertionsForEmailAndMember, language);
                 request.setEmailsSent(request.getEmailsSent() + 1);
             } else {
                 LOG.info("ORCID id found for {}. Sending notification.", email);
-                sendNotification(
-                    email,
-                    orgName,
-                    request.getSalesforceId(),
-                    allAssertionsForEmailAndMember,
-                    orcidId,
-                    language
-                );
-                request.setNotificationsSent(
-                    request.getNotificationsSent() + 1
-                );
+                sendNotification(email, orgName, request.getSalesforceId(), allAssertionsForEmailAndMember, orcidId, language);
+                request.setNotificationsSent(request.getNotificationsSent() + 1);
             }
         } catch (Exception e) {
-            LOG.warn(
-                "Error sending notification to {} on behalf of {}",
-                email,
-                request.getSalesforceId()
-            );
+            LOG.warn("Error sending notification to {} on behalf of {}", email, request.getSalesforceId());
             LOG.warn("Could not send notification", e);
             allAssertionsForEmailAndMember.forEach(a -> {
                 a.setStatus(AssertionStatus.NOTIFICATION_FAILED.name());
@@ -308,29 +202,15 @@ public class NotificationService {
         }
     }
 
-    private void sendNotification(
-        String email,
-        String orgName,
-        String salesforceId,
-        List<Assertion> allAssertionsForEmailAndMember,
-        String orcidId,
-        String language
-    ) throws JAXBException, IOException {
-        NotificationPermission notification = getPermissionLinkNotification(
-            allAssertionsForEmailAndMember,
-            email,
-            salesforceId,
-            orgName,
-            language
-        );
+    private void sendNotification(String email, String orgName, String salesforceId, List<Assertion> allAssertionsForEmailAndMember, String orcidId, String language)
+            throws JAXBException, IOException {
+        NotificationPermission notification = getPermissionLinkNotification(allAssertionsForEmailAndMember, email, salesforceId, orgName, language);
         orcidApiClient.postNotification(notification, orcidId);
         allAssertionsForEmailAndMember.forEach(a -> {
             a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
 
             Instant now = Instant.now();
-            if (
-                a.getNotificationSent() == null && a.getInvitationSent() == null
-            ) {
+            if (a.getNotificationSent() == null && a.getInvitationSent() == null) {
                 // invitation / notification not previously sent
                 a.setNotificationSent(now);
             }
@@ -339,22 +219,8 @@ public class NotificationService {
         });
     }
 
-    private void sendEmailInvitation(
-        String email,
-        String orgName,
-        String salesforceId,
-        List<Assertion> allAssertionsForEmailAndMember,
-        String language
-    ) {
-        mailService.sendInvitationEmail(
-            email,
-            orgName,
-            orcidRecordService.generateLinkForEmailAndSalesforceId(
-                email,
-                salesforceId
-            ),
-            language
-        );
+    private void sendEmailInvitation(String email, String orgName, String salesforceId, List<Assertion> allAssertionsForEmailAndMember, String language) {
+        mailService.sendInvitationEmail(email, orgName, orcidRecordService.generateLinkForEmailAndSalesforceId(email, salesforceId), language);
         allAssertionsForEmailAndMember.forEach(a -> {
             a.setStatus(AssertionStatus.NOTIFICATION_SENT.name());
 
@@ -368,74 +234,43 @@ public class NotificationService {
         });
     }
 
-    private NotificationPermission getPermissionLinkNotification(
-        List<Assertion> assertions,
-        String email,
-        String salesforceId,
-        String orgName,
-        String language
-    ) {
+    private NotificationPermission getPermissionLinkNotification(List<Assertion> assertions, String email, String salesforceId, String orgName, String language) {
         Locale locale = LocaleUtils.getLocale(language);
-        NotificationPermission notificationPermission =
-            new NotificationPermission();
-        notificationPermission.setNotificationIntro(
-            messageSource.getMessage(
-                "assertion.notifications.introduction",
-                null,
-                locale
-            )
-        );
-        notificationPermission.setNotificationSubject(
-            messageSource.getMessage(
-                "assertion.notifications.subject",
-                new Object[] { orgName },
-                locale
-            )
-        );
+        NotificationPermission notificationPermission = new NotificationPermission();
+        notificationPermission.setNotificationIntro(messageSource.getMessage("assertion.notifications.introduction", null, locale));
+        notificationPermission.setNotificationSubject(messageSource.getMessage("assertion.notifications.subject", new Object[] { orgName }, locale));
         notificationPermission.setNotificationType(NotificationType.PERMISSION);
-        notificationPermission.setAuthorizationUrl(
-            new AuthorizationUrl(
-                orcidRecordService.generateLinkForEmailAndSalesforceId(
-                    email,
-                    salesforceId
-                )
-            )
-        );
+        notificationPermission.setAuthorizationUrl(new AuthorizationUrl(orcidRecordService.generateLinkForEmailAndSalesforceId(email, salesforceId)));
 
         List<Item> items = new ArrayList<>();
         assertions.forEach(a -> {
             Item item = new Item();
-            item.setItemName(
-                a.getOrgName() +
-                (a.getRoleTitle() != null ? " : " + a.getRoleTitle() : "")
-            );
+            item.setItemName(a.getOrgName() + (a.getRoleTitle() != null ? " : " + a.getRoleTitle() : ""));
 
             switch (a.getAffiliationSection()) {
-                case DISTINCTION:
-                    item.setItemType(ItemType.DISTINCTION);
-                    break;
-                case EDUCATION:
-                    item.setItemType(ItemType.EDUCATION);
-                    break;
-                case EMPLOYMENT:
-                    item.setItemType(ItemType.EMPLOYMENT);
-                    break;
-                case INVITED_POSITION:
-                    item.setItemType(ItemType.INVITED_POSITION);
-                    break;
-                case MEMBERSHIP:
-                    item.setItemType(ItemType.MEMBERSHIP);
-                    break;
-                case QUALIFICATION:
-                    item.setItemType(ItemType.QUALIFICATION);
-                    break;
-                case SERVICE:
-                    item.setItemType(ItemType.SERVICE);
-                    break;
-                default:
-                    throw new IllegalArgumentException(
-                        "Invalid item type found"
-                    );
+            case DISTINCTION:
+                item.setItemType(ItemType.DISTINCTION);
+                break;
+            case EDUCATION:
+                item.setItemType(ItemType.EDUCATION);
+                break;
+            case EMPLOYMENT:
+                item.setItemType(ItemType.EMPLOYMENT);
+                break;
+            case INVITED_POSITION:
+                item.setItemType(ItemType.INVITED_POSITION);
+                break;
+            case MEMBERSHIP:
+                item.setItemType(ItemType.MEMBERSHIP);
+                break;
+            case QUALIFICATION:
+                item.setItemType(ItemType.QUALIFICATION);
+                break;
+            case SERVICE:
+                item.setItemType(ItemType.SERVICE);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid item type found");
             }
             items.add(item);
         });
@@ -444,14 +279,10 @@ public class NotificationService {
         return notificationPermission;
     }
 
-    private SendNotificationsRequest findActiveRequestBySalesforceId(
-        String salesforceId
-    ) {
-        List<SendNotificationsRequest> requests =
-            sendNotificationsRequestRepository.findActiveRequestBySalesforceId(
-                salesforceId
-            );
+    private SendNotificationsRequest findActiveRequestBySalesforceId(String salesforceId) {
+        List<SendNotificationsRequest> requests = sendNotificationsRequestRepository.findActiveRequestBySalesforceId(salesforceId);
         assert requests.size() <= 1;
         return requests.size() == 1 ? requests.get(0) : null;
     }
+
 }

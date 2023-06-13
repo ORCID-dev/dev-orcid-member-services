@@ -5,7 +5,6 @@ package org.orcid.memberportal.service.user.dto;
  * password.
  */
 public class PasswordChangeDTO {
-
     private String currentPassword;
     private String newPassword;
 
@@ -19,6 +18,7 @@ public class PasswordChangeDTO {
     }
 
     public String getCurrentPassword() {
+
         return currentPassword;
     }
 

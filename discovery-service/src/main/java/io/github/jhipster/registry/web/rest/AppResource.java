@@ -1,7 +1,5 @@
 package io.github.jhipster.registry.web.rest;
 
-import io.github.jhipster.registry.config.ApplicationProperties;
-import io.github.jhipster.registry.service.dto.VersionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.github.jhipster.registry.config.ApplicationProperties;
+import io.github.jhipster.registry.service.dto.VersionDTO;
 
 /**
  * REST controller for managing the current user's account.
@@ -34,4 +35,5 @@ public class AppResource {
         String version = applicationProperties.getAppVersion();
         return ResponseEntity.ok(new VersionDTO(version));
     }
+
 }

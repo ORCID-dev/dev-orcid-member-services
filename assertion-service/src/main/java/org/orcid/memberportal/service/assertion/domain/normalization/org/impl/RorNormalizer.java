@@ -21,4 +21,5 @@ public class RorNormalizer implements OrgNormalizer {
     public String getOrgSource() {
         return Constants.ROR_ORG_SOURCE;
     }
+
 }

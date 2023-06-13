@@ -39,4 +39,6 @@ public class ConsortiumMember {
             this.name = name;
         }
     }
+
+
 }

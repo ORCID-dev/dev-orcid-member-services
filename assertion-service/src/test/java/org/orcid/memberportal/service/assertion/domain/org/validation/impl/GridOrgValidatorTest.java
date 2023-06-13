@@ -24,4 +24,5 @@ public class GridOrgValidatorTest {
         assertThat(validator.validId(".238252.c")).isFalse();
         assertThat(validator.validId("grid")).isFalse();
     }
+
 }

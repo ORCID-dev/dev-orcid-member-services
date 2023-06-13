@@ -13,12 +13,9 @@ import org.xbill.DNS.TextParseException;
  */
 public class OrcidDomainValidator {
 
-    private DomainValidator standardDomainValidator =
-        DomainValidator.getInstance();
+    private DomainValidator standardDomainValidator = DomainValidator.getInstance();
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(
-        OrcidDomainValidator.class
-    );
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrcidDomainValidator.class);
 
     public boolean isValid(String hostLocation) {
         try {
@@ -28,10 +25,7 @@ public class OrcidDomainValidator {
             if (Lookup.SUCCESSFUL == result) {
                 return true;
             }
-            if (
-                Lookup.HOST_NOT_FOUND == result ||
-                Lookup.TYPE_NOT_FOUND == result
-            ) {
+            if (Lookup.HOST_NOT_FOUND == result || Lookup.TYPE_NOT_FOUND == result) {
                 return false;
             }
             LOGGER.warn("DNS is not OK, so validating in offline mode");
@@ -43,11 +37,7 @@ public class OrcidDomainValidator {
 
     public static void main(String[] args) {
         String host = args[0];
-        System.out.println(
-            "Host: " +
-            host +
-            ", Valid=" +
-            new OrcidDomainValidator().isValid(host)
-        );
+        System.out.println("Host: " + host + ", Valid=" + new OrcidDomainValidator().isValid(host));
     }
+
 }

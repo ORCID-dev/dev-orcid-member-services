@@ -11,4 +11,5 @@ public class ResendActivationResponseVM {
     public void setResent(boolean resent) {
         this.resent = resent;
     }
+
 }

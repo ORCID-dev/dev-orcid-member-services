@@ -1,12 +1,13 @@
 package org.orcid.memberportal.service.member.web.rest.errors;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 public class ExceptionTranslatorTestController {
@@ -17,15 +18,16 @@ public class ExceptionTranslatorTestController {
     }
 
     @PostMapping("/test/method-argument")
-    public void methodArgument(@Valid @RequestBody TestDTO testDTO) {}
+    public void methodArgument(@Valid @RequestBody TestDTO testDTO) {
+    }
 
     @GetMapping("/test/missing-servlet-request-part")
-    public void missingServletRequestPartException(@RequestPart String part) {}
+    public void missingServletRequestPartException(@RequestPart String part) {
+    }
 
     @GetMapping("/test/missing-servlet-request-parameter")
-    public void missingServletRequestParameterException(
-        @RequestParam String param
-    ) {}
+    public void missingServletRequestParameterException(@RequestParam String param) {
+    }
 
     @GetMapping("/test/access-denied")
     public void accessdenied() {
@@ -61,10 +63,9 @@ public class ExceptionTranslatorTestController {
         }
     }
 
-    @ResponseStatus(
-        value = HttpStatus.BAD_REQUEST,
-        reason = "test response status"
-    )
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "test response status")
     @SuppressWarnings("serial")
-    public static class TestResponseStatusException extends RuntimeException {}
+    public static class TestResponseStatusException extends RuntimeException {
+    }
+
 }

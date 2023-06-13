@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
+
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import org.orcid.memberportal.service.member.client.model.MemberContacts;
 import org.orcid.memberportal.service.member.client.model.MemberDetails;
 import org.orcid.memberportal.service.member.client.model.MemberOrgId;
 import org.orcid.memberportal.service.member.client.model.MemberOrgIds;
-import org.orcid.memberportal.service.member.client.model.PublicMemberDetails;
+import org.orcid.memberportal.service.member.client.model.MemberUpdateData;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.validation.MemberValidation;
@@ -46,18 +47,13 @@ public class MemberResourceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         MockHttpServletRequest request = new MockHttpServletRequest();
-        RequestContextHolder.setRequestAttributes(
-            new ServletRequestAttributes(request)
-        );
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
 
     @Test
     public void testValidateMember() throws URISyntaxException, JSONException {
-        Mockito
-            .when(memberService.validateMember(Mockito.any(Member.class)))
-            .thenReturn(getMemberValidation());
-        ResponseEntity<MemberValidation> validationResponse =
-            memberResource.validateMember(new Member());
+        Mockito.when(memberService.validateMember(Mockito.any(Member.class))).thenReturn(getMemberValidation());
+        ResponseEntity<MemberValidation> validationResponse = memberResource.validateMember(new Member());
 
         // always 200, even if invalid member; the request to validate is valid
         assertEquals(200, validationResponse.getStatusCodeValue());
@@ -67,32 +63,23 @@ public class MemberResourceTest {
 
     @Test
     public void testGetMemberDetails() {
-        Mockito
-            .when(memberService.getCurrentMemberDetails())
-            .thenReturn(getMemberDetails());
-        ResponseEntity<MemberDetails> entity =
-            memberResource.getMemberDetails();
+        Mockito.when(memberService.getCurrentMemberDetails()).thenReturn(getMemberDetails());
+        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails();
         assertEquals(200, entity.getStatusCodeValue());
 
         MemberDetails memberDetails = entity.getBody();
 
         assertThat(memberDetails).isNotNull();
         assertThat(memberDetails.getName()).isEqualTo("test member details");
-        assertThat(memberDetails.getPublicDisplayName())
-            .isEqualTo("public display name");
+        assertThat(memberDetails.getPublicDisplayName()).isEqualTo("public display name");
         assertThat(memberDetails.getWebsite()).isEqualTo("https://website.com");
-        assertThat(memberDetails.getMembershipStartDateString())
-            .isEqualTo("2022-01-01");
-        assertThat(memberDetails.getMembershipEndDateString())
-            .isEqualTo("2027-01-01");
-        assertThat(memberDetails.getPublicDisplayEmail())
-            .isEqualTo("orcid@testmember.com");
+        assertThat(memberDetails.getMembershipStartDateString()).isEqualTo("2022-01-01");
+        assertThat(memberDetails.getMembershipEndDateString()).isEqualTo("2027-01-01");
+        assertThat(memberDetails.getPublicDisplayEmail()).isEqualTo("orcid@testmember.com");
         assertThat(memberDetails.getConsortiaLeadId()).isNull();
         assertThat(memberDetails.isConsortiaMember()).isFalse();
-        assertThat(memberDetails.getPublicDisplayDescriptionHtml())
-            .isEqualTo("<p>public display description</p>");
-        assertThat(memberDetails.getMemberType())
-            .isEqualTo("Research Institute");
+        assertThat(memberDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
+        assertThat(memberDetails.getMemberType()).isEqualTo("Research Institute");
         assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
@@ -100,48 +87,27 @@ public class MemberResourceTest {
 
     @Test
     public void testUpdatePublicMemberDetails() {
-        Mockito
-            .when(
-                memberService.updatePublicMemberDetails(
-                    Mockito.any(PublicMemberDetails.class)
-                )
-            )
-            .thenReturn(Boolean.TRUE);
-        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        ResponseEntity<Boolean> response =
-            memberResource.updatePublicMemberDetails(publicMemberDetails);
+        Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.TRUE);
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData);
         assertEquals(200, response.getStatusCodeValue());
-        Mockito
-            .verify(memberService)
-            .updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
+        Mockito.verify(memberService).updateMemberData(Mockito.any(MemberUpdateData.class));
     }
 
     @Test
     public void testUpdatePublicMemberDetailsWithEmptyName() {
-        Mockito
-            .when(
-                memberService.updatePublicMemberDetails(
-                    Mockito.any(PublicMemberDetails.class)
-                )
-            )
-            .thenReturn(Boolean.FALSE);
-        PublicMemberDetails publicMemberDetails = getPublicMemberDetails();
-        publicMemberDetails.setName("");
-        ResponseEntity<Boolean> response =
-            memberResource.updatePublicMemberDetails(publicMemberDetails);
+        Mockito.when(memberService.updateMemberData(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.FALSE);
+        MemberUpdateData memberUpdateData = getPublicMemberDetails();
+        memberUpdateData.setName("");
+        ResponseEntity<Boolean> response = memberResource.updatePublicMemberDetails(memberUpdateData);
         assertTrue(response.getStatusCode().is4xxClientError());
-        Mockito
-            .verify(memberService, Mockito.never())
-            .updatePublicMemberDetails(Mockito.any(PublicMemberDetails.class));
+        Mockito.verify(memberService, Mockito.never()).updateMemberData(Mockito.any(MemberUpdateData.class));
     }
 
     @Test
     public void testGetMemberContacts() {
-        Mockito
-            .when(memberService.getCurrentMemberContacts())
-            .thenReturn(getMemberContacts());
-        ResponseEntity<MemberContacts> entity =
-            memberResource.getMemberContacts();
+        Mockito.when(memberService.getCurrentMemberContacts()).thenReturn(getMemberContacts());
+        ResponseEntity<MemberContacts> entity = memberResource.getMemberContacts();
         assertEquals(200, entity.getStatusCodeValue());
 
         MemberContacts memberContacts = entity.getBody();
@@ -149,37 +115,23 @@ public class MemberResourceTest {
         assertThat(memberContacts.getTotalSize()).isEqualTo(2);
         assertThat(memberContacts.getRecords()).isNotNull();
         assertThat(memberContacts.getRecords().size()).isEqualTo(2);
-        assertThat(memberContacts.getRecords().get(0).getName())
-            .isEqualTo("contact 1");
-        assertThat(memberContacts.getRecords().get(0).getTitle())
-            .isEqualTo("Dr");
-        assertThat(memberContacts.getRecords().get(0).getEmail())
-            .isEqualTo("contact1@orcid.org");
-        assertThat(memberContacts.getRecords().get(0).getRole())
-            .isEqualTo("contact one role");
-        assertThat(memberContacts.getRecords().get(0).getSalesforceId())
-            .isEqualTo("salesforce-id");
-        assertThat(memberContacts.getRecords().get(0).isVotingContact())
-            .isEqualTo(false);
-        assertThat(memberContacts.getRecords().get(1).getName())
-            .isEqualTo("contact 2");
-        assertThat(memberContacts.getRecords().get(1).getPhone())
-            .isEqualTo("123456789");
-        assertThat(memberContacts.getRecords().get(1).getEmail())
-            .isEqualTo("contact2@orcid.org");
-        assertThat(memberContacts.getRecords().get(1).getRole())
-            .isEqualTo("contact two role");
-        assertThat(memberContacts.getRecords().get(1).getSalesforceId())
-            .isEqualTo("salesforce-id");
-        assertThat(memberContacts.getRecords().get(1).isVotingContact())
-            .isEqualTo(true);
+        assertThat(memberContacts.getRecords().get(0).getName()).isEqualTo("contact 1");
+        assertThat(memberContacts.getRecords().get(0).getTitle()).isEqualTo("Dr");
+        assertThat(memberContacts.getRecords().get(0).getEmail()).isEqualTo("contact1@orcid.org");
+        assertThat(memberContacts.getRecords().get(0).getRole()).isEqualTo("contact one role");
+        assertThat(memberContacts.getRecords().get(0).getSalesforceId()).isEqualTo("salesforce-id");
+        assertThat(memberContacts.getRecords().get(0).isVotingContact()).isEqualTo(false);
+        assertThat(memberContacts.getRecords().get(1).getName()).isEqualTo("contact 2");
+        assertThat(memberContacts.getRecords().get(1).getPhone()).isEqualTo("123456789");
+        assertThat(memberContacts.getRecords().get(1).getEmail()).isEqualTo("contact2@orcid.org");
+        assertThat(memberContacts.getRecords().get(1).getRole()).isEqualTo("contact two role");
+        assertThat(memberContacts.getRecords().get(1).getSalesforceId()).isEqualTo("salesforce-id");
+        assertThat(memberContacts.getRecords().get(1).isVotingContact()).isEqualTo(true);
     }
 
     @Test
     public void testGetMemberOrgIds() {
-        Mockito
-            .when(memberService.getCurrentMemberOrgIds())
-            .thenReturn(getMemberOrgIds());
+        Mockito.when(memberService.getCurrentMemberOrgIds()).thenReturn(getMemberOrgIds());
         ResponseEntity<MemberOrgIds> entity = memberResource.getMemberOrgIds();
         assertEquals(200, entity.getStatusCodeValue());
 
@@ -188,119 +140,58 @@ public class MemberResourceTest {
         assertThat(memberOrgIds.getTotalSize()).isEqualTo(2);
         assertThat(memberOrgIds.getRecords()).isNotNull();
         assertThat(memberOrgIds.getRecords().size()).isEqualTo(2);
-        assertThat(memberOrgIds.getRecords().get(0).getType())
-            .isEqualTo("Ringgold ID");
-        assertThat(memberOrgIds.getRecords().get(0).getValue())
-            .isEqualTo("9988776655");
-        assertThat(memberOrgIds.getRecords().get(1).getType())
-            .isEqualTo("GRID");
-        assertThat(memberOrgIds.getRecords().get(1).getValue())
-            .isEqualTo("grid.238252");
+        assertThat(memberOrgIds.getRecords().get(0).getType()).isEqualTo("Ringgold ID");
+        assertThat(memberOrgIds.getRecords().get(0).getValue()).isEqualTo("9988776655");
+        assertThat(memberOrgIds.getRecords().get(1).getType()).isEqualTo("GRID");
+        assertThat(memberOrgIds.getRecords().get(1).getValue()).isEqualTo("grid.238252");
     }
 
     @Test
     public void testGetAllMembers() {
-        Mockito
-            .when(memberService.getMembers(Mockito.any(Pageable.class)))
-            .thenReturn(
-                new PageImpl<>(
-                    Arrays.asList(
-                        getMember(),
-                        getMember(),
-                        getMember(),
-                        getMember()
-                    )
-                )
-            );
-        Mockito
-            .when(
-                memberService.getMembers(
-                    Mockito.any(Pageable.class),
-                    Mockito.anyString()
-                )
-            )
-            .thenReturn(
-                new PageImpl<>(Arrays.asList(getMember(), getMember()))
-            );
+        Mockito.when(memberService.getMembers(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember(), getMember())));
+        Mockito.when(memberService.getMembers(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember())));
 
-        ResponseEntity<List<Member>> response = memberResource.getAllMembers(
-            "",
-            Mockito.mock(Pageable.class)
-        );
+        ResponseEntity<List<Member>> response = memberResource.getAllMembers("", Mockito.mock(Pageable.class));
         assertNotNull(response);
         List<Member> members = response.getBody();
         assertEquals(4, members.size());
-        Mockito
-            .verify(memberService, Mockito.times(1))
-            .getMembers(Mockito.any(Pageable.class));
+        Mockito.verify(memberService, Mockito.times(1)).getMembers(Mockito.any(Pageable.class));
 
-        response =
-            memberResource.getAllMembers(
-                "some-filter",
-                Mockito.mock(Pageable.class)
-            );
+        response = memberResource.getAllMembers("some-filter", Mockito.mock(Pageable.class));
         assertNotNull(response);
         members = response.getBody();
         assertEquals(2, members.size());
-        Mockito
-            .verify(memberService, Mockito.times(1))
-            .getMembers(Mockito.any(Pageable.class), Mockito.anyString());
+        Mockito.verify(memberService, Mockito.times(1)).getMembers(Mockito.any(Pageable.class), Mockito.anyString());
     }
 
     @Test
     public void testUpdateMemberDefaultLanguage() {
-        ResponseEntity<Void> response =
-            memberResource.updateMemberDefaultLanguage("salesforceId", "en");
+        ResponseEntity<Void> response = memberResource.updateMemberDefaultLanguage("salesforceId", "en");
         assertTrue(response.getStatusCode().is2xxSuccessful());
-        Mockito
-            .verify(memberService)
-            .updateMemberDefaultLanguage(
-                Mockito.eq("salesforceId"),
-                Mockito.eq("en")
-            );
+        Mockito.verify(memberService).updateMemberDefaultLanguage(Mockito.eq("salesforceId"), Mockito.eq("en"));
     }
 
     @Test
     public void testProcessMemberContactUpdate() {
-        Mockito
-            .doNothing()
-            .when(memberService)
-            .processMemberContact(Mockito.any(MemberContactUpdate.class));
+        Mockito.doNothing().when(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class));
         memberResource.processMemberContactUpdate(new MemberContactUpdate());
-        Mockito
-            .verify(memberService)
-            .processMemberContact(Mockito.any(MemberContactUpdate.class));
+        Mockito.verify(memberService).processMemberContact(Mockito.any(MemberContactUpdate.class));
     }
 
     @Test
     public void testRequestNewConsortiumMember() {
-        Mockito
-            .doNothing()
-            .when(memberService)
-            .requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
+        Mockito.doNothing().when(memberService).requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
         memberResource.requestNewConsortiumMember(new AddConsortiumMember());
-        Mockito
-            .verify(memberService)
-            .requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
+        Mockito.verify(memberService).requestNewConsortiumMember(Mockito.any(AddConsortiumMember.class));
     }
 
     @Test
     public void testRequestRemoveConsortiumMember() {
-        Mockito
-            .doNothing()
-            .when(memberService)
-            .requestRemoveConsortiumMember(
-                Mockito.any(RemoveConsortiumMember.class)
-            );
-        memberResource.requestRemoveConsortiumMember(
-            new RemoveConsortiumMember()
-        );
-        Mockito
-            .verify(memberService)
-            .requestRemoveConsortiumMember(
-                Mockito.any(RemoveConsortiumMember.class)
-            );
+        Mockito.doNothing().when(memberService).requestRemoveConsortiumMember(Mockito.any(RemoveConsortiumMember.class));
+        memberResource.requestRemoveConsortiumMember(new RemoveConsortiumMember());
+        Mockito.verify(memberService).requestRemoveConsortiumMember(Mockito.any(RemoveConsortiumMember.class));
     }
+
 
     private MemberValidation getMemberValidation() {
         MemberValidation validation = new MemberValidation();
@@ -329,9 +220,7 @@ public class MemberResourceTest {
         memberDetails.setLogoUrl("some/url/for/a/logo");
         memberDetails.setMemberType("Research Institute");
         memberDetails.setName("test member details");
-        memberDetails.setPublicDisplayDescriptionHtml(
-            "<p>public display description</p>"
-        );
+        memberDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
         memberDetails.setPublicDisplayEmail("orcid@testmember.com");
         memberDetails.setPublicDisplayName("public display name");
         memberDetails.setMembershipStartDateString("2022-01-01");
@@ -340,13 +229,13 @@ public class MemberResourceTest {
         return memberDetails;
     }
 
-    private PublicMemberDetails getPublicMemberDetails() {
-        PublicMemberDetails publicMemberDetails = new PublicMemberDetails();
-        publicMemberDetails.setName("test member details");
-        publicMemberDetails.setWebsite("https://website.com");
-        publicMemberDetails.setDescription("test");
-        publicMemberDetails.setEmail("email@orcid.org");
-        return publicMemberDetails;
+    private MemberUpdateData getPublicMemberDetails() {
+        MemberUpdateData memberUpdateData = new MemberUpdateData();
+        memberUpdateData.setName("test member details");
+        memberUpdateData.setWebsite("https://website.com");
+        memberUpdateData.setDescription("test");
+        memberUpdateData.setEmail("email@orcid.org");
+        return memberUpdateData;
     }
 
     private MemberContacts getMemberContacts() {
@@ -389,4 +278,5 @@ public class MemberResourceTest {
 
         return memberOrgIds;
     }
+
 }

@@ -1,7 +1,8 @@
 {
-  "endpoint": "",
-  "token": "",
-  "base_url": "",
-  "email": "",
-  "password": ""
+    "endpoint":  "",
+    "token": "",
+    "base_url": "",
+    "email": "",
+    "password": ""
+
 }

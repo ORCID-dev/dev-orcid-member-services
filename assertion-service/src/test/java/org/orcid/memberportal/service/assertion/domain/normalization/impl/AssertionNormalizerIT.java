@@ -18,16 +18,12 @@ public class AssertionNormalizerIT {
 
     @Test
     public void testNormalize() {
-        Assertion normalized = assertionNormalizer.normalize(
-            getAssertionToNormalize()
-        );
-        assertThat(normalized.getDisambiguatedOrgId())
-            .isEqualTo("https://ror.org/03yrm5c26");
+        Assertion normalized = assertionNormalizer.normalize(getAssertionToNormalize());
+        assertThat(normalized.getDisambiguatedOrgId()).isEqualTo("https://ror.org/03yrm5c26");
 
         // check that ids with base url aren't changed by normalizer
         normalized = assertionNormalizer.normalize(normalized);
-        assertThat(normalized.getDisambiguatedOrgId())
-            .isEqualTo("https://ror.org/03yrm5c26");
+        assertThat(normalized.getDisambiguatedOrgId()).isEqualTo("https://ror.org/03yrm5c26");
     }
 
     private Assertion getAssertionToNormalize() {
@@ -37,4 +33,7 @@ public class AssertionNormalizerIT {
         assertion.setRoleTitle("testing normalization");
         return assertion;
     }
+
 }
+
+

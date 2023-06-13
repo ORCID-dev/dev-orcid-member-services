@@ -31,4 +31,5 @@ public class PasswordResetResultVM {
     public void setInvalidKey(boolean invalidKey) {
         this.invalidKey = invalidKey;
     }
+
 }

@@ -87,4 +87,5 @@ public class AssertionsUploadSummary implements Serializable {
     public void setRegistryDeleteFailures(List<String> registryDeleteFailures) {
         this.registryDeleteFailures = registryDeleteFailures;
     }
+
 }

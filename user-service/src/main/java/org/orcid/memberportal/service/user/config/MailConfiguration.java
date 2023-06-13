@@ -13,22 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class MailConfiguration {
 
     @Bean
-    public HttpClient mailgunHttpClient(
-        ApplicationProperties applicationProperties
-    ) {
-        UsernamePasswordCredentials credentials =
-            new UsernamePasswordCredentials(
-                "api",
-                applicationProperties.getMailApiKey()
-            );
+    public HttpClient mailgunHttpClient(ApplicationProperties applicationProperties) {
+        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("api", applicationProperties.getMailApiKey());
 
         CredentialsProvider provider = new BasicCredentialsProvider();
         provider.setCredentials(AuthScope.ANY, credentials);
 
-        HttpClient client = HttpClientBuilder
-            .create()
-            .setDefaultCredentialsProvider(provider)
-            .build();
+        HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
         return client;
     }
+
 }

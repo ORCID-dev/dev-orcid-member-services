@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.assertion.security;
 
 import java.util.Collection;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -18,6 +19,7 @@ public class MockSecurityContext implements SecurityContext {
     @Override
     public Authentication getAuthentication() {
         return new Authentication() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -26,8 +28,8 @@ public class MockSecurityContext implements SecurityContext {
             }
 
             @Override
-            public void setAuthenticated(boolean isAuthenticated)
-                throws IllegalArgumentException {}
+            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+            }
 
             @Override
             public boolean isAuthenticated() {
@@ -57,5 +59,7 @@ public class MockSecurityContext implements SecurityContext {
     }
 
     @Override
-    public void setAuthentication(Authentication authentication) {}
+    public void setAuthentication(Authentication authentication) {
+    }
+
 }

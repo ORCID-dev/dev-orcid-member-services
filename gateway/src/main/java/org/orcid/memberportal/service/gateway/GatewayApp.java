@@ -1,10 +1,7 @@
 package org.orcid.memberportal.service.gateway;
 
 import io.github.jhipster.config.JHipsterConstants;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
+
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.gateway.config.ApplicationProperties;
 import org.orcid.memberportal.service.gateway.config.DefaultProfileUtil;
@@ -17,6 +14,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.core.env.Environment;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ ApplicationProperties.class })
@@ -44,30 +46,12 @@ public class GatewayApp implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        Collection<String> activeProfiles = Arrays.asList(
-            env.getActiveProfiles()
-        );
-        if (
-            activeProfiles.contains(
-                JHipsterConstants.SPRING_PROFILE_DEVELOPMENT
-            ) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
-        ) {
-            log.error(
-                "You have misconfigured your application! It should not run " +
-                "with both the 'dev' and 'prod' profiles at the same time."
-            );
+        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+            log.error("You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time.");
         }
-        if (
-            activeProfiles.contains(
-                JHipsterConstants.SPRING_PROFILE_DEVELOPMENT
-            ) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)
-        ) {
-            log.error(
-                "You have misconfigured your application! It should not " +
-                "run with both the 'dev' and 'cloud' profiles at the same time."
-            );
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
+            log.error("You have misconfigured your application! It should not " + "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
     }
 
@@ -98,35 +82,17 @@ public class GatewayApp implements InitializingBean {
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            log.warn(
-                "The host name could not be determined, using `localhost` as fallback"
-            );
+            log.warn("The host name could not be determined, using `localhost` as fallback");
         }
-        log.info(
-            "\n----------------------------------------------------------\n\t" +
-            "Application '{}' is running! Access URLs:\n\t" +
-            "Local: \t\t{}://localhost:{}{}\n\t" +
-            "External: \t{}://{}:{}{}\n\t" +
-            "Profile(s): \t{}\n----------------------------------------------------------",
-            env.getProperty("spring.application.name"),
-            protocol,
-            serverPort,
-            contextPath,
-            protocol,
-            hostAddress,
-            serverPort,
-            contextPath,
-            env.getActiveProfiles()
-        );
+        log.info("\n----------------------------------------------------------\n\t" + "Application '{}' is running! Access URLs:\n\t"
+                + "Local: \t\t{}://localhost:{}{}\n\t" + "External: \t{}://{}:{}{}\n\t" + "Profile(s): \t{}\n----------------------------------------------------------",
+                env.getProperty("spring.application.name"), protocol, serverPort, contextPath, protocol, hostAddress, serverPort, contextPath, env.getActiveProfiles());
 
         String configServerStatus = env.getProperty("configserver.status");
         if (configServerStatus == null) {
             configServerStatus = "Not found or not setup for this application";
         }
-        log.info(
-            "\n----------------------------------------------------------\n\t" +
-            "Config Server: \t{}\n----------------------------------------------------------",
-            configServerStatus
-        );
+        log.info("\n----------------------------------------------------------\n\t" + "Config Server: \t{}\n----------------------------------------------------------",
+                configServerStatus);
     }
 }

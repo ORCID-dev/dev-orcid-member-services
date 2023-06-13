@@ -2,12 +2,8 @@
   "activate": {
     "title": { "string": "Activación " },
     "messages": {
-      "success": {
-        "string": "<strong>Se ha activado su cuenta de usuario.</strong> Por favor,"
-      },
-      "error": {
-        "string": "<strong>No se ha podido activar su usuario.</strong> Utilice el formulario de registro para registrarse."
-      }
+      "success": { "string": "<strong>Se ha activado su cuenta de usuario.</strong> Por favor," },
+      "error": { "string": "<strong>No se ha podido activar su usuario.</strong> Utilice el formulario de registro para registrarse." }
     }
   }
 }

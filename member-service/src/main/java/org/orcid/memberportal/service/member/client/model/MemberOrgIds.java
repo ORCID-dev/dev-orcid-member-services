@@ -1,7 +1,8 @@
 package org.orcid.memberportal.service.member.client.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MemberOrgIds {
 
@@ -26,4 +27,5 @@ public class MemberOrgIds {
     public void setRecords(List<MemberOrgId> records) {
         this.records = records;
     }
+
 }

@@ -1,7 +1,8 @@
 package io.github.jhipster.registry.web.rest.vm;
 
-import java.util.List;
 import org.springframework.cloud.client.ServiceInstance;
+
+import java.util.List;
 
 /**
  * View Model that stores a route managed by the Registry.
@@ -20,16 +21,9 @@ public class RouteVM {
 
     private List<ServiceInstance> serviceInstances;
 
-    public RouteVM() {}
+    public RouteVM(){}
 
-    public RouteVM(
-        String path,
-        String prefix,
-        String serviceId,
-        String appName,
-        String status,
-        List<ServiceInstance> serviceInstances
-    ) {
+    public RouteVM(String path, String prefix, String serviceId, String appName, String status, List<ServiceInstance> serviceInstances) {
         this.path = path;
         this.prefix = prefix;
         this.serviceId = serviceId;
@@ -88,26 +82,14 @@ public class RouteVM {
 
     @Override
     public String toString() {
-        return (
-            "RouteVM{" +
-            "path='" +
-            path +
-            '\'' +
-            ", prefix='" +
-            prefix +
-            '\'' +
-            ", serviceId='" +
-            serviceId +
-            '\'' +
-            ", appName='" +
-            appName +
-            '\'' +
-            ", status='" +
-            status +
-            '\'' +
-            ", serviceInstances=" +
-            serviceInstances +
-            '}'
-        );
+        return "RouteVM{" +
+            "path='" + path + '\'' +
+            ", prefix='" + prefix + '\'' +
+            ", serviceId='" + serviceId + '\'' +
+            ", appName='" + appName + '\'' +
+            ", status='" + status + '\'' +
+            ", serviceInstances=" + serviceInstances +
+            '}';
     }
+
 }

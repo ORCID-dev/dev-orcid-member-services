@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -38,113 +39,56 @@ public class MemberValidatorTest {
     @BeforeEach
     private void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito
-            .when(
-                messageSource.getMessage(
-                    Mockito.anyString(),
-                    Mockito.any(),
-                    Mockito.any(Locale.class)
-                )
-            )
-            .thenReturn("error-message");
-        Mockito
-            .when(memberRepository.findByClientName(Mockito.anyString()))
-            .thenReturn(Optional.empty());
-        Mockito
-            .when(memberRepository.findBySalesforceId(Mockito.anyString()))
-            .thenReturn(Optional.empty());
+        Mockito.when(messageSource.getMessage(Mockito.anyString(), Mockito.any(), Mockito.any(Locale.class))).thenReturn("error-message");
+        Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
     }
 
     @Test
     public void testValidateWithMissingAssertionsEnabled() {
         Member member = getMemberWithMissingAssertionsEnabled();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.missingAssertionsEnabled",
-            propertyName
-        );
+        assertEquals("member.validation.error.missingAssertionsEnabled", propertyName);
     }
 
     @Test
     public void testValidateWithInvalidAssertionsEnabled() {
         Member member = getConsortiaLeadWithNoClientId();
         member.setAssertionServiceEnabled(true); // invalid due to no client id
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.invalidAssertionsEnabled",
-            propertyName
-        );
+        assertEquals("member.validation.error.invalidAssertionsEnabled", propertyName);
     }
 
     @Test
     public void testValidateWithMissingSalesforceId() {
         Member member = getMemberWithMissingSalesforceId();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.missingSalesforceId",
-            propertyName
-        );
+        assertEquals("member.validation.error.missingSalesforceId", propertyName);
     }
 
     @Test
     public void testValidateWithMissingClientId() {
         Member member = getMemberWithMissingClientId();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.missingClientId", propertyName);
 
@@ -159,20 +103,11 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithMissingClientName() {
         Member member = getMemberWithMissingClientName();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.missingClientName", propertyName);
     }
@@ -180,20 +115,11 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithInvalidClientId() {
         Member member = getMemberWithInvalidClientId();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.invalidClientId", propertyName);
     }
@@ -201,64 +127,39 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithValidOldClientId() {
         Member member = getMemberWithValidOldClientId();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertTrue(validation.isValid());
         assertEquals(0, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.never())
-            .getMessage(Mockito.anyString(), Mockito.any(), Mockito.any());
+        Mockito.verify(messageSource, Mockito.never()).getMessage(Mockito.anyString(), Mockito.any(), Mockito.any());
     }
 
     @Test
     public void testValidateWithValidNewClientId() {
         Member member = getMemberWithValidNewClientId();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertTrue(validation.isValid());
         assertEquals(0, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.never())
-            .getMessage(Mockito.anyString(), Mockito.any(), Mockito.any());
+        Mockito.verify(messageSource, Mockito.never()).getMessage(Mockito.anyString(), Mockito.any(), Mockito.any());
     }
 
     @Test
     public void testValidateWithMissingConsortiumLead() {
         Member member = getMemberWithMissingConsortiumLead();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.missingConsortiumLead",
-            propertyName
-        );
+        assertEquals("member.validation.error.missingConsortiumLead", propertyName);
     }
 
     @Test
     public void testValidateNonConsortiumLeadWithNoParentSalesforceId() {
         Member member = getNonConsortiumLeadWithNoParentSalesforceId();
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
     }
 
@@ -267,25 +168,13 @@ public class MemberValidatorTest {
         Member member = getConsortiaLeadWithNoClientId();
         member.setParentSalesforceId("illegal");
         member.setAssertionServiceEnabled(false);
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         assertFalse(validation.isValid());
         List<String> errors = validation.getErrors();
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.parentSalesforceIdNotAllowed",
-            propertyName
-        );
+        assertEquals("member.validation.error.parentSalesforceIdNotAllowed", propertyName);
 
         member.setSalesforceId("legal");
         member.setParentSalesforceId("legal");
@@ -305,59 +194,32 @@ public class MemberValidatorTest {
     public void testValidateCreateMemberWhereSalesforceIdExists() {
         Member existingMember = getMemberWithValidNewClientId();
         existingMember.setId("existing-member-id");
-        Mockito
-            .when(memberRepository.findBySalesforceId(Mockito.anyString()))
-            .thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(existingMember));
 
-        Member invalidNewMemberWithClashingSalesforceId =
-            getMemberWithValidNewClientId();
-        MemberValidation validation = memberValidator.validate(
-            invalidNewMemberWithClashingSalesforceId,
-            getUser()
-        );
+        Member invalidNewMemberWithClashingSalesforceId = getMemberWithValidNewClientId();
+        MemberValidation validation = memberValidator.validate(invalidNewMemberWithClashingSalesforceId, getUser());
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.salesforceIdAlreadyExists",
-            propertyName
-        );
+        assertEquals("member.validation.error.salesforceIdAlreadyExists", propertyName);
     }
 
     @Test
     public void testValidateCreateMemberWhereNameExists() {
         Member existingMember = getMemberWithValidNewClientId();
         existingMember.setId("existing-member-id");
-        Mockito
-            .when(memberRepository.findByClientName(Mockito.anyString()))
-            .thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(existingMember));
 
-        Member invalidNewMemberDueToClashingClientName =
-            getMemberWithValidNewClientId();
-        MemberValidation validation = memberValidator.validate(
-            invalidNewMemberDueToClashingClientName,
-            getUser()
-        );
+        Member invalidNewMemberDueToClashingClientName = getMemberWithValidNewClientId();
+        MemberValidation validation = memberValidator.validate(invalidNewMemberDueToClashingClientName, getUser());
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.nameAlreadyExists", propertyName);
     }
@@ -366,61 +228,34 @@ public class MemberValidatorTest {
     public void testValidateUpdateMemberWhereSalesforceIdExists() {
         Member existingMember = getMemberWithValidNewClientId();
         existingMember.setId("existing-member-id");
-        Mockito
-            .when(memberRepository.findBySalesforceId(Mockito.anyString()))
-            .thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(existingMember));
 
-        Member invalidUpdatingMemberWithClashingSalesforceId =
-            getMemberWithValidNewClientId();
+        Member invalidUpdatingMemberWithClashingSalesforceId = getMemberWithValidNewClientId();
         invalidUpdatingMemberWithClashingSalesforceId.setId("some-id");
-        MemberValidation validation = memberValidator.validate(
-            invalidUpdatingMemberWithClashingSalesforceId,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(invalidUpdatingMemberWithClashingSalesforceId, getUser());
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.salesforceIdAlreadyExists",
-            propertyName
-        );
+        assertEquals("member.validation.error.salesforceIdAlreadyExists", propertyName);
     }
 
     @Test
     public void testValidateUpdateMemberWhereNameExists() {
         Member existingMember = getMemberWithValidNewClientId();
         existingMember.setId("existing-member-id");
-        Mockito
-            .when(memberRepository.findByClientName(Mockito.anyString()))
-            .thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(existingMember));
 
-        Member invalidUpdatingMemberDueToClashingClientName =
-            getMemberWithValidNewClientId();
+        Member invalidUpdatingMemberDueToClashingClientName = getMemberWithValidNewClientId();
         invalidUpdatingMemberDueToClashingClientName.setId("some-id");
-        MemberValidation validation = memberValidator.validate(
-            invalidUpdatingMemberDueToClashingClientName,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(invalidUpdatingMemberDueToClashingClientName, getUser());
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.nameAlreadyExists", propertyName);
     }
@@ -429,21 +264,12 @@ public class MemberValidatorTest {
     public void testValidateMemberWithInvalidMemberType() {
         Member member = getMemberWithValidNewClientId();
         member.setType("invalid member type");
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
         assertEquals("member.validation.error.invalidMemberType", propertyName);
     }
@@ -452,10 +278,7 @@ public class MemberValidatorTest {
     public void testValidateMemberWithValidMemberType() {
         Member member = getMemberWithValidNewClientId();
         member.setType("basic");
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
 
         member.setType("premium");
@@ -467,36 +290,21 @@ public class MemberValidatorTest {
     public void testValidateMemberWithInvalidMemberStatus() {
         Member member = getMemberWithValidNewClientId();
         member.setStatus("invalid member status");
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
-        Mockito
-            .verify(messageSource, Mockito.times(1))
-            .getMessage(
-                errorMessagePropertyCaptor.capture(),
-                Mockito.any(),
-                Mockito.any()
-            );
+        Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals(
-            "member.validation.error.invalidMemberStatus",
-            propertyName
-        );
+        assertEquals("member.validation.error.invalidMemberStatus", propertyName);
     }
 
     @Test
     public void testValidateMemberWithValidMemberStatus() {
         Member member = getMemberWithValidNewClientId();
         member.setStatus("Active");
-        MemberValidation validation = memberValidator.validate(
-            member,
-            getUser()
-        );
+        MemberValidation validation = memberValidator.validate(member, getUser());
         assertTrue(validation.isValid());
 
         member.setStatus("Deactivated");
@@ -588,4 +396,5 @@ public class MemberValidatorTest {
         member.setSuperadminEnabled(false);
         return member;
     }
+
 }

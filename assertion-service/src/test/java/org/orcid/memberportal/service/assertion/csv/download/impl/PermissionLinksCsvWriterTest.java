@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -48,35 +49,19 @@ public class PermissionLinksCsvWriterTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(applicationProperties.getLandingPageUrl())
-            .thenReturn("https://member-portal.com");
-        when(assertionsUserService.getLoggedInUserSalesforceId())
-            .thenReturn(DEFAULT_SALESFORCE_ID);
-        when(
-            orcidRecordService.getRecordsWithoutTokens(
-                Mockito.eq(DEFAULT_SALESFORCE_ID)
-            )
-        )
-            .thenReturn(getListOfOrcidRecords());
-        when(
-            assertionsRepository.countByEmailAndSalesforceId(
-                Mockito.anyString(),
-                Mockito.eq(DEFAULT_SALESFORCE_ID)
-            )
-        )
-            .thenReturn(10l);
-        when(encryptUtil.encrypt(Mockito.anyString()))
-            .thenAnswer(
-                new Answer<String>() {
-                    // just return unencrypted arg
-                    @Override
-                    public String answer(InvocationOnMock invocation)
-                        throws Throwable {
-                        String arg = (String) invocation.getArgument(0);
-                        return arg;
-                    }
-                }
-            );
+        when(applicationProperties.getLandingPageUrl()).thenReturn("https://member-portal.com");
+        when(assertionsUserService.getLoggedInUserSalesforceId()).thenReturn(DEFAULT_SALESFORCE_ID);
+        when(orcidRecordService.getRecordsWithoutTokens(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(getListOfOrcidRecords());
+        when(assertionsRepository.countByEmailAndSalesforceId(Mockito.anyString(), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(10l);
+        when(encryptUtil.encrypt(Mockito.anyString())).thenAnswer(new Answer<String>() {
+            // just return unencrypted arg
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                String arg = (String) invocation.getArgument(0);
+                return arg;
+            }
+
+        });
     }
 
     private List<OrcidRecord> getListOfOrcidRecords() {
@@ -92,14 +77,12 @@ public class PermissionLinksCsvWriterTest {
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = csvWriter.writeCsv(
-            assertionsUserService.getLoggedInUserSalesforceId()
-        );
+        String test = csvWriter.writeCsv(assertionsUserService.getLoggedInUserSalesforceId());
         assertNotNull(test);
         assertTrue(test.length() > 0);
         String[] lines = test.split("\\n");
         assertEquals(11, lines.length); // header + permission link for each of
-        // 10 records
+                                        // 10 records
 
         String headerLine = lines[0];
         String[] headers = headerLine.split(",");
@@ -114,18 +97,12 @@ public class PermissionLinksCsvWriterTest {
 
     private void checkValues(String[] values, int i) {
         assertEquals(i + "@test.com", values[0].trim());
-        assertEquals(
-            "https://member-portal.com?state=" +
-            DEFAULT_SALESFORCE_ID +
-            "&&" +
-            i +
-            "@test.com",
-            values[1].trim()
-        );
+        assertEquals("https://member-portal.com?state=" + DEFAULT_SALESFORCE_ID + "&&" + i + "@test.com", values[1].trim());
     }
 
     private void checkHeaders(String[] headers) {
         assertEquals("email", headers[0].trim());
         assertEquals("link", headers[1].trim());
     }
+
 }

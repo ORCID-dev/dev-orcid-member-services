@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.member.config;
 
 import io.github.jhipster.config.locale.AngularCookieLocaleResolver;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
@@ -12,16 +13,14 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 
     @Bean(name = "localeResolver")
     public LocaleResolver localeResolver() {
-        AngularCookieLocaleResolver cookieLocaleResolver =
-            new AngularCookieLocaleResolver();
+        AngularCookieLocaleResolver cookieLocaleResolver = new AngularCookieLocaleResolver();
         cookieLocaleResolver.setCookieName("NG_TRANSLATE_LANG_KEY");
         return cookieLocaleResolver;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        LocaleChangeInterceptor localeChangeInterceptor =
-            new LocaleChangeInterceptor();
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("language");
         registry.addInterceptor(localeChangeInterceptor);
     }

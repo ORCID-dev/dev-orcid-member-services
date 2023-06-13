@@ -13,17 +13,13 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * expired/missing ones.
  */
 class CookiesHttpServletRequestWrapper extends HttpServletRequestWrapper {
-
     /**
      * The new cookies of the request. Use these instead of the ones found in
      * the wrapped request.
      */
     private Cookie[] cookies;
 
-    public CookiesHttpServletRequestWrapper(
-        HttpServletRequest request,
-        Cookie[] cookies
-    ) {
+    public CookiesHttpServletRequestWrapper(HttpServletRequest request, Cookie[] cookies) {
         super(request);
         this.cookies = cookies;
     }

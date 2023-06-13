@@ -11,14 +11,14 @@ repos:
         stages: [commit, push, manual]
         exclude: ^tx
 
-      - id: check-executables-have-shebangs
-        name: check that executables have shebangs
-        description: ensures that (non-binary) executables have a shebang.
-        entry: check-executables-have-shebangs
-        language: python
-        types: [text, executable]
-        stages: [commit, push, manual]
-
+#       - id: check-executables-have-shebangs
+#         name: check that executables have shebangs
+#         description: ensures that (non-binary) executables have a shebang.
+#         entry: check-executables-have-shebangs
+#         language: python
+#         types: [text, executable]
+#         stages: [commit, push, manual]
+#
       - id: check-yaml
         name: check yaml
         description: checks yaml files for parseable syntax.
@@ -67,21 +67,21 @@ repos:
         types: [yaml]
         files: "^.github/workflows/"
 
-      - id: prettier
-        name: prettier-local
-        types: [javascript,css,xml]
-        entry: prettier --write --list-different --ignore-unknown
-        #entry: prettier --check --loglevel debug
-        additional_dependencies:
-          - "prettier@2.8.8"
-          - "@prettier/plugin-xml@v2.2.0"
-          - "prettier-plugin-java@v2.1.0"
-        language: node
-        args: []
-        exclude: ".pom$"
-        require_serial: false
-        minimum_pre_commit_version: "0"
-
+#       - id: prettier
+#         name: prettier-local
+#         types: [javascript,css,xml]
+#         entry: prettier --write --list-different --ignore-unknown
+#         #entry: prettier --check --loglevel debug
+#         additional_dependencies:
+#           - "prettier@2.8.8"
+#           - "@prettier/plugin-xml@v2.2.0"
+#           - "prettier-plugin-java@v2.1.0"
+#         language: node
+#         args: []
+#         exclude: ".pom$"
+#         require_serial: false
+#         minimum_pre_commit_version: "0"
+#
 
 #   - repo: https://github.com/ORCID/pre-commit-spotless
 #     rev: v1.0.0

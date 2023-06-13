@@ -1,10 +1,11 @@
 package io.github.jhipster.registry.gateway;
 
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
-
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+
 import java.util.Set;
+
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
 
 public class JWTTokenRelayFilter extends ZuulFilter {
 

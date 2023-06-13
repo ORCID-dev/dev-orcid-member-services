@@ -2,6 +2,7 @@ package org.orcid.memberportal.service.user.upload;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -35,4 +36,5 @@ public class UserUpload {
     public JSONArray getErrors() {
         return errors;
     }
+
 }

@@ -23,4 +23,5 @@ public class UserValidation {
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }
+
 }

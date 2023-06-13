@@ -1,6 +1,7 @@
 package org.orcid.memberportal.service.user.services;
 
 import feign.FeignException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.user.client.MemberServiceClient;
 import org.orcid.memberportal.service.user.member.MemberServiceMember;
@@ -17,8 +18,7 @@ public class MemberService {
 
     public boolean memberExistsWithSalesforceId(String salesforceId) {
         try {
-            ResponseEntity<MemberServiceMember> response =
-                memberServiceClient.getMember(salesforceId);
+            ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 return true;
@@ -27,7 +27,9 @@ public class MemberService {
             if (response.getStatusCode().is4xxClientError()) {
                 return false;
             }
+
         } catch (FeignException ex) {
+
             HttpStatus status = HttpStatus.resolve(ex.status());
             if (status == null) {
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -40,16 +42,14 @@ public class MemberService {
             if (status.is4xxClientError()) {
                 return false;
             }
+
         }
 
         throw new RuntimeException("Error contacting member service");
     }
 
-    public boolean memberExistsWithSalesforceIdAndAssertionsEnabled(
-        String salesforceId
-    ) {
-        ResponseEntity<MemberServiceMember> response =
-            memberServiceClient.getMember(salesforceId);
+    public boolean memberExistsWithSalesforceIdAndAssertionsEnabled(String salesforceId) {
+        ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody().getAssertionServiceEnabled();
         }
@@ -60,11 +60,8 @@ public class MemberService {
         throw new RuntimeException("Error contacting member service");
     }
 
-    public boolean memberExistsWithSalesforceIdAndSuperadminEnabled(
-        String salesforceId
-    ) {
-        ResponseEntity<MemberServiceMember> response =
-            memberServiceClient.getMember(salesforceId);
+    public boolean memberExistsWithSalesforceIdAndSuperadminEnabled(String salesforceId) {
+        ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
             if (response.getBody().getSuperadminEnabled() == null) {
                 return false;
@@ -84,8 +81,7 @@ public class MemberService {
             return null;
         }
 
-        ResponseEntity<MemberServiceMember> response =
-            memberServiceClient.getMember(salesforceId);
+        ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody().getClientName();
         }
@@ -97,13 +93,9 @@ public class MemberService {
     }
 
     public boolean memberIsConsortiumLead(String salesforceId) {
-        ResponseEntity<MemberServiceMember> response =
-            memberServiceClient.getMember(salesforceId);
+        ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
-            return (
-                response.getBody().getIsConsortiumLead() != null &&
-                response.getBody().getIsConsortiumLead().booleanValue()
-            );
+            return response.getBody().getIsConsortiumLead() != null && response.getBody().getIsConsortiumLead().booleanValue();
         }
         if (response.getStatusCodeValue() == 404) {
             throw new RuntimeException("Member not found");
@@ -113,13 +105,9 @@ public class MemberService {
     }
 
     public boolean memberIsAdminEnabled(String salesforceId) {
-        ResponseEntity<MemberServiceMember> response =
-            memberServiceClient.getMember(salesforceId);
+        ResponseEntity<MemberServiceMember> response = memberServiceClient.getMember(salesforceId);
         if (response.getStatusCode().is2xxSuccessful()) {
-            return (
-                response.getBody().getSuperadminEnabled() != null &&
-                response.getBody().getSuperadminEnabled().booleanValue()
-            );
+            return response.getBody().getSuperadminEnabled() != null && response.getBody().getSuperadminEnabled().booleanValue();
         }
         if (response.getStatusCodeValue() == 404) {
             throw new RuntimeException("Member not found");

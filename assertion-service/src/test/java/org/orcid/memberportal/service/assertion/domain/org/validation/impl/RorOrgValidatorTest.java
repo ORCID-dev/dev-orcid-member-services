@@ -28,4 +28,5 @@ public class RorOrgValidatorTest {
         assertThat(validator.validId("https://ror.org/03yrd")).isFalse();
         assertThat(validator.validId("03yrd")).isFalse();
     }
+
 }

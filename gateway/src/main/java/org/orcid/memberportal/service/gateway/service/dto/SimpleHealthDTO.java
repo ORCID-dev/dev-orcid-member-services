@@ -10,7 +10,8 @@ public final class SimpleHealthDTO {
 
     private Status status;
 
-    public SimpleHealthDTO() {}
+    public SimpleHealthDTO() {
+    }
 
     public SimpleHealthDTO(Status status) {
         this.status = status;
@@ -23,4 +24,5 @@ public final class SimpleHealthDTO {
     public void setStatus(Status status) {
         this.status = status;
     }
+
 }

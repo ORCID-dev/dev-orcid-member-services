@@ -81,9 +81,7 @@ public class ApplicationProperties {
         return holisticsMemberDashboardUrl;
     }
 
-    public void setHolisticsMemberDashboardUrl(
-        String holisticsMemberDashboardUrl
-    ) {
+    public void setHolisticsMemberDashboardUrl(String holisticsMemberDashboardUrl) {
         this.holisticsMemberDashboardUrl = holisticsMemberDashboardUrl;
     }
 
@@ -91,9 +89,7 @@ public class ApplicationProperties {
         return holisticsMemberDashboardSecret;
     }
 
-    public void setHolisticsMemberDashboardSecret(
-        String holisticsMemberDashboardSecret
-    ) {
+    public void setHolisticsMemberDashboardSecret(String holisticsMemberDashboardSecret) {
         this.holisticsMemberDashboardSecret = holisticsMemberDashboardSecret;
     }
 
@@ -101,31 +97,23 @@ public class ApplicationProperties {
         return holisticsIntegrationDashboardUrl;
     }
 
-    public void setHolisticsIntegrationDashboardUrl(
-        String holisticsIntegrationDashboardUrl
-    ) {
-        this.holisticsIntegrationDashboardUrl =
-            holisticsIntegrationDashboardUrl;
+    public void setHolisticsIntegrationDashboardUrl(String holisticsIntegrationDashboardUrl) {
+        this.holisticsIntegrationDashboardUrl = holisticsIntegrationDashboardUrl;
     }
 
     public String getHolisticsIntegrationDashboardSecret() {
         return holisticsIntegrationDashboardSecret;
     }
 
-    public void setHolisticsIntegrationDashboardSecret(
-        String holisticsIntegrationDashboardSecret
-    ) {
-        this.holisticsIntegrationDashboardSecret =
-            holisticsIntegrationDashboardSecret;
+    public void setHolisticsIntegrationDashboardSecret(String holisticsIntegrationDashboardSecret) {
+        this.holisticsIntegrationDashboardSecret = holisticsIntegrationDashboardSecret;
     }
 
     public String getHolisticsConsortiaDashboardUrl() {
         return holisticsConsortiaDashboardUrl;
     }
 
-    public void setHolisticsConsortiaDashboardUrl(
-        String holisticsConsortiaDashboardUrl
-    ) {
+    public void setHolisticsConsortiaDashboardUrl(String holisticsConsortiaDashboardUrl) {
         this.holisticsConsortiaDashboardUrl = holisticsConsortiaDashboardUrl;
     }
 
@@ -133,33 +121,24 @@ public class ApplicationProperties {
         return holisticsConsortiaDashboardSecret;
     }
 
-    public void setHolisticsConsortiaDashboardSecret(
-        String holisticsConsortiaDashboardSecret
-    ) {
-        this.holisticsConsortiaDashboardSecret =
-            holisticsConsortiaDashboardSecret;
+    public void setHolisticsConsortiaDashboardSecret(String holisticsConsortiaDashboardSecret) {
+        this.holisticsConsortiaDashboardSecret = holisticsConsortiaDashboardSecret;
     }
 
     public String getHolisticsAffiliationDashboardUrl() {
         return holisticsAffiliationDashboardUrl;
     }
 
-    public void setHolisticsAffiliationDashboardUrl(
-        String holisticsAffiliationDashboardUrl
-    ) {
-        this.holisticsAffiliationDashboardUrl =
-            holisticsAffiliationDashboardUrl;
+    public void setHolisticsAffiliationDashboardUrl(String holisticsAffiliationDashboardUrl) {
+        this.holisticsAffiliationDashboardUrl = holisticsAffiliationDashboardUrl;
     }
 
     public String getHolisticsAffiliationDashboardSecret() {
         return holisticsAffiliationDashboardSecret;
     }
 
-    public void setHolisticsAffiliationDashboardSecret(
-        String holisticsAffiliationDashboardSecret
-    ) {
-        this.holisticsAffiliationDashboardSecret =
-            holisticsAffiliationDashboardSecret;
+    public void setHolisticsAffiliationDashboardSecret(String holisticsAffiliationDashboardSecret) {
+        this.holisticsAffiliationDashboardSecret = holisticsAffiliationDashboardSecret;
     }
 
     public String getSalesforceClientEndpoint() {
@@ -206,22 +185,16 @@ public class ApplicationProperties {
         return holisticsConsortiaMemberAffiliationsDashboardUrl;
     }
 
-    public void setHolisticsConsortiaMemberAffiliationsDashboardUrl(
-        String holisticsConsortiaMemberAffiliationsDashboardUrl
-    ) {
-        this.holisticsConsortiaMemberAffiliationsDashboardUrl =
-            holisticsConsortiaMemberAffiliationsDashboardUrl;
+    public void setHolisticsConsortiaMemberAffiliationsDashboardUrl(String holisticsConsortiaMemberAffiliationsDashboardUrl) {
+        this.holisticsConsortiaMemberAffiliationsDashboardUrl = holisticsConsortiaMemberAffiliationsDashboardUrl;
     }
 
     public String getHolisticsConsortiaMemberAffiliationsDashboardSecret() {
         return holisticsConsortiaMemberAffiliationsDashboardSecret;
     }
 
-    public void setHolisticsConsortiaMemberAffiliationsDashboardSecret(
-        String holisticsConsortiaMemberAffiliationsDashboardSecret
-    ) {
-        this.holisticsConsortiaMemberAffiliationsDashboardSecret =
-            holisticsConsortiaMemberAffiliationsDashboardSecret;
+    public void setHolisticsConsortiaMemberAffiliationsDashboardSecret(String holisticsConsortiaMemberAffiliationsDashboardSecret) {
+        this.holisticsConsortiaMemberAffiliationsDashboardSecret = holisticsConsortiaMemberAffiliationsDashboardSecret;
     }
 
     public String getContactUpdateRecipient() {

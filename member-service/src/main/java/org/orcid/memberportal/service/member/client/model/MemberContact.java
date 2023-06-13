@@ -80,4 +80,5 @@ public class MemberContact {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 }

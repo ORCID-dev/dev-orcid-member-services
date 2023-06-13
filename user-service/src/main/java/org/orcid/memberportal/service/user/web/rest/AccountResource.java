@@ -2,8 +2,10 @@ package org.orcid.memberportal.service.user.web.rest;
 
 import java.util.List;
 import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.orcid.memberportal.service.user.domain.User;
 import org.orcid.memberportal.service.user.dto.PasswordChangeDTO;
@@ -41,8 +43,7 @@ public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
-    public static final String ROLE_PREVIOUS_ADMINISTRATOR =
-        "ROLE_PREVIOUS_ADMINISTRATOR";
+    public static final String ROLE_PREVIOUS_ADMINISTRATOR = "ROLE_PREVIOUS_ADMINISTRATOR";
 
     protected final UserRepository userRepository;
 
@@ -52,12 +53,7 @@ public class AccountResource {
 
     protected final MailService mailService;
 
-    public AccountResource(
-        UserRepository userRepository,
-        UserService userService,
-        MailService mailService,
-        UserMapper userMapper
-    ) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
@@ -88,25 +84,11 @@ public class AccountResource {
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         User currentUser = userService.getCurrentUser();
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(
-            userDTO.getEmail()
-        );
-        if (
-            existingUser.isPresent() &&
-            !existingUser
-                .get()
-                .getEmail()
-                .equalsIgnoreCase(currentUser.getEmail())
-        ) {
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && !existingUser.get().getEmail().equalsIgnoreCase(currentUser.getEmail())) {
             throw new EmailAlreadyUsedException();
         }
-        userService.updateAccount(
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail(),
-            userDTO.getLangKey(),
-            userDTO.getImageUrl()
-        );
+        userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
     }
 
     /**
@@ -121,9 +103,7 @@ public class AccountResource {
         User user = userService.getCurrentUser();
         UserDTO userDTO = userMapper.toUserDTO(user);
         if (!StringUtils.isAllBlank(userDTO.getLoginAs())) {
-            Optional<User> loginAsUser = userService.getUserByLogin(
-                userDTO.getLoginAs()
-            );
+            Optional<User> loginAsUser = userService.getUserByLogin(userDTO.getLoginAs());
             userDTO = userMapper.toUserDTO(loginAsUser.get());
             userDTO.setLoggedAs(true);
         }
@@ -149,9 +129,7 @@ public class AccountResource {
      * @param mfaSetup - the otp and secret
      */
     @PostMapping(path = "/account/mfa/on")
-    public ResponseEntity<List<String>> switchOnMfa(
-        @RequestBody MfaSetup mfaSetup
-    ) {
+    public ResponseEntity<List<String>> switchOnMfa(@RequestBody MfaSetup mfaSetup) {
         if (mfaSetup == null || StringUtils.isBlank(mfaSetup.getOtp())) {
             return ResponseEntity.badRequest().build();
         }
@@ -181,16 +159,11 @@ public class AccountResource {
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
-    public void changePassword(
-        @RequestBody PasswordChangeDTO passwordChangeDto
-    ) {
+    public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
         if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        userService.changePassword(
-            passwordChangeDto.getCurrentPassword(),
-            passwordChangeDto.getNewPassword()
-        );
+        userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
     }
 
     /**
@@ -203,11 +176,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-        mailService.sendPasswordResetMail(
-            userService
-                .requestPasswordReset(mail)
-                .orElseThrow(EmailNotFoundException::new)
-        );
+        mailService.sendPasswordResetMail(userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
     }
 
     /**
@@ -220,19 +189,14 @@ public class AccountResource {
      *                                  be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
-    public ResponseEntity<PasswordResetResultVM> finishPasswordReset(
-        @RequestBody KeyAndPasswordVM keyAndPassword
-    ) {
+    public ResponseEntity<PasswordResetResultVM> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
 
         PasswordResetResultVM result = new PasswordResetResultVM();
         try {
-            userService.completePasswordReset(
-                keyAndPassword.getNewPassword(),
-                keyAndPassword.getKey()
-            );
+            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
             result.setSuccess(true);
         } catch (ExpiredKeyException e) {
             result.setExpiredKey(true);
@@ -253,9 +217,7 @@ public class AccountResource {
      *                                  be reset.
      */
     @PostMapping(path = "/account/reset-password/validate")
-    public ResponseEntity<PasswordResetResultVM> validateKey(
-        @RequestBody KeyVM key
-    ) {
+    public ResponseEntity<PasswordResetResultVM> validateKey(@RequestBody KeyVM key) {
         PasswordResetResultVM result = new PasswordResetResultVM();
         if (userService.validResetKey(key.getKey())) {
             result.setExpiredKey(userService.expiredResetKey(key.getKey()));
@@ -266,10 +228,6 @@ public class AccountResource {
     }
 
     protected static boolean checkPasswordLength(String password) {
-        return (
-            !StringUtils.isEmpty(password) &&
-            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH
-        );
+        return !StringUtils.isEmpty(password) && password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH && password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 }

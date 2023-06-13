@@ -4,10 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -15,9 +13,9 @@ import org.mockito.Mockito;
 import org.orcid.memberportal.service.member.MemberServiceApp;
 import org.orcid.memberportal.service.member.domain.Member;
 import org.orcid.memberportal.service.member.repository.MemberRepository;
+import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.services.MemberService;
 import org.orcid.memberportal.service.member.services.UserService;
-import org.orcid.memberportal.service.member.services.pojo.MemberServiceUser;
 import org.orcid.memberportal.service.member.web.rest.errors.ExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +26,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @SpringBootTest(classes = MemberServiceApp.class)
 public class MemberResourceIT {
@@ -68,244 +70,98 @@ public class MemberResourceIT {
         objectMapper.registerModule(new JavaTimeModule());
         memberRepository.deleteAll();
         createMembers(30);
-        this.restUserMockMvc =
-            MockMvcBuilders
-                .standaloneSetup(memberResource)
-                .setCustomArgumentResolvers(pageableArgumentResolver)
-                .setControllerAdvice(exceptionTranslator)
-                .setMessageConverters(jacksonMessageConverter)
-                .build();
-        Mockito
-            .when(mockedUserService.getLoggedInUser())
-            .thenReturn(getLoggedInUser());
-        ReflectionTestUtils.setField(
-            memberService,
-            "userService",
-            mockedUserService
-        );
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(memberResource).setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator).setMessageConverters(jacksonMessageConverter).build();
+        Mockito.when(mockedUserService.getLoggedInUser()).thenReturn(getLoggedInUser());
+        ReflectionTestUtils.setField(memberService, "userService", mockedUserService);
     }
 
     @Test
-    @WithMockUser(
-        username = LOGGED_IN_EMAIL,
-        authorities = { "ROLE_ADMIN", "ROLE_USER" },
-        password = LOGGED_IN_PASSWORD
-    )
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getMembers() throws Exception {
         MvcResult result = restUserMockMvc
-            .perform(
-                get("/api/members")
-                    .param("size", "50")
-                    .accept(TestUtil.APPLICATION_JSON_UTF8)
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            )
-            .andExpect(status().isOk())
-            .andReturn();
+            .perform(get("/api/members").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk()).andReturn();
 
-        List<Member> members = objectMapper.readValue(
-            result.getResponse().getContentAsByteArray(),
-            new TypeReference<List<Member>>() {}
-        );
+        List<Member> members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(31);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "salesforceId")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "salesforceId").accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(31);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "salesforceId 4")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "salesforceId 4").accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(1);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "client 12")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(
+                get("/api/members").param("size", "50").param("filter", "client 12").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(1);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "parent")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "parent").accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(31);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "parent 1")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "parent 1").accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(11); // parent 1, parent 10 - 19
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "salesforceId+%2Btest")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "salesforceId+%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(1);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "client+%2Btest")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "client+%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(1);
 
-        result =
-            restUserMockMvc
-                .perform(
-                    get("/api/members")
-                        .param("size", "50")
-                        .param("filter", "parent+%2Btest")
-                        .accept(TestUtil.APPLICATION_JSON_UTF8)
-                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-        members =
-            objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                new TypeReference<List<Member>>() {}
-            );
+        result = restUserMockMvc.perform(get("/api/members").param("size", "50").param("filter", "parent+%2Btest").accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andReturn();
+        members = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Member>>() {
+        });
         assertThat(members.size()).isEqualTo(1);
+
     }
 
     @Test
-    @WithMockUser(
-        username = LOGGED_IN_EMAIL,
-        authorities = { "ROLE_USER" },
-        password = LOGGED_IN_PASSWORD
-    )
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getMembers_missingRoleAdmin() throws Exception {
         MvcResult result = restUserMockMvc
-            .perform(
-                get("/api/members")
-                    .param("size", "50")
-                    .accept(TestUtil.APPLICATION_JSON_UTF8)
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            )
-            .andExpect(status().isForbidden())
-            .andReturn();
+            .perform(get("/api/members").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isForbidden()).andReturn();
     }
 
     @Test
-    @WithMockUser(
-        username = LOGGED_IN_EMAIL,
-        authorities = { "ROLE_ADMIN", "ROLE_USER" },
-        password = LOGGED_IN_PASSWORD
-    )
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getMembersList() throws Exception {
         MvcResult result = restUserMockMvc
-            .perform(
-                get("/api//members/list/all")
-                    .param("size", "50")
-                    .accept(TestUtil.APPLICATION_JSON_UTF8)
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            )
-            .andExpect(status().isOk())
-            .andReturn();
+            .perform(get("/api//members/list/all").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk()).andReturn();
     }
 
     @Test
-    @WithMockUser(
-        username = LOGGED_IN_EMAIL,
-        authorities = { "ROLE_USER" },
-        password = LOGGED_IN_PASSWORD
-    )
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
     public void getMembersList_missingRoleAdmin() throws Exception {
         MvcResult result = restUserMockMvc
-            .perform(
-                get("/api//members/list/all")
-                    .param("size", "50")
-                    .accept(TestUtil.APPLICATION_JSON_UTF8)
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            )
-            .andExpect(status().isForbidden())
-            .andReturn();
+            .perform(get("/api//members/list/all").param("size", "50").accept(TestUtil.APPLICATION_JSON_UTF8).contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isForbidden()).andReturn();
     }
+
 
     private void createMembers(int quantity) {
         for (int i = 0; i < quantity; i++) {
@@ -331,4 +187,5 @@ public class MemberResourceIT {
         user.setSalesforceId(LOGGED_IN_SALESFORCE_ID);
         return user;
     }
+
 }

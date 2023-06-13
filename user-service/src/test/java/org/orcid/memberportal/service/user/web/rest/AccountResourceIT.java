@@ -1,5 +1,4 @@
 package org.orcid.memberportal.service.user.web.rest;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -10,10 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Optional;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +47,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.
@@ -95,87 +96,32 @@ public class AccountResourceIT {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
 
-        Mockito
-            .when(
-                mockMemberService.memberExistsWithSalesforceId(
-                    Mockito.anyString()
-                )
-            )
-            .thenReturn(Boolean.TRUE);
-        Mockito
-            .when(mockMemberService.memberIsAdminEnabled(Mockito.anyString()))
-            .thenReturn(Boolean.TRUE);
-        Mockito
-            .when(
-                mockMemberService.getMemberNameBySalesforce(Mockito.anyString())
-            )
-            .thenReturn("member");
+        Mockito.when(mockMemberService.memberExistsWithSalesforceId(Mockito.anyString())).thenReturn(Boolean.TRUE);
+        Mockito.when(mockMemberService.memberIsAdminEnabled(Mockito.anyString())).thenReturn(Boolean.TRUE);
+        Mockito.when(mockMemberService.getMemberNameBySalesforce(Mockito.anyString())).thenReturn("member");
 
-        ReflectionTestUtils.setField(
-            userMapper,
-            "memberService",
-            mockMemberService
-        );
-        ReflectionTestUtils.setField(
-            userService,
-            "memberService",
-            mockMemberService
-        );
-        ReflectionTestUtils.setField(
-            authorityService,
-            "memberService",
-            mockMemberService
-        );
+        ReflectionTestUtils.setField(userMapper, "memberService", mockMemberService);
+        ReflectionTestUtils.setField(userService, "memberService", mockMemberService);
+        ReflectionTestUtils.setField(authorityService, "memberService", mockMemberService);
 
-        AccountResource accountResource = new AccountResource(
-            userRepository,
-            userService,
-            mockMailService,
-            userMapper
-        );
+        AccountResource accountResource = new AccountResource(userRepository, userService, mockMailService, userMapper);
 
-        AccountResource accountUserMockResource = new AccountResource(
-            userRepository,
-            mockUserService,
-            mockMailService,
-            userMapper
-        );
-        this.restMvc =
-            MockMvcBuilders
-                .standaloneSetup(accountResource)
-                .setMessageConverters(httpMessageConverters)
-                .setControllerAdvice(exceptionTranslator)
-                .build();
-        this.restUserMockMvc =
-            MockMvcBuilders
-                .standaloneSetup(accountUserMockResource)
-                .setControllerAdvice(exceptionTranslator)
-                .build();
+        AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, mockMailService, userMapper);
+        this.restMvc = MockMvcBuilders.standaloneSetup(accountResource).setMessageConverters(httpMessageConverters).setControllerAdvice(exceptionTranslator).build();
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).setControllerAdvice(exceptionTranslator).build();
     }
 
     @Test
     public void testNonAuthenticatedUser() throws Exception {
-        restUserMockMvc
-            .perform(
-                get("/api/authenticate").accept(MediaType.APPLICATION_JSON)
-            )
-            .andExpect(status().isOk())
-            .andExpect(content().string(""));
+        restUserMockMvc.perform(get("/api/authenticate").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string(""));
     }
 
     @Test
     public void testAuthenticatedUser() throws Exception {
-        restUserMockMvc
-            .perform(
-                get("/api/authenticate")
-                    .with(request -> {
-                        request.setRemoteUser("test");
-                        return request;
-                    })
-                    .accept(MediaType.APPLICATION_JSON)
-            )
-            .andExpect(status().isOk())
-            .andExpect(content().string("test"));
+        restUserMockMvc.perform(get("/api/authenticate").with(request -> {
+            request.setRemoteUser("test");
+            return request;
+        }).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string("test"));
     }
 
     @Test
@@ -190,39 +136,18 @@ public class AccountResourceIT {
         user.setAdmin(true);
         when(mockUserService.getCurrentUser()).thenReturn(user);
 
-        restUserMockMvc
-            .perform(get("/api/account").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(
-                content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            )
-            .andExpect(jsonPath("$.firstName").value("john"))
-            .andExpect(jsonPath("$.lastName").value("doe"))
-            .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
-            .andExpect(
-                jsonPath("$.imageUrl").value("http://placehold.it/50x50")
-            )
-            .andExpect(jsonPath("$.langKey").value("en"))
-            .andExpect(
-                jsonPath(
-                    "$.authorities",
-                    Matchers.containsInAnyOrder(
-                        AuthoritiesConstants.USER,
-                        AuthoritiesConstants.ADMIN
-                    )
-                )
-            );
+        restUserMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andExpect(jsonPath("$.firstName").value("john"))
+                .andExpect(jsonPath("$.lastName").value("doe")).andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
+                .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50")).andExpect(jsonPath("$.langKey").value("en"))
+                .andExpect(jsonPath("$.authorities", Matchers.containsInAnyOrder(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
     }
 
     @Test
     public void testGetUnknownAccount() throws Exception {
         when(mockUserService.getCurrentUser()).thenReturn(null);
 
-        restUserMockMvc
-            .perform(
-                get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON)
-            )
-            .andExpect(status().isInternalServerError());
+        restUserMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON)).andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -242,21 +167,12 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(
-            Collections.singleton(AuthoritiesConstants.ADMIN)
-        );
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
-        restMvc
-            .perform(
-                post("/api/account")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(userDTO))
-            )
-            .andExpect(status().is2xxSuccessful());
+        restMvc.perform(post("/api/account").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                .andExpect(status().is2xxSuccessful());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase(user.getEmail())
-            .orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase(user.getEmail()).orElse(null);
         assertThat(updatedUser.getEmail()).isEqualTo(user.getEmail());
     }
 
@@ -277,20 +193,12 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(
-            Collections.singleton(AuthoritiesConstants.ADMIN)
-        );
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
-        restMvc
-            .perform(
-                post("/api/account")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(userDTO))
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                .andExpect(status().isBadRequest());
 
-        assertThat(userRepository.findOneByEmailIgnoreCase("invalid email"))
-            .isNotPresent();
+        assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")).isNotPresent();
     }
 
     @Test
@@ -317,23 +225,13 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(
-            Collections.singleton(AuthoritiesConstants.ADMIN)
-        );
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
-        restMvc
-            .perform(
-                post("/api/account")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(userDTO))
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase("save-existing-email@example.com")
-            .orElse(null);
-        assertThat(updatedUser.getEmail())
-            .isEqualTo("save-existing-email@example.com");
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("save-existing-email@example.com").orElse(null);
+        assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
     }
 
     @Test
@@ -353,25 +251,13 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(
-            Collections.singleton(AuthoritiesConstants.ADMIN)
-        );
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
-        restMvc
-            .perform(
-                post("/api/account")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(userDTO))
-            )
-            .andExpect(status().is4xxClientError());
+        restMvc.perform(post("/api/account").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                .andExpect(status().is4xxClientError());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase(
-                "save-existing-email-and-login@example.com"
-            )
-            .orElse(null);
-        assertThat(updatedUser.getEmail())
-            .isEqualTo("save-existing-email-and-login@example.com");
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("save-existing-email-and-login@example.com").orElse(null);
+        assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
     }
 
     @Test
@@ -383,34 +269,12 @@ public class AccountResourceIT {
         user.setEmail("change-password-wrong-existing-password@example.com");
         userRepository.save(user);
 
-        restMvc
-            .perform(
-                post("/api/account/change-password")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(
-                        TestUtil.convertObjectToJsonBytes(
-                            new PasswordChangeDTO(
-                                "1" + currentPassword,
-                                "new password"
-                            )
-                        )
-                    )
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1" + currentPassword, "new password")))).andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase(
-                "change-password-wrong-existing-password@example.com"
-            )
-            .orElse(null);
-        assertThat(
-            passwordEncoder.matches("new password", updatedUser.getPassword())
-        )
-            .isFalse();
-        assertThat(
-            passwordEncoder.matches(currentPassword, updatedUser.getPassword())
-        )
-            .isTrue();
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-wrong-existing-password@example.com").orElse(null);
+        assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
+        assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
     }
 
     @Test
@@ -422,28 +286,11 @@ public class AccountResourceIT {
         user.setEmail("change-password@example.com");
         userRepository.save(user);
 
-        restMvc
-            .perform(
-                post("/api/account/change-password")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(
-                        TestUtil.convertObjectToJsonBytes(
-                            new PasswordChangeDTO(
-                                currentPassword,
-                                "new password"
-                            )
-                        )
-                    )
-            )
-            .andExpect(status().isOk());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))).andExpect(status().isOk());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase("change-password@example.com")
-            .orElse(null);
-        assertThat(
-            passwordEncoder.matches("new password", updatedUser.getPassword())
-        )
-            .isTrue();
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password@example.com").orElse(null);
+        assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
     }
 
     @Test
@@ -455,25 +302,12 @@ public class AccountResourceIT {
         user.setEmail("change-password-too-small@example.com");
         userRepository.save(user);
 
-        String newPassword = RandomStringUtils.random(
-            ManagedUserVM.PASSWORD_MIN_LENGTH - 1
-        );
+        String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
 
-        restMvc
-            .perform(
-                post("/api/account/change-password")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(
-                        TestUtil.convertObjectToJsonBytes(
-                            new PasswordChangeDTO(currentPassword, newPassword)
-                        )
-                    )
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))).andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase("change-password-too-small@example.com")
-            .orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-too-small@example.com").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
@@ -486,25 +320,12 @@ public class AccountResourceIT {
         user.setEmail("change-password-too-long@example.com");
         userRepository.save(user);
 
-        String newPassword = RandomStringUtils.random(
-            ManagedUserVM.PASSWORD_MAX_LENGTH + 1
-        );
+        String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
 
-        restMvc
-            .perform(
-                post("/api/account/change-password")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(
-                        TestUtil.convertObjectToJsonBytes(
-                            new PasswordChangeDTO(currentPassword, newPassword)
-                        )
-                    )
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))).andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase("change-password-too-long@example.com")
-            .orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-too-long@example.com").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
@@ -517,21 +338,10 @@ public class AccountResourceIT {
         user.setEmail("change-password-empty@example.com");
         userRepository.save(user);
 
-        restMvc
-            .perform(
-                post("/api/account/change-password")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(
-                        TestUtil.convertObjectToJsonBytes(
-                            new PasswordChangeDTO(currentPassword, "")
-                        )
-                    )
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))).andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase("change-password-empty@example.com")
-            .orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-empty@example.com").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
@@ -543,12 +353,7 @@ public class AccountResourceIT {
         user.setEmail("password-reset@example.com");
         userRepository.save(user);
 
-        restMvc
-            .perform(
-                post("/api/account/reset-password/init")
-                    .content("password-reset@example.com")
-            )
-            .andExpect(status().isOk());
+        restMvc.perform(post("/api/account/reset-password/init").content("password-reset@example.com")).andExpect(status().isOk());
     }
 
     @Test
@@ -559,22 +364,12 @@ public class AccountResourceIT {
         user.setEmail("password-reset@example.com");
         userRepository.save(user);
 
-        restMvc
-            .perform(
-                post("/api/account/reset-password/init")
-                    .content("password-reset@EXAMPLE.COM")
-            )
-            .andExpect(status().isOk());
+        restMvc.perform(post("/api/account/reset-password/init").content("password-reset@EXAMPLE.COM")).andExpect(status().isOk());
     }
 
     @Test
     public void testRequestPasswordResetWrongEmail() throws Exception {
-        restMvc
-            .perform(
-                post("/api/account/reset-password/init")
-                    .content("password-reset-wrong-email@example.com")
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/reset-password/init").content("password-reset-wrong-email@example.com")).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -591,32 +386,17 @@ public class AccountResourceIT {
         keyAndPassword.setNewPassword("new password");
 
         MvcResult result = restMvc
-            .perform(
-                post("/api/account/reset-password/finish")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))
-            )
-            .andExpect(status().isOk())
-            .andReturn();
+                .perform(
+                        post("/api/account/reset-password/finish").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
+                .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(
-            result.getResponse().getContentAsByteArray(),
-            PasswordResetResultVM.class
-        );
+        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
         assertThat(resetResult.isSuccess()).isTrue();
         assertThat(resetResult.isInvalidKey()).isFalse();
         assertThat(resetResult.isExpiredKey()).isFalse();
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase(user.getEmail())
-            .orElse(null);
-        assertThat(
-            passwordEncoder.matches(
-                keyAndPassword.getNewPassword(),
-                updatedUser.getPassword()
-            )
-        )
-            .isTrue();
+        User updatedUser = userRepository.findOneByEmailIgnoreCase(user.getEmail()).orElse(null);
+        assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
     }
 
     @Test
@@ -632,24 +412,11 @@ public class AccountResourceIT {
         keyAndPassword.setKey(user.getResetKey());
         keyAndPassword.setNewPassword("foo");
 
-        restMvc
-            .perform(
-                post("/api/account/reset-password/finish")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))
-            )
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/reset-password/finish").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
+                .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository
-            .findOneByEmailIgnoreCase(user.getEmail())
-            .orElse(null);
-        assertThat(
-            passwordEncoder.matches(
-                keyAndPassword.getNewPassword(),
-                updatedUser.getPassword()
-            )
-        )
-            .isFalse();
+        User updatedUser = userRepository.findOneByEmailIgnoreCase(user.getEmail()).orElse(null);
+        assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
     }
 
     @Test
@@ -659,22 +426,15 @@ public class AccountResourceIT {
         keyAndPassword.setNewPassword("new password");
 
         MvcResult result = restMvc
-            .perform(
-                post("/api/account/reset-password/finish")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))
-            )
-            .andExpect(status().isOk())
-            .andReturn();
+                .perform(
+                        post("/api/account/reset-password/finish").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
+                .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(
-            result.getResponse().getContentAsByteArray(),
-            PasswordResetResultVM.class
-        );
+        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isTrue();
         assertThat(resetResult.isExpiredKey()).isFalse(); // because key doesn't
-        // exist
+                                                          // exist
     }
 
     @Test
@@ -682,11 +442,7 @@ public class AccountResourceIT {
         User user = new User();
         user.setPassword(RandomStringUtils.random(60));
         user.setEmail("finish-password-reset-expired@example.com");
-        user.setResetDate(
-            Instant
-                .now()
-                .minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 5000)
-        );
+        user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 5000));
         user.setResetKey("resetkey");
         userRepository.save(user);
 
@@ -695,18 +451,11 @@ public class AccountResourceIT {
         keyAndPassword.setNewPassword("something");
 
         MvcResult result = restMvc
-            .perform(
-                post("/api/account/reset-password/finish")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))
-            )
-            .andExpect(status().isOk())
-            .andReturn();
+                .perform(
+                        post("/api/account/reset-password/finish").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
+                .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(
-            result.getResponse().getContentAsByteArray(),
-            PasswordResetResultVM.class
-        );
+        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isFalse();
         assertThat(resetResult.isExpiredKey()).isTrue();
@@ -717,11 +466,7 @@ public class AccountResourceIT {
         User user = new User();
         user.setPassword(RandomStringUtils.random(60));
         user.setEmail("finish-password-reset-expired@example.com");
-        user.setResetDate(
-            Instant
-                .now()
-                .minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 5000)
-        );
+        user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS + 5000));
         user.setResetKey("resetkey");
         userRepository.save(user);
 
@@ -729,18 +474,10 @@ public class AccountResourceIT {
         key.setKey("resetkey");
 
         MvcResult result = restMvc
-            .perform(
-                post("/api/account/reset-password/validate")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(key))
-            )
-            .andExpect(status().isOk())
-            .andReturn();
+                .perform(post("/api/account/reset-password/validate").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(key)))
+                .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(
-            result.getResponse().getContentAsByteArray(),
-            PasswordResetResultVM.class
-        );
+        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isFalse();
         assertThat(resetResult.isExpiredKey()).isTrue();
@@ -752,18 +489,10 @@ public class AccountResourceIT {
         key.setKey("incorrectValue");
 
         MvcResult result = restMvc
-            .perform(
-                post("/api/account/reset-password/validate")
-                    .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                    .content(TestUtil.convertObjectToJsonBytes(key))
-            )
-            .andExpect(status().isOk())
-            .andReturn();
+                .perform(post("/api/account/reset-password/validate").contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(key)))
+                .andExpect(status().isOk()).andReturn();
         ObjectMapper mapper = new ObjectMapper();
-        PasswordResetResultVM resetResult = mapper.readValue(
-            result.getResponse().getContentAsByteArray(),
-            PasswordResetResultVM.class
-        );
+        PasswordResetResultVM resetResult = mapper.readValue(result.getResponse().getContentAsByteArray(), PasswordResetResultVM.class);
         assertThat(resetResult.isSuccess()).isFalse();
         assertThat(resetResult.isInvalidKey()).isTrue();
         assertThat(resetResult.isExpiredKey()).isFalse();

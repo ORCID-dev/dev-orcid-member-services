@@ -1,13 +1,14 @@
 package org.orcid.memberportal.service.user.config;
 
-import io.github.jhipster.config.JHipsterProperties;
 import java.net.MalformedURLException;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.orcid.memberportal.service.user.security.AuthoritiesConstants;
 import org.orcid.memberportal.service.user.security.PasswordTokenGranter;
 import org.orcid.memberportal.service.user.services.UserService;
@@ -45,12 +46,11 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import io.github.jhipster.config.JHipsterProperties;
+
 @Configuration
 @EnableAuthorizationServer
-public class UaaConfiguration
-    extends AuthorizationServerConfigurerAdapter
-    implements ApplicationContextAware {
-
+public class UaaConfiguration extends AuthorizationServerConfigurerAdapter implements ApplicationContextAware {
     /**
      * Access tokens will not expire any earlier than this.
      */
@@ -62,14 +62,12 @@ public class UaaConfiguration
     private UserService userService;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
     @EnableResourceServer
-    public static class ResourceServerConfiguration
-        extends ResourceServerConfigurerAdapter {
+    public static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
         private final TokenStore tokenStore;
 
@@ -77,11 +75,7 @@ public class UaaConfiguration
 
         private final CorsFilter corsFilter;
 
-        public ResourceServerConfiguration(
-            TokenStore tokenStore,
-            JHipsterProperties jHipsterProperties,
-            CorsFilter corsFilter
-        ) {
+        public ResourceServerConfiguration(TokenStore tokenStore, JHipsterProperties jHipsterProperties, CorsFilter corsFilter) {
             this.tokenStore = tokenStore;
             this.jHipsterProperties = jHipsterProperties;
             this.corsFilter = corsFilter;
@@ -89,57 +83,18 @@ public class UaaConfiguration
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
-            http
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) ->
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
-                )
-                .and()
-                .csrf()
-                .disable()
-                .addFilterBefore(
-                    corsFilter,
-                    UsernamePasswordAuthenticationFilter.class
-                )
-                .headers()
-                .frameOptions()
-                .disable()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/register")
-                .permitAll()
-                .antMatchers("/api/activate")
-                .permitAll()
-                .antMatchers("/api/authenticate")
-                .permitAll()
-                .antMatchers("/api/account/reset-password/init")
-                .permitAll()
-                .antMatchers("/api/account/reset-password/finish")
-                .permitAll()
-                .antMatchers("/api/account/reset-password/validate")
-                .permitAll()
-                .antMatchers("/api/users/**/resendActivation")
-                .permitAll()
-                .antMatchers("/api/**")
-                .authenticated()
-                .antMatchers("/management/health")
-                .permitAll()
-                .antMatchers("/management/**")
-                .hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/v2/api-docs/**")
-                .permitAll()
-                .antMatchers("/swagger-resources/configuration/ui")
-                .permitAll()
-                .antMatchers("/swagger-ui/index.html")
-                .hasAuthority(AuthoritiesConstants.ADMIN);
+            http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)).and().csrf()
+                    .disable().addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable().and().sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/api/register").permitAll()
+                    .antMatchers("/api/activate").permitAll().antMatchers("/api/authenticate").permitAll().antMatchers("/api/account/reset-password/init").permitAll()
+                    .antMatchers("/api/account/reset-password/finish").permitAll().antMatchers("/api/account/reset-password/validate").permitAll()
+                    .antMatchers("/api/users/**/resendActivation").permitAll().antMatchers("/api/**").authenticated().antMatchers("/management/health").permitAll()
+                    .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN).antMatchers("/v2/api-docs/**").permitAll()
+                    .antMatchers("/swagger-resources/configuration/ui").permitAll().antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
 
         @Override
-        public void configure(ResourceServerSecurityConfigurer resources)
-            throws Exception {
+        public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
             resources.resourceId("jhipster-uaa").tokenStore(tokenStore);
         }
     }
@@ -150,97 +105,36 @@ public class UaaConfiguration
 
     private final PasswordEncoder passwordEncoder;
 
-    public UaaConfiguration(
-        JHipsterProperties jHipsterProperties,
-        UaaProperties uaaProperties,
-        PasswordEncoder passwordEncoder
-    ) {
+    public UaaConfiguration(JHipsterProperties jHipsterProperties, UaaProperties uaaProperties, PasswordEncoder passwordEncoder) {
         this.jHipsterProperties = jHipsterProperties;
         this.uaaProperties = uaaProperties;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void configure(ClientDetailsServiceConfigurer clients)
-        throws Exception {
-        int accessTokenValidity = uaaProperties
-            .getWebClientConfiguration()
-            .getAccessTokenValidityInSeconds();
-        accessTokenValidity =
-            Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALIDITY_SECS);
-        int refreshTokenValidity = uaaProperties
-            .getWebClientConfiguration()
-            .getRefreshTokenValidityInSecondsForRememberMe();
-        refreshTokenValidity =
-            Math.max(refreshTokenValidity, accessTokenValidity);
-        clients
-            .inMemory()
-            .withClient(uaaProperties.getWebClientConfiguration().getClientId())
-            .secret(
-                passwordEncoder.encode(
-                    uaaProperties.getWebClientConfiguration().getSecret()
-                )
-            )
-            .scopes("openid")
-            .autoApprove(true)
-            .authorizedGrantTypes(
-                "implicit",
-                "refresh_token",
-                "password",
-                "authorization_code"
-            )
-            .accessTokenValiditySeconds(accessTokenValidity)
-            .refreshTokenValiditySeconds(refreshTokenValidity)
-            .and()
-            .withClient(
-                jHipsterProperties
-                    .getSecurity()
-                    .getClientAuthorization()
-                    .getClientId()
-            )
-            .secret(
-                passwordEncoder.encode(
-                    jHipsterProperties
-                        .getSecurity()
-                        .getClientAuthorization()
-                        .getClientSecret()
-                )
-            )
-            .scopes("web-app")
-            .authorities("ROLE_ADMIN")
-            .autoApprove(true)
-            .authorizedGrantTypes("client_credentials")
-            .accessTokenValiditySeconds(
-                (int) jHipsterProperties
-                    .getSecurity()
-                    .getAuthentication()
-                    .getJwt()
-                    .getTokenValidityInSeconds()
-            )
-            .refreshTokenValiditySeconds(
-                (int) jHipsterProperties
-                    .getSecurity()
-                    .getAuthentication()
-                    .getJwt()
-                    .getTokenValidityInSecondsForRememberMe()
-            );
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        int accessTokenValidity = uaaProperties.getWebClientConfiguration().getAccessTokenValidityInSeconds();
+        accessTokenValidity = Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALIDITY_SECS);
+        int refreshTokenValidity = uaaProperties.getWebClientConfiguration().getRefreshTokenValidityInSecondsForRememberMe();
+        refreshTokenValidity = Math.max(refreshTokenValidity, accessTokenValidity);
+        clients.inMemory().withClient(uaaProperties.getWebClientConfiguration().getClientId())
+                .secret(passwordEncoder.encode(uaaProperties.getWebClientConfiguration().getSecret())).scopes("openid").autoApprove(true)
+                .authorizedGrantTypes("implicit", "refresh_token", "password", "authorization_code").accessTokenValiditySeconds(accessTokenValidity)
+                .refreshTokenValiditySeconds(refreshTokenValidity).and().withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
+                .secret(passwordEncoder.encode(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())).scopes("web-app").authorities("ROLE_ADMIN")
+                .autoApprove(true).authorizedGrantTypes("client_credentials")
+                .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
+                .refreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-        throws Exception {
-        Collection<TokenEnhancer> tokenEnhancers = applicationContext
-            .getBeansOfType(TokenEnhancer.class)
-            .values();
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        Collection<TokenEnhancer> tokenEnhancers = applicationContext.getBeansOfType(TokenEnhancer.class).values();
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(new ArrayList<>(tokenEnhancers));
 
         // don't reuse refresh tokens to avoid inactivity timeouts
-        endpoints
-            .authenticationManager(authenticationManager)
-            .tokenStore(tokenStore())
-            .tokenEnhancer(tokenEnhancerChain)
-            .reuseRefreshTokens(false);
+        endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore()).tokenEnhancer(tokenEnhancerChain).reuseRefreshTokens(false);
         endpoints.tokenGranter(tokenGranter(endpoints));
     }
 
@@ -250,50 +144,16 @@ public class UaaConfiguration
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
         defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
-        defaultTokenServices.setAccessTokenValiditySeconds(
-            (int) jHipsterProperties
-                .getSecurity()
-                .getAuthentication()
-                .getJwt()
-                .getTokenValidityInSeconds()
-        );
-        defaultTokenServices.setRefreshTokenValiditySeconds(
-            (int) jHipsterProperties
-                .getSecurity()
-                .getAuthentication()
-                .getJwt()
-                .getTokenValidityInSecondsForRememberMe()
-        );
+        defaultTokenServices.setAccessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
+        defaultTokenServices.setRefreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
         return defaultTokenServices;
     }
 
-    private TokenGranter tokenGranter(
-        final AuthorizationServerEndpointsConfigurer endpoints
-    ) {
-        PasswordTokenGranter passwordTokenGranter = new PasswordTokenGranter(
-            endpoints,
-            authenticationManager,
-            userService,
-            tokenServices()
-        );
-        RefreshTokenGranter refreshTokenGranter = new RefreshTokenGranter(
-            tokenServices(),
-            endpoints.getClientDetailsService(),
-            endpoints.getOAuth2RequestFactory()
-        );
-        ClientCredentialsTokenGranter clientCredentialsTokenGranter =
-            new ClientCredentialsTokenGranter(
-                tokenServices(),
-                endpoints.getClientDetailsService(),
-                endpoints.getOAuth2RequestFactory()
-            );
-        return new CompositeTokenGranter(
-            Arrays.asList(
-                passwordTokenGranter,
-                refreshTokenGranter,
-                clientCredentialsTokenGranter
-            )
-        );
+    private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
+        PasswordTokenGranter passwordTokenGranter = new PasswordTokenGranter(endpoints, authenticationManager, userService, tokenServices());
+        RefreshTokenGranter refreshTokenGranter = new RefreshTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
+        ClientCredentialsTokenGranter clientCredentialsTokenGranter = new ClientCredentialsTokenGranter(tokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
+        return new CompositeTokenGranter(Arrays.asList(passwordTokenGranter, refreshTokenGranter, clientCredentialsTokenGranter));
     }
 
     @Autowired
@@ -322,17 +182,11 @@ public class UaaConfiguration
         if (uaaProperties.getKeyStore().getName() != null) {
             JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
             try {
-                KeyPair keyPair = new KeyStoreKeyFactory(
-                    new FileUrlResource(uaaProperties.getKeyStore().getName()),
-                    uaaProperties.getKeyStore().getPassword().toCharArray()
-                )
-                    .getKeyPair(uaaProperties.getKeyStore().getAlias());
+                KeyPair keyPair = new KeyStoreKeyFactory(new FileUrlResource(uaaProperties.getKeyStore().getName()),
+                        uaaProperties.getKeyStore().getPassword().toCharArray()).getKeyPair(uaaProperties.getKeyStore().getAlias());
                 converter.setKeyPair(keyPair);
             } catch (MalformedURLException e) {
-                throw new RuntimeException(
-                    "Error creating keystore factory",
-                    e
-                );
+                throw new RuntimeException("Error creating keystore factory", e);
             }
             return converter;
         } else {
@@ -341,21 +195,14 @@ public class UaaConfiguration
     }
 
     public class RefreshTokenConverter extends JwtAccessTokenConverter {
-
         public RefreshTokenConverter() {
             super();
             try {
-                KeyPair keyPair = new KeyStoreKeyFactory(
-                    new FileUrlResource(uaaProperties.getKeyStore().getName()),
-                    uaaProperties.getKeyStore().getPassword().toCharArray()
-                )
-                    .getKeyPair(uaaProperties.getKeyStore().getAlias());
+                KeyPair keyPair = new KeyStoreKeyFactory(new FileUrlResource(uaaProperties.getKeyStore().getName()),
+                        uaaProperties.getKeyStore().getPassword().toCharArray()).getKeyPair(uaaProperties.getKeyStore().getAlias());
                 super.setKeyPair(keyPair);
             } catch (MalformedURLException e) {
-                throw new RuntimeException(
-                    "Error creating keystore factory",
-                    e
-                );
+                throw new RuntimeException("Error creating keystore factory", e);
             }
         }
 
@@ -365,10 +212,7 @@ public class UaaConfiguration
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer)
-        throws Exception {
-        oauthServer
-            .tokenKeyAccess("permitAll()")
-            .checkTokenAccess("isAuthenticated()");
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+        oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
 }

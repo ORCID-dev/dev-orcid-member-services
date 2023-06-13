@@ -9,12 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "oauth2", ignoreUnknownFields = false)
 public class OAuth2Properties {
+    private WebClientConfiguration webClientConfiguration = new WebClientConfiguration();
 
-    private WebClientConfiguration webClientConfiguration =
-        new WebClientConfiguration();
-
-    private SignatureVerification signatureVerification =
-        new SignatureVerification();
+    private SignatureVerification signatureVerification = new SignatureVerification();
 
     public WebClientConfiguration getWebClientConfiguration() {
         return webClientConfiguration;
@@ -25,7 +22,6 @@ public class OAuth2Properties {
     }
 
     public static class WebClientConfiguration {
-
         private String clientId = "web_app";
         private String secret = "changeit";
         /**
@@ -79,7 +75,6 @@ public class OAuth2Properties {
     }
 
     public static class SignatureVerification {
-
         /**
          * Maximum refresh rate for public keys in ms. We won't fetch new public
          * keys any faster than that to avoid spamming UAA in case we receive a
@@ -102,9 +97,7 @@ public class OAuth2Properties {
             return publicKeyRefreshRateLimit;
         }
 
-        public void setPublicKeyRefreshRateLimit(
-            long publicKeyRefreshRateLimit
-        ) {
+        public void setPublicKeyRefreshRateLimit(long publicKeyRefreshRateLimit) {
             this.publicKeyRefreshRateLimit = publicKeyRefreshRateLimit;
         }
 

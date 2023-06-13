@@ -9,12 +9,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -24,6 +18,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.StringUtils;
+
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 public class TokenProvider implements InitializingBean {
 
@@ -45,33 +46,19 @@ public class TokenProvider implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        String secret = jHipsterProperties
-            .getSecurity()
-            .getAuthentication()
-            .getJwt()
-            .getSecret();
-        String base64secret = jHipsterProperties
-            .getSecurity()
-            .getAuthentication()
-            .getJwt()
-            .getBase64Secret();
+        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+        String base64secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
         byte[] keyBytes;
         if (StringUtils.isEmpty(base64secret)) {
-            log.info(
-                "The JWT key used is not Base64-encoded. " +
-                "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security."
-            );
+            log.info("The JWT key used is not Base64-encoded. " +
+                "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security.");
 
             if (StringUtils.isEmpty(secret)) {
-                log.error(
-                    "\n----------------------------------------------------------\n" +
-                    "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n" +
+                log.error("\n----------------------------------------------------------\n" +
+                    "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
                     "Please read the documentation at https://www.jhipster.tech/jhipster-registry/\n" +
-                    "----------------------------------------------------------"
-                );
-                throw new RuntimeException(
-                    "No JWT secret key is configured, the application cannot start."
-                );
+                    "----------------------------------------------------------");
+                throw new RuntimeException("No JWT secret key is configured, the application cannot start.");
             }
             keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         } else {
@@ -80,42 +67,26 @@ public class TokenProvider implements InitializingBean {
         }
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.tokenValidityInMilliseconds =
-            1000 *
-            jHipsterProperties
-                .getSecurity()
-                .getAuthentication()
-                .getJwt()
-                .getTokenValidityInSeconds();
+            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
         this.tokenValidityInMillisecondsForRememberMe =
-            1000 *
-            jHipsterProperties
-                .getSecurity()
-                .getAuthentication()
-                .getJwt()
+            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt()
                 .getTokenValidityInSecondsForRememberMe();
     }
 
-    public String createToken(
-        Authentication authentication,
-        boolean rememberMe
-    ) {
-        String authorities = authentication
-            .getAuthorities()
-            .stream()
+    public String createToken(Authentication authentication, boolean rememberMe) {
+        String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
         Date validity;
         if (rememberMe) {
-            validity =
-                new Date(now + this.tokenValidityInMillisecondsForRememberMe);
+            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
         } else {
             validity = new Date(now + this.tokenValidityInMilliseconds);
         }
 
-        return Jwts
-            .builder()
+        return Jwts.builder()
             .setSubject(authentication.getName())
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(key, SignatureAlgorithm.HS512)
@@ -124,33 +95,26 @@ public class TokenProvider implements InitializingBean {
     }
 
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts
-            .parser()
+        Claims claims = Jwts.parser()
             .setSigningKey(key)
             .parseClaimsJws(token)
             .getBody();
 
-        Collection<? extends GrantedAuthority> authorities = Arrays
-            .stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+        Collection<? extends GrantedAuthority> authorities =
+            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         User principal = new User(claims.getSubject(), "", authorities);
 
-        return new UsernamePasswordAuthenticationToken(
-            principal,
-            token,
-            authorities
-        );
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
             return true;
-        } catch (
-            io.jsonwebtoken.security.SecurityException | MalformedJwtException e
-        ) {
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature.");
             log.trace("Invalid JWT signature trace.", e);
         } catch (ExpiredJwtException e) {

@@ -87,9 +87,7 @@ public class ApplicationProperties {
         return sendActivationRemindersDelay;
     }
 
-    public void setSendActivationRemindersDelay(
-        String sendActivationRemindersDelay
-    ) {
+    public void setSendActivationRemindersDelay(String sendActivationRemindersDelay) {
         this.sendActivationRemindersDelay = sendActivationRemindersDelay;
     }
 
@@ -108,4 +106,5 @@ public class ApplicationProperties {
     public void setEncryptKey(String encryptKey) {
         this.encryptKey = encryptKey;
     }
+
 }
