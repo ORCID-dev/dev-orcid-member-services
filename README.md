@@ -94,3 +94,5 @@ Our user service, based on [JHipster UAA](https://www.jhipster.tech/using-uaa/),
 ## Notes
 
 - As long as the jhipster-registry is running first, the starting order of the other services is not important. They can also be started concurrently.
+
+

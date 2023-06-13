@@ -1,4 +1,5 @@
 repos:
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
@@ -27,13 +28,6 @@ repos:
         exclude: ".ytt.yaml$"
         types: [yaml]
 
-      - id: check-json
-        name: check json
-        description: checks json files for parseable syntax.
-        entry: check-json
-        language: python
-        types: [json]
-
       - id: check-merge-conflict
         name: check for merge conflicts
         description: checks for files that contain merge conflict strings.
@@ -57,6 +51,11 @@ repos:
         exclude: ".csv$"
         types: [text]
 
+  - repo: https://gitlab.com/bmares/check-json5
+    rev: v1.0.0
+    hooks:
+      - id: check-json5
+
   - repo: local
     hooks:
       - id: actionlint
@@ -67,16 +66,6 @@ repos:
           [github.com/rhysd/actionlint/cmd/actionlint@v1.6.23]
         types: [yaml]
         files: "^.github/workflows/"
-
-      - id: maven-spotless-apply
-        name: maven spotless apply
-        description: Runs spotless:apply goal
-        entry: |
-            env MAVEN_OPTS="-client -XX:TieredStopAtLevel=1 -Xverify:none -XX:+TieredCompilation"
-            mvn --batch-mode -f spotless/pom.xml spotless:apply
-        language: system
-        types: [xml]
-        pass_filenames: false
 
       - id: prettier
         name: prettier-local
@@ -92,6 +81,18 @@ repos:
         exclude: ".pom$"
         require_serial: false
         minimum_pre_commit_version: "0"
+
+
+#   - repo: https://github.com/ORCID/pre-commit-spotless
+#     rev: v1.0.0
+#     hooks:
+#       - id: spotless-check
+#         #types_or: [java, xml]
+#         types_or: [xml]
+#       - id: spotless-apply
+#         #types_or: [java, xml]
+#         types_or: [xml]
+#
 
 ##########
 # pre-commit-ci config

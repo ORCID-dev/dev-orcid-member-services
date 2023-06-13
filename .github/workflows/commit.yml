@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - '**' # run on any branch
-    #  - '!main'
-    #  - '!development'
+      - '!main'
+      - '!development'
 
 # cancel running job if another commit comes in
 concurrency:
@@ -17,3 +17,4 @@ concurrency:
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
+    if: github.event_name != 'pull_request'
