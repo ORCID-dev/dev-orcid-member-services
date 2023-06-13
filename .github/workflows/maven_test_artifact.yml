@@ -40,7 +40,7 @@ jobs:
 
       - name: "Test ${{ inputs.context }}"
         working-directory: ${{ inputs.context }}
-        run: mvn --batch-mode -Dangular.env=qa -Dmaven.test.failure.ignore=true test
+        run: mvn --batch-mode --activate-profiles prod -Dangular.env=qa -Dmaven.test.failure.ignore=true test
 
       - uses: actions/upload-artifact@v3  # upload test results
         if: success() || failure()        # run this step even if previous step failed
