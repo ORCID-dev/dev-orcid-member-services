@@ -19,9 +19,9 @@ concurrency:
 jobs:
   pre_commit_ci_lite:
     uses: ./.github/workflows/pre_commit_ci_lite.yml
-#
-#   unit_tests_artifact:
-#     uses: ./.github/workflows/unit_tests_artifact.yml
+
+  unit_tests_artifact:
+    uses: ./.github/workflows/unit_tests_artifact.yml
 #
 #   NOTE: codeql is only available on public repos or enterprise github accounts
 #   codeql:
