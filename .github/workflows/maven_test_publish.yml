@@ -41,7 +41,7 @@ jobs:
 
       - name: "Test ${{ inputs.context }}"
         working-directory: ${{ inputs.context }}
-        run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
+        run: mvn --batch-mode -Dangular.env=qa -Dmaven.test.failure.ignore=true test
 
       # NOTE: if the above test fail then this step will report that failure and stop the run
       - name: Publish Unit Test Results
