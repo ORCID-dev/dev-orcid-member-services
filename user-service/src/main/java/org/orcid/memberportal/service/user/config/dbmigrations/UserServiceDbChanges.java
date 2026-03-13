@@ -59,4 +59,28 @@ public class UserServiceDbChanges {
         mongoTemplate.dropCollection("jhi_authority");
     }
 
+    @ChangeSet(order = "06", author = "George Nash", id = "06-correctChineseLangCodes")
+    public void correctChineseLangCodes(MongoTemplate mongoTemplate) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("lang_key").is("zh_CN"));
+        Update update = new Update();
+        update.set("lang_key", "zh-CN");
+        mongoTemplate.updateMulti(query, update, User.class);
+
+        query = new Query();
+        query.addCriteria(Criteria.where("lang_key").is("zh_TW"));
+        update = new Update();
+        update.set("lang_key", "zh-TW");
+        mongoTemplate.updateMulti(query, update, User.class);
+    }
+
+    @ChangeSet(order = "07", author = "George Nash", id = "07-correctInvalidLanguageCodes")
+    public void correctInvalidLanguageCodes(MongoTemplate mongoTemplate) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("lang_key").nin("en", "cs", "es", "fr", "it", "ja", "ko", "pt", "ru", "zh-CN", "zh-TW"));
+        Update update = new Update();
+        update.set("lang_key", "en");
+        mongoTemplate.updateMulti(query, update, User.class);
+    }
+
 }

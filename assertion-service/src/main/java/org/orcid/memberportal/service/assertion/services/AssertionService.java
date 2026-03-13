@@ -1,35 +1,13 @@
 package org.orcid.memberportal.service.assertion.services;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.xml.bind.JAXBException;
-
+import com.google.common.base.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.orcid.memberportal.service.assertion.client.OrcidAPIClient;
 import org.orcid.memberportal.service.assertion.csv.CsvWriter;
-import org.orcid.memberportal.service.assertion.domain.Assertion;
-import org.orcid.memberportal.service.assertion.domain.AssertionServiceUser;
-import org.orcid.memberportal.service.assertion.domain.CsvReport;
-import org.orcid.memberportal.service.assertion.domain.MemberAssertionStatusCount;
-import org.orcid.memberportal.service.assertion.domain.OrcidRecord;
-import org.orcid.memberportal.service.assertion.domain.OrcidToken;
-import org.orcid.memberportal.service.assertion.domain.StoredFile;
+import org.orcid.memberportal.service.assertion.domain.*;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AffiliationSection;
 import org.orcid.memberportal.service.assertion.domain.enumeration.AssertionStatus;
 import org.orcid.memberportal.service.assertion.domain.normalization.AssertionNormalizer;
@@ -50,7 +28,16 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.base.Objects;
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.*;
 
 @Service
 public class AssertionService {
@@ -179,6 +166,9 @@ public class AssertionService {
                 if (tokenDeniedStatus == null) {
                     String activeToken = record.getToken(assertion.getSalesforceId(), false);
                     if (activeToken != null && !activeToken.isBlank()) {
+                        if (StringUtils.isBlank(record.getOrcid())) {
+                            LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} when creating assertion", record.getOrcid(), assertion.getId(), email);
+                        }
                         assertion.setOrcidId(record.getOrcid());
                     }
                 }
@@ -235,7 +225,9 @@ public class AssertionService {
     }
 
     public boolean updateAssertionsSalesforceId(String from, String to) {
-        return updateAssertionsSalesforceId(from, to, true);
+        boolean updated = updateAssertionsSalesforceId(from, to, true);
+        updated = updated && orcidRecordService.updateTokenSalesforceIds(from, to);
+        return updated;
     }
 
     private boolean updateAssertionsSalesforceId(String from, String to, boolean rollback) {
@@ -428,17 +420,20 @@ public class AssertionService {
         LOG.info("PUTting assertions in orcid");
         Pageable pageable = getPageableForRegistrySync();
         List<Assertion> assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
+        LOG.info("Fetched {} assertions to update in orcid registry", assertionsToUpdate.size());
         while (assertionsToUpdate != null && !assertionsToUpdate.isEmpty()) {
             for (Assertion assertion : assertionsToUpdate) {
+                LOG.info("About to update assertion {} in orcid registry", assertion.getId());
                 Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
                 try {
                     putAssertionInOrcid(refreshed);
                 } catch (Exception e) {
-                    LOG.error("Unexpected error PUTting assertion in registry", e);
+                    LOG.error("Unexpected error PUTting assertion {} in registry", assertion.getId(), e);
                 }
             }
             pageable = pageable.next();
             assertionsToUpdate = assertionRepository.findAllToUpdateInOrcidRegistry(pageable);
+            LOG.info("Fetched {} assertions to update in orcid registry", assertionsToUpdate.size());
         }
         LOG.info("PUTting complete");
     }
@@ -492,13 +487,15 @@ public class AssertionService {
         } catch (DeactivatedException | DeprecatedException e) {
             handleDeactivatedOrDeprecated(orcidId, assertion);
         } catch (ORCIDAPIException oae) {
-            if (oae.getStatusCode() != 404) {
+            if (oae.getStatusCode() != 404 && !AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus())) {
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_DELETING_IN_ORCID);
                 throw new RegistryDeleteFailureException();
             }
         } catch (Exception e) {
-            storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID);
-            throw new RegistryDeleteFailureException();
+            if (!AssertionStatus.USER_REVOKED_ACCESS.name().equals(assertion.getStatus())) {
+                storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_DELETING_IN_ORCID);
+                throw new RegistryDeleteFailureException();
+            }
         }
     }
 
@@ -612,12 +609,10 @@ public class AssertionService {
         if (!record.isPresent()) {
             LOG.error("OrcidRecord not available for email {}", assertion.getEmail());
             error = "Orcid record not available";
-        }
-        if (StringUtils.isBlank(record.get().getOrcid())) {
+        } else if (StringUtils.isBlank(record.get().getOrcid())) {
             LOG.info("Orcid ID not available for {}", assertion.getEmail());
             error = "ORCID iD not available";
-        }
-        if (record.get().getTokens() == null) {
+        } else if (record.get().getTokens() == null || record.get().getToken(assertion.getSalesforceId(), true) == null) {
             LOG.info("Token not available for {}", assertion.getEmail());
             error = "Token not available";
         }
@@ -714,9 +709,15 @@ public class AssertionService {
 
     public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
         Optional<OrcidRecord> record = orcidRecordService.findOneByEmail(email);
+        if (record.isEmpty()) {
+            throw new IllegalArgumentException("Can't find orcid record for email " + email);
+        }
         final String orcid = record.get().getOrcid();
         List<Assertion> assertions = assertionRepository.findAllByEmail(email);
         assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
+            if (StringUtils.isBlank(orcid)) {
+                LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} after granting permission", orcid, a.getId(), email);
+            }
             a.setOrcidId(orcid);
             assertionRepository.save(a);
         });
@@ -733,6 +734,7 @@ public class AssertionService {
             summary.setDate(DATE_FORMAT.format(uploadFile.getDateWritten()));
             mailService.sendAssertionsUploadSummaryMail(summary, user);
         } catch (Exception e) {
+            LOG.warn("Unexpected error processing assertions CSV upload", e);
             if (e.getCause() != null) {
                 uploadFile.setError(e.getCause().toString());
             } else {
@@ -759,29 +761,29 @@ public class AssertionService {
         List<String> registryDeleteFailures = new ArrayList<>();
 
         for (Assertion a : upload.getAssertions()) {
-            if (!isDuplicate(a, user.getSalesforceId())) {
-                if (a.getId() == null || a.getId().isEmpty()) {
-                    createAssertion(a, user);
-                    created++;
-                } else {
-                    Assertion existingAssertion = findById(a.getId());
-                    if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
-                        throw new BadRequestAlertException("This affiliation doesn't belong to your organization", "affiliation", "affiliationOtherOrganization");
-                    }
-                    if (assertionToDelete(a)) {
-                        try {
-                            deleteById(a.getId(), user);
-                            deleted++;
-                        } catch (RegistryDeleteFailureException e) {
-                            registryDeleteFailures.add(a.getId());
-                        }
+            if (assertionToDelete(a)) {
+                try {
+                    deleteById(a.getId(), user);
+                    deleted++;
+                } catch (RegistryDeleteFailureException e) {
+                    registryDeleteFailures.add(a.getId());
+                }
+            } else {
+                if (!isDuplicate(a, user.getSalesforceId())) {
+                    if (a.getId() == null || a.getId().isEmpty()) {
+                        createAssertion(a, user);
+                        created++;
                     } else {
+                        Assertion existingAssertion = findById(a.getId());
+                        if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+                            throw new BadRequestAlertException("This affiliation doesn't belong to your organization", "affiliation", "affiliationOtherOrganization");
+                        }
                         updateAssertion(a, user);
                         updated++;
                     }
+                } else {
+                    duplicates++;
                 }
-            } else {
-                duplicates++;
             }
         }
 

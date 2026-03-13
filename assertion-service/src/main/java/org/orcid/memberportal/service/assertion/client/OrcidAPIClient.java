@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -35,6 +36,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.orcid.jaxb.model.message.Orcid;
 import org.orcid.jaxb.model.v3.release.error.OrcidError;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.jaxb.model.v3.release.record.Affiliation;
@@ -71,6 +73,10 @@ public class OrcidAPIClient {
 
     private String internalAccessToken;
 
+    public static final int HTTP_CLIENT_MAX_CONNECTION_TOTAL = 100;
+    public static final int HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE = 20;
+    public static final int HTTP_CLIENT_CONNECTION_TIME_TO_LIVE_SECONDS = 20;
+
     @Autowired
     private ApplicationProperties applicationProperties;
 
@@ -79,7 +85,7 @@ public class OrcidAPIClient {
             Membership.class, Qualification.class, Service.class, OrcidError.class, NotificationPermission.class);
         this.jaxbMarshaller = jaxbContext.createMarshaller();
         this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        this.httpClient = HttpClients.createDefault();
+        this.httpClient = HttpClients.custom().disableCookieManagement().setMaxConnTotal(HTTP_CLIENT_MAX_CONNECTION_TOTAL).setMaxConnPerRoute(HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE).setConnectionTimeToLive(HTTP_CLIENT_CONNECTION_TIME_TO_LIVE_SECONDS, TimeUnit.SECONDS).build();
     }
 
     public String exchangeToken(String idToken, String orcidId) throws JSONException, IOException, DeactivatedException {
@@ -100,11 +106,11 @@ public class OrcidAPIClient {
         if (statusCode != Status.OK.getStatusCode()) {
             String responseString = EntityUtils.toString(response.getEntity());
 
-            if (responseString.contains("invalid_scope") && recordIsDeactivated(orcidId)) {
-                LOG.info("Deactivated profile detected: status code {}", statusCode);
+            if (statusCode == Status.UNAUTHORIZED.getStatusCode() && responseString.contains("invalid_scope") && recordIsDeactivated(orcidId)) {
+                LOG.info("Deactivated profile detected");
                 throw new DeactivatedException();
             } else {
-                LOG.error("Unable to exchange id_token: {}", responseString);
+                LOG.error("Unable to exchange id_token for orcid ID {} : {}", orcidId, responseString);
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
         }
@@ -115,7 +121,7 @@ public class OrcidAPIClient {
         return json.get("access_token").toString();
     }
 
-    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException {
+    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
         LOG.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
@@ -126,8 +132,9 @@ public class OrcidAPIClient {
         StringEntity entity = getStringEntity(orcidAffiliation);
         httpPost.setEntity(entity);
 
+        CloseableHttpResponse response = null;
         try {
-            HttpResponse response = httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() == 409) {
                 throw new DeprecatedException();
             } else if (response.getStatusLine().getStatusCode() != Status.CREATED.getStatusCode()) {
@@ -137,10 +144,11 @@ public class OrcidAPIClient {
             }
             String location = response.getFirstHeader("location").getValue();
             return location.substring(location.lastIndexOf('/') + 1);
-        } catch (IOException e) {
-            LOG.error("Unable to create affiliation in ORCID", e);
+        } finally {
+            if (response != null) {
+                response.close();
+            }
         }
-        return null;
     }
 
     public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
@@ -166,7 +174,9 @@ public class OrcidAPIClient {
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
         } finally {
-            response.close();
+            if (response != null) {
+                response.close();
+            }
         }
     }
 
@@ -189,7 +199,9 @@ public class OrcidAPIClient {
                 throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), responseString);
             }
         } finally {
-            response.close();
+            if (response != null) {
+                response.close();
+            }
         }
     }
 
@@ -206,17 +218,24 @@ public class OrcidAPIClient {
     }
 
     public boolean recordIsDeactivated(String orcidId) {
+        LOG.info("Checking to see if record {} is deactivated", orcidId);
         return useInternalAccessToken(() -> {
             return checkRegistryForDeactivated(orcidId);
         });
     }
 
     private boolean checkRegistryForDeactivated(String orcidId) {
+        LOG.info("Calling {}/person endpoint to check deactivated status", orcidId);
         HttpGet httpGet = new HttpGet(applicationProperties.getOrcidAPIEndpoint() + orcidId + "/person");
         setJsonHeaders(httpGet, internalAccessToken);
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-            return response.getStatusLine().getStatusCode() == Status.CONFLICT.getStatusCode();
+            LOG.info("Received status {} from the registry", response.getStatusLine().getStatusCode());
+            if (response.getStatusLine().getStatusCode() == Status.UNAUTHORIZED.getStatusCode()) {
+                throw new ORCIDAPIException(response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase());
+            } else {
+                return response.getStatusLine().getStatusCode() == Status.CONFLICT.getStatusCode();
+            }
         } catch (Exception e) {
             LOG.error("Error checking registry for deactivated record {}", orcidId, e);
             throw new RuntimeException(e);
