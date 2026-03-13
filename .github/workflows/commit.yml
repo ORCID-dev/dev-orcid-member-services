@@ -16,4 +16,4 @@ concurrency:
 
 jobs:
   lint:
-    uses: ./.github/workflows/lint.yml
+    uses: ./.github/workflows/lint_private.yml
