@@ -150,7 +150,7 @@ jobs:
       - name: push our container to the private registry
         if: inputs.angular_env == 'unused'
         run: |
-          docker push ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}
+          docker push "${DOCKER_REG_PRIVATE}/${docker_name}:${tag}"
         shell: bash
         env:
           DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"
@@ -160,7 +160,7 @@ jobs:
       - name: push our container to the private registry using a postpended tag of the angular env
         if: inputs.angular_env != 'unused'
         run: |
-          docker push ${DOCKER_REG_PRIVATE}/${docker_name}:${tag}
+          docker push "${DOCKER_REG_PRIVATE}/${docker_name}:${tag}"
         shell: bash
         env:
           DOCKER_REG_PRIVATE: "${{ secrets.DOCKER_REG_PRIVATE }}"
