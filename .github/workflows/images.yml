@@ -1,0 +1,45 @@
+name: images
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Image tag, e.g. 1.2.3.
+        type: string
+        required: true
+
+permissions: {}
+
+jobs:
+  jars:
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: jars
+      modules: '["user-service-2", "member-service-2", "assertion-service-2"]'
+      java-version: '21'
+      upload: '*-service-2/target/*.jar'
+      run: mvn -T 1C package -DskipTests -Dangular.env=unused --file "$MODULE/pom.xml"
+
+  images:
+    needs: jars
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/docker.yml@v1
+    with:
+      name: images
+      images: >-
+        [{"name": "ui-2", "context": "ui-2"},
+        {"name": "userservice2", "context": "user-service-2", "file": "user-service-2/src/main/docker/Dockerfile",
+        "artifact": "jars-user-service-2", "artifact-path": "user-service-2/target"},
+        {"name": "memberservice2", "context": "member-service-2", "file": "member-service-2/src/main/docker/Dockerfile",
+        "artifact": "jars-member-service-2", "artifact-path": "member-service-2/target"},
+        {"name": "assertionservice2", "context": "assertion-service-2", "file": "assertion-service-2/src/main/docker/Dockerfile",
+        "artifact": "jars-assertion-service-2", "artifact-path": "assertion-service-2/target"}]
+      version: ${{ inputs.version }}
+      push: true
+    secrets:
+      registry: ${{ secrets.DOCKER_REGISTRY }}
+      username: ${{ secrets.DOCKER_USER }}
+      password: ${{ secrets.DOCKER_PASSWORD }}
