@@ -43,3 +43,11 @@ jobs:
       run: |
         npm run format:cli
         npm test
+
+  ok:
+    if: always()
+    needs: [lint, maven, ui]
+    permissions: {}
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/gate.yml@v1
+    with:
+      needs: ${{ toJSON(needs) }}
