@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/lint.yml@v1
+
+  # One job for the three services, so it can also write the shared Maven cache on main.
+  maven:
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: maven
+      java-version: '21'
+      cache: save
+      run: |
+        mvn verify -Dsurefire.useFile=false --file user-service-2/pom.xml
+        mvn verify -Pprod -Dsurefire.useFile=false --file assertion-service-2/pom.xml
+        mvn verify -Pprod -Dsurefire.useFile=false --file member-service-2/pom.xml
+
+  ui:
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: ui
+      node-version: '22'
+      working-directory: ui-2
+      cache: save
+      run: |
+        npm run format:cli
+        npm test
