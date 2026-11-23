@@ -19,7 +19,7 @@ jobs:
       name: jars
       modules: '["user-service-2", "member-service-2", "assertion-service-2"]'
       java-version: '21'
-      upload: '*-service-2/target/*.jar'
+      upload: '{module}/target/*.jar'
       run: mvn -T 1C package -DskipTests -Dangular.env=unused --file "$MODULE/pom.xml"
 
   images:
